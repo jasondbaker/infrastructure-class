@@ -1,0 +1,294 @@
+:blank: pass:[ +]
+
+[.text-center]
+GRADUATE PROGRAMS IN SOFTWARE +
+University of St. Thomas +
+St. Paul, MN 55105
+
+[.text-center]
+SYLLABUS Fall 2016 SEIX 6XX +
+Version 1.0
+
+{blank}
+[underline]#Course Title# +
+Information Technology Infrastructure
+
+[underline]#Meeting Time Place# +
+Fridays, 5:45 - 9:00 PM, OSS-326
+
+[underline]#Credit Value# +
+3 semester credits
+
+[underline]#Prerequisites# +
+SEIS 610
+
+[underline]#Instructor# +
+Jason Baker
+
+[underline]#E-Mail Address# +
+bake2352@stthomas.edu
+
+[underline]#Phone Number# +
+612-695-7775 (cell)
+
+[underline]#Office Address# +
+OSS 334
+
+[underline]#Office Hours# +
+Before class or by appointment +
+(Remote conferencing via Google Hangouts/ Skype encouraged)
+
+{blank}
+[underline]#Course Description# +
+SEIS 6XX Information Technology Infrastructure
+
+IT infrastructure deployment practices are rapidly changing as organizations build
+"Infrastructure as code" and adopt cloud computing platforms. This course covers the
+engineering and design of IT infrastructure, focusing on cloud-scale distributed
+systems and modern DevOps practices. While the lessons will cover a number of
+theoretical concepts, we will primarily learn by doing. Students will gain hands-on
+experience with several widely-adopted infrastructure platforms including Github,
+AWS, Docker, and Ansible.
+
+{blank}
+[underline]#Course Objectives#
+
+*   Understand how IT organizations are deploying modern infrastructure and how
+to build "Infrastructure as code".
+*   Understand how to architect cloud-scale distributed systems and the key design
+patterns used to enhance scalability and reliability within these systems.
+*   Develop specific skills relating to modern DevOps practices (source control
+  management, package management, configuration management, etc.)
+
+{blank}
+[underline]#Required Texts# +
+_Agile IT Management: From Startup to Enterprise_ by Charles T. Betz. Available free on Github. http://dm-academy.github.io/aitm/
+
+_Practice of Cloud Systems Administration (Volume 2)_ by Thomas Limoncelli, Strata Challup, & Christina Hogan.
+
+Additional public writings (whitepapers, blogs, etc) as assigned by the instructor.
+
+{blank}
+[underline]#Attendance Policy#
+
+* Instructor will enter attendance into Blackboard weekly
+* Maximum of two absences expected
+* 2-3 hours work for each hour of in class instruction is the academic standard, so plan on spending 6-9 hours a week out of class on readings and assignments. If you don't currently have much experience in an IT organization, plan on budgeting more time.
+
+{blank}
+[underline]#Blackboard# +
+Lecture notes (powerpoint/pdf format), and grades will be available on
+Blackboard. We will also use Blackboard for some of the reading quizzes.
+We will not use Blackboard for many of the tasks in this course, because we
+will focus on collaboration tools used in IT organizations.
+
+{blank}
+[underline]#Github# +
+We will use Github extensively and a Github account (free) is required. You can
+create an account, if you don't already have one, by going to the URL:
+[https://github.com/join](https://github.com/join)
+
+Students are strongly encouraged to sign up for a free account at Code School
+before the start of the semester and participate in the free Git training
+course: https://www.codeschool.com/courses/try-git
+
+{blank}
+[underline]#Slack# +
+Slack is a great real-time chat and collaboration tool for teams. Sign up for a
+free account at http://www.slack.com or feel free to use your existing Slack
+account. We will all join a team for the duration of the course and make use
+of chat channels to work on projects.
+
+{blank}
+[underline]#Computers# +
+A computer is an essential tool for this class since many of our classroom
+lectures and assignments will involve hands-on learning. Additionally,
+the exams and quizzes may have online components. A relatively modern laptop
+with at least 4 GB of RAM is encouraged.
+
+A computer is a powerful learning tool, but it can also be a distraction in a
+classroom setting. The
+course will move at a quick pace and will cover a wide breadth of material.
+Try to minimize web surfing and personal communications during classes so that
+you do not miss out on key insights and important learnings.
+￼￼￼￼￼￼￼￼￼￼
+
+{blank}
+[underline]#Linux# +
+Understanding the Linux command line interface is critical to success in this
+course. It's likely that some students have significant amounts of experience
+with Linux while others have none. We will spend some time at the beginning of
+the course covering essential Linux topics so that everyone has an opportunity
+to successfully complete assignments.
+
+It's not possible to teach Linux in a few hours. If you have never used Linux
+before, you will need to invest extra time in the early weeks of this course
+getting comfortable with the operating system. By the end of this course, you
+will have basic Linux system administration skills.
+
+{blank}
+[underline]#Grading Policy#
+
+* Attendance and quizzes (10%)
+  ** 5 points per session attended
+  ** Weekly Blackboard quizzes on reading, 10 points per quiz
+  ** Complete the week’s quiz online before class ALONE
+  ** Reading quiz will be available at least 1 week in advance
+  ** No makeups, because you have all week and can do them remotely.
+  ** Possible hands-on technical quizzes in class
+* Homework assignments (30%)
+  ** Participation points given for helping others through Slack
+* Midterm (30%)
+* Final (30%)
+  ** The usual (but not forced) distribution will be ~50/50 between A grades and B grades
+* Factors that may severely impact your grade
+  ** Significant disregard for assignments
+  ** More than 2 absences.
+  ** A failing grade on the final.
+  ** Poor participation.
+
+{blank}
+[underline]#Recording of Classroom Activities# +
+
+All recordings of class sessions using any device is expressly prohibited
+without the written permission of the instructor. (See Class Session Recording
+  Permission Form.)
+
+{blank}
+[underline]#Schedule# +
+
+
+[cols="1,^1,20,20",options="header"]
+|=========================================================
+|Week | Date | Topic | Assignment Due
+
+|1 | X/X/2016 | Course Introduction +
+Source control +
+Git |
+Complete Try Git course +
+Read Limoncelli Appendix B
+
+|2 | X/X/2016 | Linux fundamentals +
+Package management +
+Service management +
+Shell scripting
+ |
+Read Limoncelli Chapter 12
+
+|3 | X/X/2016 | Infrastructure fundamentals +
+Distributed infrastructure design and operations +
+ |
+Read Limoncelli Chapter 1 & 2
+
+
+|4 | X/X/2016 | Virtualization +
+Vagrant |
+Read Limoncelli Chapter 3
+
+|5 | X/X/2016 | Virtualization +
+Docker |
+TBD
+
+|6 | X/X/2016 | Distributed application architecture +
+Web services +
+REST/ JSON |
+Read Limoncelli Chapter 4
+
+|7 | X/X/2016 | DevOps +
+Continuous integration +
+Jenkins |
+Read Limoncelli Chapter 8
+
+|8 | X/X/2016 | Midterm |
+TBD
+
+|9 | X/X/2016 | Configuration management I +
+Ansible |
+Read Limoncelli Chapter 5
+
+|10 | X/X/2016 | Configuration management II +
+Ansible |
+Read Limoncelli Chapter 6
+
+|11 | X/X/2016 | Cloud computing +
+AWS |
+TBD
+
+|12 | X/X/2016 | Cloud computing +
+Heroku +
+Private cloud |
+TBD
+
+|13 | X/X/2016 | Data center architecture |
+TBD
+
+|14 | X/X/2016 | Final exam |
+
+
+|=========================================================
+
+{blank}
+[underline]#STUDENTS WITH DISABILTIES# +
+
+Classroom accommodations will be provided for qualified students with documented disabilities. Students are invited to contact the Disability Resources office about accommodations for this course. Telephone appointments are available to students as needed. Appointments can be made by calling 651- 962-6315 or 800-328-6819, extension 6315. You may also make an appointment in person in Murray Herrick 110. For further information, you can locate the Disability Resources office on the web at http://www.stthomas.edu/enhancementprog/.
+
+{blank}
+[underline]#ACADEMIC INTEGRITY# +
+
+Academic integrity is defined as not cheating and not plagiarizing; honesty and trust among students and between students and faculty are essential for a strong, functioning academic community. Consequently, students are expected to do their own work on all academic assignments, tests, projects and research/term papers. Academic dishonesty, whether cheating, plagiarism or some other form of dishonest conduct related to academic coursework and listed in the Student Policy Book under “Discipline: Rules of Conduct” will automatically result in failure for the work involved. But academic dishonesty could also result in failure for the course and, in the event of a second incident of academic dishonesty, suspension from the University.
+
+{blank}
+[underline]#Cheating# +
+
+In cases of cheating, the instructor will impose a minimum sanction of failure of work involved. The instructor will inform the student and the director of the program in writing of:
+
+1. the nature of the offense,
+2. the penalty imposed within the course;
+3. the recommendation of the instructor as to whether further disciplinary action by the director is warranted.
+
+If the instructor or the director of the program determines that further disciplinary action is warranted, a disciplinary hearing shall be commenced at the request of either the instructor or the director. (If there is a previous offense of this nature on the student’s record, a hearing is mandatory.)
+
+Here are the common ways to violate the academic integrity code: +
+
+* Cheating - Intentionally using or attempting to use unauthorized materials, information, or study aids in any academic exercise. The term academic exercise includes all forms of work submitted for credit.
+* Fabrication -Intentional and unauthorized falsification or invention of any information or citation in an academic exercise.
+* Facilitating Academic Dishonesty - Intentionally or knowingly helping or attempting to help another to violate a provision of the institutional code of academic integrity.
+* Plagiarism -The deliberate adoption or reproduction of ideas or words or statements of another person as one’s own without acknowledgment. You commit plagiarism whenever you use a source in any way without indicating that you have used it.
+
+{blank}
+[underline]#Plagiarism# +
+
+The following statement of plagiarism is reprinted here for the use of faculty and students.
+
+Reprinted from _Writing: A College Handbook_, James A.W. Heffernan and John E. Lincoln. By permission W. W. Norton & Company, Inc., Copyright 1982 by W.W. Norton & Company, Inc.
+
+*Plagiarism is the dishonest act of presenting the words or thoughts of another writer as if they were your own.*
+
+You commit plagiarism whenever you use a source in any way without indicating that you have used it. If you quote anything at all, even a phrase, you must put quotation marks around it, or set it off from your text; if you summarize or paraphrase an author’s words, you must clearly indicate where the summary or paraphrase begins and ends; if you use an author’s idea, you must say that you are doing so. In every instance, you must also formally acknowledge the written source from which you took the material.
+
+The only time you can use a source without formal acknowledgment is when you refer to a specific phrase, statement, or passage that you have used and acknowledged earlier in the same paper. If the
+writer has already formally acknowledged the specific source of the material, there is no need to acknowledge it again in the conclusion. Nor is there any need to enumerate the sources of a summary statement based on several different passages that have been used earlier in the paper and have already been acknowledged. But you are free to skip the acknowledgment only when you are referring a second time to exactly the same material. When you use new material from a source already cited, you must make a new acknowledgment.
+
+Here are examples of various kinds of plagiarism. In each instance, the source is a passage from p. 102 of E.R. Dodd’s _The Greek and the Irrational_ (Berkeley, 1971; reprinted: Boston: Beacon, 1957). First here is the original note, copied accurately from the book.
+
+Functions, Dodds 12, p. 102 +
+“If the waking world has certain advantages of solidary and continuity its social opportunities are terribly restricted. In it we need as a rule, only the neighbors whereas the dream world offers the chance of intercourse, however fugitive, with our distant friends, our dead and gods. For normal men it is the sole experience in which they escape the offensive and incomprehensible bondage of time and space.”
+
+*And here are five ways of plagiarizing this source*: (If you have any questions about plagiarism, ask the instructor)
+
+1. *Word-for-word continuous copying without quotation marks or mention of the author’s name.*
+Dreams help us satisfy another important psychic need - our need to vary our social life. This need is regularly thwarted in our waking moments. If the waking world has certain advantages of solidity and continuity, its social opportunities are terribly restricted. In it we need, as a rule, only the neighbors, whereas the dream world offers the change of intercourse, however fugitive, with our distant friends, our dead, and our gods. We awaken from such encounters feeling refreshed, the dream having liberated us from the here and now...
+
+2. *Copying many words and phrases without quotation marks or mention of the author’s name.*
+Dreams help us satisfy another important psychic need - our need to vary our social life. In the waking world our social opportunities, for example, are terribly restricted. As a rule, we usually encounter only the neighbors. In the dream world, on the other hand, we have the chance of meeting our distant friends. For most of us it is the sole experience in which we escape the bondage of time and space....
+
+3. *Copying an occasional key word or phrase without quotation marks or mention of the author’s name.*
+Dreams help us satisfy another important psychic need - our need to vary our social life. During our waking hours our social opportunities are terribly restricted. We see only the people next door and our business associates. In contrast, whenever we dream, we can see our distant friends. Even though the encounter is brief, we awaken refreshed, having freed ourselves from the bondage of the here and now...
+
+4. *Paraphrasing without mention of the author’s name.*
+Dreams help us satisfy another important psychic need - our need to vary our social life. When awake, we are creatures of this time and this place. Those we meet are usually those we live near and work with.
+When dreaming, on the other hand, we can meet far-off friends. We awaken refreshed by our flight from
+the here and now.
+
+5. *Taking the author’s idea without acknowledging the source.*
+Dreams help us to satisfy another important psychic need - the need for a change. They liberate us from the here and now, taking us out of the world we normally live in....
