@@ -6,7 +6,7 @@ University of St. Thomas +
 St. Paul, MN 55105
 
 [.text-center]
-SYLLABUS Fall 2016 SEIX 6XX +
+SYLLABUS Fall 2016 SEIS 6XX +
 Version 1.0
 
 {blank}
@@ -14,7 +14,7 @@ Version 1.0
 Information Technology Infrastructure
 
 [underline]#Meeting Time Place# +
-Fridays, 5:45 - 9:00 PM, OSS-326
+XXXXXXX, 5:45 - 9:00 PM, OSS-XXXX
 
 [underline]#Credit Value# +
 3 semester credits
@@ -42,13 +42,15 @@ Before class or by appointment +
 [underline]#Course Description# +
 SEIS 6XX Information Technology Infrastructure
 
-IT infrastructure deployment practices are rapidly changing as organizations build
-"Infrastructure as code" and adopt cloud computing platforms. This course covers the
+This course covers the
 engineering and design of IT infrastructure, focusing on cloud-scale distributed
-systems and modern DevOps practices. While the lessons will cover a number of
+systems and modern DevOps practices. IT infrastructure deployment practices are rapidly changing as organizations build
+"Infrastructure as code" and adopt cloud computing platforms. We will examine the theory behind these modern practices and the real-world implementation challenges faced by IT organizations.
+
+While the lessons will cover a number of
 theoretical concepts, we will primarily learn by doing. Students will gain hands-on
-experience with several widely-adopted infrastructure platforms including Github,
-AWS, Docker, and Ansible.
+experience with several widely-adopted IT platforms including Github,
+AWS, and Docker.
 
 {blank}
 [underline]#Course Objectives#
@@ -57,40 +59,40 @@ AWS, Docker, and Ansible.
 to build "Infrastructure as code".
 *   Understand how to architect cloud-scale distributed systems and the key design
 patterns used to enhance scalability and reliability within these systems.
-*   Develop specific skills relating to modern DevOps practices (source control
-  management, package management, configuration management, etc.)
+*   Develop specific skills related to DevOps practices including source control
+  management, package management, and configuration management.
 
 {blank}
 [underline]#Required Texts# +
-_Agile IT Management: From Startup to Enterprise_ by Charles T. Betz. Available free on Github. http://dm-academy.github.io/aitm/
 
 _Practice of Cloud Systems Administration (Volume 2)_ by Thomas Limoncelli, Strata Challup, & Christina Hogan.
 
-Additional public writings (whitepapers, blogs, etc) as assigned by the instructor.
+_Web Operations: Keeping the Data on Time_ by John Allspaw and Jesse Robbins
+
+Additional writings (whitepapers, blogs, etc) as assigned by the instructor.
 
 {blank}
-[underline]#Attendance Policy#
+[underline]#Attendance Policy and Studying#
 
 * Instructor will enter attendance into Blackboard weekly
-* Maximum of two absences expected
-* 2-3 hours work for each hour of in class instruction is the academic standard, so plan on spending 6-9 hours a week out of class on readings and assignments. If you don't currently have much experience in an IT organization, plan on budgeting more time.
+* 2-3 hours work for each hour of in class instruction is the academic standard,
+so plan on spending 6-9 hours a week out of class on readings and assignments.
+If you don't currently have much experience working with IT infrastructure, plan on
+budgeting more time.
 
 {blank}
 [underline]#Blackboard# +
 Lecture notes (powerpoint/pdf format), and grades will be available on
 Blackboard. We will also use Blackboard for some of the reading quizzes.
-We will not use Blackboard for many of the tasks in this course, because we
-will focus on collaboration tools used in IT organizations.
 
 {blank}
 [underline]#Github# +
-We will use Github extensively and a Github account (free) is required. You can
-create an account, if you don't already have one, by going to the URL:
-[https://github.com/join](https://github.com/join)
+We will use Github throughout the course and a free Github account is required. You can
+create an account, if you don't already have one, by going to the website:
+https://github.com/join
 
-Students are strongly encouraged to sign up for a free account at Code School
-before the start of the semester and participate in the free Git training
-course: https://www.codeschool.com/courses/try-git
+Students are strongly encouraged to sign up and participate in free Git training
+before the start of the semester: https://www.codeschool.com/courses/try-git
 
 {blank}
 [underline]#Slack# +
@@ -101,15 +103,13 @@ of chat channels to work on projects.
 
 {blank}
 [underline]#Computers# +
-A computer is an essential tool for this class since many of our classroom
-lectures and assignments will involve hands-on learning. Additionally,
-the exams and quizzes may have online components. A relatively modern laptop
-with at least 4 GB of RAM is encouraged.
+A computer is an essential tool for this class since many of our assignments will involve hands-on learning. Additionally,
+the exams may have online components. A personal laptop is strongly encouraged.
 
 A computer is a powerful learning tool, but it can also be a distraction in a
 classroom setting. The
-course will move at a quick pace and will cover a wide breadth of material.
-Try to minimize web surfing and personal communications during classes so that
+course will move at a quick pace and will cover a wide breadth of technical material.
+Try to minimize web surfing and personal communications during lectures so that
 you do not miss out on key insights and important learnings.
 ￼￼￼￼￼￼￼￼￼￼
 
@@ -130,22 +130,19 @@ will have basic Linux system administration skills.
 [underline]#Grading Policy#
 
 * Attendance and quizzes (10%)
-  ** 5 points per session attended
   ** Weekly Blackboard quizzes on reading, 10 points per quiz
   ** Complete the week’s quiz online before class ALONE
-  ** Reading quiz will be available at least 1 week in advance
-  ** No makeups, because you have all week and can do them remotely.
-  ** Possible hands-on technical quizzes in class
+  ** Reading quiz will be available at least 1 week in advance (No makeups, because you have all week and can do them remotely)
 * Homework assignments (30%)
-  ** Participation points given for helping others through Slack
+  ** Participation points may be given for helping others troubleshoot issues through Slack
 * Midterm (30%)
 * Final (30%)
-  ** The usual (but not forced) distribution will be ~50/50 between A grades and B grades
+* Some components of the midterm and final may require a computer
+* The usual (but not forced) distribution will be ~50/50 between A grades and B grades
 * Factors that may severely impact your grade
   ** Significant disregard for assignments
-  ** More than 2 absences.
+  ** More than 2 class absences.
   ** A failing grade on the final.
-  ** Poor participation.
 
 {blank}
 [underline]#Recording of Classroom Activities# +
@@ -166,62 +163,68 @@ without the written permission of the instructor. (See Class Session Recording
 Source control +
 Git |
 Complete Try Git course +
-Read Limoncelli Appendix B
+Read Practice of Cloud Systems Administration Appendix B
 
 |2 | X/X/2016 | Linux fundamentals +
 Package management +
 Service management +
 Shell scripting
  |
-Read Limoncelli Chapter 12
+ Read Web Operations Chapter 1 +
+Read Practice of Cloud Systems Administration Chapter 12
 
 |3 | X/X/2016 | Infrastructure fundamentals +
+Virtualization +
 Distributed infrastructure design and operations +
  |
-Read Limoncelli Chapter 1 & 2
+Read Practice of Cloud Systems Administration Chapter 1 & 2 +
+Read Web Operations Chapter 15
+
+|4 | X/X/2016 | Cloud computing +
+AWS +
+IAM, EC2, S3 |
+Read _Overview of Amazon Web Services_ (White paper December 2015)
+
+|5 | X/X/2016 | Cloud computing +
+AWS +
+VPC, RDS, ELB |
+Read _Architecting for the Cloud: AWS Best Practices_ (White paper February 2016)
+
+|6 | X/X/2016 | Cloud computing +
+AWS +
+Autoscaling, Cloudwatch, SQS, SNS, SES |
+Read Web Operations Chapter 2
+
+|7 | X/X/2016 | Midterm |
 
 
-|4 | X/X/2016 | Virtualization +
-Vagrant |
-Read Limoncelli Chapter 3
-
-|5 | X/X/2016 | Virtualization +
-Docker |
-TBD
-
-|6 | X/X/2016 | Distributed application architecture +
+|8 | X/X/2016 | Distributed application architecture +
 Web services +
-REST/ JSON |
-Read Limoncelli Chapter 4
-
-|7 | X/X/2016 | DevOps +
-Continuous integration +
-Jenkins |
-Read Limoncelli Chapter 8
-
-|8 | X/X/2016 | Midterm |
-TBD
+REST/ JSON / YAML |
+Read Practice of Cloud Systems Administration Chapter 4
 
 |9 | X/X/2016 | Configuration management I +
 Ansible |
-Read Limoncelli Chapter 5
+Read Web Operations chapter 5 +
+Read Practice of Cloud Systems Administration Chapter 5
 
 |10 | X/X/2016 | Configuration management II +
 Ansible |
-Read Limoncelli Chapter 6
+Read Practice of Cloud Systems Administration Chapter 6
 
-|11 | X/X/2016 | Cloud computing +
-AWS |
-TBD
+|11 | X/X/2016 | Containers +
+Docker |
+Read Practice of Cloud Systems Administration Chapter 3
 
-|12 | X/X/2016 | Cloud computing +
-Heroku +
-Private cloud |
-TBD
+|12 | X/X/2016 | DevOps +
+Continuous integration & deployment +
+Jenkins |
+Read Web Operations Chapters 4 & 10 +
+Read Practice of Cloud Systems Administration Chapter 8
 
 |13 | X/X/2016 | Data center architecture |
-TBD
-
+Read _How Cloud Has Changed The Data Center Architect_ +
+Read _6 Models Of The Modern Data Center_
 |14 | X/X/2016 | Final exam |
 
 
