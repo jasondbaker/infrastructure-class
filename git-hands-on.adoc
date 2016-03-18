@@ -1,0 +1,17 @@
+:blank: pass:[ +]
+
+[.text-center]
+GRADUATE PROGRAMS IN SOFTWARE +
+University of St. Thomas +
+St. Paul, MN 55105
+
+[.text-center]
+SYLLABUS Fall 2016 SEIS 6XX +
+Version 1.0
+
+{blank}
+[underline]#Course Title# +
+Information Technology Infrastructure
+
+[underline]#Meeting Time Place# +
+XXXXXXX, 5:45 - 9:00 PM, OSS-XXXX
