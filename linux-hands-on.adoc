@@ -1,0 +1,142 @@
+:blank: pass:[ +]
+
+Linux Hands-on Guide
+====================
+Jason Baker <bake2352@stthomas.edu>
+1.0, 3/18/2016
+
+
+== Basic Commands and Features
+
+=== Logging In
+Generally you log into a Linux server using a graphical user interface (GUI) if
+you are working right on the system (physical or virtual machine), or you use a
+terminal access program to connect to a remote system. The latter is much more
+common in an enterprise and what we will use in this class.
+
+The terminal access program uses a protocol called secure shell (SSH) to encrypt
+all of the communications between your desktop and the remote linux server. Everything
+you type in the terminal access window is sent securely and confidentially.
+
+Linux systems support a wide variety of access credentials to authenticate users
+on the system. You are probably familiar with using a username and password to
+access systems. That's common with Linux as well. However, when accessing cloud-based
+Linux systems keys are more commonly used for authentication instead of passwords.
+Keys provide a much stronger level of authentication than passwords because keys
+are virtually impossible to guess.
+
+Keys are used as part of a public key encryption process to authenticate users
+trying to access the Linux system. The user needs to have a private key that
+is associated with the public key provided by the remote Linux server.
+
+A username is also required to access the remote server. In this course, we will
+use Amazon Linux systems. The default username for these servers is: `ec2-user`.
+
+.Example (MacOS):
+----
+$ ssh -i server-key.pem ec2-user@54.173.25.113
+----
+
+In this example, the `-i server-key.pem` option defines the key that will be
+used to access the remote Linux server. The `ec2-user@54.173.25.113` argument
+specifies the login username and the IP address of the remote system.
+
+== Logging out
+
+It's really easy to log out and disconnect from a remote server. Simply type in:
+`logout`
+
+.Example:
+----
+$ logout
+----
+
+== The Shell
+You can't access the operating system directly on a Linux server. Instead, you
+initiate system calls through another program called the shell. This program
+allows you to execute other programs, stop services, and manipulate files.
+
+At first
+it might seem like the shell is an antiquated way to work with an operating system,
+but once you get used to it you will find that it's a fast and flexible way to
+work on a system. Plus, the shell makes it really easy to automate tasks because
+anything you type into the shell can be written as code in a script file.
+
+Many different shells are available on a Linux system. IT people will sometimes
+ask what shell you are using, because everyone has their own preference. The
+default shell on Linux (and probably the most popular) is called Bourne-again shell, or *bash* for short. This is
+the shell we will use in this course.
+
+When you initially log into a server, the system starts a shell and places you
+into it automatically. Each command you type at the command line is being interpreted
+by the shell.
+
+== Commands
+Each command you type on the command line is interpreted by the shell. It may
+process the command using internal functions (built-in) or it may execute a small helper
+application. To see a list of the commands built into the shell, type the `help` command.
+
+.Example:
+----
+$ help
+
+or, if you want help on a specific command:
+
+$ help echo
+----
+
+If you type in a command that isn't built into the shell, it will look in a few
+different directories on the file system to find a program matching the command
+name you provided. For example, if you type in the command `date`, the shell will
+execute a program located at /bin/date to service your request. If the command
+you execute produces output, the shell will generally try to display that output
+on the terminal.
+
+== Getting help
+Most of the commands on a Linux system are documented in a text manual available
+on the terminal. These pieces of documentation, known as _man pages_, tend to be
+a bit complicated to read. To view a man page, type in the command: `man <command>`
+
+.Example:
+----
+$ man date
+----
+
+Frankly, if you a struggling to figure out how to use a particular command it's
+oftentimes easier to just search for the command on Google versus trying to
+understand the related man page.
+
+== Viewing text files
+Linux systems contain hundreds of text files which store various configuration
+settings for applications and services running on the system. For example, a
+web server configuration file (httpd.conf) contains settings controlling how the
+webserver responds to requests from web browsers. As an IT professional, it's
+important to understand how to view these files to understand how services are
+configured.
+
+Linux systems include a couple different programs that let you easily view the
+contents of text files. Two popular programs are called `cat` and `less`.
+
+.Example:
+----
+$ cat myfile.txt
+$ less server.conf
+----
+
+The benefit of the `less` command is that it automatically pages the output for
+easier viewing on a terminal.
+
+== Editing text files
+Not only is it important to understand how to view text files, you need to
+understand how to change the content of the files as well. Linux provides several different text editors to modify files from a command
+line interface.
+
+One of the most venerable text editors is called `vi`. It's a
+powerful editor, but it has a steep learning curve. If you are just starting to
+use Linux, the `nano` editor is probably a better choice. Edit a file by typing:
+`nano <filename>`
+
+.Example:
+----
+$ nano myfile.conf
+----

@@ -1,0 +1,64 @@
+:blank: pass:[ +]
+
+Assignment 1
+============
+Jason Baker <bake2352@stthomas.edu>
+1.0, 3/18/2016
+
+== Overview
+
+You have three required tasks and one optional task to complete this week.
+
+* Sign up for a free GitHub.com account
+* Sign up for a free Slack account and install software on your desktop and/or
+mobile device
+* Sign up for an Amazon Web Services account
+* (Optional) Take the _Try Git_ online class
+
+== GitHub.com account
+
+Sign up for a free GitHub account by going to https://github.com and clicking
+the `Sign Up` button. Feel free to use an existing personal account if have one.
+
+== Slack account
+You will receive an invite to join a Slack group for this class (https://slack.com). Slack is
+a chat-base collaborative platform used by thousands of businesses. It is heavily
+used in the application development and DevOps communities.
+
+You can access Slack using a web browser or you can download a desktop application
+(https://slack.com/downloads). Slack is also available as an app for your mobile
+device. This course doesn't teach you how to use Slack, but it's pretty easy
+to figure out. Just go to the Slack website and click on the `Getting Started` link
+to learn the basics.
+
+We will use Slack as a group learning tool throughout the course. If you have a
+question or encounter a problem while working with a tool, you should ask your
+question on Slack first. Students that actively participate on Slack and assist
+other students with issues may receive extra credit points.
+
+== AWS account
+
+We will use Amazon Web Services extensively throughout the course to learn how
+to work with cloud-based infrastructure. You are required to setup an AWS account
+to complete many of the assignments. You may use an existing (non-corporate) AWS
+account for the class. A credit card is required to sign up for an AWS account.
+
+Amazon offers a _free_ tier of service for users with new accounts. This free tier
+lasts for one year after the account is registered. Additionally, you may qualify
+for up to $100 in AWS annual credits as part of the AWS Educate program.
+
+This course makes every effort to stay within the free tier of service at AWS.
+However, there are times when your account will likely incur hourly charges. The
+free tier of service combined with educational credits should cover all of your
+expenses. However, you are responsible for covering any expenses not covered by
+these credits.
+
+Go to http://aws.amazon.com/ and click on the `Sign In` link to sign up for a
+new AWS account.
+
+== _Try Git_ (optional)
+
+The _Try Git_ online class provides a quick introduction to Git where you can
+play with some of the basic commands. Students that have not used Git before
+are *strongly recommended* to take this 15-minute class. The class is located at
+https://try.github.io
