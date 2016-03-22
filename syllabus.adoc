@@ -103,8 +103,7 @@ of chat channels to work on projects.
 
 {blank}
 [underline]#Computers# +
-A computer is an essential tool for this class since many of our assignments will involve hands-on learning. Additionally,
-the exams may have online components. A personal laptop is strongly encouraged.
+A computer is an essential tool for this class since many of our assignments will involve hands-on learning. A personal laptop is strongly encouraged.
 
 A computer is a powerful learning tool, but it can also be a distraction in a
 classroom setting. The
@@ -162,27 +161,28 @@ without the written permission of the instructor. (See Class Session Recording
 |1 | X/X/2016 | Course Introduction +
 Source control +
 Git |
-Complete Try Git course +
-Read Practice of Cloud Systems Administration Appendix B
+
 
 |2 | X/X/2016 | Linux fundamentals +
 Package management +
-Service management +
 Shell scripting
  |
- Read Web Operations Chapter 1 +
-Read Practice of Cloud Systems Administration Chapter 12
+Assignment 1 +
+Read Practice of Cloud Systems Administration Chapter 12 +
+Read Git Hands On Guide +
+Start reading Linux Hands On Guide
 
 |3 | X/X/2016 | Infrastructure fundamentals +
 Virtualization +
 Distributed infrastructure design and operations +
  |
-Read Practice of Cloud Systems Administration Chapter 1 & 2 +
+Read Practice of Cloud Systems Administration Chapters 1 & 2 +
 Read Web Operations Chapter 15
 
 |4 | X/X/2016 | Cloud computing +
 AWS +
 IAM, EC2, S3 |
+Read Practice of Cloud Systems Administration Appendix B +
 Read _Overview of Amazon Web Services_ (White paper December 2015)
 
 |5 | X/X/2016 | Cloud computing +
@@ -193,7 +193,7 @@ Read _Architecting for the Cloud: AWS Best Practices_ (White paper February 2016
 |6 | X/X/2016 | Cloud computing +
 AWS +
 Autoscaling, Cloudwatch, SQS, SNS, SES |
-Read Web Operations Chapter 2
+Read Web Operations Chapters 1 & 2
 
 |7 | X/X/2016 | Midterm |
 

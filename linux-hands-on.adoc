@@ -1,22 +1,32 @@
-:blank: pass:[ +]
+:doctype: article
 
-Linux Hands-on Guide
-====================
+image:images/linux-hands-on-tux.png[float="right"]
+
+:sectnums!:
+
+== Linux Hands-on Guide
 Jason Baker <bake2352@stthomas.edu>
 1.0, 3/18/2016
 
-
-== Basic Commands and Features
+=== Overview
+The purpose of this guide is to provide a basic overview of the Linux operating
+system. The goal is to get students to a level where they feel comfortable performing
+simple tasks using Linux. The guide is loosely based on the _Linux Essentials_
+certification requirements developed by the _Linux Professional Institute_.
 
 === Logging In
-Generally you log into a Linux server using a graphical user interface (GUI) if
-you are working right on the system (physical or virtual machine), or you use a
-terminal access program to connect to a remote system. The latter is much more
-common in an enterprise and what we will use in this class.
+Logging into a Linux system for the first time can seem a little strange, especially
+if you are used to working with the graphical interfaces on desktop systems. Linux
+offers a graphical interface as well, but people don't generally use it unless
+Linux is running on their desktop computer or they are directly interacting with
+a physical Linux server. Most people log into remotely located Linux systems using
+a terminal program.
 
-The terminal access program uses a protocol called secure shell (SSH) to encrypt
-all of the communications between your desktop and the remote linux server. Everything
-you type in the terminal access window is sent securely and confidentially.
+A terminal access program uses a protocol called secure shell (SSH) to encrypt
+all of the communications between your desktop and the remote Linux system. Everything
+you type in the terminal access window is transmitted securely and confidentially.
+Apple Mac and Linux users already have a terminal access program installed on their
+machines. Windows users can download a terminal access program called PuTTY.
 
 Linux systems support a wide variety of access credentials to authenticate users
 on the system. You are probably familiar with using a username and password to
@@ -27,10 +37,10 @@ are virtually impossible to guess.
 
 Keys are used as part of a public key encryption process to authenticate users
 trying to access the Linux system. The user needs to have a private key that
-is associated with the public key provided by the remote Linux server.
+is associated with the public key provided by the remote Linux system.
 
-A username is also required to access the remote server. In this course, we will
-use Amazon Linux systems. The default username for these servers is: `ec2-user`.
+A username is also required to access the remote system. In this course, we will
+use Amazon Linux systems. The default username for these Linux instances is: `ec2-user`.
 
 .Example (MacOS):
 ----
@@ -38,12 +48,12 @@ $ ssh -i server-key.pem ec2-user@54.173.25.113
 ----
 
 In this example, the `-i server-key.pem` option defines the key that will be
-used to access the remote Linux server. The `ec2-user@54.173.25.113` argument
+used to access the remote Linux system. The `ec2-user@54.173.25.113` argument
 specifies the login username and the IP address of the remote system.
 
-== Logging out
+=== Logging out
 
-It's really easy to log out and disconnect from a remote server. Simply type in:
+It's really easy to log out and disconnect from a remote Linux system. Simply type in:
 `logout`
 
 .Example:
@@ -51,9 +61,9 @@ It's really easy to log out and disconnect from a remote server. Simply type in:
 $ logout
 ----
 
-== The Shell
+=== The Shell
 You can't access the operating system directly on a Linux server. Instead, you
-initiate system calls through another program called the shell. This program
+initiate system calls through another program called the *shell*. This program
 allows you to execute other programs, stop services, and manipulate files.
 
 At first
@@ -63,15 +73,14 @@ work on a system. Plus, the shell makes it really easy to automate tasks because
 anything you type into the shell can be written as code in a script file.
 
 Many different shells are available on a Linux system. IT people will sometimes
-ask what shell you are using, because everyone has their own preference. The
+ask what shell you are using, because everyone has their own preference.
+
+The
 default shell on Linux (and probably the most popular) is called Bourne-again shell, or *bash* for short. This is
-the shell we will use in this course.
+the shell we will use in this course. When you initially log into a server, the system starts a shell and places you
+into it automatically.
 
-When you initially log into a server, the system starts a shell and places you
-into it automatically. Each command you type at the command line is being interpreted
-by the shell.
-
-== Commands
+=== Commands
 Each command you type on the command line is interpreted by the shell. It may
 process the command using internal functions (built-in) or it may execute a small helper
 application. To see a list of the commands built into the shell, type the `help` command.
@@ -79,20 +88,21 @@ application. To see a list of the commands built into the shell, type the `help`
 .Example:
 ----
 $ help
+----
 
-or, if you want help on a specific command:
-
+Or, if you want help on a specific command:
+----
 $ help echo
 ----
 
 If you type in a command that isn't built into the shell, it will look in a few
 different directories on the file system to find a program matching the command
 name you provided. For example, if you type in the command `date`, the shell will
-execute a program located at /bin/date to service your request. If the command
+execute a program located at `/bin/date` to service your request. If the command
 you execute produces output, the shell will generally try to display that output
 on the terminal.
 
-== Getting help
+=== Getting help
 Most of the commands on a Linux system are documented in a text manual available
 on the terminal. These pieces of documentation, known as _man pages_, tend to be
 a bit complicated to read. To view a man page, type in the command: `man <command>`
@@ -106,11 +116,382 @@ Frankly, if you a struggling to figure out how to use a particular command it's
 oftentimes easier to just search for the command on Google versus trying to
 understand the related man page.
 
-== Viewing text files
+=== User accounts
+You need to provide a username when logging into a Linux system. This username is
+associated with a user account and becomes your identity when
+running commands on the system. Linux, like every other modern operating system,
+can support multiple user accounts. Each account may have different access
+privileges on the system.
+
+By default a user only has access to their personal files and applications.
+Users can be placed in groups which give them greater access privileges. The
+most powerful group on a Linux system is called the _root_ group. A member of
+the root group has access to everything on the system -- just like the _Administrators_
+group on a Windows system.
+
+Commands run with the access privileges of the user that executes the command. If
+you log into a Linux system with the user account `ec2-user`, then every command
+you run will execute with the privileges of that user. Some commands and services
+on the system cannot be run by normal users. You have to be a member of the
+root group, also known as a _super-user_, to execute these more privileged commands.
+
+A user can escalate their privileges to that of a super-user by using the
+`sudo` command. Think of this command as meaning "do as super-user".
+
+.Example:
+----
+$ sudo nano /etc/httpd.conf
+----
+
+If your user account has sudo privileges, you can do pretty much anything you
+want on the system. How do you know when to run commands as super-user?
+Basically, anytime you are trying to modify files you don't own or start core
+services on the system you need to run those commands as super-user. It's sort
+of similar to the "Run As Administrator" command on a Windows system.
+
+The `sudo` command is used quite often when performing administration tasks on
+a Linux system. Sometimes people will use a shortcut to escalate their privileges
+temporarily to perform a set of tasks as a super-user.
+
+.Example:
+----
+$ sudo su
+#
+----
+
+This command tells the system to switch the user to a super-user status and
+run all future commands with this escalated privilege. The user can return to their normal
+privilege level by typing the `exit` command. Running commands as a super-user
+all the time is potentially hazardous since a super-user is all-powerful.
+Only do this if you know what you're doing.
+
+Note, the command prompt will change to a hash character (`#`) when the user
+account is escalated to super-user status. You can always type in the `whoami`
+command if you forget what user account is currently executing commands. That
+might sound strange, but it happens!
+
+
+=== File names
+
+File names on Linux are case sensitive, so the file `Server.conf` is different
+than `server.conf`. Commands are case sensitive as well because many commands
+are also files (binary executables)! Also, Linux files don't have dot extensions that determine
+the file type like Windows files (i.e., .txt, .exe, etc).
+
+You can use a period
+anywhere you like in a Linux file name. Sometimes we use an extension like `.conf`
+or `.txt` to denote the purpose of a Linux file, but this extension is meaningless
+to the operating system. If a period is used as the first character in a file name,
+the file is considered a _hidden file_ and is not displayed in a standard
+file listing.
+
+=== Directories
+
+The file system on a Linux system is partitioned into separate directories, each
+denoted by a forward-slash character (/). For example, `/home` denotes a directory
+called `home`. If there was a directory called `web` located within the `home`
+directory, you would specify this directory as `/home/web`.
+
+The directories on a Linux file system form a tree structure with the base of
+the tree called the `root` directory. This special directory is specified by
+simply using a `/`.
+
+.Example:
+----
+$ cd /
+$ cd /home
+$ cd /home/web
+----
+
+In this example, we are starting at the root directory and progressively changing
+the current working directory to a deeper sub-directory.
+
+Understanding the directory structure on a Linux system is really key to understanding
+how to manage the system. The same is true of a Windows or Mac system. Systems
+that primarily offer a graphical interface generally hide some of the file system
+details. This isn't the case with Linux. You need to become very comfortable working
+directly with the file system to become a competent Linux professional.
+
+Here are some of the key directories on a Linux file system:
+
+****
+  /bin, /sbin, /usr:: common locations for many executable applications
+  /boot:: stores the linux kernel and related bootstrap files
+  /etc:: stores configuration files for core services running on the system (usually pronounced 'et-see')
+  /home:: stores a directory for each user on the system containing personal files
+  /lib:: common location for many shared libraries
+  /var:: common location for log files and data storage (web files and databases)
+****
+
+=== Directory paths
+When you log into a Linux system, a shell automatically starts and you are placed
+in a directory on the system. This directory is typically called your _home directory_.
+You can change to a different directory and move around the file system at will. Whatever
+directory you are currently located in is called your _current working directory_.
+It's like the current open folder in the Windows file explorer.
+
+When you referring to directories on the file system in commands, you can use either absolute or relative path names. An
+absolute directory path name begins with a forward-slash (`/`). For example, `/home/web`
+refers to a sub-directory called `web` located within the `home` directory (which is itself
+a sub-directory of the root directory).
+
+.Example:
+----
+$ cd /home/web
+----
+
+A relative directory path name refers to a directory that's relative to the current
+working directory. For example, if `home` is the current working directory you
+can easily change to the `web` directory by simply typing `web` without the
+preceding forward-slash.
+
+.Example:
+----
+$ cd web
+$ pwd
+/home/web
+----
+
+There's an important short-cut to remember. You can reference a directory
+located _above_ the current working directory by using two dots (`..`).
+
+.Example:
+----
+$ ls ../web
+----
+
+In this example, if the current working directory is `/home/web`, then this
+command will list the contents of the `/home` directory because it is the
+parent of the `web` directory.
+
+=== Changing the current directory
+The current working directory is changed by typing the command: `cd <new directory>`
+
+.Example:
+----
+$ cd /home
+----
+
+If you lose track of what directory you are currently in you can type the command:
+`pwd`
+
+.Example:
+----
+$ cd /home
+$ pwd
+home
+----
+
+You can easily change to the parent directory of the current directory by
+typing: `cd ..`
+
+Each user on a system has a special directory called the _home directory_
+which can be used to store their personal files. Linux provides a shortcut
+to denote this special directory using the tilde character (`~`).
+
+.Example:
+----
+$ cd ~
+$ pwd
+/home/jason
+----
+
+=== Listing files and directories
+The `ls` command is used to list files and directories on a Linux file system.
+Typing in the command will list all of the files and sub-directories in the current working
+directory.
+
+.Example:
+----
+$ ls
+----
+
+You can also use an absolute or relative directory reference as an argument to
+this command.
+
+.Example:
+----
+$ ls /home
+$ ls ../web
+----
+
+The `ls` command without any options provides a basic listing which omits many
+file details, including hidden files. Oftentimes it's useful to see a more
+detailed listing. That's when we add the `-la` option to the command.
+
+.Example:
+----
+$ ls -la /home/web
+----
+
+You will quickly learn that a plethora of options are available for every
+Linux command. Usually there are multiple ways to accomplish any given task.
+Don't get too overwhelmed with the details for now. Focus on the basics.
+
+=== Creating and deleting directories
+Create a directory inside the current working directory using the command: `mkdir <directory name>`
+
+.Example:
+----
+$ mkdir test
+----
+
+As with other file system commands, you can use either absolute or relative
+directory references in your argument.
+
+Delete a directory using the command: `rmdir <directory name>`
+
+.Example:
+----
+$ rmdir test
+----
+
+Note that in the above example, if the `test` directory isn't empty then the
+`rmdir` command will return an error message. This command won't let you delete
+a directory that contains files. That's probably a good thing. You will need to
+manually remove all of the files and sub-directories before deleting the
+directory.
+
+There's a quicker shortcut though. Typing the command `rm -fr <directory>`
+will delete the directory and any files it contains. This is a dangerous
+command so be careful. You could accidentally blow away your entire filesystem
+if you reference the root directory as a super-user.
+
+.Example:
+----
+$ rm -fr test
+----
+
+=== Creating a file
+Many commands and applications on Linux will generate files. One way to quickly
+generate an empty file is using the command: `touch`
+
+.Example:
+----
+$ touch myfile
+----
+
+You can also create files using a text editor (discussed in a bit).
+
+=== Copying and moving files
+Copy a file from one location to another using the command: `cp <filename> <newfile>`
+
+.Example:
+----
+$ cp myfile.txt myfile.bak
+----
+
+This example makes a new copy of the `myfile.txt` file and stores it in the
+`myfile.bak` file.
+
+Sometimes you just want to move a file to a different location without creating
+another copy. Use the `mv <filename> <location>` command to move files.
+
+.Example:
+----
+$ mv /home/web/myfile.txt /var/www/html
+----
+
+In this example, the `myfile.txt` file is moved to the `var/www/html` directory.
+
+=== Deleting a file
+Delete files in a directory by using the `rm` command.
+
+.Example:
+----
+$ rm myfile
+----
+
+=== File patterns
+Oftentimes it's useful to list or refer to a group of files containing a specific
+character pattern. In this case, the asterisk (`*`) character may be used as
+a wildcard pattern.
+
+.Example:
+----
+$ ls log*
+----
+
+In this example, the command will list all of the files in the current working
+directory that start with the character string `log`. Note that if the current directory
+contains any sub-directories that start with the name `log`, the contents
+of these directories will be listed as well.
+
+The asterisk wildcard represents an arbitrary number of characters. But if you
+only want to refer to a single wildcard character, you can use the question mark (`?`).
+
+.Example:
+----
+$ ls record?log
+----
+
+This example might output a file listing containing files like `record1log`,
+`record2log`, `record3log`, etc.
+
+=== File access control
+Linux, like other sophisticated operating systems, has strong controls around
+file access to maintain system security. You learned earlier that a system
+can have multiple users, users belong to groups, and some groups have higher
+privileges than other groups (like the all powerful super-users in the root group).
+
+Every file and directory on a Linux system has a set of access credentials associated
+with it. You can think of these credentials as an access control list. The same
+concept exists on Windows systems.
+
+To see the access credentials for files in a directory, type: `ls -la`
+
+.Example:
+----
+$ ls -la
+-rw-------  1 ec2-user users     778 Jun 29  2015 file1
+-rw-r--r--  1 jbaker webusers    972 Mar 15 16:57 file2
+drwxr-xr-x  3 root   root        4096 Jun 28  2015 logs
+----
+
+A complete discussion of Linux file permissions could be an entire guide on
+its own. Here are some of the basics. The `ls` command shows the user and group
+that owns each file. In the example above, file1 is owned by `ec2-user` and
+file2 is owned by `jbaker`. The second file, file2, is associated with the
+`webusers` group.
+
+What up with this `drwxr-xr-x` stuff? That file attribute describes the actual
+access control list for each file. Each character position in the string means
+something different. If the first character is a `d`, it means that the file
+is actually a directory. Linux makes very little distinction between files and
+directories.
+
+image:images/linux-hands-on-acl.png[]
+
+The other characters in the access control list detail the read, write, and
+execute permissions available to the associated user, group, and everyone else (others).
+The `r` and `w` characters represent read and write respectively. If the character
+is an `x`, it means that the file is executable.
+An executable file is either a binary executable or a shell script (which we'll learn about in a bit).
+
+Its possible to modify the access control list for a file using the command: `chmod`
+
+.Example:
+----
+$ sudo chmod a+r file1
+----
+
+In this example, the access control list for `file1` is modified to allow everyone
+to read the file. Hopefully the file doesn't contain any confidential information!
+
+You can also change the owner or group associated with a file using the `chown <username> <filename>`
+and `chgrp <groupname> <filename>` commands respectively.
+
+.Example:
+----
+$ sudo chown jbaker file1
+$ sudo chgrp webusers file1
+----
+
+=== Viewing text files
 Linux systems contain hundreds of text files which store various configuration
 settings for applications and services running on the system. For example, a
-web server configuration file (httpd.conf) contains settings controlling how the
-webserver responds to requests from web browsers. As an IT professional, it's
+web server configuration file (`httpd.conf`) contains settings controlling how the
+webserver responds to requests from web browsers. As a Linux user, it's
 important to understand how to view these files to understand how services are
 configured.
 
@@ -123,10 +504,11 @@ $ cat myfile.txt
 $ less server.conf
 ----
 
+Both commands output the contents of a text file to your terminal.
 The benefit of the `less` command is that it automatically pages the output for
-easier viewing on a terminal.
+easier viewing.
 
-== Editing text files
+=== Editing text files
 Not only is it important to understand how to view text files, you need to
 understand how to change the content of the files as well. Linux provides several different text editors to modify files from a command
 line interface.
@@ -139,4 +521,440 @@ use Linux, the `nano` editor is probably a better choice. Edit a file by typing:
 .Example:
 ----
 $ nano myfile.conf
+----
+
+The nano editor will present you with a set of commands, most of which are accessed
+using the `ctrl` key. For example, hit `ctrl-x` to quit the nano editor.
+
+=== I/O Redirection
+Typically, a Linux command line program accepts input data from a keyboard,
+processes the data, and then outputs the data to a terminal. The data input
+path is called the *stdin* (standard input) and the data output path is called
+the *stdout* (standard output).
+
+image:images/linux-hands-on-stdin.png[]
+
+Oftentimes, it's useful to manipulate these data I/O pathways to accomplish
+certain tasks. For example, instead of inputing data into a program manually
+using a keyboard, you could input a text file containing the data. Most of the time
+a program outputs results to a terminal (screen), but sometimes it makes more
+sense to output results to a file. The shell provides features to allow you to
+redirect the I/O pathways of Linux programs.
+
+Let's start with redirecting the output of a program. To redirect the output,
+use the right angle-bracket character (`>`) and the name of the output file.
+
+.Example:
+----
+$ ls /home/web > files.txt
+----
+
+In this example, the `ls` command will create a listing of all files and directories
+in the `/home/web` directory and write the listing output to the `files.txt` file instead
+of your terminal screen.
+
+Linux will create a new output file if it doesn't already exist or overwrite an
+existing file. If you would rather append to an existing file rather than overwrite
+it, use two right angle-brackets (`>>`).
+
+.Example:
+----
+$ ls /home/web >> files.txt
+----
+
+We can also redirect the input of a program. Typically the program input comes
+from a keyboard, but we can use an existing file instead. To redirect the input,
+use the left angle-bracket character (`<`) and the name of the input file.
+
+.Example:
+----
+$ wc -w < report.doc
+----
+
+The `wc -w` command above performs a word count of input data. In this case, the
+input data is coming from a text file called `report.doc` using I/O redirection.
+
+=== Command pipelines
+The notion of command *pipes* is a really powerful feature provided by Linux
+shells and one that IT professionals use often. You saw how it's possible to
+redirect the input and output pathways for programs. You can use a file as
+input or output for a command. But what if you want to use another program for the data input
+or output? Pipes let you do this.
+
+Pipes allow you to take the output of a command line program and use the output
+as the input to another program. The data is being _piped_ from one program to
+another. To pipe data between programs use the vertical bar character (`|`).
+
+.Example:
+----
+$ ls /var/www/html | less
+----
+
+This example command takes the directory listing output from the `/var/www/html` directory
+and pipes it to the `less` command. Why is this useful? If the `/var/www/html`
+directory contains a significant number of files, executing the `ls` command will
+cause the terminal screen to scroll quickly and it will be difficult to see all of the files.
+By piping the `ls` command output to the `less` command, the output will be paginated and
+easier to read.
+
+=== Shell quick-keys
+You spend much of your time working with the shell when managing applications and
+services in Linux. The shell provides a couple handy quick-keys to make your
+life easier.
+
+If you want to abort a program or stop a long-running output, hit: `ctrl-c`.
+
+The shell provides auto-completion when you type in a partial filename
+and hit the `tab` button. This is an incredibly useful feature because sometimes
+it's easy to forgot exactly how a filename is spelled.
+
+Another handy quick-key is the `up-arrow` key. Clicking this key once, or
+multiple times, on an empty command line allows you to scroll through the
+previous command history and re-execute a shell command.
+
+=== Shell variables
+The Linux shell (bash, in this case) provides a few features found in general
+programming languages. The shell supports the creation and use of variables.
+
+.Example:
+----
+$ j=123
+$ echo $j
+123
+----
+
+In the example, the variable `j` is assigned the value of 123. The `echo` command
+is used to display the value of the variable. When the echo command sees a
+string preceded by a dollar-sign character (`$`), it interprets the string name
+as a variable. Note, bash is really picky about spaces in the variable assignment.
+Leave them out.
+
+=== Shell scripts
+By now you've probably figured out that the shell is a really powerful program.
+We've been working with the shell manually, but in many cases we want to automate
+a set of tasks. We can do this using a shell script. For example, you could write
+a shell script that automatically installs a webserver service, configures it, and
+downloads the web application files onto the system. Writing a shell script is
+like coding a basic procedural program.
+
+Shell scripts are just executable text files that contain a series
+of shell commands. A shell script always starts with a directive called a
+_sha-bang_ written as `#!/bin/bash`. The sha-bang string tells the shell that
+this is an executable script.
+
+When you execute a shell script you can pass in command line arguments -- just
+like any other program. These arguments are made available to the script in
+the form of numbered variables, starting with `$1`, `$2`, `$3`, etc.
+
+.Example:
+----
+$ cat myscript
+#!/bin/bash
+echo Hello $1
+
+$ ./myscript Jason
+Hello Jason
+----
+
+The executable file `myscript` starts with a sha-bang directive which tells
+the shell that this file contains shell commands. The first (and only) command
+tells the shell to print out the word `Hello` followed by whatever was entered
+as the first command argument when the script was executed. In this case, the
+name `Jason` was entered as the first command argument for the script.
+
+The shell provides a couple additional handy features related to argument
+variables. The `$#` variable contains the number of arguments passed to the
+script, and the `$*` variable contains the entire set of arguments passed to the
+script.
+
+.Example:
+----
+$ cat myscript
+#!/bin/bash
+echo Let\'s say hello to $# people
+echo Hello $*
+
+$ ./myscript Jason John Jane
+Let's say hello to 3 people
+Hello Jason John Jane
+----
+
+Here three names are provided as arguments to the script -- `Jason`, `John` and
+`Jane`. The `$#` variable equals the number of arguments (3) while the `$*`
+variable contains the full set of provided arguments. Don't let the funny
+looking variable names confuse you.
+
+Note the use of the backslash character (`\`) before the apostrophe in the
+word `Let's`. This is what's called an _escape character_ and it tells the
+shell interpreter to ignore the single apostrophe. Otherwise the interpreter
+would process this statement incorrectly.
+
+You can use all of the commands we've learned so far in a shell script to
+automate tasks. For example, let's write a shell script that creates a directory
+and then writes a file into the directory.
+
+.Example:
+----
+$ cat createconfig
+#!/bin/bash
+# My Hello World script
+mkdir myconfig
+cd myconfig
+echo 'Hello World' >> server.conf
+
+$ ./createconfig
+$ cd myconfig
+$cat server.conf
+Hello World
+----
+
+By now you should be able to understand what this script is doing. If you
+feel a little uncertain, just review it one line at a time and make sure you
+understand what each command is doing before looking at the next line.
+
+Script lines that start with a hash character (`#`) are comment lines and are
+ignored by the shell interpreter. It's important to add comments to your script
+file so that other people know what the script is doing. Plus, when you need
+to modify the script a year later you will be able to quickly figure out what
+it does as well.
+
+The standard process to follow when creating shell scripts is to execute a
+set of commands manually to achieve the desired result. Then write the shell script
+using the previously documented steps. Finally, test the script to verify that
+it works properly.
+
+We can use loops in shell scripts to iterate over a set of variable values
+using a `for-do-done` construct.
+
+.Example:
+----
+$ cat myscript
+#!/bin/bash
+# for-loop test script
+names='Jason John Jane'
+for i in $names
+do
+  echo Hello $i
+done
+
+$ ./myscript
+Hello Jason
+Hello John
+Hello Jane
+----
+
+The example script executes a loop iteratively for each name in the `$names` variable.
+The `$i` variable is used as a temporary reference during the loop process.
+
+If-then-else constructs are also available in shell scripts. These constructs
+allow your scripts to make decisions based on testable conditions.
+
+.Example:
+----
+$ cat myscript
+#!/bin/bash
+if [ -f "$1" ]
+then
+  echo The file $1 exists
+else
+  echo 'Cannot find the file.'
+fi
+
+$ ./myscript testfile
+Cannot find the file.
+
+$ touch testfile
+$ ./myscript testfile
+The file testfile exists
+----
+
+When this script is first executed, the file `testfile` doesn't exist yet so
+the `else` condition in the script runs. The file is created using the `touch`
+command before the script is run the second time. When it's executed again,
+the test condition `[ -f "$1" ]` evaluates to true and the program reports that
+the file exists. The test condition `-f` checks to see whether a file matching
+the name of the provided script argument `$1` exists.
+
+== Archiving and compressing files
+A really common task on Linux systems, and servers in general, is to package a directory of files together in an archive -- a single file which
+you can easily move from one location to another. Maybe you want to create an
+archive to backup a set of data or possibly copy a set of data files to a
+different system. Linux makes this process really easy using the `tar <options> <archive name> <files>` command.
+
+.Example:
+----
+$ tar -cvzf newarchive.tar.gz /var/www/html
+----
+
+This tar command will archive and compress all of the files and directories
+located in `/var/www/html` into a file called `newarchive.tar.gz`. It's common practice to use the `.tar.gz` extension
+on archive file names so that other people know that these files are compressed
+archives.
+
+You can use a very similar looking command to unpack and uncompress the archive.
+
+.Example:
+----
+$ tar -xvzf newarchive.tar.gz
+----
+
+This will unpack and uncompress the `newarchive.tar.gz` archive in the current
+working directory. Note the only difference in the `tar` command options is the use
+of the `-c` option to create the archive and the use of the `-x` option to
+unpack (extract) the archive.
+
+=== Managing Linux services
+Much of your time spent working with a Linux system involves installing,
+configuring, and maintaining different services. A service is an application
+that runs on the system and supports requests from users and programs. For example,
+a webserver is a service that responds to requests from web browsers.
+
+You can start and stop services on the Linux system using the `service` command.
+
+.Example:
+----
+$ sudo service start httpd
+----
+
+This command starts the Apache2 webserver on the system. Stopping the service is
+just as easy.
+
+.Example:
+----
+$ sudo service stop httpd
+----
+
+A service can be configured to automatically start when a system boots using
+the `chkconfig <service> on` command.
+
+.Example:
+----
+$ sudo chkconfig httpd on
+----
+
+Similarly, you can configure a service to not start when a system boots up.
+
+.Example:
+----
+$ sudo chkconfig httpd off
+----
+
+Each service runs as a process, or set of processes, on the system. You can
+quickly view a list of all the processes running on the system by using the
+`ps` command.
+
+.Example:
+----
+$ ps
+----
+
+The `ps` command alone provides basic information about the running processes.
+The command accepts a number of options to provide more details.
+
+.Example:
+----
+$ ps -ax
+----
+
+Linux also offers a way to view the current performance of a system using the
+`top` command. This is
+very similar to the Activity Monitor on a Mac or the Performance Monitor on
+a Windows PC.
+
+.Example:
+----
+$ top
+----
+
+If a process is running improperly or consuming too many system resources,
+you can forcibly stop it using the `kill <process id>` command.
+
+.Example:
+----
+$ sudo kill 955
+----
+
+Be careful with this command. You could accidently stop a critical service or
+even lock yourself out of the system!
+
+=== Shutdown and restart system
+The `shutdown` command may be used to shutdown a Linux system. Note that you
+will need to have super-user privileges to run this command.
+
+.Example:
+----
+$ sudo shutdown
+----
+
+The shutdown command starts a count down timer which delays the system shutdown
+for a short period of time. If you want to shutdown the system immediately,
+use: `sudo shutdown now`.
+
+You can also restart the system using the `shutdown` command with the `-r` option.
+
+.Example:
+----
+$ sudo shutdown -r now
+----
+
+If the Linux system is running as an instance at a cloud provider like AWS, you
+can also use the cloud provider's web and API tools to manage the state of
+Linux instances.
+
+=== Package management
+Every Linux system comes with a set of applications and services pre-installed
+on the system. The set of applications depends on the Linux distribution being
+used. In this course, we are using the Amazon Linux distribution which is based
+on Red Hat Enterprise Linux (RHEL).
+
+It's possible to install new applications on a Linux system by copying the
+application files to the system, moving the files to the correct file system
+locations, and setting up the application's configuration files. However, this can
+be a tricky process, especially if an application has a number of dependencies.
+
+What are application dependencies? Applications may be dependent on shared system
+libraries or other applications. It's not uncommon for the dependencies of applications
+to have their own dependencies. Installing an application and all of its dependencies can
+quickly become a complicated process.
+
+What happens when you need to update an application? Now you need to figure out
+how to update the application and all of its dependencies -- without breaking the
+application.
+
+Thankfully, most Linux systems provide a package management tool to manage the
+installation, updating, and removal of applications. The package manager can
+download software from a repository and automatically install all of the software
+dependencies. It can also tell you when software updates are available and help
+you automatically install those updates. In short, package managers are incredibly
+helpful.
+
+The package manager installed on the Linux systems in our course is called
+`yum`. We can use it to update a Linux system.
+
+.Example:
+----
+$ sudo yum update -y
+----
+
+The command in this example is very similar to running a Windows Update on a Windows system.
+It tells `yum` to check and see if any updates are available for currently installed
+software packages, and if so automatically install those updates. This command
+is commonly the very first command you might execute on a newly launched Linux
+system.
+
+You can use the `yum install <package>` command to install new software on the system.
+
+.Example:
+----
+$ sudo yum install httpd
+----
+
+In this example, yum will download and install the latest version of the Apache
+web server.
+
+To remove an existing package from the system, use the `yum remove <package>` command.
+
+.Example:
+----
+$ sudo yum remove httpd
 ----

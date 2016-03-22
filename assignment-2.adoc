@@ -1,4 +1,5 @@
 :doctype: article
+:blank: pass:[ +]
 
 :sectnums!:
 
@@ -28,20 +29,33 @@ Let's get started!
 The first step in the assignment is to create a new git repository in GitHub.
 Here are the basic steps:
 
-  1. Log into GitHub using the account you setup in the previous assignment.
+[start = 1]
+  . Log into GitHub using the account you setup in the previous assignment.
 
-  2. Click on the `New Repository` button on the dashboard page.
-      image:images/assignment1/github-newrepo.png["150","150"]
+[start = 2]
+  . Click on the `New Repository` button on the dashboard page.
 
-  3. Create a new public repository called `infrastructure-assignment1`. The spelling
+image:images/assignment1/github-newrepo.png["150","150"]
+{blank}
+{blank}
+
+[start = 3]
+  . Create a new public repository called `infrastructure-assignment1`. The spelling
   is important here so check your text input.
-  image:images/assignment1/github-createrepo.png["400","400"]
 
-  4. After creating the repository, GitHub will provide you with a URL (https) to access
+image:images/assignment1/github-createrepo.png["400","400"]
+{blank}
+{blank}
+
+[start = 4]
+  . After creating the repository, GitHub will provide you with a URL (https) to access
   the repository. Either copy this address to your clipboard or write it down
   somewhere. You will need to use this address to setup the repository on a
   Linux server.
-  image:images/assignment1/github-url.png[]
+
+image:images/assignment1/github-url.png["600","600"]
+{blank}
+{blank}
 
 At this point your new repository to ready to use. The repository is currently
 empty. We will put some content in there soon!
@@ -429,6 +443,7 @@ output from the `ls` command and redirects it to the `less` command where
 the resulting output is paged. Pipes are super powerful and used all the
 time by savvy Linux operators.
 
+==== Working with shell scripts
 Now things are going to get interesting.
 
 We've been manually typing in commands throughout this exercise. If we were
@@ -536,6 +551,7 @@ Scripts support several programming constructs like for-loops, do-while loops, a
 if-then-else. These building blocks allow you to create fairly complex scripts for
 automating tasks.
 
+==== Installing packages and services
 We're nearing the end of this exercise. But before we finish, let's install some
 new software packages on our server. The first thing we should do is make sure
 all the current packages installed on our Linux server are up-to-date. Type in:
@@ -586,6 +602,7 @@ is stored in a git repository. First we need to install git. Type in the command
 
   $ sudo yum install git -y
 
+==== Saving our work in the repository
 Next, make sure you are still in your home directory (`/home/ec2-user`). We will
 install the git repository you created at the beginning of this exercise. You
 will need to modify this command by typing in the GitHub repository URL you
@@ -678,6 +695,6 @@ Your Linux instance will shutdown and disappear in a few minutes. The EC2 dashbo
 will continue to display the instance on your instance listing for another day or so. However, the state
 of the instance will be `terminated`.
 
-==== Final Step -- IMPORTANT!
+=== Submitting your assignment -- IMPORTANT!
 Please email me your GitHub repository URL in order to receive credit for this
 assignment.

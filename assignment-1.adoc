@@ -5,9 +5,12 @@ Assignment 1
 Jason Baker <bake2352@stthomas.edu>
 1.0, 3/18/2016
 
+:sectnums!:
 == Overview
 
-You have three required tasks and one optional task to complete this week.
+You have three required tasks and one optional task to complete this week,
+as well as the assigned readings. Don't wait until the end of the week to
+begin working on these tasks!
 
 * Sign up for a free GitHub.com account
 * Sign up for a free Slack account and install software on your desktop and/or
@@ -15,14 +18,15 @@ mobile device
 * Sign up for an Amazon Web Services account
 * (Optional) Take the _Try Git_ online class
 
-== GitHub.com account
+:sectnums:
+==  GitHub.com account
 
 Sign up for a free GitHub account by going to https://github.com and clicking
 the `Sign Up` button. Feel free to use an existing personal account if have one.
 
 == Slack account
 You will receive an invite to join a Slack group for this class (https://slack.com). Slack is
-a chat-base collaborative platform used by thousands of businesses. It is heavily
+a chat-based collaborative platform used by thousands of businesses. It is heavily
 used in the application development and DevOps communities.
 
 You can access Slack using a web browser or you can download a desktop application
