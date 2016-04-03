@@ -40,7 +40,7 @@ image:images/assignment1/github-newrepo.png["150","150"]
 {blank}
 
 [start = 3]
-  . Create a new public repository called `infrastructure-assignment1`. The spelling
+  . Create a new public repository called `infrastructure-assignment2`. The spelling
   is important here so check your text input.
 
 image:images/assignment1/github-createrepo.png["400","400"]

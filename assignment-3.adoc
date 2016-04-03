@@ -10,7 +10,8 @@ Jason Baker <bake2352@stthomas.edu>
 === Overview
 Last week we launched a Linux server on AWS and worked with several basic
 Linux and Git commands. We will expand on last week's learnings in this
-assignment.
+assignment. Read through the entire assignment first before launching a
+new server.
 
 Automation is a critical component in modern IT services. Gone are the days
 when IT professionals would carefully hand-craft IT solutions. Some enterprises
@@ -58,6 +59,18 @@ key pair you used last week or you can create a new key pair for this
 server. Either option is fine. From a practical standpoint, it might make
 sense to reuse the same key pair each time so that you don't have to
 keep track of which key pair you used to launch a particular server.
+
+==== Taking a break
+
+It's recommended that you complete this assignment in one sitting. But if
+you need to work on it over the course of a couple days, that's no problem.
+You can always `stop` your EC2 instance when you need to take a break, and
+then `start` the instance back up when you are ready to work again. The
+EC2 instances we are creating save our changes even when the instances are
+shut down. Just don't `terminate` the instance, because then you will lose
+all of your work and have to start all over again. AWS does not bill you
+for instances that are stopped. Well, technically they bill you for the storage
+costs of the instance, but that amounts to pennies per month.
 
 ==== Log into server
 The next step is to log into the Linux server using a terminal program with
@@ -279,27 +292,244 @@ by simply adding more argument options and related functions. That's exactly
 what we're going to do next. Before we do that, add the `script3` file to the
 Git repository and make another commit.
 
+During the past two assignments, we've been adding and modifying script files
+in our Git repository on the same branch -- the *master* branch. Typically,
+you don't want to edit and make changes to the files on the master branch. You
+should do all of your coding and testing in a separate branch, usually a
+feature branch. Once you have successfully modified your code then you can
+merge it back into the master branch. A typical development workflow contains
+many of these branching and merging activities. Let's start following that
+practice now.
 
+Start by creating a new branch:
+
+  $ git checkout -b feature/script3
+
+This is a nice shortcut command which creates a new branch called `feature/script3`
+and immediately checks it out. If you type:
+
+  $ git branch
+
+You will see that the `feature/script3` branch is currently checked out. Git
+doesn't care about forward-slashes (`/`) in the branch name, and these are
+commonly used to help categorize the purpose of the branch. In this case, we
+are going to add more functionality to the `script3` file.
+
+Modify the `script3` file so that it looks like this:
+
+----
+#!/bin/bash
+
+# assign variables
+ACTION=${1}
+
+function create_file() {
+
+touch "${1}-54321"
+}
+
+function display_help() {
+
+cat << EOF
+Usage: ${0} {-c|--create|-h|--help} <filename>
+
+OPTIONS:
+	-c | --create   Create a new file
+	-h | --help	Display the command help
+
+Examples:
+	Create a new file:
+		$ ${0} -c foo.txt
+
+	Display help:
+		$ ${0} -h
+
+EOF
+}
+
+case "$ACTION" in
+	-h|--help)
+		display_help
+		;;
+	-c|--create)
+		create_file "${2:-server}"
+		;;
+	*)
+	echo "Usage ${0} {-c|-h}"
+	exit 1
+esac
+----
+
+Next, test out the script by running the command:
+
+  $ ./script3 -c foo
+
+List the contents of the current directory. You should see a new empty file
+named `foo-54321`. Now, run the command again without providing a filename:
+
+  $ ./script3 -c
+
+You should see a file in the current directory named `server-54321`.
+
+We expanded the bash script by adding a command that allows the user to
+create a file. Adding the command required a couple basic steps:
+
+  * Add the new command (`-c|--create`) to the `case` statement
+  * Add a new function called `create_file`
+  * Modify the displayed usage statement
+  * Modify the `display_help` function to display information on the new option
+
+One additional trick we are using in this script is passing the second
+argument from the command line into the `create_file` function. This function
+really executes like a command, so it can interpret arguments as well.
+The filename is passed as the second argument on the command line, but when
+it is passed to the `create_file` function (`create file "${2:-server}"`) it
+becomes the *first* argument in the function: `touch "${1}-54321"`.
+
+Remove the `foo-54321` and `server-54321` files from the current directory.
+If your script is working properly, go ahead and add it to the repository and
+commit it.
+
+Note, a shortcut to add all the files that have changed
+in the current working directory to the repository is:
+
+  $ git commit -a -m "script3 feature update"
+
+Okay, let's add a bit more functionality to our script. We can use the script to
+create new files but it would be nice if the script could also delete files.
+Your mission is to modify `script3` to add this deletion feature. Here are the
+requirements:
+
+  * The `-d` or `--delete` flags should execute the `delete_file` function
+  * The `delete_file` function should remove a specified file.
+  * If a filename isn't provided as an argument to the script, then use `server`
+  as the default filename
+  * The usage statement should display the new deletion flag option.
+  * The help test should display useful information about the new deletion feature.
+
+You can test your script by issuing the following sequence of commands:
+
+  $ ./script3 -c
+  $ ./script3 -d
+  $ ./script3 -c foo
+  $ ./script3 -d foo
+
+If your script is working properly, you should not see a `server-54321` or
+`foo-54321` file listed in the current directory. If your script isn't working
+properly, then keep working at it! It's okay (and expected) to make mistakes.
+Feel free to use Google or Slack to investigate any error messages that you
+encounter.
+
+Once the script is working properly, commit the updated script to your
+current branch.
+
+Next, checkout the master branch from the Git repository:
+
+  $ git checkout master
+
+Take a look at your `script3` file again:
+
+  $ less script3
+
+Whoa! What happened to all of our script changes? All of our hard work is
+gone! Well, no not really. We committed the changes to `script3` on a
+different branch. When we switched back to the master branch we basically
+stepped back in time. Git replaced the `script3` file with a version of the
+file before we created our new branch.
+
+Branching is one of the most powerful features of Git and other version control
+systems. Branching allows you to experiment with ideas and code without
+destroying previous versions of files. You can quickly branch your code to
+test a new idea, and if it doesn't work you don't have to worry about breaking
+your original code.
+
+Switch back to the feature branch:
+
+  $ git checkout feature/script3
+
+Now, to calm you fears take a look at the script3 file:
+
+  $ less script3
+
+All your modified code is back! The key concept to understand is that
+the files in your current working directory always represent a single point
+in time in the Git repository (a commit). Git manipulates the files
+in the current directory as you change branches. The lesson here is that you
+always need to understand *where* you are in the repository, because this
+directly effects what files and changes you see in the file directory.
+
+Before we push our code up to GitHub, let's merge our feature branch into
+the master branch. Think of this like merging our new feature into our
+production code.
+
+  $ git checkout master
+  $ git merge feature/script3
+
+Look at the contents of the `script3` file. Your changes from the feature
+branch have now been merged into the master branch.
+
+==== Push project repo to GitHub
+
+The final step of the assignment is to push your repository up to GitHub. We'll
+follow a slightly different process than we followed during the previous assignment.
+Last time, we first created the Git repository on GitHub and then cloned (copied)
+the repository to our Linux server. Once we finished working with the repository
+on our local server, we pushed the changes back up to the GitHub repository.
+
+That process works fine when you are working with a brand new project. But sometimes
+you want to take an existing project and existing Git repository and connect it
+to GitHub. That's what we will do now.
+
+First, log into GitHub and create a new repository called `infrastructure-assignment3`.
+Refer back to the previous lesson's instructions for creating a new GitHub repo.
+Make sure you grab a copy of the new GitHub repository URL.
+
+Next, you need to connect your local Git repository on the Linux server to
+your GitHub repository. The way you do that is by specifying your GitHub
+repository as the *origin*. A Git repository can be linked to several different
+Git repositories, called *remotes*. It's not uncommon for a typical repository
+to have at least two or three different remotes. In this case, all we care
+about is the remote called origin. Setup the origin remote by typing:
+
+  $ git remote add origin <your GitHub repo URL>
+
+
+.Example:
+----
+$ git remote add origin https://github.com/jasondbaker/infrastructure-assignment3.git
+----
+
+Now push your local repository to the GitHub repo by typing:
+
+  $ git push -u origin master
+
+The `-u` flag in this command sets the _upstream_ server for the repository to
+the remote defined as origin. Then, the master branch from the repository is
+pushed to the GitHub account.
+
+Congratulations, your work has now been pushed up to GitHub! Take a look at
+your repository on GitHub and look specifically at the branches. You will see
+that only the master branch exists on the GitHub repository. That's because
+we specifically pushed up the master branch. If you type in `git branch` on
+your Linux server, you will notice that your local repository has two branches:
+`master` and `feature/script3`.
+
+It's common for a local repository and upstream repository to have different
+branches. When you have a team of developers all working against the same
+GitHub repository, each team member may have various branches that exist on
+their local workstations but not on the central GitHub repository. Of course,
+it also makes sense to push these local branches to the GitHub repository at
+times as well -- especially if multiple developers are collaborating on a
+particular feature and need to share changes.
 
 ==== Terminate server
 
-The last step is to terminate your Linux instance. AWS will bill you for every
+The last step in the assignment is to terminate your Linux instance. AWS will bill you for every
 hour the instance is running. The cost is nominal, but there's no need to rack
-up unnecessary charges.
+up unnecessary charges. Refer to the previous assignment if you don't remember
+how to terminate your EC2 instance.
 
-Here are the steps to terminate your instance:
-
-  1. Log into your AWS account and click on the EC2 dashboard.
-  2. Click the `Instances` menu item.
-  3. Select your server in the instances table.
-  4. Click on the `Actions` drop down menu above the instances table.
-  5. Select the `Instance State` menu option
-  6. Click on the `Terminate` action.
-
-Your Linux instance will shutdown and disappear in a few minutes. The EC2 dashboard
-will continue to display the instance on your instance listing for another day or so. However, the state
-of the instance will be `terminated`.
-
-=== Submitting your assignment -- IMPORTANT!
-Please email me your GitHub repository URL in order to receive credit for this
-assignment.
+=== Submitting your assignment
+You should have emailed me your GitHub username during the previous assignment.
+There is no need to email your username again. I will review your published
+work on GitHub after the homework due date.
