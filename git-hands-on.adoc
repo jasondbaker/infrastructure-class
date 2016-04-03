@@ -65,6 +65,9 @@ $ git add index.html
   to stop tracking a file so that changes to the file don't get added to
   the repository.
 
+A handy command option to add all of the files in the current directory to the Git
+staging area is: `git add -A`
+
 === Viewing state of files in current working directory
 The files in the current working directory could be in the
 repository, in the staging area, or neither (untracked). Display

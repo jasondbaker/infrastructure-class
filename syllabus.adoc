@@ -176,7 +176,8 @@ Start reading Linux Hands On Guide
 Virtualization +
 Distributed infrastructure design and operations +
  |
-Read Practice of Cloud Systems Administration Chapters 1 & 2 +
+Assignment 2 +
+Read Practice of Cloud Systems Administration Chapter 1 +
 Read Web Operations Chapter 15
 
 |4 | X/X/2016 | Cloud computing +
@@ -201,7 +202,7 @@ Read Web Operations Chapters 1 & 2
 |8 | X/X/2016 | Distributed application architecture +
 Web services +
 REST/ JSON / YAML |
-Read Practice of Cloud Systems Administration Chapter 4
+Read Practice of Cloud Systems Administration Chapters 2 & 4
 
 |9 | X/X/2016 | Configuration management I +
 Ansible |

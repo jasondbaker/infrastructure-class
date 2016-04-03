@@ -1,0 +1,305 @@
+:doctype: article
+:blank: pass:[ +]
+
+:sectnums!:
+
+== Assignment 3
+Jason Baker <bake2352@stthomas.edu>
+1.0, 4/3/2016
+
+=== Overview
+Last week we launched a Linux server on AWS and worked with several basic
+Linux and Git commands. We will expand on last week's learnings in this
+assignment.
+
+Automation is a critical component in modern IT services. Gone are the days
+when IT professionals would carefully hand-craft IT solutions. Some enterprises
+may still engage in these labor intensive practices, but more and more
+organizations recognize the benefits of investing in automation.
+
+Automation also aligns well with DevOps practices such as "infrastructure as code",
+where infrastructure is created by writing code. You might feel a little nervous
+about writing code, especially if you don't have a background in software development.
+Don't worry. The level of code we write when automating infrastructure is
+generally more basic than the code written for software applications. You just
+need to get comfortable with a few simple practices.
+
+You will notice that some of the tasks in this assignment are less prescriptive
+than last week. In other words, instead of telling you exactly how to perform
+a task, you will be expected to perform the task based on knowledge you gained
+from the previous assignment. Try to perform a task without looking at previous
+notes first. If you make a mistake, no worries. We all learn by making mistakes.
+
+=== Requirements
+
+You need to have a personal AWS account and GitHub account for this assignment. You should have
+also read the _Git Hands-on Guide_ and _Linux Hands-on Guide_ by this point in the
+course.
+
+=== The assignment
+
+Ready? Let's go!
+
+==== Launch Linux server
+
+The first step in the assignment is to launch a Linux server using AWS EC2.
+You should follow the same process as the previous assignment. Refer back
+to the assignment notes if you need to review the launch process.
+
+The server should have the following characteristics:
+
+  * Amazon Linux AMI 64-bit (usually the first option listed)
+  * Located in a U.S. region (us-east-1 or us-west-1)
+  * t2.micro instance type
+  * All default instance settings (storage, vpm, security group, etc.)
+
+Note that when you are launching the server, you can elect to use the same
+key pair you used last week or you can create a new key pair for this
+server. Either option is fine. From a practical standpoint, it might make
+sense to reuse the same key pair each time so that you don't have to
+keep track of which key pair you used to launch a particular server.
+
+==== Log into server
+The next step is to log into the Linux server using a terminal program with
+secure shell (SSH) support. You will need to have the server key and the
+public IP address before attempting to log into the server.
+
+==== More Shell Script Fun
+
+Before we dive into the assignment, let's update the software packages on
+the Linux instance by running a `yum update`:
+
+  $ sudo yum update -y
+
+Remember, it's a good practice to always update the Linux software packages
+immediately after building the server. Amazon Linux is a _rolling release,
+which means that the Linux image is being rebuilt with newer packages
+several times a week. This means that when you launch an Amazon Linux
+instance the software is very current.
+
+We will also use Git in this assignment, so install the required software
+packages:
+
+  $ sudo yum install git -y
+
+Do you remember which directory you are automatically placed into when you
+initially log into a Linux server? Your home directory. Remember, each user
+on a Linux system has their own unique home directory. Verify the location:
+
+  $ PWD
+
+Next, we're going to create a sub-directory in our home directory to store this
+week's assignment files. Let's call it `project1`. Go ahead and create this
+directory now, and change to the new directory.
+
+Okay, you should be currently in the new directory. Let's create a new Git
+repository in this directory. Look back at previous notes if you don't
+remember how to initialize a new Git repository.
+
+List the directory contents to verify that a `.git` directory exists. Remember,
+the `.git` directory contains the actual Git repository. The directory starts
+with a dot, so you can't see it if you just use the basic `ls` command. You also
+need to supply some option flags to the `ls` command to view hidden files and
+sub-directories.
+
+Create a script file named `script1` and enter the following bash script
+code into the file:
+
+----
+#!/bin/bash
+
+# assign first command line argument
+ARG1=${1}
+
+# display first provided argument
+echo $ARG1
+----
+
+You can use `nano` or whatever text editor you are comfortable with to create
+the file. Remember, once you save the file you will need to make it
+executable:
+
+  $ chmod u+x script1
+
+During the remainder of this assignment, when you are asked to create a
+script file you will need to remember to make the script executable.
+
+Now, let's run the script by supplying an argument:
+
+  $ ./script1 foo
+
+Notice that the response from the script is `foo`. The name of the script is
+script1 and any terms we enter after the name of the script are called
+arguments. We only provided one argument in this case, but we could provide a
+whole list of arguments if we wanted. Arguments provide a method to input
+data into a script. We can have the script perform different tasks based on
+the data we input.
+
+In the script code, the `ARG1` variable is assigned to a funny looking value
+called `${1}`. This value represents the first argument listed after the command.
+Technically, the command name is also treated like an argument. It's value is
+represented by `${0}`. How do you think the second argument value is
+represented? Right, `${2}`.
+
+Let's save our hard work by committing it to the Git repository.
+
+  $ git add script1
+  $ git commit -m "my script1 bash file"
+
+Next, make a new script file called `script2` and enter the code:
+
+----
+#!/bin/bash
+
+# assign the action
+ACTION=${1:-launch}
+
+# display first provided argument
+if [ -z "$1" ]
+	then
+		echo "No argument supplied, default action is: $ACTION"
+	else
+		echo "Initiating $ACTION."
+fi
+----
+
+Run the code without supplying an argument:
+
+  $ ./script2
+
+Now, run the script again with an argument:
+
+  $ ./script2 update
+
+What happened here? A couple things are going on with this script. Note how
+the `ACTION` variable assignment contains the strange looking `:-` operator.
+This variable assignment basically says "assign the value of the first argument
+to the variable ACTION, but if the argument doesn't exist then use `launch`
+as the default value of the variable".
+
+The if-then-else code structure performs an initial test `[ -z "$1" ]` which
+checks to see if the first argument is an empty string. In other words, this
+test evaluates as true if the first argument doesn't exist. Note, the spaces
+in this code are very important. The bash interpreter will not understand
+the code statement properly if the spaces are left out.
+
+One of the key use-cases for a bash script is building up a set of arguments
+that can be used to control the execution of the script. When a user doesn't
+provide a value for a required argument, sometimes the script needs to use
+a default value instead.
+
+Go ahead and add this file to the Git repository and make another Git commit.
+Use an appropriate commit message during your commit.
+
+Next, create a new script file called `script3`. The script code is a little
+longer than previous scripts. Here is the code:
+
+----
+#!/bin/bash
+
+# assign variables
+ACTION=${1}
+
+function display_help() {
+
+cat << EOF
+Usage: ${0} {-h|--help}
+
+OPTIONS:
+	-h | --help	Display the command help
+
+Examples:
+	Display help:
+		$ ${0} -h
+
+EOF
+}
+
+case "$ACTION" in
+	-h|--help)
+		display_help
+		;;
+	*)
+	echo "Usage ${0} {-h}"
+	exit 1
+esac
+----
+
+Okay, take a breath. There are several new concepts introduced in this script
+file. First, notice the function definition for `display_help()`. We can use
+functions in script files to encapsulate a set of code which we may want to
+execute one or more times. You can build complex shell scripts by incrementally
+adding functions. The function is called during the shell execution by
+simply referring to the function name `display_help`.
+
+When you execute the script, the bash interpreter skips over all the commands
+encapsulated in the `display_help()` function definition (everything between
+  the curly brackets). The interpreter won't execute the commands in the
+  function definition until the function is actually called.
+
+After skipping over the function definition, the interpreter reaches the
+`case` statement. You probably learned in earlier programming classes that
+a case statement provides an easy way to compare a variable to a set of
+values. If the variable matches a value then the interpreter executes a
+specified set of statements. The case statement block begins with the `case` command
+and ends with the `esac` command (case spelled backwards).
+
+In this case statement, if the `ACTION` variable matches the value `-h` *or*
+the value `--help`, the `display_help` function is called. Otherwise, if
+the ACTION variable doesn't match anything (denoted by the `*` character),
+a command usage statement is displayed to the user and the script exits. Note
+that exiting a script with the value of 1 is the proper way to signify that
+the script was executed improperly.
+
+There's one more strange looking thing going on with this script. Look at the
+`display_help` function code. What's up with this `cat << EOF` stuff? That's
+just a trick which is used to output multiple text lines to the terminal. We are
+redirecting the input to the `cat` command and inputing all the lines of text
+between the two `EOF` tags.
+
+Let's play with this script a little bit. Type:
+
+  $ ./script3
+
+Since you didn't provide any arguments the script helpfully displayed its
+proper usage. The `case` statement didn't match the value of the first
+argument to `-h` or `--help`, so it chose the default match (`*`).
+
+Type this in:
+
+  $ ./script3 -h
+
+Now the script displays the help information for the command. The `case` statement
+matched the argument value to `-h` and executed the `display_help` function. The
+function displayed all the text between the two `EOF` tags on the terminal.
+Easy!
+
+You can now see how it's possible to build up increasingly complex bash scripts
+by simply adding more argument options and related functions. That's exactly
+what we're going to do next. Before we do that, add the `script3` file to the
+Git repository and make another commit.
+
+
+
+==== Terminate server
+
+The last step is to terminate your Linux instance. AWS will bill you for every
+hour the instance is running. The cost is nominal, but there's no need to rack
+up unnecessary charges.
+
+Here are the steps to terminate your instance:
+
+  1. Log into your AWS account and click on the EC2 dashboard.
+  2. Click the `Instances` menu item.
+  3. Select your server in the instances table.
+  4. Click on the `Actions` drop down menu above the instances table.
+  5. Select the `Instance State` menu option
+  6. Click on the `Terminate` action.
+
+Your Linux instance will shutdown and disappear in a few minutes. The EC2 dashboard
+will continue to display the instance on your instance listing for another day or so. However, the state
+of the instance will be `terminated`.
+
+=== Submitting your assignment -- IMPORTANT!
+Please email me your GitHub repository URL in order to receive credit for this
+assignment.
