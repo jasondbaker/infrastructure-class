@@ -1,0 +1,3 @@
+# ignore pdf and html files because these are built from adoc
+*.pdf
+*.html
