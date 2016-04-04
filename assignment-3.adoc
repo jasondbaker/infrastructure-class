@@ -99,7 +99,7 @@ Do you remember which directory you are automatically placed into when you
 initially log into a Linux server? Your home directory. Remember, each user
 on a Linux system has their own unique home directory. Verify the location:
 
-  $ PWD
+  $ pwd
 
 Next, we're going to create a sub-directory in our home directory to store this
 week's assignment files. Let's call it `project1`. Go ahead and create this
