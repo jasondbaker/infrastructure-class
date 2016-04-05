@@ -154,7 +154,7 @@ without the written permission of the instructor. (See Class Session Recording
 [underline]#Schedule# +
 
 
-[cols="1,^1,20,20",options="header"]
+[cols="10,10,40,40",options="header"]
 |=========================================================
 |Week | Date | Topic | Assignment Due
 
@@ -183,17 +183,20 @@ Read Web Operations Chapter 15
 |4 | X/X/2016 | Cloud computing +
 AWS +
 IAM, EC2, S3 |
+Assignment 3 +
 Read Practice of Cloud Systems Administration Appendix B +
 Read _Overview of Amazon Web Services_ (White paper December 2015)
 
 |5 | X/X/2016 | Cloud computing +
 AWS +
 VPC, RDS, ELB |
+Assignment 4 +
 Read _Architecting for the Cloud: AWS Best Practices_ (White paper February 2016)
 
 |6 | X/X/2016 | Cloud computing +
 AWS +
 Autoscaling, Cloudwatch, SQS, SNS, SES |
+Assignment 5 +
 Read Web Operations Chapters 1 & 2
 
 |7 | X/X/2016 | Midterm |
@@ -202,24 +205,29 @@ Read Web Operations Chapters 1 & 2
 |8 | X/X/2016 | Distributed application architecture +
 Web services +
 REST/ JSON / YAML |
+Assignment 6 +
 Read Practice of Cloud Systems Administration Chapters 2 & 4
 
 |9 | X/X/2016 | Configuration management I +
 Ansible |
+Assignment 7 +
 Read Web Operations chapter 5 +
 Read Practice of Cloud Systems Administration Chapter 5
 
 |10 | X/X/2016 | Configuration management II +
 Ansible |
+Assignment 8 +
 Read Practice of Cloud Systems Administration Chapter 6
 
 |11 | X/X/2016 | Containers +
 Docker |
+Assignment 9 +
 Read Practice of Cloud Systems Administration Chapter 3
 
 |12 | X/X/2016 | DevOps +
 Continuous integration & deployment +
 Jenkins |
+Assignment 10 +
 Read Web Operations Chapters 4 & 10 +
 Read Practice of Cloud Systems Administration Chapter 8
 
