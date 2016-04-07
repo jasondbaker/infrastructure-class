@@ -195,7 +195,8 @@ Read _Architecting for the Cloud: AWS Best Practices_ (White paper February 2016
 
 |6 | X/X/2016 | Cloud computing +
 AWS +
-Autoscaling, Cloudwatch, SQS, SNS, SES |
+Autoscaling, Cloud Watch, Route53, +
+SQS, SNS, SES |
 Assignment 5 +
 Read Web Operations Chapters 1 & 2
 

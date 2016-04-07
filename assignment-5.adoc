@@ -1,0 +1,350 @@
+:doctype: article
+:blank: pass:[ +]
+
+:sectnums!:
+
+== Assignment 5
+Jason Baker <bake2352@stthomas.edu>
+1.0, 4/6/2016
+
+=== Overview
+This week we will build a VPC from scratch and work with an elastic load
+balancer to deploy a resilient website.
+
+Like the previous assignment, you may have to work through some of the detailed
+steps to complete the requirements. If you get stuck on a step, do a little
+research on the AWS documentation site or reach out to the class on Slack. Your
+feedback will be incorporated into future versions of the assignment.
+
+=== Requirements
+
+You need to have a personal AWS account and GitHub account for this assignment.
+
+=== The assignment
+
+Get ready to build your virtual private cloud!
+
+==== Create a Virtual Private Cloud and subnets
+
+The first step in this assignment is to create a new Virtual Private Cloud (VPC).
+Go to the AWS web console and access the VPC dashboard. Make sure you are using
+the Northern Virginia (us-east) region. Select the *Your VPCs*
+menu option and click the button or link to *create a VPC*. Your new VPC should
+have the following parameters:
+
+  * Name: infrastructureVPC
+  * CIDR: 10.0.0.0/20
+  * Tenancy: Default
+
+Once, the VPC is created go ahead and create a couple subnets. The VPC will have
+two subnets -- one public and one private. Select the *Subnets* menu item on the
+VPC dashboard and click the button or link to *create a subnet*. You will have
+to go through this process twice, once for each subnet.
+
+You are free to choose
+whatever networks you like for the subnets, but remember the networks must be
+within the 10.0.0.0/20 network and the networks cannot overlap. Write these networks down so that you can
+refer to them during subsequent configuration steps.The subnets should have
+the following parameters:
+
+  * Subnet #1
+    ** Name: infrastructure-public
+    ** VPC: infrastructureVPC
+    ** AZ: us-east-1a
+    ** CIDR: <choose an appropriate network>
+
+  * Subnet #2
+    ** Name: infrastructure-private
+    ** VPC: infrastructureVPC
+    ** AZ: us-east-1b
+    ** CIDR: <choose an appropriate network>
+
+==== Create an Internet Gateway
+
+The next step is to create an Internet Gateway for the new VPC. The Internet
+Gateway will allow instances with a public IP address to communicate with
+devices on the Internet.
+
+Go to the *Internet Gateways* menu on the VPC dashboard and click the
+*create Internet Gateway* button or link. Name your Internet gateway:
+`infrastructure-IG`.
+
+Once the Internet Gateway is created, you will need to attach it to your
+new VPC by selecting the gateway and clicking the *attach to VPC* button.
+
+==== Setting up routing
+
+Let's recap what you have done to this point. You created a new VPC and setup
+two subnets within the VPC. You also created an Internet Gateway and attached
+it to the VPC. The VPC has a main route table that was setup for you when
+you created the VPC. The route table has a single route that basically says
+"route traffic from any instance in any subnet to any other instance".
+
+If you launched an instance with a public IP address into the public subnet
+in your new VPC, would it be able to communicate with the Internet? No. The
+reason is because there is no network route setup to route data from the
+public network to the Internet Gateway.
+
+Some of this network routing stuff may sound a little confusing, especially
+if you don't have any data networking experience. Think of it like plumbing.
+We've installed the bathtub and the sinks, but we haven't laid out the pipes
+yet. Let's work on that now.
+
+Click on the *Route Tables* link on the VPC dashboard. Notice that a route table
+already exists for your new VPC. This is the main route table for the VPC and
+all subnets not explicitly associated with another subnet use this route
+table. Read that last sentence twice, because the concept is a little confusing.
+
+Go ahead and *create a route table* by clicking on the appropriate button. Name
+this route table: `infrastructure-public-routes`. Make sure to designate the
+proper VPC when creating the route table.
+
+Select the new route table and look at its route listing. You will notice a single
+route with the network 10.0.0.0/18 and target of `local`. This route will
+route traffic from any subnet in the VPC to any other subnet. That configuration
+is fine, however we need to add a route to send all traffic to Internet destinations
+through the Internet Gateway.
+
+Edit the route table for the new subnet and add a new route to the destination
+`0.0.0.0/0` (which is a catch-all network) and a target of the Internet Gateway
+identifier. Make sure you save the updated route table when you are done.
+
+image:images/assignment5/route-table.png["600","600"]
+
+Your new route table isn't associated with any subnets so it isn't actually doing
+anything yet. Click on the *subnet associations* for the new subnet and edit
+the current properties by adding the `infrastructure-public` subnet to the
+routing table. Save your work.
+
+Now if you launch an instance into the VPC's public subnet it should be able to
+communicate with the Internet. Let's test that assumption next.
+
+==== Launch a server
+
+We launched an instance based on the Amazon Linux AMI in previous
+assignments and then we modified the Linux instance by installing whatever
+software we needed. However, in the previous assignment we built out a Linux
+server and created an AMI. Now we can use that AMI to launch a new instance,
+saving us the time and effort required to get a new webserver up and running.
+
+Go to the EC2 dashboard in the AWS web console and launch a new instance. The
+instance should have the following properties:
+
+  * Use the private AMI you created from the previous lesson (look in the *My AMIs* panel
+    during the AMI selection)
+  * Located in Northern Virginia (us-east)
+  * t2.micro instance type
+  * Network is `infrastructureVPC`
+  * Subnet is `infrastructure-public`
+  * Auto-assign Public IP is enabled
+  * Root volume size set to 10 GiB
+  * Create a tag with a key of `Name` and a value of `webserver1`
+  * Create a new security group for the instance called `webservers` with the following policies:
+    ** SSH from anywhere 0.0.0.0/0
+    ** HTTP from anywhere 0.0.0.0/0
+    ** HTTPS from anywhere 0.0.0.0/0
+  * Review your configuration settings and launch the new instance.
+
+While this new instance is launching, let's launch another instance in the new VPC's
+private subnet. The second instance should have the following properties:
+
+* Use the private AMI you created from the previous lesson (look in the *My AMIs* panel
+  during the AMI selection)
+* Located in Northern Virginia (us-east)
+* t2.micro instance type
+* Network is `infrastructureVPC`
+* Subnet is `infrastructure-private`
+* Auto-assign Public IP is disabled
+* Root volume size set to 10 GiB
+* Create a tag with a key of `Name` and a value of `backend1`
+* Create a new security group for the instance called `backends` with the following policies:
+  ** SSH from anywhere sg-<webservers ID>  (where webservers ID is your webservers ecurity group identifier, example: sg-f0321d88)
+  ** HTTP from anywhere sg-<webservers ID>
+  ** HTTPS from anywhere sg-<webservers ID>
+* Review your configuration settings and launch the new instance.
+
+The rules you created for the `backends` security group restrict incoming ssh, http,
+and https requests to only those instances located in the `webservers` security group.
+You can see how it's possible to use security groups to identify source networks
+when creating rules in other security groups. This is a helpful abstraction because
+you don't have to think about the actual networks that instances live in. You
+can just focus on the security groups that instances belong to.
+
+==== Connect to the public webserver
+
+Your public webserver instance should be up and running at this point. Open up
+a web browser on your desktop and try to connect to the public IP address of
+this webserver. What do you see? You should see the website you created during
+the previous assignment. Congratulations!
+
+If you don't see this page then you
+have some troubleshooting to do. Walk through the subnet setup and route table
+configuration steps to verify your work. Did you launch `webserver1` into the
+public network on your VPC? Look at your resource configuration carefully and
+methodically. You should be able to find the configuration error.
+
+==== Connect to the private web server
+
+You were able to connect to the first web server but what about the second
+web server you launched in the private network? Well, it isn't accessible for
+two reasons. First, the second instance doesn't have a public IP address. Verify
+that by looking at the instance properties on the EC2 dashboard. Second, the
+instance is hosted within a subnet that doesn't have a route connected to
+an Internet Gateway.
+
+The `backend1` instance may not be accessible from the Internet, but you
+should be able to access it from `webserver1`. Test that out by opening a
+terminal connection to `webserver1`. Once you have logged into `webserver1`,
+try to connect to the website hosted on `backend1`:
+
+  $ curl <backend1 private IP address>
+
+.Example
+----
+$ curl 10.0.2.241
+----
+
+You should see the text from your web site displayed in the terminal output. The
+security group configuration allows `webserver1` to communicate with `backend1`
+via http.
+
+Now let's try to ssh into the `backend1` instance. In order to do that you will
+need to copy your ssh key pair from your local workstation onto the `webserver1`
+instance.
+
+You should still be connected to `webserver1` via your terminal program. Open
+up the ssh key pair on your local workstation in a text editing program and
+copy the contents of the file into your clipboard.
+
+Next, create a file called `server-key.pem` using a text editor on `webserver1`
+(nano or vim) and paste the contents of your clipboard into this file. Make
+sure you save the file.
+
+Now, open a terminal connection from `webserver1` to `backend1`:
+
+  $ ssh -i server-key ec2-user@<backend1 private IP address>
+
+.Example
+----
+$ ssh -i server-key ec2-user@10.0.2.241
+----
+
+You probably received a security error after trying this connection request.
+The access permisions on the `server-key.pem` file you create are too insecure.
+Let's fix that:
+
+  $ chmod 600 server-key.pem
+
+Hit the up arrow key a few times to replay the `ssh` command. You should
+successfully connect to the `backend1` instance. Congratulations, you just
+used `webserver1` as a bastion host!
+
+In a real production environment, the bastion host access, security groups,
+and network access control lists would be more carefully locked down than in
+this assignment. You would probably never use a web server as a bastion host.
+The key is understanding conceptually what a bastion host is
+and how it fits in the overall network architecture.
+
+==== Update the backend server
+
+We should make sure that our backend server has all the latest software updates.
+Go ahead and issue the `yum` command to update the server.
+
+Whoa, what's up with the connection timeout errors? Think about the VPC subnet
+configuration and where the `backend1` server lives. The private subnet does
+not have a route to the Internet Gateway.
+
+Maybe we should setup this Internet Gateway route on the private subnet.
+Then we would have to assign a public IP address to the `backend1` instance (an
+elastic IP address in this case). However, now the `backend1` instance would
+be potentially accessible via the Internet. That defeats the whole purpose of
+creating a private subnet.
+
+We need a way to allow the `backend1` instance, using a private IP address, to
+communicate with hosts on the Internet so that it can download software updates.
+Sounds like a NAT is what you need!
+
+==== Deploy a NAT
+
+We will deploy a NAT to allow the `backend1` instance to communicate with the
+Internet. The NAT instance needs to live in the public subnet because that
+subnet has access to the Internet via the Internet Gateway.
+
+Go to the VPC dashboard in the AWS web console. Select the *Elastic IPs* menu
+link. You need to allocate an elastic IP address because the NAT requires a
+public IP. Click on the button to *allocate a new address*.
+
+Next, select the *NAT Gateways* menu link on the VPC dashboard and click the
+button to *create a NAT gateway*. Select the public subnet you created for your
+VPN and the elastic IP address you created in the previous step.
+
+It takes a few minutes for the NAT Gateway to initialize. You can view the current
+status of the gateway in the NAT Gateway listing on the VPC dashboard. The
+gateway is simply a specialized EC2 instance managed by AWS. In fact, you can
+easily launch a NAT instance on your own using an AMI. We're just taking a bit
+of a short cut following this particular process.
+
+While the gateway is initializing, let's modify the route table for the private
+subnet so that private instances can route Internet-bound traffic through the
+NAT Gateway.
+
+Click on the *Route Tables* link in the VPC dashboard and select the route table
+associated with the private subnet. Which route table is that? Recall that a
+default route table was setup when you initially created your VPC. This route
+table is also known as the *main* route table for the VPC. Any subnet that's
+not explicitly associated with a route table uses the main route table by default.
+
+In this case, select the route table designated as the main route table for
+your VPC. Edit the routes associated with this table and add the following route:
+
+  Destination: 0.0.0.0/0
+  Target: nat-<nat ID>
+
+.Example
+----
+0.0.0.0/0 nat-0354b30716cdaefa4
+----
+
+Save your edits to the route table.
+
+Okay, ready for the big test? <drumroll please> Go back to your terminal program.
+You should still be connected to the `backend1` instance. Confirm that by typing
+in:
+
+  $ uname -a
+
+You should see a 10.0.2.x IP address displayed in the command output. If not,
+you need to log into the `backend1` server again using your bastion host
+(`webserver1`).
+
+Go ahead and try to update the software again on `backend1` using the `yum`
+command. Viola! The package manager should begin updating the system. The
+`backend1` instance is now communicating to hosts on the Internet using the
+NAT Gateway. Note that this communication can only be initiated in one
+direction. There is no way an Internet device can initiate a connection to
+the `backend1` server through the NAT Gateway.
+
+Now that you have successfully established this NAT connection, we are going
+to remote it. The NAT Gateway is no longer needed in this exercise. Go back
+to the VPC dashboard on the AWS web console and click the *NAT Gateway* menu
+link. Select your NAT Gateway and click on the appropriate button to
+*delete the NAT Gateway*.
+
+We should also deallocate the elastic IP address we created because we will
+get charged for it even if we don't use it. Click on the *Elastic IP* link
+on the VPC dashboard. Select the elastic IP you created earlier and click on
+the action to *deallocate the address*.
+
+Finally, we no longer need to use the `backend1` instance in this lesson, so
+go to the EC2 dashboard and terminate this instance. Leave the `webserver1`
+instance running though because we will continue to use that instance.
+
+
+==== Terminate server
+
+The last step in the assignment is to terminate your Linux instance. AWS will bill you for every
+hour the instance is running. The cost is nominal, but there's no need to rack
+up unnecessary charges and we won't use this instance in the next lesson.
+
+=== Submitting your assignment
+I will review your published work on GitHub after the homework due date.
