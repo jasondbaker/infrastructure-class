@@ -1,0 +1,35 @@
+:doctype: article
+:blank: pass:[ +]
+
+:sectnums!:
+
+== Assignment 6
+Jason Baker <bake2352@stthomas.edu>
+1.0, 4/8/2016
+
+=== Overview
+This week we will build a VPC from scratch and work with an elastic load
+balancer to deploy a resilient website.
+
+Like the previous assignment, you may have to work through some of the detailed
+steps to complete the requirements. If you get stuck on a step, do a little
+research on the AWS documentation site or reach out to the class on Slack. Your
+feedback will be incorporated into future versions of the assignment.
+
+=== Requirements
+
+You need to have a personal AWS account and GitHub account for this assignment.
+
+=== The assignment
+
+Get ready to build your virtual private cloud!
+
+==== Terminate server
+
+The last step in the assignment is to terminate the EC2 instances, delete
+the load balancer, and delete the VPC. I'll leave this as an exercise for you to
+figure out how to complete. Remember, you will get billed for each hour these
+services are running (or at least lose free credits).
+
+=== Submitting your assignment
+I will review your published work on GitHub after the homework due date.
