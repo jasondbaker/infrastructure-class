@@ -41,23 +41,19 @@ two subnets -- one public and one private. Select the *Subnets* menu item on the
 VPC dashboard and click the button or link to *create a subnet*. You will have
 to go through this process twice, once for each subnet.
 
-You are free to choose
-whatever networks you like for the subnets, but remember the networks must be
-within the 10.0.0.0/20 network and the networks cannot overlap. Write these networks down so that you can
-refer to them during subsequent configuration steps.The subnets should have
-the following parameters:
+The subnets should have the following parameters:
 
   * Subnet #1
     ** Name: infrastructure-public
     ** VPC: infrastructureVPC
     ** AZ: us-east-1a
-    ** CIDR: <choose an appropriate network>
+    ** CIDR: 10.0.1.0/24
 
   * Subnet #2
     ** Name: infrastructure-private
     ** VPC: infrastructureVPC
     ** AZ: us-east-1b
-    ** CIDR: <choose an appropriate network>
+    ** CIDR: 10.0.2.0/24
 
 ==== Create an Internet Gateway
 
@@ -324,8 +320,51 @@ NAT Gateway. Note that this communication can only be initiated in one
 direction. There is no way an Internet device can initiate a connection to
 the `backend1` server through the NAT Gateway.
 
+==== Create a Git repo
+
+While you are on the `backend1` server, create a directory called `assignment5`
+in your home directory. Change to this directory and initialize a Git
+repository. Because you are creating a Git repository on a private network, Git
+might complain about your identity when you try to commit files. You can set
+your local Git identity by running these commands:
+
+  $ git config --global user.email "your@email.com"
+  $ git config --global user.name "your GitHub username"
+
+You need to create three files in the current directory.
+
+Use the `curl` command to create a file called `backend1-identity.json` containing
+the data returned by accessing the URL:
+
+  http://169.254.169.254/latest/dynamic/instance-identity/document/
+
+Use the `curl` command with the `-vs` flag (verbose, silent) to create a file called `backend1-message.json` containing
+the data returned by accessing the URL. You will need to redirect the output
+in a special way based on the way the `curl` command works (using the `tee` command).
+
+  https://raw.githubusercontent.com/jasondbaker/infrastructure-class/master/files/assignment5/message.json
+
+.Example
+----
+$ curl -vs https://raw.githubusercontent.com/jasondbaker/infrastructure-class/master/files/assignment5/message.json 2>&1 | tee message.json
+----
+
+Copy the file `/var/log/nginx/access.log` into the current directory.
+
+Add and commit the files to the repository. Next, you will need to push your local
+repository up to GitHub.
+
+* Create a new repository on GiHub called `infrastructure-assignment5`.
+* Modify the origin remote on your local Git repository to point to the
+address of this new GitHub repository
+* Push your local master branch up to the GitHub repository
+
+Confirm that the three files are now in your new GitHub repository.
+
+==== Remove NAT and backend server
+
 Now that you have successfully established this NAT connection, we are going
-to remote it. The NAT Gateway is no longer needed in this exercise. Go back
+to remove it. The NAT Gateway is no longer needed in this exercise. Go back
 to the VPC dashboard on the AWS web console and click the *NAT Gateway* menu
 link. Select your NAT Gateway and click on the appropriate button to
 *delete the NAT Gateway*.
@@ -339,12 +378,185 @@ Finally, we no longer need to use the `backend1` instance in this lesson, so
 go to the EC2 dashboard and terminate this instance. Leave the `webserver1`
 instance running though because we will continue to use that instance.
 
+==== Launch another web server
+
+During the last part of the assignment you will launch a second web server and
+setup a load balancer to distribute traffic between the two servers. We could
+launch another web server into the same subnet as the existing web server.
+However, that wouldn't take advantage of the multiple availability zones located
+in the us-east region. Preferably, we would like to launch the second web server
+into a different availability zone so that if the data center supporting an
+ availability zone fails, the load balancer will redirect all traffic to
+the web server in the other availability zone.
+
+Go to the VPC dashboard and create a third subnet in your VPC:
+
+* Subnet #3
+  ** Name: infrastructure-public-2
+  ** VPC: infrastructureVPC
+  ** AZ: us-east-1c
+  ** CIDR: 10.0.3.0/24
+
+Modify the appropriate routing table so that instances within this new subnet
+can communicate with the Internet (hint: look at subnet associations).
+
+Go back to the EC2 dashboard and launch a new web server. The new server should
+have the same characteristics as the first web server with the exception that
+it should be launched into the new `infrastructure-public-2` subnet. This way
+each web server is located in a separate subnet.
+
+Can the two web servers communicate with one another? Let's think about that
+question. Each web server is in a separate subnet, but the subnets use a routing
+table that routes traffic between any instance in the same VPC. Both web servers
+are in the same VPC. Also, both web servers share the same security group.
+Therefore, yes the two web servers can communicate.
+
+Before you launch a load balancer, open a terminal connection to `webserver1`.
+Change to the directory `/usr/share/nginx` and edit the existing `index.html`
+file so that it looks like the following:
+
+----
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Infrastructure Assignment 4</title>
+</head>
+
+<body>
+  <h1>My 4th Infrastructure Assignment</h1>
+  Webserver 1!
+</body>
+</html>
+----
+
+Basically, all you need to do is add the text `Webserver 1!` under the main
+header text. Make sure you save the file when you are finished editing it. The
+websites hosted on `webserver1` and `webserver2` are now slightly different so
+that you can visually see which server is providing the content to your web
+browser. Let's launch a load balancer next.
+
+==== Launch an Elastic Load Balancer
+
+Select the *Load Balancers* link on the EC2 dashboard and click the button to
+*create a load balancer*. The load balancer will have the following properties:
+
+  * Name: `infrastructure-lb`
+  * Create it inside your VPC
+  * Select the two public subnets
+  * Assign the existing `webservers` security group
+  * The load balancer does not need a secure listener (https).
+  * Health Check
+    ** Normally you probably wouldn't use `/index.html` as the health check path
+    for a load balancer. You would create a separate health check web page.
+    However, for this assignment just leave the path as the default.
+    ** Set the Health Check Interval to 10 seconds
+  * Add the `webserver1` and `webserver2` instances to the load balancer
+  * Create a tag:
+    ** Key: `Project`
+    ** Value: `Assignment 5`
+
+After you click the *create* button, click the *Load Balancers* menu link
+on the EC2 dashboard. Then select the load balancer you just launched and
+look at the set of *instances* associated with the load balancer. You will
+notice that the status of the instances is _OutOfService_. This status means
+that the web servers haven't passed the load balancer's health check yet.
+
+image:images/assignment5/loadbalancer-instances.png["600","600"]
+
+
+Refresh the browser display after a minute or two and you should see the
+status of the web server instances change to _InService_.
+
+Once both instances are in service, click on the *Description* panel of the
+selected load balancer to see its *DNS Name*. This name is the end point for
+the load balanced service. You could open up a browser on your desktop and
+type in the public IP address for either one of the web servers to see the
+website. However, what you really want to do is use the address of the
+load balancer.
+
+The load balancer doesn't use a public IP address -- at least not one that's
+visible to you. The load balancer's public IP address will change depending
+on the status of the instances associated with it.
+
+Open up a web browser on your desktop and type in the load balancer's DNS Name
+as the URL.
+
+.Example
+----
+infrastructure-lb-1175121939.us-east-1.elb.amazonaws.com
+----
+
+You should see the website you created in the previous assignment. Hit the
+refresh button on your browser a few times. Do you notice the web page content
+changes depending on which web server is handling the request? The load
+balancer is redirecting the request to the least utilized server.
+
+==== Simulate a failure
+
+Now you are going to simulate a service failure by stopping one of the
+web servers. In the real world a server could fail for a number of reasons -
+software bug, human error, or even a complete data center failure.
+
+Let's say
+that one of Amazon's data centers experiences a complete power outage and
+takes down the `infrastructure-public-2` subnet. Go to the EC2 dashboard,
+select the `webserver2` instance and stop it.
+
+Next, go back to the *Load Balancers*
+listing and select your load balancer. Take a look at the state of the instances
+connected to the load balancer. You should notice that `webserver2` is in an
+out of service state. Wait 30 seconds and refresh the page if it hasn't changed
+to this status yet.
+
+The `webserver2` instance failed the load balancer health check and was taken
+out of service. The load balancer will direct all future website requests to
+`webserver1`. Go back to the web browser on your desktop and refresh the page
+a few times. Notice how the webpage content stays the same.
+
+Congratulations! You just deployed a highly resilient website and simulated a
+partial service failure. Load balancers aren't just used for increasing
+service resiliency, they can also increase performance by spreading website
+requests across a group of web servers.
+
+==== Save your work
+
+Let's commit some more data to the Git repository you created earlier in the
+assignment. Open a terminal connection to the `webserver1` instance (you might
+  still have a terminal connection to this instance open).
+
+Change to your home directory and clone the git repository you created earlier:
+
+  $ git clone https://github.com/<your GitHub username>/infrastructure-assignment5.git
+
+.Example
+----
+https://github.com/jasondbaker/infrastructure-assignment5.git
+----
+
+If you recall, the Git clone operation makes a copy of the public GitHub repository in
+your current directory. Next, change to the `infrastructure-assignment5` directory.
+
+Copy the `/var/log/nginx/access.log` file to a new file named `access2.log` in
+the current directory.
+
+It's likely that you will need to set the Git identity settings before committing.
+Enter these commands, substituting the values as necessary:
+
+  $ git config --global user.email "your@email.com"
+  $ git config --global user.name "your GitHub username"
+
+Now add the `access2.log` file to the repository and commit your changes. Push the
+repository back up to GitHub. Verify that the new `access2.log` file exists on
+your GitHub repository.
 
 ==== Terminate server
 
-The last step in the assignment is to terminate your Linux instance. AWS will bill you for every
-hour the instance is running. The cost is nominal, but there's no need to rack
-up unnecessary charges and we won't use this instance in the next lesson.
+The last step in the assignment is to terminate the EC2 instances, delete
+the load balancer, and delete the VPC. I'll leave this as an exercise for you to
+figure out how to complete. Remember, you will get billed for each hour these
+services are running (or at least lose free credits).
 
 === Submitting your assignment
 I will review your published work on GitHub after the homework due date.
