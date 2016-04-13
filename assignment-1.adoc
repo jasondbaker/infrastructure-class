@@ -1,11 +1,11 @@
 :blank: pass:[ +]
 
-Assignment 1
-============
+= DevOps & Cloud Infrastructure: Assignment 1
 Jason Baker <bake2352@stthomas.edu>
 1.0, 3/18/2016
 
 :sectnums!:
+
 == Overview
 
 You have three required tasks and one optional task to complete this week,

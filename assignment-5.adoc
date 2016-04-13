@@ -3,11 +3,11 @@
 
 :sectnums!:
 
-== Assignment 5
+= DevOps & Cloud Infrastructure: Assignment 5
 Jason Baker <bake2352@stthomas.edu>
 1.0, 4/6/2016
 
-=== Overview
+== Overview
 This week we will build a VPC from scratch and work with an elastic load
 balancer to deploy a resilient website.
 
@@ -16,15 +16,15 @@ steps to complete the requirements. If you get stuck on a step, do a little
 research on the AWS documentation site or reach out to the class on Slack. Your
 feedback will be incorporated into future versions of the assignment.
 
-=== Requirements
+== Requirements
 
 You need to have a personal AWS account and GitHub account for this assignment.
 
-=== The assignment
+== The assignment
 
 Get ready to build your virtual private cloud!
 
-==== Create a Virtual Private Cloud and subnets
+=== Create a Virtual Private Cloud and subnets
 
 The first step in this assignment is to create a new Virtual Private Cloud (VPC).
 Go to the AWS web console and access the VPC dashboard. Make sure you are using
@@ -55,7 +55,7 @@ The subnets should have the following parameters:
     ** AZ: us-east-1b
     ** CIDR: 10.0.2.0/24
 
-==== Create an Internet Gateway
+=== Create an Internet Gateway
 
 The next step is to create an Internet Gateway for the new VPC. The Internet
 Gateway will allow instances with a public IP address to communicate with
@@ -68,7 +68,7 @@ Go to the *Internet Gateways* menu on the VPC dashboard and click the
 Once the Internet Gateway is created, you will need to attach it to your
 new VPC by selecting the gateway and clicking the *attach to VPC* button.
 
-==== Setting up routing
+=== Setting up routing
 
 Let's recap what you have done to this point. You created a new VPC and setup
 two subnets within the VPC. You also created an Internet Gateway and attached
@@ -115,7 +115,7 @@ routing table. Save your work.
 Now if you launch an instance into the VPC's public subnet it should be able to
 communicate with the Internet. Let's test that assumption next.
 
-==== Launch a server
+=== Launch a server
 
 We launched an instance based on the Amazon Linux AMI in previous
 assignments and then we modified the Linux instance by installing whatever
@@ -166,7 +166,7 @@ when creating rules in other security groups. This is a helpful abstraction beca
 you don't have to think about the actual networks that instances live in. You
 can just focus on the security groups that instances belong to.
 
-==== Connect to the public webserver
+=== Connect to the public webserver
 
 Your public webserver instance should be up and running at this point. Open up
 a web browser on your desktop and try to connect to the public IP address of
@@ -179,7 +179,7 @@ configuration steps to verify your work. Did you launch `webserver1` into the
 public network on your VPC? Look at your resource configuration carefully and
 methodically. You should be able to find the configuration error.
 
-==== Connect to the private web server
+=== Connect to the private web server
 
 You were able to connect to the first web server but what about the second
 web server you launched in the private network? Well, it isn't accessible for
@@ -241,7 +241,7 @@ this assignment. You would probably never use a web server as a bastion host.
 The key is understanding conceptually what a bastion host is
 and how it fits in the overall network architecture.
 
-==== Update the backend server
+=== Update the backend server
 
 We should make sure that our backend server has all the latest software updates.
 Go ahead and issue the `yum` command to update the server.
@@ -260,7 +260,7 @@ We need a way to allow the `backend1` instance, using a private IP address, to
 communicate with hosts on the Internet so that it can download software updates.
 Sounds like a NAT is what you need!
 
-==== Deploy a NAT
+=== Deploy a NAT
 
 We will deploy a NAT to allow the `backend1` instance to communicate with the
 Internet. The NAT instance needs to live in the public subnet because that
@@ -320,7 +320,7 @@ NAT Gateway. Note that this communication can only be initiated in one
 direction. There is no way an Internet device can initiate a connection to
 the `backend1` server through the NAT Gateway.
 
-==== Create a Git repo
+=== Create a Git repo
 
 While you are on the `backend1` server, create a directory called `assignment5`
 in your home directory. Change to this directory and initialize a Git
@@ -361,7 +361,7 @@ address of this new GitHub repository
 
 Confirm that the three files are now in your new GitHub repository.
 
-==== Remove NAT and backend server
+=== Remove NAT and backend server
 
 Now that you have successfully established this NAT connection, we are going
 to remove it. The NAT Gateway is no longer needed in this exercise. Go back
@@ -378,7 +378,7 @@ Finally, we no longer need to use the `backend1` instance in this lesson, so
 go to the EC2 dashboard and terminate this instance. Leave the `webserver1`
 instance running though because we will continue to use that instance.
 
-==== Launch another web server
+=== Launch another web server
 
 During the last part of the assignment you will launch a second web server and
 setup a load balancer to distribute traffic between the two servers. We could
@@ -437,7 +437,7 @@ websites hosted on `webserver1` and `webserver2` are now slightly different so
 that you can visually see which server is providing the content to your web
 browser. Let's launch a load balancer next.
 
-==== Launch an Elastic Load Balancer
+=== Launch an Elastic Load Balancer
 
 Select the *Load Balancers* link on the EC2 dashboard and click the button to
 *create a load balancer*. The load balancer will have the following properties:
@@ -493,7 +493,7 @@ refresh button on your browser a few times. Do you notice the web page content
 changes depending on which web server is handling the request? The load
 balancer is redirecting the request to the least utilized server.
 
-==== Simulate a failure
+=== Simulate a failure
 
 Now you are going to simulate a service failure by stopping one of the
 web servers. In the real world a server could fail for a number of reasons -
@@ -520,7 +520,7 @@ partial service failure. Load balancers aren't just used for increasing
 service resiliency, they can also increase performance by spreading website
 requests across a group of web servers.
 
-==== Save your work
+=== Save your work
 
 Let's commit some more data to the Git repository you created earlier in the
 assignment. Open a terminal connection to the `webserver1` instance (you might
@@ -551,12 +551,12 @@ Now add the `access2.log` file to the repository and commit your changes. Push t
 repository back up to GitHub. Verify that the new `access2.log` file exists on
 your GitHub repository.
 
-==== Terminate server
+=== Terminate server
 
 The last step in the assignment is to terminate the EC2 instances, delete
 the load balancer, and delete the VPC. I'll leave this as an exercise for you to
 figure out how to complete. Remember, you will get billed for each hour these
 services are running (or at least lose free credits).
 
-=== Submitting your assignment
+== Submitting your assignment
 I will review your published work on GitHub after the homework due date.

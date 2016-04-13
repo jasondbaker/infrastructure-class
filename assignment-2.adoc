@@ -3,11 +3,11 @@
 
 :sectnums!:
 
-== Assignment 2
+= DevOps & Cloud Infrastructure: Assignment 2
 Jason Baker <bake2352@stthomas.edu>
 1.0, 3/18/2016
 
-=== Overview
+== Overview
 This week we will focus on becoming familiar with launching a Linux server and
 working with some basic Linux and Git commands. We will use AWS to launch and host
 the Linux server. AWS might seem a little confusing at this point. Don't worry, we
@@ -15,17 +15,17 @@ will gain much more hands-on experience with AWS throughout the course. The goal
 is to get you comfortable working with the technology and not overwhelm you with
 all the details.
 
-=== Requirements
+== Requirements
 
 You need to have a personal AWS account and GitHub account for this assignment. You should also
 read the _Git Hands-on Guide_ and _Linux Hands-on Guide_ before beginning this
 exercise.
 
-=== The assignment
+== The assignment
 
 Let's get started!
 
-==== Create GitHub repository
+=== Create GitHub repository
 The first step in the assignment is to create a new git repository in GitHub.
 Here are the basic steps:
 
@@ -60,7 +60,7 @@ image:images/assignment1/github-url.png["600","600"]
 At this point your new repository to ready to use. The repository is currently
 empty. We will put some content in there soon!
 
-==== Launch Linux server
+=== Launch Linux server
 
 The second step in the assignment is to launch a Linux server using AWS EC2. The
 server should have the following characteristics:
@@ -77,7 +77,7 @@ available at:
 
 Once you launch the new server, it may take a few minutes to provision.
 
-==== Log into server
+=== Log into server
 The next step is to log into the Linux server using a terminal program with
 secure shell (SSH) support. You will need to have the server key and the
 public IP address before attempting to log into the server. Remember, the key
@@ -89,7 +89,7 @@ log into the instance using a Windows desktop and a MacOS desktop:
 
   TBD
 
-==== Working with Linux
+=== Working with Linux
 
 If you've made it this far, congratulations! You've made it over the toughest
 hurdle. By the end of this course you will be able to launch and
@@ -443,7 +443,7 @@ output from the `ls` command and redirects it to the `less` command where
 the resulting output is paged. Pipes are super powerful and used all the
 time by savvy Linux operators.
 
-==== Working with shell scripts
+=== Working with shell scripts
 Now things are going to get interesting.
 
 We've been manually typing in commands throughout this exercise. If we were
@@ -551,7 +551,7 @@ Scripts support several programming constructs like for-loops, do-while loops, a
 if-then-else. These building blocks allow you to create fairly complex scripts for
 automating tasks.
 
-==== Installing packages and services
+=== Installing packages and services
 We're nearing the end of this exercise. But before we finish, let's install some
 new software packages on our server. The first thing we should do is make sure
 all the current packages installed on our Linux server are up-to-date. Type in:
@@ -602,7 +602,7 @@ is stored in a git repository. First we need to install git. Type in the command
 
   $ sudo yum install git -y
 
-==== Saving our work in the repository
+=== Saving our work in the repository
 Next, make sure you are still in your home directory (`/home/ec2-user`). We will
 install the git repository you created at the beginning of this exercise. You
 will need to modify this command by typing in the GitHub repository URL you
@@ -676,7 +676,7 @@ Go back to the GitHub.com website and login if you have been logged out. Click
 on the `infrastructure-assignment1` repository. Do you see your files listed
 there? Congratulations, you survived the exercise!
 
-==== Terminate server
+=== Terminate server
 
 The last step is to terminate your Linux instance. AWS will bill you for every
 hour the instance is running. The cost is nominal, but there's no need to rack

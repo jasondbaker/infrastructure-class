@@ -3,11 +3,11 @@
 
 :sectnums!:
 
-== Assignment 3
+= DevOps & Cloud Infrastructure: Assignment 3
 Jason Baker <bake2352@stthomas.edu>
 1.0, 4/3/2016
 
-=== Overview
+== Overview
 Last week we launched a Linux server on AWS and worked with several basic
 Linux and Git commands. We will expand on last week's learnings in this
 assignment. Read through the entire assignment first before launching a
@@ -31,17 +31,17 @@ a task, you will be expected to perform the task based on knowledge you gained
 from the previous assignment. Try to perform a task without looking at previous
 notes first. If you make a mistake, no worries. We all learn by making mistakes.
 
-=== Requirements
+== Requirements
 
 You need to have a personal AWS account and GitHub account for this assignment. You should have
 also read the _Git Hands-on Guide_ and _Linux Hands-on Guide_ by this point in the
 course.
 
-=== The assignment
+== The assignment
 
 Ready? Let's go!
 
-==== Launch Linux server
+=== Launch Linux server
 
 The first step in the assignment is to launch a Linux server using AWS EC2.
 You should follow the same process as the previous assignment. Refer back
@@ -60,24 +60,29 @@ server. Either option is fine. From a practical standpoint, it might make
 sense to reuse the same key pair each time so that you don't have to
 keep track of which key pair you used to launch a particular server.
 
-==== Taking a break
-
+[TIP]
+.Taking a break
+====
 It's recommended that you complete this assignment in one sitting. But if
 you need to work on it over the course of a couple days, that's no problem.
 You can always `stop` your EC2 instance when you need to take a break, and
-then `start` the instance back up when you are ready to work again. The
-EC2 instances we are creating save our changes even when the instances are
+then `start` the instance back up when you are ready to work again.
+
+The EC2 instances we are creating save our changes even when the instances are
 shut down. Just don't `terminate` the instance, because then you will lose
-all of your work and have to start all over again. AWS does not bill you
+all of your work and have to start all over again.
+
+AWS does not bill you
 for instances that are stopped. Well, technically they bill you for the storage
 costs of the instance, but that amounts to pennies per month.
+====
 
-==== Log into server
+=== Log into server
 The next step is to log into the Linux server using a terminal program with
 secure shell (SSH) support. You will need to have the server key and the
 public IP address before attempting to log into the server.
 
-==== More Shell Script Fun
+=== More Shell Script Fun
 
 Before we dive into the assignment, let's update the software packages on
 the Linux instance by running a `yum update`:
@@ -468,7 +473,7 @@ production code.
 Look at the contents of the `script3` file. Your changes from the feature
 branch have now been merged into the master branch.
 
-==== Push project repo to GitHub
+=== Push project repo to GitHub
 
 The final step of the assignment is to push your repository up to GitHub. We'll
 follow a slightly different process than we followed during the previous assignment.
@@ -522,14 +527,14 @@ it also makes sense to push these local branches to the GitHub repository at
 times as well -- especially if multiple developers are collaborating on a
 particular feature and need to share changes.
 
-==== Terminate server
+=== Terminate server
 
 The last step in the assignment is to terminate your Linux instance. AWS will bill you for every
 hour the instance is running. The cost is nominal, but there's no need to rack
 up unnecessary charges. Refer to the previous assignment if you don't remember
 how to terminate your EC2 instance.
 
-=== Submitting your assignment
+== Submitting your assignment
 You should have emailed me your GitHub username during the previous assignment.
 There is no need to email your username again. I will review your published
 work on GitHub after the homework due date.

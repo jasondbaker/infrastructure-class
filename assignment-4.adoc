@@ -3,11 +3,11 @@
 
 :sectnums!:
 
-== Assignment 4
+= DevOps & Cloud Infrastructure: Assignment 4
 Jason Baker <bake2352@stthomas.edu>
 1.0, 4/3/2016
 
-=== Overview
+== Overview
 This week we will get some hands-on experience with EC2 and S3. You have been
 using EC2 for a couple weeks now, but this assignment will dive deeper into
 its capabilities.
@@ -22,15 +22,15 @@ If you get stuck on a step, do a little research on the AWS documentation site o
 reach out to the class on Slack. Your feedback will be incorporated into future
 versions of the assignment.
 
-=== Requirements
+== Requirements
 
 You need to have a personal AWS account and GitHub account for this assignment.
 
-=== The assignment
+== The assignment
 
 Ready your engines. Let's rev up some instances!
 
-==== Create a role
+=== Create a role
 
 The first step in the assignment is to create a new role. We talked about
 roles briefly in class. Basically, a role is a way to assign privileges to
@@ -66,7 +66,7 @@ Let's create this S3 access role now.
 If you created the new role properly, you should see the `S3-full-access` role listed
 in the IAM roles table.
 
-==== Create an S3 bucket
+=== Create an S3 bucket
 
 Next, let's create an S3 bucket to store some data. Go ahead and select the S3
 service on the AWS console. If you haven't created an S3 bucket before you might
@@ -87,7 +87,7 @@ jbaker-infrastructure-4
 
   * You should be able to select a button or link to *create* the bucket at this point.
 
-==== Upload data to S3
+=== Upload data to S3
 
 You can upload files to S3 now that your new bucket is setup. Select your new bucket
 on the S3 dashboard and look at its *properties*.
@@ -123,7 +123,7 @@ You should now see the `index.html` file listed in the bucket file listing. Did
 you notice that you can also create folders inside S3 buckets? Folders are a
 useful way to organize your data within buckets.
 
-==== Encrypt S3 data
+=== Encrypt S3 data
 
 You can easily encrypt data that's stored on S3. When you uploaded your file to
 the S3 bucket the data transfer occurred over an SSL/TLS-secured communications
@@ -142,7 +142,7 @@ someone from retrieving your data from the physical hard drive it's stored on.
 AES-256 is the standard encryption algorithm used by Amazon to secure data in
 many of its services.
 
-==== Launch Linux server
+=== Launch Linux server
 
 The next step is to launch a Linux instance using EC2.
 In previous assignments, you accepted all of the server launch defaults when launching a
@@ -179,13 +179,13 @@ server. Either option is fine. From a practical standpoint, it might make
 sense to reuse the same key pair each time so that you don't have to
 keep track of which key pair you used to launch a particular server.
 
-==== Log into server
+=== Log into server
 The next step is to log into the Linux server using a terminal program with
 secure shell (SSH) support. You will need to have the server key and the
 public IP address before attempting to log into the server. Remember, it will
 take a few minutes for the server to initialize before you can connect to it.
 
-==== Update server software
+=== Update server software
 Once you log into the server, perform an update on all the Linux packages. Refer back
 to previous lessons if you can't recall the command to do this. Also, install
 the Git client on the server.
@@ -231,7 +231,7 @@ you can check:
 Make sure you can successfully test the Nginx web server before continuing with
 this assignment.
 
-==== Configure webserver
+=== Configure web server
 
 Nginx is installed on the Linux instance and is currently running. However, if you
 reboot the instance Nginx will not automatically restart. Let's fix that:
@@ -299,7 +299,7 @@ image:images/assignment4/new-page.png["400","400"]
 
 The page isn't very fancy yet. Perhaps we'll expand on it future assignments.
 
-==== Instance meta-data
+=== Instance meta-data
 
 One of the challenges IT professionals face when working with cloud-based
 infrastructure like EC2 instances is understanding how to programmatically
@@ -329,7 +329,7 @@ You should see `t2.micro` in the response. Understanding how to access
 instance meta-data is critically important when programmatically working with
 EC2 instances.
 
-==== Create a script
+=== Create a script
 
 We're going to take our new found knowledge of instance meta-data and put it
 to work. Start by creating a directory in `/user/share/nginx` (your current
@@ -368,7 +368,7 @@ Here are a couple hints for writing this script:
   linefeed character to it's output by using a flag: `curl -w "\n" <url>`,
   where `<url>` is the website address being accessed.
 
-==== Commit the work
+=== Commit the work
 
 Once your script is working properly, change back to the `/user/share/nginx`
 directory and add the `scripts` directory and your new files to the Git
@@ -387,7 +387,7 @@ need to recall the specific commands.
 
 Congratulations! Your work is now saved.
 
-==== Take a snapshot
+=== Take a snapshot
 
 Before we conclude this assignment, let's take a snapshot of our new instance.
 A snapshot can be used to backup the data on our instance or to create new
@@ -416,7 +416,7 @@ changed since the previous snapshot.
 You can watch the progress of the snapshot by selecting the *Snapshots* menu
 link in the EC2 dashboard.
 
-==== Create an AMI
+=== Create an AMI
 
 Once the snapshot is completed, you can use the snapshot to create a personal
 Amazon Machine Image (AMI). Select the new snapshot in the *Snapshots* page
@@ -431,11 +431,11 @@ visibility is private.
 
 image:images/assignment4/ami-class.png["600","600"]
 
-==== Terminate server
+=== Terminate server
 
 The last step in the assignment is to terminate your Linux instance. AWS will bill you for every
 hour the instance is running. The cost is nominal, but there's no need to rack
 up unnecessary charges and we won't use this instance in the next lesson.
 
-=== Submitting your assignment
+== Submitting your assignment
 I will review your published work on GitHub after the homework due date.

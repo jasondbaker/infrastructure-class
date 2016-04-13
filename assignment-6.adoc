@@ -3,33 +3,54 @@
 
 :sectnums!:
 
-== Assignment 6
+= DevOps & Cloud Infrastructure: Assignment 6
 Jason Baker <bake2352@stthomas.edu>
 1.0, 4/8/2016
 
-=== Overview
-This week we will build a VPC from scratch and work with an elastic load
-balancer to deploy a resilient website.
+== Overview
+This week we will enable auto scaling for a set of EC2 instances and
+use EFS to share files on the instances.
 
 Like the previous assignment, you may have to work through some of the detailed
 steps to complete the requirements. If you get stuck on a step, do a little
 research on the AWS documentation site or reach out to the class on Slack. Your
 feedback will be incorporated into future versions of the assignment.
 
-=== Requirements
+== Requirements
 
 You need to have a personal AWS account and GitHub account for this assignment.
 
-=== The assignment
+== The assignment
 
-Get ready to build your virtual private cloud!
+Let's start scaling.
 
-==== Terminate server
+=== Create VPC
+
+Each assignment in this course has been less prescriptive than the previous
+and this assignment is no different. By now, you should understand how to configure
+a VPC, subnets, routing tables, an internet gateway, an elastic load balancer, and
+EC2 instances. You will create all of these components and more in this week's
+assignment. Remember, you can always look back at previous assignments, class
+recordings, or online AWS documentation if you get stuck on a step.
+
+You will build a VPC and set of AWS services which conforms to the service
+diagram below.
+image:images/assignment6/diagram.png["600","600"]
+
+Start the assignment by creating a VPC named `productionVpc` in the `us-east`
+region. The VPC will have two subnets:
+
+  * `production-public-1` subnet located in the `us-east-1a` availability zone
+  will use the 10.0.1.0/25 network.
+  * `production-public-2` subnet located in the `us-east-1b` availability zone
+  will use the 10.0.1.128/25 network.
+
+=== Terminate server
 
 The last step in the assignment is to terminate the EC2 instances, delete
 the load balancer, and delete the VPC. I'll leave this as an exercise for you to
 figure out how to complete. Remember, you will get billed for each hour these
 services are running (or at least lose free credits).
 
-=== Submitting your assignment
+== Submitting your assignment
 I will review your published work on GitHub after the homework due date.

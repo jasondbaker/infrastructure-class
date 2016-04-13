@@ -11,7 +11,7 @@ Version 1.0
 
 {blank}
 [underline]#Course Title# +
-Information Technology Infrastructure
+DevOps & Cloud Infrastructure
 
 [underline]#Meeting Time Place# +
 XXXXXXX, 5:45 - 9:00 PM, OSS-XXXX
@@ -40,7 +40,6 @@ Before class or by appointment +
 
 {blank}
 [underline]#Course Description# +
-SEIS 6XX Information Technology Infrastructure
 
 This course covers the
 engineering and design of IT infrastructure, focusing on cloud-scale distributed
