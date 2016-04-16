@@ -8,13 +8,13 @@ Jason Baker <bake2352@stthomas.edu>
 1.0, 4/8/2016
 
 == Overview
-This week we will enable auto scaling for a set of EC2 instances and
-use EFS to share files on the instances.
+This week we will enable auto scaling for a Wordpress web application. Multiple
+web servers will share the web application content using EFS. The web application
+will communicate with a backend database server running on RDS.
 
-Like the previous assignment, you may have to work through some of the detailed
+Like the previous assignment, you will have to work through some of the detailed
 steps to complete the requirements. If you get stuck on a step, do a little
-research on the AWS documentation site or reach out to the class on Slack. Your
-feedback will be incorporated into future versions of the assignment.
+research on the AWS documentation site or reach out to the class on Slack.
 
 == Requirements
 
@@ -24,7 +24,7 @@ You need to have a personal AWS account and GitHub account for this assignment.
 
 Let's start scaling.
 
-=== Create VPC
+=== Create VPC and subnets
 
 Each assignment in this course has been less prescriptive than the previous
 and this assignment is no different. By now, you should understand how to configure
@@ -38,12 +38,78 @@ diagram below.
 image:images/assignment6/diagram.png["600","600"]
 
 Start the assignment by creating a VPC named `productionVpc` in the `us-east`
-region. The VPC will have two subnets:
+region with a CIDR block of `10.0.0.0/16`. The VPC will have two subnets:
 
   * `production-public-1` subnet located in the `us-east-1a` availability zone
-  will use the 10.0.1.0/25 network.
+  will use the `10.0.1.0/25` network.
   * `production-public-2` subnet located in the `us-east-1b` availability zone
-  will use the 10.0.1.128/25 network.
+  will use the `10.0.1.128/25` network.
+
+All instances on the two production subnets will need to be able to communicate with
+the Internet. You will need to configure the VPC to allow this communication.
+
+=== Create Security Groups
+
+While you are in the VPC dashboard, go ahead and create a couple security
+groups. You will need to use these security groups when launching services
+later in the assignment. It's always a good idea to plan out the security
+requirements for your services in advance.
+
+Create two security groups called `production-web` and `production-db`. The
+first security group will allow all external devices to communicate with
+the web server instances via SSH and HTTP. Here are the requirements for the
+first security group:
+
+  * production-web
+    ** Name tag: production-web
+    ** Group name: production-web
+    ** Description: production web servers
+    ** VPC: productionVPC
+    ** Inbound:
+      *** SSH from source 0.0.0.0/0
+      *** HTTP from source 0.0.0.0/0
+
+The second security group will allow only the web serves to communicate with
+the MySQL database instances using port 3306. Here are the requirements for the
+second security group:
+
+  * production-db
+    ** Name tag: production-db
+    ** Group name: production-db
+    ** Description: production database servers
+    ** VPC: productionVPC
+    ** Inbound:
+      *** MySQL (3306) from source production-web security group
+
+
+=== Create RDS database
+
+Wordpress is a very popular Content Management System (CMS) and like most CMS
+systems it requires a database to persist content and user account information.
+We will use a MySQL database managed by the RDS service to support this
+database requirement.
+
+Go to the RDS dashboard on AWS and launch a new MySQL database instance. The
+launch wizard may ask you if you plan to use the instance for production or
+development purposes. In this case, select the development option. In a real
+production scenario you would want to use a database tier that supports
+multi-AZ deployments. A single lower-cost database instance is fine for this
+assignment.
+
+The MySQL instance should have the following properties:
+
+  * DB Engine Version = ~5.6 (most any recent release should work)
+  * DB Class = db.t2.micro
+  * Multi-AZ deployment: No
+  * Allocated Storage: 10GB
+  * DB Instance Identifier: wordpressdb
+  * Master Username: wpdbadmin
+  * Master Password: (choose a suitable password)
+  * VPC: productionVPC
+  * Subnet Group: Create new DB Subnet Group
+  * Publicly Accessible: No
+  * Availability Zone: us-east-1c
+  * VPC Security Group:
 
 === Terminate server
 

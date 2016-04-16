@@ -209,13 +209,13 @@ Assignment 6 +
 Read Practice of Cloud Systems Administration Chapters 2 & 4
 
 |9 | X/X/2016 | Configuration management I +
-Ansible |
+ |
 Assignment 7 +
 Read Web Operations chapter 5 +
 Read Practice of Cloud Systems Administration Chapter 5
 
 |10 | X/X/2016 | Configuration management II +
-Ansible |
+ |
 Assignment 8 +
 Read Practice of Cloud Systems Administration Chapter 6
 
@@ -234,6 +234,7 @@ Read Practice of Cloud Systems Administration Chapter 8
 |13 | X/X/2016 | Data center architecture |
 Read _How Cloud Has Changed The Data Center Architect_ +
 Read _6 Models Of The Modern Data Center_
+
 |14 | X/X/2016 | Final exam |
 
 
