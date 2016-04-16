@@ -8,9 +8,8 @@ Jason Baker <bake2352@stthomas.edu>
 1.0, 4/8/2016
 
 == Overview
-This week we will enable auto scaling for a Wordpress web application. Multiple
-web servers will share the web application content using EFS. The web application
-will communicate with a backend database server running on RDS.
+This week we will enable auto scaling for a Wordpress web application. The web
+application will communicate with a backend database server running on RDS.
 
 Like the previous assignment, you will have to work through some of the detailed
 steps to complete the requirements. If you get stuck on a step, do a little
@@ -37,12 +36,12 @@ You will build a VPC and set of AWS services which conforms to the service
 diagram below.
 image:images/assignment6/diagram.png["600","600"]
 
-Start the assignment by creating a VPC named `productionVpc` in the `us-east`
+Start the assignment by creating a VPC named `productionVpc` in the `us-west`
 region with a CIDR block of `10.0.0.0/16`. The VPC will have two subnets:
 
-  * `production-public-1` subnet located in the `us-east-1a` availability zone
+  * `production-public-1` subnet located in the `us-west-1a` availability zone
   will use the `10.0.1.0/25` network.
-  * `production-public-2` subnet located in the `us-east-1b` availability zone
+  * `production-public-2` subnet located in the `us-west-1b` availability zone
   will use the `10.0.1.128/25` network.
 
 All instances on the two production subnets will need to be able to communicate with
@@ -108,8 +107,176 @@ The MySQL instance should have the following properties:
   * VPC: productionVPC
   * Subnet Group: Create new DB Subnet Group
   * Publicly Accessible: No
-  * Availability Zone: us-east-1c
-  * VPC Security Group:
+  * Availability Zone: No Preference
+  * VPC Security Group: production-db
+  * Database Name: wordpress
+
+The MySQL database instance will take a few minutes to launch. Once the
+instance is available, take a look at the instance properties and copy or
+write down the database endpoint address. The address will look something
+like this:
+
+   wordpressdb.c4mwrq8d4std.us-east-1.rds.amazonaws.com
+
+You will need to know this database endpoint address when setting up the Wordpress web
+application.
+
+=== Create AMI
+
+The next step is to create a custom AMI containing a basic Wordpress installation.
+You will connect this installation to your MySQL database, and then store the
+completed configuration as an AMI. You can use the new AMI to create an auto scaling
+launch configuration.
+
+Launch an EC2 instance with the following properties:
+
+  * Amazon Linux AMI 64-bit
+  * t2.micro
+  * Network: productionVpc
+  * Subnet: production-public-1
+  * Auto-assign public IP: Enable
+  * User data (in Advanced section):
+
+  #!/bin/bash
+  yum update -y
+  yum install -y git httpd24 php56 php56-mysqlnd
+  service httpd start
+  chkconfig httpd on
+
+
+  * Tag: Name = wordpress1
+  * Security group: production-web
+
+Once the instance is running, open a web browser on your desktop and browse
+to the public IP address of the new instance. You should see a test page
+appear in your browser. The user data script automatically updated the server
+and installed a number of basic components needed by Wordpress, including
+the Apache web server, PHP, and a MySQL library.
+
+Connect to the new instance using a terminal program. Type in the following
+command:
+
+  $ wget https://wordpress.org/latest.tar.gz
+
+The `wget` command is similar to the `curl` command we have used in previous
+assignments. You can use the `wget` command to retrieve and download
+data, whereas `curl` may be used to upload data as well.
+
+Now that you have downloaded the latest version of the Wordpress software,
+unpack the software archive:
+
+  $ tar -xzf latest.tar.gz
+
+You will notice that the unpacked archive is located in a new sub-directory
+called `wordpress`. You need to configure the Wordpress software before
+deploying it on the web server. Wordpress, like many software applications,
+is configured using a text file containing settings and properties. Wordpress
+comes with a sample configuration file. Start out by copying the sample
+file to another file which you will use in production:
+
+  $ cd wordpress
+  $ cp wp-config-sample.php wp-config.php
+
+Next, open the `wp-config.php` file in a text editor. You need to set the
+MySQL database access information in the configuration file by modifying
+4 lines.
+
+First, modify the following line to include the `wordpress` database name:
+
+  define('DB_NAME', 'database_name_here');
+
+  define('DB_NAME', 'wordpress');
+
+Second, modify the following line to include the `wpdbadmin` username:
+
+  define('DB_USER', 'username_here');
+
+  define('DB_USER', 'wpdbadmin');
+
+Third, modify the following line to include the admin password:
+
+  define('DB_PASSWORD', 'password_here');
+
+  define('DB_PASSWORD', 'your-password');
+
+Finally, modify the following line to include your MySQL instance endpoint:
+
+  define('DB_HOST', 'localhost');
+
+  define('DB_HOST', 'wordpressdb.cqgfjsasiodi.us-west-1.rds.amazonaws.com');
+
+[WARNING]
+====
+Note, in a production WordPress configuration you would never use
+the administrator username and password for your MySQL database. Instead you
+would create a database access account specifically for the WordPress
+application. In this case, we're just using the administrative account as
+a shortcut. Don't rely on this as a best practice!
+====
+
+Next, you need to make a change to the web server configuration to improve
+the security of the Wordpress application. The change will allow .htaccess
+files to work properly.
+
+Open the /etc/httpd/conf/httpd.conf file in an editor. Note, since this
+file is outside your home directory you will need to use `sudo`. Find the
+section of the file that starts with:
+
+  <Directory "/var/www/html">
+
+There are several lines that look similar to this section, so make sure you
+are looking in the correct spot. Next, look for this setting:
+
+  AllowOverride None
+
+Change this existing setting to:
+
+  AllowOverride All
+
+Close and save the configuration file.
+
+You also need to make some changes to the file access permissions on the
+Wordpress directory because the application needs to be able to update local
+files. Enter the following commands:
+
+  $ sudo groupadd www
+  $ sudo usermod -a -G www apache
+  $ sudo chown -R apache:www /var/www
+  $ sudo chmod 2775 /var/www
+  $ find /var/www -type d -exec sudo chmod 2775 {} \;
+  $ find /var/www -type f -exec sudo chmod 0664 {} \;
+
+Finally, restart the Apache web server so that it picks up the new server
+configuration changes:
+
+  $ sudo service httpd restart
+
+Open up a web browser on your desktop and type in the public IP address of
+your EC2 instance as the URL. You should see a Wordpress installation page.
+Congratulations!
+
+The next step of the process is to configure the Wordpress website settings.
+Type in the following properties:
+
+  * Site Title: My WordPress Site (or use anything you like, be creative!)
+  * Username: wpadmin
+  * Password: (make up a pasword)
+  * Email: (your email address)
+
+Then click the install button to install the Wordpress website. Once the
+site is installed, you can enter your admin username and password to access
+the WordPress administrative console. Open up a new tab on your web browser
+and type in the public IP address of your EC2 instance. You should see the
+default WordPress page. You now have a fully functioning WordPress application
+running on EC2 connected to a database managed by RDS.
+
+You can shutdown the EC2 instance now that you have confirmed that the
+WordPress application is running properly. Make sure you shutdown the instance,
+not terminate it! Stopping the instance will allow the data on the server to
+quiesce. After the instance stops, create an image based on the instance
+called `wordpressweb`. AWS will take a few minutes to build the new AMI.
+
+
 
 === Terminate server
 
