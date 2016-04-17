@@ -8,7 +8,7 @@ Jason Baker <bake2352@stthomas.edu>
 1.0, 4/8/2016
 
 == Overview
-This week we will enable auto scaling for a Wordpress web application. The web
+This week we will enable auto scaling for a WordPress web application. The web
 application will communicate with a backend database server running on RDS.
 
 Like the previous assignment, you will have to work through some of the detailed
@@ -118,12 +118,29 @@ like this:
 
    wordpressdb.c4mwrq8d4std.us-east-1.rds.amazonaws.com
 
-You will need to know this database endpoint address when setting up the Wordpress web
+You will need to know this database endpoint address when setting up the WordPress web
 application.
 
-=== Create AMI
+=== Create a load balancer
 
-The next step is to create a custom AMI containing a basic Wordpress installation.
+The auto scaling group will deploy multiple WordPress servers into your VPC.
+You will need a load balancer to distribute the load across the servers and
+to ensure that the service is highly available.
+
+Go to the EC2 dashboard and select the `Load Balancers` menu item. Create a
+new load balancer called `wordpress-lb` that will distribute HTTP (port 80) requests across
+web servers located in both the us-west-1a and us-west-1b subnets. The load
+balancer should use `/readme.html` as the health check ping path. You won't
+be able to associate any EC2 instances with the load balancer yet. That's not
+a problem since you can associate an instance with the load balancer later.
+
+Note, make sure you select the correct VPC, subnet, and security group
+settings for the load balancer. Review previous assignments if you are unsure
+how to set these properties.
+
+=== Create WordPress instance and AMI
+
+The next step is to create a custom AMI containing a basic WordPress installation.
 You will connect this installation to your MySQL database, and then store the
 completed configuration as an AMI. You can use the new AMI to create an auto scaling
 launch configuration.
@@ -179,7 +196,7 @@ file to another file which you will use in production:
 
 Next, open the `wp-config.php` file in a text editor. You need to set the
 MySQL database access information in the configuration file by modifying
-4 lines.
+6 lines.
 
 First, modify the following line to include the `wordpress` database name:
 
@@ -199,11 +216,25 @@ Third, modify the following line to include the admin password:
 
   define('DB_PASSWORD', 'your-password');
 
-Finally, modify the following line to include your MySQL instance endpoint:
+Fourth, modify the following line to include your MySQL instance endpoint:
 
   define('DB_HOST', 'localhost');
 
   define('DB_HOST', 'wordpressdb.cqgfjsasiodi.us-west-1.rds.amazonaws.com');
+
+Finally, add the following two lines to the configuration file right under
+the line `define('DB_NAME', 'wordpress');`. You will need to enter the
+DNS name for your load balancer.
+
+  define('WP_HOME', 'http://(load balancer DNS name)');
+  define('WP_SITEURL', 'http://(load balancer DNS name)');
+
+.Example
+----
+define('DB_NAME', 'wordpress');
+define('WP_HOME', 'http://wordpressLB-2127306763.us-west-1.elb.amazonaws.com');
+define('WP_SITEURL', 'http://wordpressLB-2127306763.us-west-1.elb.amazonaws.com');
+----
 
 [WARNING]
 ====
@@ -251,16 +282,22 @@ configuration changes:
 
   $ sudo service httpd restart
 
-Open up a web browser on your desktop and type in the public IP address of
-your EC2 instance as the URL. You should see a Wordpress installation page.
-Congratulations!
+The WordPress site is available but it is configured to use your load
+balancer. Therefore, you need to associate the instance with the load
+balancer. Go to the `instances` property of your load balancer and
+*edit* the instances to add the `wordpress1` server.
+
+Open up a web browser on your desktop and type in the DNS name of the load
+balancer as the URL. You should see a Wordpress installation page.
+Congratulations! If you don't see the installation page, check to make sure
+that the instance status in the load balancer properties is set to _InService_.
 
 The next step of the process is to configure the Wordpress website settings.
 Type in the following properties:
 
   * Site Title: My WordPress Site (or use anything you like, be creative!)
   * Username: wpadmin
-  * Password: (make up a pasword)
+  * Password: (make up a password)
   * Email: (your email address)
 
 Then click the install button to install the Wordpress website. Once the
@@ -276,14 +313,159 @@ not terminate it! Stopping the instance will allow the data on the server to
 quiesce. After the instance stops, create an image based on the instance
 called `wordpressweb`. AWS will take a few minutes to build the new AMI.
 
+Go back to the load balancer properties and remove the instance from the
+load balancer.
 
+=== Create an Auto Scaling group
+
+The next step in the assignment is to create a launch configuration and auto
+scaling group. Select the `Launch Configuration` menu item and click on the
+button to create a new auto scaling group. Here are the properties for the
+new launch configuration:
+
+  * AMI: wordpressweb (located in your personal AMI listing)
+  * Type: t2.micro
+  * Launch configuration name: wordpress-launch-config
+  * IP Address Type: Assign a public IP address to every instance.  (located in advanced section)
+  * Security group: production-web
+
+The auto scaling group should have the following properties:
+
+  * Group name: wordpress-web-group
+  * Group size: 2
+  * Network: productionVpc
+  * Subnets: production-public-1 & production-public-2
+  * Receive traffic from Elastic Load Balancers: Enabled
+    ** Select the `wordpress-lb` load balancer
+    ** Health check type: ELB
+  * Scaling policy: Keep this group at its initial size
+  * Tag:
+    ** Key = Group
+    ** Value = wordpressweb
+
+Take a look at the Activity History of the auto scaling group you just launched.
+You should see a couple pending activities. If you see any failure messages,
+that means either the launch configuration settings or the auto scaling group
+settings are incorrect. You may need to delete the new launch configuration and
+scaling group to build the configuration again.
+
+If the auto scaling process is working properly you should see two new instanced
+being launched in the EC2 dashboard. Once the instances are running, locate
+the DNS name of your load balancer. It should look something like:
+
+  wordpressLB-2127306763.us-west-1.elb.amazonaws.com
+
+Type the load balancer DNS name into your web browser. You should see the
+Hello World page from your WordPress site. Hit the refresh button on your
+browser a few times so that the load balancer redirects the request to a different
+server. Now you have a highly available WordPress site that is being managed
+by an auto scaling group.
+
+=== Simulate an auto scaling failure
+
+Auto scaling is designed to respond to events such as a failed instance or the
+CPU load on an instance increasing above a certain threshold. Let's simulate an
+instance failure by terminating one of the running instances. It doesn't matter
+which instance you choose.
+
+After terminating one of the running instances, wait a few minutes and check
+out the list of EC2 instances on the dashboard. You should see a new new instance
+starting up. Auto scaling will automatically maintain two running instances at
+all times.
+
+[NOTE]
+.Important Production Note
+====
+Your WordPress application probably looks like it is working correctly. The load
+balancer is distributing requests between the two web servers. You can see the
+WordPress site if you browser to the load balancer address and refresh the
+page multiple times. So everything is working, right? Not exactly. The current
+architecture has a problem -- a big one.
+
+If a user creates a new WordPress post and uploads an image,
+that image file will get stored on the local filesystem of the server the user is
+was connected to. When another user visits the site and views the
+previous user's post, the new user may or *may not* see the image! That's
+because the image is only stored on one of the two web servers.
+
+The solution to this problem is that all uploaded content needs to be stored
+in a file location that is shared by both web servers. Traditionally, people
+solved this problem by storing the uploaded files in an S3 bucket or setting
+up a replicated file share between the web servers. Perhaps EFS is the best
+way to solve this issue for new implementations.
+====
+
+=== Collecting session data
+
+Connect to one of the running instances using a terminal program. In assignment
+4, you used the AWS command line interface to interact with S3. Let's use the
+same CLI to pull some event information from the EC2 auto scaling service.
+
+First you need to configure the AWS CLI using your credentials. You didn't have
+to do this in the previous assignment with S3 because you associated an
+IAM Role with the instance. Type in the following command:
+
+  $ aws configure
+
+The CLI will prompt you for your account credentials. Hopefully you have these
+written down from assignment 2! If you forgot your access key, you can look at
+your account properties in the IAM dashboard. However, your secret key cannot
+be recovered. You would need to generate a new secret key for your access account
+if you lost the previous key. Don't lose this key!
+
+The default region name for the AWS CLI configuration is: `us-west-1` and just
+select the default output format (none).
+
+Next, type in the following command to view all the autoscaling activities:
+
+  $ aws autoscaling describe-scaling-activities --auto-scaling-group-name wordpress-web-group
+
+You should see a long text output including a list of activities with each
+having a Description, ActivityId, StartTime, etc.
+
+Next, create a sub-directory in your home directory called `assignment6` and
+change to this new directory. Initialize a new Git repository in the directory.
+
+Create a small batch script called `getdata.sh` which performs the following:
+
+  * Copies the output of the following command into a text file in the current
+  directory called `activity.json`:
+
+  aws autoscaling describe-scaling-activities --auto-scaling-group-name wordpress-web-group
+
+  * Copies the /var/www/html/wp-config.php file to the current directory into
+  a file with the same name.
+
+  * Copies the /var/log/httpd/access_log file to the current directory into
+  a file with the same name
+
+Note, you may need to use `sudo` to copy the `wp-config.php` and `access_log`
+files.
+
+After running the script, you should have four files in the current directory:
+
+  access_log  activity.json  getdata.sh  wp-config.php
+
+Check each of the files to make sure the files contain data. Add all of the
+files to the Git repository and commit your work.
+
+Finally, create a new GitHub repository called `infrastructure-assignment6`
+and associate your local repository with this new GitHub repo. Push the
+local master branch from your repository up to GitHub. Verify that your
+files are properly stored on Github.
 
 === Terminate server
 
-The last step in the assignment is to terminate the EC2 instances, delete
-the load balancer, and delete the VPC. I'll leave this as an exercise for you to
-figure out how to complete. Remember, you will get billed for each hour these
-services are running (or at least lose free credits).
+The last step in the assignment is to delete the auto scaling group, launch
+configuration, EC2 instances, EC2 load balancer, AMI, EC2 snapshots, RDS database, and VPC. I'll leave
+this as an exercise for you to figure out how to complete. When deleting the
+RDS database instance, you don't need to save a copy of the database as a
+snapshot.
+
+Remember, you will
+get billed for each hour these services are running (or at least lose free
+credits). You launched quite a few services this week, so if you don't terminate
+them you will have a nice bill waiting for you at the end of the month!
 
 == Submitting your assignment
 I will review your published work on GitHub after the homework due date.
