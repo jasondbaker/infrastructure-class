@@ -119,6 +119,8 @@ a load balancer, security group, auto scaling group, CloudWatch alarms,
 and RDS instances for you. It's basically setting up everything you had to do
 manually in the previous assignment. This method is much easier!
 
+image:images/assignment7/eb-events.png["600","600"]
+
 Why don't we always just use Elastic Beanstalk to launch our applications?
 Well, Elastic Beanstalk is great for certain kinds of applications, but it
 certainly can't support every possible application architecture. You will
@@ -152,7 +154,11 @@ Logs, Health, Monitoring, etc. Take a look at the monitoring section. Here you
 can find overall health information for your application.
 
 Next, click on the Configuration menu link and select the small gear icon
-in the Scaling properties window. You can modify the minimum or maximum
+in the Scaling properties window.
+
+image:images/assignment7/eb-scaling.png["200","200"]
+
+You can modify the minimum or maximum
 number of instances and the scaling policies in this section. Let's increase
 the minimum number of instances to 2. In the Auto Scaling section, set
 the following property:
@@ -164,7 +170,11 @@ Elastic Beanstalk is updating your application environment. Go to the EC2
 dashboard and you will see that a new instance is launching.
 
 Go back to the Elastic Beanstalk dashboard and select your application. Wait
-until the application health is OK (green). Now, click on the application URL
+until the application health is OK (green).
+
+image:images/assignment7/eb-ok.png["600","600"]
+
+Now, click on the application URL
 to open the WordPress site in your browser. Hit the browser refresh button a
 couple times. Your WordPress application is running on multiple instances --
 just like the previous assignment.
@@ -182,6 +192,18 @@ policy will have no impact on the two instances that are currently running.
 However, after a few minutes the auto scaling group will automatically
 terminate one of the instances due to a lack of requests being handled. Pretty
 cool, huh?
+
+You might be wondering how to go about updating the WordPress application in
+the future. You can't just log into each server and upload new code. Well,
+okay you could technically do that but anytime the auto scaling group
+launches a new EC2 instance it will load the old version of your code on the
+instance.
+
+Elastic Beanstalk makes it really easy to upload new code on running instances.
+If you go to the EB dashboard and select your application, you will notice
+a button on the application dashboard titled *Upload and Deploy*. This
+feature allows you to upload a new application archive. EB takes care of the
+deployment process based on your predefined deployment settings. Awesome!
 
 === Collect session data
 
