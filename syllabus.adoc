@@ -206,13 +206,13 @@ Read Web Operations Chapters 1 & 2
 Web services +
 REST/ JSON / YAML |
 Assignment 6 +
-Read Practice of Cloud Systems Administration Chapters 2 & 4
+Read Practice of Cloud Systems Administration Chapters 4 & 5
 
 |9 | X/X/2016 | Configuration management I +
  |
 Assignment 7 +
 Read Web Operations chapter 5 +
-Read Practice of Cloud Systems Administration Chapter 5
+Read Practice of Cloud Systems Administration Chapter 2
 
 |10 | X/X/2016 | Configuration management II +
  |
