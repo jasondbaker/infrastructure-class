@@ -1,6 +1,7 @@
 ##GRADUATE PROGRAMS IN SOFTWARE  
 University of St. Thomas  
 St. Paul, MN 55105
+
 ---
 
 DevOps & Cloud Infrastructure (SEIS 768)
@@ -54,6 +55,6 @@ Build
 
 This repository requires the [Asciidoctor](http://asciidoctor.org/) toolchain
 to convert AsciiDoc files into PDF files.
- 
+
 The `generate-pdfs.sh` script in the `/build` directory will create PDF
 versions of all AsciiDoc files located in the root directory.
