@@ -6,7 +6,7 @@ University of St. Thomas +
 St. Paul, MN 55105
 
 [.text-center]
-SYLLABUS Fall 2016 SEIS 6XX +
+SYLLABUS Fall 2016 SEIS 665 +
 Version 1.0
 
 {blank}
@@ -14,7 +14,7 @@ Version 1.0
 DevOps & Cloud Infrastructure
 
 [underline]#Meeting Time Place# +
-XXXXXXX, 5:45 - 9:00 PM, OSS-XXXX
+Mondays, 5:45 - 9:00 PM, OSS-428
 
 [underline]#Credit Value# +
 3 semester credits
