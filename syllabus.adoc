@@ -14,7 +14,7 @@ Version 1.0
 DevOps & Cloud Infrastructure
 
 [underline]#Meeting Time Place# +
-Mondays, 5:45 - 9:00 PM, OSS-428
+Mondays, 5:45 - 9:00 PM, OSS 428
 
 [underline]#Credit Value# +
 3 semester credits
@@ -157,12 +157,12 @@ without the written permission of the instructor. (See Class Session Recording
 |=========================================================
 |Week | Date | Topic | Assignment Due
 
-|1 | X/X/2016 | Course Introduction +
+|1 | 9/12 | Course Introduction +
 Source control +
 Git |
 
 
-|2 | X/X/2016 | Linux fundamentals +
+|2 | 9/19 | Linux fundamentals +
 Package management +
 Shell scripting
  |
@@ -171,7 +171,7 @@ Read Practice of Cloud Systems Administration Chapter 12 +
 Read Git Hands On Guide +
 Start reading Linux Hands On Guide
 
-|3 | X/X/2016 | Infrastructure fundamentals +
+|3 | 9/26 | Infrastructure fundamentals +
 Virtualization +
 Distributed infrastructure design and operations +
  |
@@ -179,63 +179,63 @@ Assignment 2 +
 Read Practice of Cloud Systems Administration Chapter 1 +
 Read Web Operations Chapter 15
 
-|4 | X/X/2016 | Cloud computing +
+|4 | 10/3 | Cloud computing +
 AWS +
 IAM, EC2, S3 |
 Assignment 3 +
 Read Practice of Cloud Systems Administration Appendix B +
 Read _Overview of Amazon Web Services_ (White paper December 2015)
 
-|5 | X/X/2016 | Cloud computing +
+|5 | 10/10 | Cloud computing +
 AWS +
 VPC, RDS, ELB |
 Assignment 4 +
 Read _Architecting for the Cloud: AWS Best Practices_ (White paper February 2016)
 
-|6 | X/X/2016 | Cloud computing +
+|6 | 10/17 | Cloud computing +
 AWS +
 Autoscaling, Cloud Watch, Route53, +
 SQS, SNS, SES |
 Assignment 5 +
 Read Web Operations Chapters 1 & 2
 
-|7 | X/X/2016 | Midterm |
+|7 | 10/24 | Midterm |
 
 
-|8 | X/X/2016 | Distributed application architecture +
+|8 | 10/31 | Distributed application architecture +
 Web services +
 REST/ JSON / YAML |
 Assignment 6 +
 Read Practice of Cloud Systems Administration Chapters 4 & 5
 
-|9 | X/X/2016 | Configuration management I +
+|9 | 11/7 | Configuration management I +
  |
 Assignment 7 +
 Read Web Operations chapter 5 +
 Read Practice of Cloud Systems Administration Chapter 2
 
-|10 | X/X/2016 | Configuration management II +
+|10 | 11/14 | Configuration management II +
  |
 Assignment 8 +
 Read Practice of Cloud Systems Administration Chapter 6
 
-|11 | X/X/2016 | Containers +
+|11 | 11/21 | Containers +
 Docker |
 Assignment 9 +
 Read Practice of Cloud Systems Administration Chapter 3
 
-|12 | X/X/2016 | DevOps +
+|12 | 11/28 | DevOps +
 Continuous integration & deployment +
 Jenkins |
 Assignment 10 +
 Read Web Operations Chapters 4 & 10 +
 Read Practice of Cloud Systems Administration Chapter 8
 
-|13 | X/X/2016 | Data center architecture |
+|13 | 12/5 | Data center architecture |
 Read _How Cloud Has Changed The Data Center Architect_ +
 Read _6 Models Of The Modern Data Center_
 
-|14 | X/X/2016 | Final exam |
+|14 | 12/12 | Final exam |
 
 
 |=========================================================
