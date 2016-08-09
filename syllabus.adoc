@@ -44,7 +44,7 @@ Before class or by appointment +
 This course covers the
 engineering and design of IT infrastructure, focusing on cloud-scale distributed
 systems and modern DevOps practices. IT infrastructure deployment practices are rapidly changing as organizations build
-"Infrastructure as code" and adopt cloud computing platforms. We will examine the theory behind these modern practices and the real-world implementation challenges faced by IT organizations.
+infrastructure as code and adopt cloud computing platforms. We will examine the theory behind these modern practices and the real-world implementation challenges faced by IT organizations.
 
 While the lessons will cover a number of
 theoretical concepts, we will primarily learn by doing. Students will gain hands-on
@@ -55,7 +55,7 @@ AWS, and Docker.
 [underline]#Course Objectives#
 
 *   Understand how IT organizations are deploying modern infrastructure and how
-to build "Infrastructure as code".
+to build infrastructure as code.
 *   Understand how to architect cloud-scale distributed systems and the key design
 patterns used to enhance scalability and reliability within these systems.
 *   Develop specific skills related to DevOps practices including source control
@@ -80,6 +80,19 @@ If you don't currently have much experience working with IT infrastructure, plan
 budgeting more time.
 
 {blank}
+[underline]#Amazon Web Services# +
+Most class assignments will make use of infrastructure running on Amazon Web
+Services (AWS). The University of St. Thomas is an AWS Educate Institution
+which means that students can apply for $100 worth of AWS credits. Students
+should sign up for an AWS account using their @stthomas.edu email address at
+http://aws.amazon.com/. After signing up for an account, you can apply
+for educational credits at https://www.awseducate.com/Application.
+
+The educational credits should cover the costs associated with your usage of
+AWS in this class throughout the semester. However, you are responsible for
+paying any expenses not covered by these credits.
+
+{blank}
 [underline]#Blackboard# +
 Lecture notes (powerpoint/pdf format), and grades will be available on
 Blackboard. We will also use Blackboard for some of the reading quizzes.
@@ -96,8 +109,8 @@ before the start of the semester: https://www.codeschool.com/courses/try-git
 {blank}
 [underline]#Slack# +
 Slack is a great real-time chat and collaboration tool for teams. Sign up for a
-free account at http://www.slack.com or feel free to use your existing Slack
-account. We will all join a team for the duration of the course and make use
+free account at https://ustseis665.slack.com/signup using your @stthomas.edu
+email address. We will all join this team for the duration of the course and make use
 of chat channels to work on projects.
 
 {blank}
@@ -121,8 +134,9 @@ to successfully complete assignments.
 
 It's not possible to teach Linux in a few hours. If you have never used Linux
 before, you will need to invest extra time in the early weeks of this course
-getting comfortable with the operating system. By the end of this course, you
-will have basic Linux system administration skills.
+getting comfortable with the operating system. By completing the required
+learning assignments and developing DevOps processes, you will gain basic Linux
+system administration skills.
 
 {blank}
 [underline]#Grading Policy#
@@ -140,7 +154,7 @@ will have basic Linux system administration skills.
 * Factors that may severely impact your grade
   ** Significant disregard for assignments
   ** More than 2 class absences.
-  ** A failing grade on the final.
+  ** A failing grade on the midterm or final.
 
 {blank}
 [underline]#Recording of Classroom Activities# +
@@ -225,8 +239,8 @@ Assignment 9 +
 Read Practice of Cloud Systems Administration Chapter 3
 
 |12 | 11/28 | DevOps +
-Continuous integration & deployment +
-Jenkins |
+Continuous integration & delivery +
+ |
 Assignment 10 +
 Read Web Operations Chapters 4 & 10 +
 Read Practice of Cloud Systems Administration Chapter 8

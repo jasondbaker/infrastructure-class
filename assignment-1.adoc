@@ -22,10 +22,11 @@ mobile device
 ==  GitHub.com account
 
 Sign up for a free GitHub account by going to https://github.com and clicking
-the `Sign Up` button. Feel free to use an existing personal account if have one.
+the `Sign Up` button. You are welcome to use an existing personal GitHub account if have one.
 
 == Slack account
-You will receive an invite to join a Slack group for this class (https://slack.com). Slack is
+Sign up for a free Slack account at https://ustseis665.slack.com/signup using
+your @stthomas.edu email address. Slack is
 a chat-based collaborative platform used by thousands of businesses. It is heavily
 used in the application development and DevOps communities.
 
@@ -40,6 +41,11 @@ question or encounter a problem while working with a tool, you should ask your
 question on Slack first. Students that actively participate on Slack and assist
 other students with issues may receive extra credit points.
 
+Note that even though we will use Slack as a collaboration tool, students must
+complete and submit their own work on assignments. Some of the exam questions
+will relate to the assignments, and students that don't complete the assignments
+on their own will have difficulty on the exams.
+
 == AWS account
 
 We will use Amazon Web Services extensively throughout the course to learn how
@@ -48,8 +54,9 @@ to complete many of the assignments. You may use an existing (non-corporate) AWS
 account for the class. A credit card is required to sign up for an AWS account.
 
 Amazon offers a _free_ tier of service for users with new accounts. This free tier
-lasts for one year after the account is registered. Additionally, you may qualify
-for up to $100 in AWS annual credits as part of the AWS Educate program.
+lasts for one year after the account is registered. Additionally, since the
+University of St. Thomas is an AWS Educate Institution, you may qualify
+for up to $100 in AWS annual credits.
 
 This course makes every effort to stay within the free tier of service at AWS.
 However, there are times when your account will likely incur hourly charges. The
@@ -58,7 +65,14 @@ expenses. However, you are responsible for covering any expenses not covered by
 these credits.
 
 Go to http://aws.amazon.com/ and click on the `Sign In` link to sign up for a
-new AWS account.
+new AWS account. You should use your @stthomas.edu email address when signing
+up for the account.
+
+Once your AWS account is setup, make note of your AWS Account ID (found in your
+  account profile). Then, apply for educational credit by filling out an
+  application at: https://www.awseducate.com/Application. It may take a little
+  time for AWS to process your application so submit it as
+soon as you can.
 
 == _Try Git_ (optional)
 
