@@ -4,7 +4,7 @@ St. Paul, MN 55105
 
 ---
 
-DevOps & Cloud Infrastructure (SEIS 768)
+DevOps & Cloud Infrastructure (SEIS 665)
 ========================================
 
 Description
@@ -38,16 +38,16 @@ Lecture Schedule
 |------|------------------------------------------------------------------------|
 | 1    | Course Introduction, Source control, Git                               |
 | 2    | Linux fundamentals, Package management, Shell scripting                |
-| 3    | Infrastructure fundamentals, Virtualization, Distributed infrastructure design and operations                                                                      |
+| 3    | Infrastructure fundamentals, Virtualization, Distributed infrastructure|
 | 4    | Cloud computing, AWS, IAM, EC2, S3                                     |
 | 5    | Cloud computing, AWS, VPC, RDS, ELB                                    |
 | 6    | Cloud computing, AWS, Autoscaling, Cloud Watch, Route53, SQS, SNS, SES |
 | 7    | Midterm                                                                |
 | 8    | Distributed application architecture, Web services, REST/ JSON / YAML  |
-| 9    | Configuration management I                                             |
-| 10   | Configuration management II                                            |
-| 11   | Containers, Docker                                                     |
-| 12   | DevOps, Continuous integration & delivery                              |
+| 9    | Infrastructure as Code, CloudFormation                                 |
+| 10   | Infrastructure As Code                                                 |
+| 11   | DevOps, Continuous integration & delivery                              |
+| 12   | Containers, Docker                                                     |
 | 13   | Data center architecture                                               |
 | 14   | Final exam                                                             |
 
