@@ -1,0 +1,107 @@
+:doctype: article
+:blank: pass:[ +]
+
+:sectnums!:
+
+= DevOps & Cloud Infrastructure: Assignment 8
+Jason Baker <bake2352@stthomas.edu>
+1.0, 8/14/2016
+
+== Overview
+We discussed how IT professionals now design and provision infrastructure using
+code -- a concept known as Infrastructure as Code. The AWS CloudFormation
+service allows you to define cloud infrastructure using JSON template files.
+These template files create resource stacks in AWS.
+
+In this week's assignment, you will use AWS CloudFormation to create a relatively
+basic stack. Your stack will expand the stack design that was created during
+the hands-on portion of the class. The easiest way to create your stack is by using
+the CloudFormation Designer tool.
+
+You will learn how code can simplify and ensure the repeatability of infrastructure
+deployments.
+
+== Requirements
+
+You need to have a personal AWS account and GitHub account for this assignment.
+
+== The assignment
+
+Your first stack awaits! Let's go.
+
+=== Download WordPress application
+
+This week's assignment isn't as prescriptive as some of the previous assignments.
+You will likely need to experiment with the CloudFormation Designer and template
+code a bit to build the required solution. You can review the class powerpoint
+presentation, AWS CloudFormation documentation, and YouTube resources if you
+need to figure out how to configure a resource. Remember, this stack is similar
+in many ways to the stack that was built in class.
+
+Here's the story. The engineering manager at your office came to you and asked
+if you could build a new stack for the development team. The stack must have
+two Amazon Linux EC2 instances located behind an Elastic Load Balancer. The
+load balancer must handle incoming requests on port 80 and send those to the
+EC2 instances on port 80.Additionally, the two instances need to be members of a security group which
+allows incoming traffic on ports 22, 80, and 443.
+
+The engineering manager would like to be able to provide two input parameters to
+define the availability zones for each of the EC2 instances. Also, he would like
+the stack to output the load balancer dns name.
+
+  * Create a new stack called *Webservers-dev*.
+  * Create two EC2 instances named *web1* and *web2*.
+    ** Instance type: *t2.micro*.
+    ** Use this AMI image: ami-3ea13f29
+    ** Create the instances using your key pair.
+
+  * Create a security group named *Webservers-SG*.
+    ** Allow incoming requests on port 22 from 0.0.0.0/0
+    ** Allow incoming requests on port 80 from 0.0.0.0/0
+    ** Allow incoming requests on port 443 from 0.0.0.0/0
+  * Create a load balanced named *Application1-LB*
+    ** Load balance incoming requests on port 80 and send to instance port 80 using the http protocol.
+    ** Load balancer health check via http on port 80 to the "/" url location.
+
+=== Launch the stack
+
+Once you have created and validated your template, save it to your local file
+system. Next, launch your new stack and watch AWS CloudFormation go through the
+build steps. It will take a few minutes for CloudFormation to build the stack
+resources.
+
+When you see that the EC2 instances are running, go ahead and terminal into
+one of the instances to confirm that you can access the server. Next, look at
+the output value from the CloudFormation stack to determine the DNS address
+for the load balancer that was created. Enter this DNS address into your
+web browser to confirm that it is distributing requests across the instances
+properly.
+
+=== Update the stack
+
+Now that you are confident that the stack is running properly, go back to the
+CloudFormation dashboard to update the stack. Select the stack and choose the
+option to update the stack.
+
+In the stack update wizard, select two new availability zones for the stack
+EC2 instances. Launch the updated configuration and watch as CloudFormation
+replaces the instances.
+
+=== Save your work
+
+Create a new GitHub repository called `infrastructure-assignment8` and commit
+your stack template file to this repository. You could create a new Git
+repository on your local machine, commit the template file to it, and then
+push the local repository up to GitHub. Or, you could use the GitHub web
+console to create a new repository and upload your template file to it. The
+latter method is probably a little quicker for this assignment.
+
+=== Terminate application environment
+
+The last step in the assignment is to delete all the AWS services you created.
+Go to the CloudFormation dashboard, select your running stack, and choose the
+delete option. Watch as CloudFormation deletes all the resources previously
+created.
+
+== Submitting your assignment
+I will review your published work on GitHub after the homework due date.
