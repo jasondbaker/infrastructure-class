@@ -3,7 +3,7 @@
 
 :sectnums!:
 
-= DevOps & Cloud Infrastructure: Assignment 4
+= SEIS 665 Assignment 4: AWS
 Jason Baker <bake2352@stthomas.edu>
 1.0, 4/3/2016
 
@@ -74,7 +74,7 @@ see some sort of welcome message explaining the purpose of the S3 service.
 
   * Once you see the S3 dashboard, click the button or link to *create a bucket*.
 
-  * Name your new S3 bucket: `<AWS username>-infrastructure-4`, where <AWS username>
+  * Name your new S3 bucket: `<AWS username>-assignment-4`, where <AWS username>
   is your personal Amazon username. Also, select the `US Standard` region. Remember,
   S3 bucket names are universal which means that your bucket name has to be unique
   worldwide. On the off chance that your bucket name is already in use, just
@@ -82,7 +82,7 @@ see some sort of welcome message explaining the purpose of the S3 service.
 
 .Example
 ----
-jbaker-infrastructure-4
+jbaker-assignment-4
 ----
 
   * You should be able to select a button or link to *create* the bucket at this point.
@@ -373,16 +373,17 @@ Here are a couple hints for writing this script:
 Once your script is working properly, change back to the `/user/share/nginx`
 directory and add the `scripts` directory and your new files to the Git
 staging area. Confirm that your new script and its output file are in the
-Git staging area. Commit the files to your Git repository.
+Git staging area. Commit the files to your local Git repository.
 
-In the previous assignment, we created a new repository on GitHub and then
+In the previous assignment, we created a new assignment repository on GitHub and then
 pushed an existing local repository up to GitHub. We are going to follow the
 same process in this assignment. Refer back to the previous assignment if you
 need to recall the specific commands.
 
-  * Create a new repository on GiHub called `infrastructure-assignment4`.
+  * Create the assignment repository on GiHub Classroom: https://classroom.github.com/assignment-invitations/5ee41c34f8397fc833df21d8fdc485fa
   * Modify the origin remote on your local Git repository to point to the
-  address of this new GitHub repository
+  address of this new GitHub repository, something like: https://github.com/seis665/assignment-2-linux-git-<username>
+
   * Push your local master branch up to the GitHub repository
 
 Congratulations! Your work is now saved.

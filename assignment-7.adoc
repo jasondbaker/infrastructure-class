@@ -3,7 +3,7 @@
 
 :sectnums!:
 
-= DevOps & Cloud Infrastructure: Assignment 7
+= SEIS 665 Assignment 7: Elastic Beanstalk
 Jason Baker <bake2352@stthomas.edu>
 1.0, 4/8/2016
 
@@ -208,7 +208,7 @@ deployment process based on your predefined deployment settings. Awesome!
 === Collect session data
 
 Connect to the running EC2 instance using a terminal program. Make a sub-directory
-in the home directory called `assignment7`. Change to that directory and
+in the home directory called `assignment-7-elastic-beanstalk-<username>` (where <username> is your GitHub account name). Change to that directory and
 create a Git repository (the Git client should already be installed on the server).
 
 Next, configure the AWS CLI with your access key, secret key, and the current
@@ -249,10 +249,9 @@ a file called `data.yaml` in the current directory.
 Add the `data.yaml` and `eb-events.json` files to the Git repository. Commit
 the files to the repository.
 
-Create a new GitHub repository called `infrastructure-assignment7`. Configure
-your local Git repository to connect to this new GitHub repository. Push
-your work to GitHub and verify that the assignment files are located in the
-GitHub repository.
+Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/7b133d3aa0bc7920c4c6c116206e70e6
+
+Configure your local Git repository to connect to this new GitHub repository. Push your work to GitHub and verify that the assignment files are located in the GitHub repository.
 
 === Terminate application environment
 

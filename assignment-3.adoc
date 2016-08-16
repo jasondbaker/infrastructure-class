@@ -3,7 +3,7 @@
 
 :sectnums!:
 
-= DevOps & Cloud Infrastructure: Assignment 3
+= SEIS 665 Assignment 3: Shell scripting
 Jason Baker <bake2352@stthomas.edu>
 1.0, 4/3/2016
 
@@ -485,9 +485,21 @@ That process works fine when you are working with a brand new project. But somet
 you want to take an existing project and existing Git repository and connect it
 to GitHub. That's what we will do now.
 
-First, log into GitHub and create a new repository called `infrastructure-assignment3`.
-Refer back to the previous lesson's instructions for creating a new GitHub repo.
-Make sure you grab a copy of the new GitHub repository URL.
+First, click on the following link to create a new repository for this assignment:
+
+https://classroom.github.com/assignment-invitations/82e8cbf52dcb14bc6f56d61001e9ff05
+
+GitHub Classroom will provide you with a URL (https) to access
+the assignment repository. Either copy this address to your clipboard or write it down
+somewhere.
+
+.Example:
+----
+https://github.com/seis665/assignment-3-shell-scripting-jasondbaker
+----
+
+First, log into GitHub and create a new repository called `assignment-3-shell-scripting-<username>`
+(where <username> is your GitHub account name).
 
 Next, you need to connect your local Git repository on the Linux server to
 your GitHub repository. The way you do that is by specifying your GitHub
@@ -501,7 +513,7 @@ about is the remote called origin. Setup the origin remote by typing:
 
 .Example:
 ----
-$ git remote add origin https://github.com/jasondbaker/infrastructure-assignment3.git
+$ git remote add origin https://github.com/seis665/assignment-3-shell-scripting-jasondbaker
 ----
 
 Now push your local repository to the GitHub repo by typing:

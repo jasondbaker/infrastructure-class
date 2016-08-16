@@ -3,7 +3,7 @@
 
 :sectnums!:
 
-= DevOps & Cloud Infrastructure: Assignment 5
+= SEIS 665 Assignment 5: VPC
 Jason Baker <bake2352@stthomas.edu>
 1.0, 4/6/2016
 
@@ -322,8 +322,7 @@ the `backend1` server through the NAT Gateway.
 
 === Create a Git repo
 
-While you are on the `backend1` server, create a directory called `assignment5`
-in your home directory. Change to this directory and initialize a Git
+While you are on the `backend1` server, create a directory called `assignment-5-vpc-<username>` (where <username> is your GitHub account name). Change to this directory and initialize a Git
 repository. Because you are creating a Git repository on a private network, Git
 might complain about your identity when you try to commit files. You can set
 your local Git identity by running these commands:
@@ -354,7 +353,7 @@ Copy the file `/var/log/nginx/access.log` into the current directory.
 Add and commit the files to the repository. Next, you will need to push your local
 repository up to GitHub.
 
-* Create a new repository on GiHub called `infrastructure-assignment5`.
+* Create a new repository on GiHub Classroom by clicking this link: https://classroom.github.com/assignment-invitations/a76427f483ecfc98a401a1fef07473d4
 * Modify the origin remote on your local Git repository to point to the
 address of this new GitHub repository
 * Push your local master branch up to the GitHub repository
@@ -528,15 +527,15 @@ assignment. Open a terminal connection to the `webserver1` instance (you might
 
 Change to your home directory and clone the git repository you created earlier:
 
-  $ git clone https://github.com/<your GitHub username>/infrastructure-assignment5.git
+  $ git clone https://github.com/seis665/assignment-5-vpc-<username>.git
 
 .Example
 ----
-https://github.com/jasondbaker/infrastructure-assignment5.git
+https://github.com/seis665/assignment-5-vpc-jasondbaker.git
 ----
 
 If you recall, the Git clone operation makes a copy of the public GitHub repository in
-your current directory. Next, change to the `infrastructure-assignment5` directory.
+your current directory. Next, change to the `assignment-5-vpc-<username>` directory.
 
 Copy the `/var/log/nginx/access.log` file to a new file named `access2.log` in
 the current directory.

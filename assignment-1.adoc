@@ -1,6 +1,6 @@
 :blank: pass:[ +]
 
-= DevOps & Cloud Infrastructure: Assignment 1
+= SEIS 665 Assignment 1: Account Setup
 Jason Baker <bake2352@stthomas.edu>
 1.0, 3/18/2016
 

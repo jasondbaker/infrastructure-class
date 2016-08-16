@@ -3,7 +3,7 @@
 
 :sectnums!:
 
-= DevOps & Cloud Infrastructure: Assignment 2
+= SEIS 665 Assignment 2: Linux & Git
 Jason Baker <bake2352@stthomas.edu>
 1.0, 3/18/2016
 
@@ -26,36 +26,26 @@ exercise.
 Let's get started!
 
 === Create GitHub repository
-The first step in the assignment is to create a new git repository in GitHub.
+The first step in the assignment is to setup a Git repository on GitHub. We will use a special solution called GitHub Classroom for this course which automates the process of setting up student assignment repositories.
+
 Here are the basic steps:
 
 [start = 1]
-  . Log into GitHub using the account you setup in the previous assignment.
+  . Click on the following link to open Assignment 2 on the GitHub Classroom site: https://classroom.github.com/assignment-invitations/b9731aff0b1982c9faba287eee565d4a
 
 [start = 2]
-  . Click on the `New Repository` button on the dashboard page.
-
-image:images/assignment1/github-newrepo.png["150","150"]
-{blank}
-{blank}
+  . Click on the *Accept this assignment* button.
 
 [start = 3]
-  . Create a new public repository called `infrastructure-assignment2`. The spelling
-  is important here so check your text input.
-
-image:images/assignment1/github-createrepo.png["400","400"]
-{blank}
-{blank}
-
-[start = 4]
-  . After creating the repository, GitHub will provide you with a URL (https) to access
-  the repository. Either copy this address to your clipboard or write it down
+  . GitHub Classroom will provide you with a URL (https) to access
+  the assignment repository. Either copy this address to your clipboard or write it down
   somewhere. You will need to use this address to setup the repository on a
   Linux server.
 
-image:images/assignment1/github-url.png["600","600"]
-{blank}
-{blank}
+.Example:
+----
+https://github.com/seis665/assignment-2-linux-git-jasondbaker
+----
 
 At this point your new repository to ready to use. The repository is currently
 empty. We will put some content in there soon!
@@ -602,26 +592,26 @@ is stored in a git repository. First we need to install git. Type in the command
 
   $ sudo yum install git -y
 
-=== Saving our work in the repository
+=== Saving our work in the git repository
 Next, make sure you are still in your home directory (`/home/ec2-user`). We will
 install the git repository you created at the beginning of this exercise. You
 will need to modify this command by typing in the GitHub repository URL you
 copied earlier.
 
-  $ git clone <your GitHub URL here>
+  $ git clone <your GitHub URL here>.git
 
 .Example:
 ----
-git clone https://github.com/jasondbaker/infrastructure-assignment1.git
+git clone https://github.com/seis665/assignment-2-linux-git-jasondbaker.git
 ----
 
 Git will clone (copy) the repository from GitHub to your Linux server. Since
 the repository is empty the clone happens almost immediately. Check to make
-sure that a sub-directory called `infrastructure-assignment1` exists in the
-current directory. Git automatically created this directory as part of the
+sure that a sub-directory called `assignment-2-linux-git-<username>` exists in the
+current directory (where <username> is your GitHub account name). Git automatically created this directory as part of the
 cloning process.
 
-Change to the `infrastructure-assignment1` directory and type:
+Change to the `assignment-2-linux-git-<username>` directory and type:
 
   $ ls -la
 
@@ -636,7 +626,7 @@ files into the repository. Type:
   $ mv myfile.conf infrastructure-assignment1
 
 Hopefully you remembered to use the auto-complete function to reduce some of that
-typing. Change to the `infrastructure-assignment1` directory and list the directory
+typing. Change to the `assignment-2-linux-git-<username>` directory and list the directory
 contents. Your files are in the repository working directory, but are not actually
 stored in the repository because they haven't been committed yet.
 
@@ -673,8 +663,13 @@ may be read and cloned by anyone. If you want to update a repository, you need
 to provide the repository owner's access credentials.
 
 Go back to the GitHub.com website and login if you have been logged out. Click
-on the `infrastructure-assignment1` repository. Do you see your files listed
-there? Congratulations, you survived the exercise!
+on the repository link for the assignment. Do you see your files listed
+there? Congratulations, you completed the exercise!
+
+.Example:
+----
+Your repository link should be something like https://github.com/seis665/assignment-2-linux-git-jasondbaker
+----
 
 === Terminate server
 

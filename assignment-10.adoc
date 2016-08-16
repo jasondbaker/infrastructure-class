@@ -3,7 +3,7 @@
 
 :sectnums!:
 
-= DevOps & Cloud Infrastructure: Assignment 10
+= SEIS 665 Assignment 10: Code pipeline
 Jason Baker <bake2352@stthomas.edu>
 1.0, 8/15/2016
 
@@ -136,7 +136,9 @@ When the pipeline completes the deployment of the application to *Prod*, refresh
 
 Go to the AWS CodePipeline console and click on the *Details* link in the Build stage to pull up the Jenkins server website. Next, select the *Back to Project* link on the Jenkins menu. You should see a webpage with the header *Maven project app-name*. Take a screenshot of this browser page and save it in a file on your desktop.
 
-Create a new GitHub repository called `infrastructure-assignment10` and commit this screenshot file into the repository.
+Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/874ccbb14cf1edafbdf104af22f7812f
+
+Commit your Jenkins screenshot file into the repository.
 
 === Terminate application environment
 
