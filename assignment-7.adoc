@@ -35,7 +35,7 @@ It's time to launch some services on a PaaS.
 You will need to download a WordPress application archive located at the
 following URL:
 
-  https://s3.amazonaws.com/jbaker-infrastructure-7/wordpress.zip
+  https://s3.amazonaws.com/seis665/wordpress.zip
 
 The WordPress archive was configured in advance to properly deploy on
 the Elastic Beanstalk service. Basically, the `wp-config.php` file was modified

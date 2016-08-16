@@ -342,11 +342,11 @@ Use the `curl` command with the `-vs` flag (verbose, silent) to create a file ca
 the data returned by accessing the URL. You will need to redirect the output
 in a special way based on the way the `curl` command works (using the `tee` command).
 
-  https://raw.githubusercontent.com/jasondbaker/infrastructure-class/master/files/assignment5/message.json
+  https://s3.amazonaws.com/seis665/message.json
 
 .Example
 ----
-$ curl -vs https://raw.githubusercontent.com/jasondbaker/infrastructure-class/master/files/assignment5/message.json 2>&1 | tee message.json
+$ curl -vs https://s3.amazonaws.com/seis665/message.json 2>&1 | tee message.json
 ----
 
 Copy the file `/var/log/nginx/access.log` into the current directory.
