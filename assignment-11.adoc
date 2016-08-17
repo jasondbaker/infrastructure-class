@@ -1,0 +1,60 @@
+:doctype: article
+:blank: pass:[ +]
+
+:sectnums!:
+
+= SEIS 665 Assignment 11: Docker
+Jason Baker <bake2352@stthomas.edu>
+1.0, 8/17/2016
+
+== Overview
+Containers are revolutionizing the way we package and deploy applications. Traditionally, we would install applications on bare metal hardware or virtual machines in our computing environment. We would have to carefully place applications on infrastructure to minimize conflicting requirements such as different versions of shared libraries. Containers let us partition applications and related dependencies on a shared computing platform.
+
+In this week's assignment, you will build a server running Docker and explore how to manage containers on the system.
+
+== Requirements
+
+You need to have a personal AWS account and GitHub account for this assignment.
+
+== The assignment
+
+Let's start shipping those containers!
+
+=== Build a Docker server
+
+The first step in the assignment is to build a Docker server running on EC2.
+
+Build a t2.micro EC2 instance running Amazon Linux. You will need to be able to ssh into this instance.
+
+Update the system packages on the instance and install Docker:
+
+  sudo yum install -y docker
+
+Then, start the Docker service:
+
+  sudo service docker start
+
+Finally, add the ec2-user to the docker user group:
+
+  sudo usermod -a -G docker ec2-user
+
+That's it. Now the EC2 instance is running Docker.
+
+=== Working with containers
+
+
+
+=== Save your work
+
+
+Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/eeea11fb5604fd931c30393c935aba6b
+
+
+
+=== Terminate application environment
+
+The last step in the assignment is to terminate your Docker instance on EC2.
+A
+
+== Submitting your assignment
+I will review your published work on GitHub after the homework due date.

@@ -7,7 +7,7 @@ St. Paul, MN 55105
 
 [.text-center]
 SYLLABUS Fall 2016 SEIS 665 +
-Version 1.0
+Version 2016.8.17
 
 {blank}
 [underline]#Course Title# +
@@ -64,9 +64,11 @@ patterns used to enhance scalability and reliability within these systems.
 {blank}
 [underline]#Required Texts# +
 
-_Practice of Cloud Systems Administration Volume 2_ by Thomas Limoncelli, Strata Challup, & Christina Hogan.
+_Practice of Cloud Systems Administration Volume 2_ by Thomas Limoncelli, Strata Challup, & Christina Hogan. +
+ISBN: 9780321943187
 
-_Infrastructure as Code_ by Kief Morris, 1st Edition.
+_Infrastructure as Code_ by Kief Morris, 1st Edition. +
+ISBN: 9781491924358
 
 Additional writings (whitepapers, blogs, etc) as assigned by the instructor.
 
@@ -89,7 +91,7 @@ http://aws.amazon.com/. After signing up for an account, you can apply
 for educational credits at https://www.awseducate.com/Application.
 
 The educational credits should cover the costs associated with your usage of
-AWS in this class throughout the semester. However, you are responsible for
+AWS in this class throughout the semester. However, if you use AWS in other classes you may consume all of your available credits. You are responsible for
 paying any expenses not covered by these credits.
 
 {blank}
@@ -247,6 +249,7 @@ Assignment 10 +
 Read _Infrastructure as Code_ Chapters 11 & 12
 
 |13 | 12/5 | Data center architecture |
+Assignment 11 +
 Read _Infrastructure as Code_ Chapter 15 +
 Read _How Cloud Has Changed The Data Center Architect_ +
 Read _6 Models Of The Modern Data Center_
@@ -259,7 +262,7 @@ Read _6 Models Of The Modern Data Center_
 {blank}
 [underline]#STUDENTS WITH DISABILTIES# +
 
-Classroom accommodations will be provided for qualified students with documented disabilities. Students are invited to contact the Disability Resources office about accommodations for this course. Telephone appointments are available to students as needed. Appointments can be made by calling 651- 962-6315 or 800-328-6819, extension 6315. You may also make an appointment in person in Murray Herrick 110. For further information, you can locate the Disability Resources office on the web at http://www.stthomas.edu/enhancementprog/.
+I want to ensure that the classroom environment is conducive to your learning and ask that you discuss with me any concerns that are interfering with your learning as they arise. Classroom accommodations will be provided for students with documented disabilities. Students must contact the Disability Resources Office about accommodations for this course as early in the semester as possible. Appointments can be made by calling 651-962-6315 or 800-328-6819, extension 6315, or in person in Rm 110 Murray Herrick Center on the St. Paul campus. Further information is available at: http://www.stthomas.edu/enhancementprog/.
 
 {blank}
 [underline]#ACADEMIC INTEGRITY# +
