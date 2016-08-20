@@ -555,7 +555,7 @@ your GitHub repository.
 The last step in the assignment is to terminate the EC2 instances, delete
 the load balancer, and delete the VPC. I'll leave this as an exercise for you to
 figure out how to complete. Remember, you will get billed for each hour these
-services are running (or at least lose free credits).
+services are running (or at least consume free credits).
 
 == Submitting your assignment
 I will review your published work on GitHub after the homework due date.
