@@ -19,9 +19,9 @@ if [ -n "$DOCKER_BUILD" ]; then
 fi
 
 # loop through all .adoc files in working dir
-for FILENAME in $(ls *.adoc)
+for FILENAME in $(find . -name '*.adoc')
 do
   echo "Generating PDF for $FILENAME"
   # use asciidoctor to generate file in pdf dir
-  $ASCIIDCOTOR_CMD -D $PDFDIR $FILENAME
+  #$ASCIIDCOTOR_CMD -D $PDFDIR $FILENAME
 done
