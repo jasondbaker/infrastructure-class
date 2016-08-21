@@ -1,6 +1,6 @@
 :doctype: article
 
-image:images/git-hands-on/git-hands-on-logo.png["200","200",float="right"]
+image:../images/git-hands-on/git-hands-on-logo.png["200","200",float="right"]
 
 :sectnums!:
 
@@ -55,10 +55,10 @@ $ git add index.html
 ----
 
   * Important: this just adds the file to the temporary staging
-  area, *not* the repository
+  area, *not* the repository.
 
   * If you create a Git repository in an existing directory, the
-  files are *not* automatically added to the staging area or repository
+  files are *not* automatically added to the staging area or repository.
 
   * Once a file is added to the staging area, Git will track all future
   changes to the file. A file only needs to be added once. It's possible
@@ -153,7 +153,7 @@ $ git branch features/update-branding
 
   * Making all your commits against the master branch is a lazy and discouraged practice.
 
-image:images/git-hands-on/git-hands-on-branching.png[]
+image:../images/git-hands-on/git-hands-on-branching.png[]
 
 === Listing current branches in the repository
 Display a list of the current branches in the repository by typing `git branch --list` or
@@ -225,7 +225,7 @@ $ git clone https://github.com/jasondbaker/infrastructure-class.git
 This example will download a repository from GitHub and store it in
 a sub-directory called *infrastructure-class* within the current file directory.
 
-image:images/git-hands-on/git-hands-on-clone.png[]
+image:../images/git-hands-on/git-hands-on-clone.png[]
 
   * Every developer on a team project clones the project repository from a central
   server and works with their own local copy.
@@ -245,7 +245,7 @@ typing: `git push origin <branch name>`
 $ git push origin develop
 ----
 
-image:images/git-hands-on/git-hands-on-pull.png["500","500"]
+image:../images/git-hands-on/git-hands-on-pull.png["500","500"]
 
 === Pulling a branch from the remote server
 Over time the repository on the central server will get out of sync with
@@ -276,4 +276,4 @@ the develop branch is the parent of the cool-widget branch. It's possible to
 take a branch of code and move it to an unrelated branch. This process is
 called _cherry-picking_.
 
-image:images/git-hands-on/git-hands-on-rebase.png[]
+image:../images/git-hands-on/git-hands-on-rebase.png[]

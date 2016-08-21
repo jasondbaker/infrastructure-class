@@ -1,6 +1,6 @@
 :doctype: article
 
-image:images/linux-hands-on/linux-hands-on-tux.png[float="right"]
+image:../images/linux-hands-on/linux-hands-on-tux.png[float="right"]
 
 :sectnums!:
 
@@ -460,7 +460,7 @@ something different. If the first character is a `d`, it means that the file
 is actually a directory. Linux makes very little distinction between files and
 directories.
 
-image:images/linux-hands-on/linux-hands-on-acl.png[]
+image:../images/linux-hands-on/linux-hands-on-acl.png[]
 
 The other characters in the access control list detail the read, write, and
 execute permissions available to the associated user, group, and everyone else (others).
@@ -532,7 +532,7 @@ processes the data, and then outputs the data to a terminal. The data input
 path is called the *stdin* (standard input) and the data output path is called
 the *stdout* (standard output).
 
-image:images/linux-hands-on/linux-hands-on-stdin.png[]
+image:../images/linux-hands-on/linux-hands-on-stdin.png[]
 
 Oftentimes, it's useful to manipulate these data I/O pathways to accomplish
 certain tasks. For example, instead of inputing data into a program manually
