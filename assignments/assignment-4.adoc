@@ -171,7 +171,7 @@ Your instance settings should look similar to the settings in the image below.
 Your configuration may be slightly different based on the availability of a
 newer Amazon Linux AMI.
 
-image:images/assignment4/server-launch-1.png["600","600"]
+image:../images/assignment4/server-launch-1.png["600","600"]
 
 Note that when you are launching the server, you can elect to use the same
 key pair you used last week or you can create a new key pair for this
@@ -217,7 +217,7 @@ the public ip address of your Linux instance as the URL. Do you see the
 welcome page? If so, congratulations! You've built a web server -- the first of
 many in this course.
 
-image:images/assignment4/welcome-page.png["600","600"]
+image:../images/assignment4/welcome-page.png["600","600"]
 
 Don't panic if the welcome page doesn't appear in your browser. Part of the _joy_
 of working in IT is learning how to troubleshoot problems. Here are some things
@@ -295,7 +295,7 @@ $ sudo aws s3 cp s3://jbaker-infrastructure-4/index.html html/index.html
 Go back to your web browser and reload the web page. You should see your
 new page loaded.
 
-image:images/assignment4/new-page.png["400","400"]
+image:../images/assignment4/new-page.png["400","400"]
 
 The page isn't very fancy yet. Perhaps we'll expand on it future assignments.
 
@@ -430,7 +430,7 @@ Click on the *AMIs* menu link on the EC2 dashboard. You should see your new
 AMI listed. Notice how the AMI has an owner (your AWS account ID) and the
 visibility is private.
 
-image:images/assignment4/ami-class.png["600","600"]
+image:../images/assignment4/ami-class.png["600","600"]
 
 === Terminate server
 

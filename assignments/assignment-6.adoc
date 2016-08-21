@@ -34,7 +34,7 @@ recordings, or online AWS documentation if you get stuck on a step.
 
 You will build a VPC and set of AWS services which conforms to the service
 diagram below.
-image:images/assignment6/diagram.png["600","600"]
+image:../images/assignment6/diagram.png["600","600"]
 
 Start the assignment by creating a VPC named `productionVpc` in the `us-west`
 region with a CIDR block of `10.0.0.0/16`. The VPC will have two subnets:

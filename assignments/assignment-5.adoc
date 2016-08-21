@@ -105,7 +105,7 @@ Edit the route table for the new subnet and add a new route to the destination
 `0.0.0.0/0` (which is a catch-all network) and a target of the Internet Gateway
 identifier. Make sure you save the updated route table when you are done.
 
-image:images/assignment5/route-table.png["600","600"]
+image:../images/assignment5/route-table.png["600","600"]
 
 Your new route table isn't associated with any subnets so it isn't actually doing
 anything yet. Click on the *subnet associations* for the new subnet and edit
@@ -462,7 +462,7 @@ look at the set of *instances* associated with the load balancer. You will
 notice that the status of the instances is _OutOfService_. This status means
 that the web servers haven't passed the load balancer's health check yet.
 
-image:images/assignment5/loadbalancer-instances.png["600","600"]
+image:../images/assignment5/loadbalancer-instances.png["600","600"]
 
 
 Refresh the browser display after a minute or two and you should see the

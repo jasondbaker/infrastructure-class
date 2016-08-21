@@ -38,7 +38,7 @@ Navigate to the following website:
 
 Generate a personal token with the *repo* and *admin:repo_hook* permissions selected (see below). Copy the token to your clipboard and store it in a save place -- perhaps something like a text file. You will need to copy this token into a CloudFormation input shortly.
 
-image:images/assignment10/github-token-permissions.png["600","600"]
+image:../images/assignment10/github-token-permissions.png["600","600"]
 
 === Launch the stack
 
@@ -91,7 +91,7 @@ If CloudFormation fails to create your resources and pipeline, it will roll back
 
 Open the AWS CodePipeline console to view your new pipeline. On the dashboard page, choose the name of the pipeline. You can watch the progress of your pipeline as it completes the action configured for each of its four stages (a source stage, a build stage, and two deployment stages).
 
-image:images/assignment10/code-pipeline.png["600","200"]
+image:../images/assignment10/code-pipeline.png["600","200"]
 
 The pipeline flows as follows:
 
@@ -112,7 +112,7 @@ When the *Succeeded* status is displayed for the pipeline status, you can view t
 
 Your browser should open the Tomcat website on the production server. Aw, hope you like cute dogs!
 
-image:images/assignment10/code-deploy-website.jpg["600","600"]
+image:../images/assignment10/code-deploy-website.jpg["600","600"]
 
 === Modify the application
 

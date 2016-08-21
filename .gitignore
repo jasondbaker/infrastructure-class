@@ -1,3 +1,5 @@
 # ignore pdf and html files because these are built from adoc
+# also keep quizzes and exams out of the public repo
 *.pdf
 *.html
+/exams

@@ -119,7 +119,7 @@ a load balancer, security group, auto scaling group, CloudWatch alarms,
 and RDS instances for you. It's basically setting up everything you had to do
 manually in the previous assignment. This method is much easier!
 
-image:images/assignment7/eb-events.png["600","600"]
+image:../images/assignment7/eb-events.png["600","600"]
 
 Why don't we always just use Elastic Beanstalk to launch our applications?
 Well, Elastic Beanstalk is great for certain kinds of applications, but it
@@ -156,7 +156,7 @@ can find overall health information for your application.
 Next, click on the Configuration menu link and select the small gear icon
 in the Scaling properties window.
 
-image:images/assignment7/eb-scaling.png["200","200"]
+image:../images/assignment7/eb-scaling.png["200","200"]
 
 You can modify the minimum or maximum
 number of instances and the scaling policies in this section. Let's increase
@@ -172,7 +172,7 @@ dashboard and you will see that a new instance is launching.
 Go back to the Elastic Beanstalk dashboard and select your application. Wait
 until the application health is OK (green).
 
-image:images/assignment7/eb-ok.png["600","600"]
+image:../images/assignment7/eb-ok.png["600","600"]
 
 Now, click on the application URL
 to open the WordPress site in your browser. Hit the browser refresh button a
