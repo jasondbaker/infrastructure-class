@@ -117,7 +117,7 @@ of chat channels to work on projects.
 
 {blank}
 [underline]#Computers# +
-A computer is an essential tool for this class since many of our assignments will involve hands-on learning. A personal laptop is strongly encouraged.
+A computer is an essential tool for this class since many of our assignments will involve hands-on learning. A personal computer is strongly encouraged.
 
 A computer is a powerful learning tool, but it can also be a distraction in a
 classroom setting. The
@@ -131,7 +131,7 @@ you do not miss out on key insights and important learnings.
 Understanding the Linux command line interface is critical to success in this
 course. It's likely that some students have significant amounts of experience
 with Linux while others have none. We will spend some time at the beginning of
-the course covering essential Linux topics so that everyone has an opportunity
+the course covering essential Linux skills so that everyone has an opportunity
 to successfully complete assignments.
 
 It's not possible to teach Linux in a few hours. If you have never used Linux
@@ -144,11 +144,14 @@ system administration skills.
 [underline]#Grading Policy#
 
 * Attendance (10%)
+  ** Up to two excused absences are acceptable.
+  ** Additional absences beyond two will deduct points.
 * Weekly reading quizzes (10%)
-  ** Weekly Blackboard quizzes on reading, 10 points per quiz.
+  ** Weekly Blackboard quizzes on reading, 5 questions and 10 points per quiz.
   ** Complete the week’s quiz online before class ALONE.
-  ** Reading quiz will be available at least 1 week in advance (No makeups, because you have all week and can do them remotely).
+  ** Reading quiz will be available approximately 1 week in advance. No makeups, because you have all week and can do them remotely.
 * Homework assignments (30%)
+  ** 10 graded assignments.
   ** Participation points may be given for helping others troubleshoot issues through Slack.
 * Midterm (25%)
 * Final (25%)
