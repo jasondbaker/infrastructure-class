@@ -102,8 +102,14 @@ TO DO
 -----
 
 * I don't know if the current lecture content will fill a 3-hour lecture period. It's likely that some of the lectures are too short and some are too long.
-* I need to improve the skill connection between assignments. I originally designed each lecture as a separate module. Assignments should leverage skills attained in previous learnings. 
+* I need to improve the skill connection between assignments. I originally designed each lecture as a separate module. Assignments should leverage skills attained in previous learnings.
 
+License
+-------
+
+All material, except those images not owned by me and used for educational purposes, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
 
 Thanks
 ------
