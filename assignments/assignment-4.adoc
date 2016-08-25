@@ -382,7 +382,7 @@ need to recall the specific commands.
 
   * Create the assignment repository on GiHub Classroom: https://classroom.github.com/assignment-invitations/5ee41c34f8397fc833df21d8fdc485fa
   * Modify the origin remote on your local Git repository to point to the
-  address of this new GitHub repository, something like: https://github.com/seis665/assignment-2-linux-git-<username>
+  address of this new GitHub repository, something like: https://github.com/seis665/assignment-2-linux-git-<username>.git
 
   * Push your local master branch up to the GitHub repository
 

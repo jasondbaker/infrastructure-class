@@ -498,9 +498,6 @@ somewhere.
 https://github.com/seis665/assignment-3-shell-scripting-jasondbaker
 ----
 
-First, log into GitHub and create a new repository called `assignment-3-shell-scripting-<username>`
-(where <username> is your GitHub account name).
-
 Next, you need to connect your local Git repository on the Linux server to
 your GitHub repository. The way you do that is by specifying your GitHub
 repository as the *origin*. A Git repository can be linked to several different
@@ -508,12 +505,12 @@ Git repositories, called *remotes*. It's not uncommon for a typical repository
 to have at least two or three different remotes. In this case, all we care
 about is the remote called origin. Setup the origin remote by typing:
 
-  $ git remote add origin <your GitHub repo URL>
+  $ git remote add origin <your GitHub repo URL>.git
 
 
 .Example:
 ----
-$ git remote add origin https://github.com/seis665/assignment-3-shell-scripting-jasondbaker
+$ git remote add origin https://github.com/seis665/assignment-3-shell-scripting-jasondbaker.git
 ----
 
 Now push your local repository to the GitHub repo by typing:

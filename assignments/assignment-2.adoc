@@ -605,8 +605,10 @@ copied earlier.
 git clone https://github.com/seis665/assignment-2-linux-git-jasondbaker.git
 ----
 
+The git application will ask you for your GitHub username and password. Note, if you have multi-factor authentication enabled on your GitHub account you will need to provide a personal token instead of your password.
+
 Git will clone (copy) the repository from GitHub to your Linux server. Since
-the repository is empty the clone happens almost immediately. Check to make
+the repository is empty the clone happens almost instantly. Check to make
 sure that a sub-directory called `assignment-2-linux-git-<username>` exists in the
 current directory (where <username> is your GitHub account name). Git automatically created this directory as part of the
 cloning process.
@@ -657,10 +659,7 @@ Finally, let's save the repository to our GitHub account. Type in:
   $ git push origin master
 
 The git client will ask you for your GitHub username and password before pushing
-the repository. Why didn't git ask for this information when we cloned the
-repository? Because we created a public repository on GitHub. Public repositories
-may be read and cloned by anyone. If you want to update a repository, you need
-to provide the repository owner's access credentials.
+the repository.
 
 Go back to the GitHub.com website and login if you have been logged out. Click
 on the repository link for the assignment. Do you see your files listed
@@ -691,5 +690,4 @@ will continue to display the instance on your instance listing for another day o
 of the instance will be `terminated`.
 
 === Submitting your assignment -- IMPORTANT!
-Please email me your GitHub repository URL in order to receive credit for this
-assignment.
+If you haven't already, please e-mail me your GitHub username in order to receive credit for this assignment.
