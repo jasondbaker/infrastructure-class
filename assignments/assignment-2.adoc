@@ -18,7 +18,7 @@ all the details.
 == Requirements
 
 You need to have a personal AWS account and GitHub account for this assignment. You should also
-read the _Git Hands-on Guide_ and _Linux Hands-on Guide_ before beginning this
+read the https://github.com/jasondbaker/infrastructure-class/blob/master/hands-on/git-hands-on.adoc[_Git Hands-on Guide_] and https://github.com/jasondbaker/infrastructure-class/blob/master/hands-on/linux-hands-on.adoc[_Linux Hands-on Guide_] before beginning this
 exercise.
 
 == The assignment
@@ -68,21 +68,21 @@ available at:
 Once you launch the new server, it may take a few minutes to provision.
 
 === Log into server
-The next step is to log into the Linux server using a terminal program with
-secure shell (SSH) support. You will need to have the server key and the
-public IP address before attempting to log into the server. Remember, the key
-is basically your password. If you lose it, you will need to terminate the existing
-server and launch a new server.
+The next step is to log into the Linux server using a terminal program with secure shell (SSH) support. I like using http://www.iterm2.com[iTerm2] on a Mac and http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html[PuTTY] on a PC.
 
-I've created videos showing you how to use a terminal application to
-log into the instance using a Windows desktop and a MacOS desktop:
+You will need to know the server key and the
+public IP address before attempting to log into the server. The server key
+is basically your password. If you lose it, you will need to terminate the existing
+instance and launch a new server. I recommend reusing the same key when launching new servers throughout the class. Note, I make this recommendation to make the learning process easier and not because it is best practice.
+
+I've created a couple videos showing you how to use a terminal application to log into the instance using a Windows desktop and a MacOS desktop. Your personal computer or lab computer may be running a different OS version, but the process is still very similar.
 
   TBD
 
 === Working with Linux
 
 If you've made it this far, congratulations! You've made it over the toughest
-hurdle. By the end of this course you will be able to launch and
+hurdle. By the end of this course, I promise you will be able to launch and
 log into servers in your sleep.
 
 You should be looking at a login screen that looks something like this:

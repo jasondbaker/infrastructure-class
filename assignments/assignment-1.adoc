@@ -2,7 +2,7 @@
 
 = SEIS 665 Assignment 1: Account Setup
 Jason Baker <bake2352@stthomas.edu>
-1.0, 3/18/2016
+1.1, 8/25/2016
 
 :sectnums!:
 
@@ -12,11 +12,11 @@ You have three required tasks and one optional task to complete this week,
 as well as the assigned readings. Don't wait until the end of the week to
 begin working on these tasks!
 
-* Sign up for a free GitHub.com account
-* Sign up for a free Slack account and install software on your desktop and/or
-mobile device
-* Sign up for an Amazon Web Services account
-* (Optional) Take the _Try Git_ online class
+* Sign up for a free GitHub.com account.
+* Sign up for a free Slack account and optionally install software on your desktop and/or
+mobile device.
+* Sign up for an Amazon Web Services account.
+* (Optional) Take the _Try Git_ online class.
 
 :sectnums:
 ==  GitHub.com account
@@ -27,8 +27,8 @@ the `Sign Up` button. You are welcome to use an existing personal GitHub account
 == Slack account
 Sign up for a free Slack account at https://ustseis665.slack.com/signup using
 your @stthomas.edu email address. Slack is
-a chat-based collaborative platform used by thousands of businesses. It is heavily
-used in the application development and DevOps communities.
+a chat-based collaborative platform used by thousands of organizations. It is heavily
+used in DevOps organizations.
 
 You can access Slack using a web browser or you can download a desktop application
 (https://slack.com/downloads). Slack is also available as an app for your mobile
@@ -36,7 +36,7 @@ device. This course doesn't teach you how to use Slack, but it's pretty easy
 to figure out. Just go to the Slack website and click on the `Getting Started` link
 to learn the basics.
 
-We will use Slack as a group learning tool throughout the course. If you have a
+We will use Slack as a group communication tool throughout the course. If you have a
 question or encounter a problem while working with a tool, you should ask your
 question on Slack first. Students that actively participate on Slack and assist
 other students with issues may receive extra credit points.
@@ -44,7 +44,7 @@ other students with issues may receive extra credit points.
 Note that even though we will use Slack as a collaboration tool, students must
 complete and submit their own work on assignments. Some of the exam questions
 will relate to the assignments, and students that don't complete the assignments
-on their own will have difficulty on the exams.
+on their own will have difficulty taking the exams.
 
 == AWS account
 
@@ -61,7 +61,7 @@ for up to $100 in AWS annual credits.
 This course makes every effort to stay within the free tier of service at AWS.
 However, there are times when your account will likely incur hourly charges. The
 free tier of service combined with educational credits should cover all of your
-expenses. However, you are responsible for covering any expenses not covered by
+expenses. However, you are responsible for covering any additional expenses not covered by
 these credits.
 
 Go to http://aws.amazon.com/ and click on the `Sign In` link to sign up for a
@@ -69,7 +69,7 @@ new AWS account. You should use your @stthomas.edu email address when signing
 up for the account.
 
 Once your AWS account is setup, make note of your AWS Account ID (found in your
-  account profile). Then, apply for educational credit by filling out an
+  account profile on the AWS console). Then, apply for educational credit by filling out an
   application at: https://www.awseducate.com/Application. It may take a little
   time for AWS to process your application so submit it as
 soon as you can.
@@ -78,5 +78,5 @@ soon as you can.
 
 The _Try Git_ online class provides a quick introduction to Git where you can
 play with some of the basic commands. Students that have not used Git before
-are *strongly recommended* to take this 15-minute class. The class is located at
+are *strongly encouraged* to take this 15-minute class. The class is located at
 https://try.github.io
