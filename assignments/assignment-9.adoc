@@ -1,0 +1,24 @@
+:doctype: article
+:blank: pass:[ +]
+
+:sectnums!:
+
+= SEIS 665 Assignment 9: Configuration Management
+Jason Baker <bake2352@stthomas.edu>
+1.0, 8/26/2016
+
+== Overview
+
+TBD
+
+== Requirements
+
+You need to have a personal AWS account and GitHub account for this assignment.
+
+== The assignment
+
+Let's start controlling that confi!
+
+
+== Submitting your assignment
+I will review your published work on GitHub after the homework due date.
