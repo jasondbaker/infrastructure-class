@@ -7,39 +7,39 @@ St. Paul, MN 55105
 
 [.text-center]
 SYLLABUS Fall 2016 SEIS 665 +
-Version 2016.8.17
+Version 2016.8.27
 
 {blank}
-[underline]#Course Title# +
+[.underline]#Course Title# +
 DevOps & Cloud Infrastructure
 
-[underline]#Meeting Time Place# +
+[.underline]#Meeting Time Place# +
 Mondays, 5:45 - 9:00 PM, OSS 428
 
-[underline]#Credit Value# +
+[.underline]#Credit Value# +
 3 semester credits
 
-[underline]#Prerequisites# +
+[.underline]#Prerequisites# +
 SEIS 610
 
-[underline]#Instructor# +
+[.underline]#Instructor# +
 Jason Baker
 
-[underline]#E-Mail Address# +
+[.underline]#E-Mail Address# +
 bake2352@stthomas.edu
 
-[underline]#Phone Number# +
+[.underline]#Phone Number# +
 612-695-7775 (cell)
 
-[underline]#Office Address# +
+[.underline]#Office Address# +
 OSS 228
 
-[underline]#Office Hours# +
+[.underline]#Office Hours# +
 Before class or by appointment +
 (Remote conferencing via Google Hangouts/ Skype encouraged)
 
 {blank}
-[underline]#Course Description# +
+[.underline]#Course Description# +
 
 This course covers the
 engineering and design of IT infrastructure, focusing on cloud-scale distributed
@@ -52,7 +52,7 @@ experience with several widely-adopted IT platforms including Github,
 AWS, and Docker.
 
 {blank}
-[underline]#Course Objectives#
+[.underline]#Course Objectives#
 
 *   Understand how IT organizations are deploying modern infrastructure and how
 to build infrastructure as code.
@@ -62,7 +62,7 @@ patterns used to enhance scalability and reliability within these systems.
   management, package management, and configuration management.
 
 {blank}
-[underline]#Required Texts# +
+[.underline]#Required Texts# +
 
 _Practice of Cloud Systems Administration Volume 2_ by Thomas Limoncelli, Strata Challup, & Christina Hogan. +
 ISBN: 9780321943187
@@ -73,7 +73,7 @@ ISBN: 9781491924358
 Additional writings (whitepapers, blogs, etc) as assigned by the instructor.
 
 {blank}
-[underline]#Attendance Policy and Studying#
+[.underline]#Attendance Policy and Studying#
 
 * Instructor will enter attendance into Blackboard weekly
 * 2-3 hours work for each hour of in class instruction is the academic standard,
@@ -82,7 +82,7 @@ If you don't currently have much experience working with Linux, plan on
 budgeting more time.
 
 {blank}
-[underline]#Amazon Web Services# +
+[.underline]#Amazon Web Services# +
 Most class assignments will make use of infrastructure running on Amazon Web
 Services (AWS). The University of St. Thomas is an AWS Educate Institution
 which means that students can apply for $100 worth of AWS credits per year. Students
@@ -95,12 +95,12 @@ AWS in this class throughout the semester. However, if you use AWS in other clas
 paying any expenses not covered by these credits.
 
 {blank}
-[underline]#Blackboard# +
+[.underline]#Blackboard# +
 Lecture notes (powerpoint/pdf format), and grades will be available on
 Blackboard. We will also use Blackboard for some of the reading quizzes.
 
 {blank}
-[underline]#Github# +
+[.underline]#Github# +
 We will use Github throughout the course and a free Github account is required. You can
 create an account, if you don't already have one, by going to the website:
 https://github.com/join
@@ -109,14 +109,14 @@ Students are strongly encouraged to sign up and participate in free Git training
 before the start of the semester: https://www.codeschool.com/courses/try-git
 
 {blank}
-[underline]#Slack# +
+[.underline]#Slack# +
 Slack is a great real-time chat and collaboration tool for teams. Sign up for a
 free account at https://ustseis665.slack.com/signup using your @stthomas.edu
 email address. We will all join this team for the duration of the course and make use
 of chat channels to work on projects.
 
 {blank}
-[underline]#Computers# +
+[.underline]#Computers# +
 A computer is an essential tool for this class since many of our assignments will involve hands-on learning. A personal computer is strongly encouraged.
 
 A computer is a powerful learning tool, but it can also be a distraction in a
@@ -127,7 +127,7 @@ you do not miss out on key insights and important learnings.
 ￼￼￼￼￼￼￼￼￼￼
 
 {blank}
-[underline]#Linux# +
+[.underline]#Linux# +
 Understanding the Linux command line interface is critical to success in this
 course. It's likely that some students have significant amounts of experience
 with Linux while others have none. We will spend some time at the beginning of
@@ -141,7 +141,7 @@ learning assignments and working with DevOps processes, you will gain basic Linu
 system administration skills.
 
 {blank}
-[underline]#Grading Policy#
+[.underline]#Grading Policy#
 
 * Attendance (10%)
   ** Up to two excused absences are acceptable.
@@ -162,14 +162,14 @@ system administration skills.
   ** A failing grade on the midterm or final.
 
 {blank}
-[underline]#Recording of Classroom Activities# +
+[.underline]#Recording of Classroom Activities# +
 
 All recordings of class sessions using any device is expressly prohibited
 without the written permission of the instructor. (See Class Session Recording
   Permission Form.)
 
 {blank}
-[underline]#Schedule# +
+[.underline]#Schedule# +
 
 
 [cols="10,10,40,40",options="header"]
@@ -263,17 +263,17 @@ Read _6 Models Of The Modern Data Center_
 |=========================================================
 
 {blank}
-[underline]#STUDENTS WITH DISABILTIES# +
+[.underline]#STUDENTS WITH DISABILTIES# +
 
 I want to ensure that the classroom environment is conducive to your learning and ask that you discuss with me any concerns that are interfering with your learning as they arise. Classroom accommodations will be provided for students with documented disabilities. Students must contact the Disability Resources Office about accommodations for this course as early in the semester as possible. Appointments can be made by calling 651-962-6315 or 800-328-6819, extension 6315, or in person in Rm 110 Murray Herrick Center on the St. Paul campus. Further information is available at: http://www.stthomas.edu/enhancementprog/.
 
 {blank}
-[underline]#ACADEMIC INTEGRITY# +
+[.underline]#ACADEMIC INTEGRITY# +
 
 Academic integrity is defined as not cheating and not plagiarizing; honesty and trust among students and between students and faculty are essential for a strong, functioning academic community. Consequently, students are expected to do their own work on all academic assignments, tests, projects and research/term papers. Academic dishonesty, whether cheating, plagiarism or some other form of dishonest conduct related to academic coursework and listed in the Student Policy Book under “Discipline: Rules of Conduct” will automatically result in failure for the work involved. But academic dishonesty could also result in failure for the course and, in the event of a second incident of academic dishonesty, suspension from the University.
 
 {blank}
-[underline]#Cheating# +
+[.underline]#Cheating# +
 
 In cases of cheating, the instructor will impose a minimum sanction of failure of work involved. The instructor will inform the student and the director of the program in writing of:
 
@@ -291,7 +291,7 @@ Here are the common ways to violate the academic integrity code: +
 * Plagiarism -The deliberate adoption or reproduction of ideas or words or statements of another person as one’s own without acknowledgment. You commit plagiarism whenever you use a source in any way without indicating that you have used it.
 
 {blank}
-[underline]#Plagiarism# +
+[.underline]#Plagiarism# +
 
 The following statement of plagiarism is reprinted here for the use of faculty and students.
 
