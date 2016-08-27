@@ -6,13 +6,15 @@ image:../images/git-hands-on/git-hands-on-logo.png["200","200",float="right"]
 
 == Git Hands-on Guide
 Jason Baker <bake2352@stthomas.edu>
-1.0, 3/18/2016
+1.1, 8/26/2016
 
 === Overview
 The purpose of this guide is to provide a basic overview of the Git version
 control system. The goal is to get students familiar with core Git functions
 and version control processes. For more detailed information, see the Git
 reference manual at https://git-scm.com/documentation.
+
+You can also refer to the https://github.com/jasondbaker/infrastructure-class/blob/master/articles/git-cheat-sheet-education.pdf[Git command cheat sheet] for a concise summary of commands.
 
 === The git command
 Git commands are executed by typing `git` followed by a function

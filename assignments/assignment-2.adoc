@@ -56,14 +56,14 @@ The second step in the assignment is to launch a Linux server using AWS EC2. The
 server should have the following characteristics:
 
   * Amazon Linux AMI 64-bit (usually the first option listed)
-  * Located in a U.S. region (us-east-1 or us-west-1)
+  * Located in a U.S. region (us-east-1)
   * t2.micro instance type
   * All default instance settings (storage, vpm, security group, etc.)
 
 I've created a video showing you how to launch this EC2 instance. The video is
 available at:
 
-   TBD
+* https://youtu.be/D5kxRVWrsGo
 
 Once you launch the new server, it may take a few minutes to provision.
 
@@ -77,7 +77,8 @@ instance and launch a new server. I recommend reusing the same key when launchin
 
 I've created a couple videos showing you how to use a terminal application to log into the instance using a Windows desktop and a MacOS desktop. Your personal computer or lab computer may be running a different OS version, but the process is still very similar.
 
-  TBD
+* Accessing EC2 instance from a Windows PC: https://youtu.be/HOlo7L9fWlc
+* Accessing EC2 instance from a Mac: https://youtu.be/ZFh-qA5DT6w
 
 === Working with Linux
 
