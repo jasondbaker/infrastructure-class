@@ -144,7 +144,7 @@ system administration skills.
 *[.underline]#Grading Policy#*
 
 * Attendance (10%)
-  ** Up to two excused absences are acceptable.
+  ** Up to two excused lecture absences are acceptable.
   ** Additional absences beyond two will deduct points.
 * Weekly reading quizzes (10%)
   ** Weekly Blackboard quizzes on reading, 5 questions and 10 points per quiz.
@@ -152,6 +152,7 @@ system administration skills.
   ** Reading quiz will be available approximately 1 week in advance. No makeups, because you have all week and can do them remotely.
 * Homework assignments (30%)
   ** 10 graded assignments.
+  ** Late submission penalty of 20% per day.
   ** Participation points may be given for helping others troubleshoot issues through Slack.
 * Midterm (25%)
 * Final (25%)
