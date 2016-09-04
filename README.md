@@ -15,16 +15,16 @@ Audience
 
 The curriculum was designed for graduate students at a large private university located near a major metropolitan area. The students represent a mixture of age groups, cultural backgrounds, and experience levels. Most students tend to be working professionals with 5-15 years of experience. Approximately 50% of the students are International students coming from a wide variety of educational systems.
 
-Students taking this course may have 10+ years of IT experience or no experience at all. Some of the students are transitioning into IT as a new career. One of the challenges I faced while creating this curriculum was figuring out how to calibrate the technical depth of the content. In most cases I opted to make the content more rigorous to challenge experienced students while at least giving less experienced students to new ideas. The course calibration will likely require a few semesters to properly fine tune.
+Students taking this course may have 10+ years of IT experience or no experience at all. Some of the students are transitioning into IT as a new career. One of the challenges I faced while creating this curriculum was figuring out how to calibrate the technical depth of the content. In most instances, I opted to make the content more rigorous to challenge experienced students while at least giving less experienced students exposure to new ideas. The course calibration will likely require a few semesters to properly fine tune.
 
 Curriculum Approach
 -------------------
 
-Let me be completely transparent. I've never developed educational curriculum before and I didn't follow any particular methodology. I created the kind of class that I would register for and sit through.
+Let me be completely transparent. I've never developed educational curriculum before and I didn't follow any particular methodology when creating this course. I created the kind of class that I'd like to take.
 
-It's based around a process of exploration and hands-on learning. Students are presented with a few theories and best practices, and then we dive straight into implementation. We will learn by doing. My hope is that an appreciation for DevOps practices will emerge as students progress through the course.
+The curriculum is based around a process of exploration and hands-on learning. Students are presented with a few theories and best practices, and then we dive straight into implementation. We will learn by doing. My hope is that an appreciation for DevOps practices will emerge as students progress through the course.
 
-I'm treating this curriculum as a grand experiment and hoping to receive fast feedback from students. I expect to make meaningful changes in future months based on student and peer critiques.
+I'm treating this curriculum as a grand experiment and hope to receive fast feedback from students. I expect to make meaningful changes in future months based on student and peer critiques.
 
 The course is focused on helping students develop skills related to DevOps and cloud infrastructure. Students learn how to walk before they run. Each lesson builds on the learnings from the previous lesson.
 

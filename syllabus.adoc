@@ -145,15 +145,15 @@ system administration skills.
 
 * Attendance (10%)
   ** Up to two excused lecture absences are acceptable.
-  ** Additional absences beyond two will deduct points.
+  ** Additional absences will result in attendance score reduction.
 * Weekly reading quizzes (10%)
-  ** Weekly Blackboard quizzes on reading, 5 questions and 10 points per quiz.
-  ** Complete the week’s quiz online before class ALONE.
+  ** 11 Weekly Blackboard quizzes on reading, 5 questions and 10 points per question (50 per quiz).
+  ** Complete each week’s quiz online before next class ALONE.
   ** Reading quiz will be available approximately 1 week in advance. No makeups, because you have all week and can do them remotely.
 * Homework assignments (30%)
   ** 10 graded assignments.
   ** Late submission penalty of 20% per day.
-  ** Participation points may be given for helping others troubleshoot issues through Slack.
+  ** Extra credit points may be given for helping others troubleshoot issues through Slack.
 * Midterm (25%)
 * Final (25%)
 * The usual (but not forced) distribution will be ~50/50 between A grades and B grades.
