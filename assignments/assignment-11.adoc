@@ -24,37 +24,92 @@ Let's start shipping those containers!
 
 The first step in the assignment is to build a Docker server running on EC2.
 
-Build a t2.micro EC2 instance running Amazon Linux. You will need to be able to ssh into this instance.
+Create a stack using CloudFormation containing a single EC2 t2.micro instance running the standard Amazon Linux AMI. You will need to be able to access this instance on port 22 (ssh) and port 8080. Also, configure the userdata property of this instance to update the system packages and install Docker.
 
-Update the system packages on the instance and install Docker:
+Here are the commands you will need to use in the userdata field:
 
-  sudo yum install -y docker
+  yum update -y
+  yum install -y docker
+  service docker start
+  usermod -a -G docker ec2-user
 
-Then, start the Docker service:
+The userdata property is a little tricky because the data needs to be in Base64 format. Fortunately, CloudFormation provides a function for this. Here's an example of a userdata property configuration in a CloudFormation template:
 
-  sudo service docker start
+  "UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+             "yum update -y\n",
+             "/opt/aws/bin/cfn-init -v\n "
+		]]}}
 
-Finally, add the ec2-user to the docker user group:
+Launch your template to create a new stack. Shell into the new EC2 instance and run the following command:
 
-  sudo usermod -a -G docker ec2-user
+  $ docker --version
 
-That's it. Now the EC2 instance is running Docker.
+The system should respond with the docker client version.
 
 === Working with containers
 
+Let's start by getting comfortable with the Docker command line. How about a Hello World application? Type in the following command:
 
+  $ docker run busybox echo hello world
+
+The system should respond back with the output `hello world`. What is happening here? Docker created a small container using the `busybox` image, executed single small process, and echoed the text `hello world`.
+
+The process isn't running anymore. You can confirm that by running the command `docker ps`. You just ran an interactive process. Once the process completed, it stopped running. This might seem a little strange at first. Remember, containers are more like supercharged processes than like virtual machines.
+
+Let's do something a little more sophisticated. Type in the following command:
+
+  $ docker run -it ubuntu bash
+
+This tells docker to load the `ubuntu` image and run the `bash` command. Additionally, docker was told to setup a virtual terminal connection to the container (-it). You should see the docker client download the ubuntu image and launch the container. It may take a minute or two the first time you run this command.
+
+Now that you are in the container terminal, look around a little bit. Type in `ls \` to view the root directory. Containers have their own filesystem that overlays the filesystem on the host. Exit out of the container terminal by typing `exit`.
+
+Notice that the container you just launched is now stopped (`docker ps`). This was an interactive container just like the first container you created. Try to run the container again, type:
+
+  $ docker run -it ubuntu bash
+
+Did you notice how much faster the container launched this time? That's because Docker is pretty smart about caching the different build layers of the container. It knew how to build the container this time because it cached all the layers from the previous container.
+
+Next, let's launch a container that runs in the background. Type in the command:
+
+  $ docker run -d -P --name web1 nginx
+
+This will download and build a container running the popular `nginx` webserver. When you create a container, docker assigns it a long ID. It's not very easy to remember long ID strings, so using the --name parameter to assign a memorable name to containers is helpful.
+
+You should see this container running on the system. Check the docker process list to confirm:
+
+  $ docker ps
+
+=== The Dockerfile
+
+The Dockerfile is a handy way to encapsulate all the configuration commands required to build a single container. The remaining part of your assignment this week is to build a simple nginx webserver container using a Dockerfile. Here are the requirements for the container:
+
+  * The container must use the `nginx` image.
+  * The container should map port 80 in the container to port 8080 on the host.
+  * The container should map the local host server directory /home/ec2-user to the directory /usr/share/nginx/html on the container.
+  * The container should have an environment variable mapping the key `NGINX_PORT` to the value `80`.
+
+Finally, create a small file in the `/home/ec2-user` directory called `index.html`. Inside this file, type the following text:
+
+  <html>
+  <body>
+    <h1>My webserver</h1>
+  </body>
+  </html>
+
+After you create the Dockerfile and build a container from it, you should be able to access the webpage you created by going to the instance address on port 8080 in your web browser. If you can't access the instance, make sure that port 8080 is open on the security group associated with your instance.
 
 === Save your work
 
 
 Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/eeea11fb5604fd931c30393c935aba6b
 
-
+Commit a copy of your CloudFormation template and your Dockerfile to this repository.
 
 === Terminate application environment
 
-The last step in the assignment is to terminate your Docker instance on EC2.
-A
+The last step in the assignment is to terminate your CloudFormation stack on AWS.
 
 == Submitting your assignment
 I will review your published work on GitHub after the homework due date.
