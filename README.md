@@ -78,7 +78,7 @@ Lecture Schedule
 | 7    | Midterm                                                                |
 | 8    | Distributed application architecture, Web services, REST/ JSON / YAML  |
 | 9    | Infrastructure as Code, CloudFormation                                 |
-| 10   | Infrastructure As Code                                                 |
+| 10   | Configuration Management                                               |
 | 11   | DevOps, Continuous integration & delivery                              |
 | 12   | Containers, Docker                                                     |
 | 13   | Data center architecture                                               |
