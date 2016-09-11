@@ -66,7 +66,7 @@ these credits.
 
 Go to http://aws.amazon.com/ and click on the `Sign In` link to sign up for a
 new AWS account. You should use your @stthomas.edu email address when signing
-up for the account. Also, you need to provide Amazon with a valid credit card during the account setup process otherwise you will not be able to apply for educational credit.
+up for the account. Also, you need to provide Amazon with a valid credit card during the account setup process otherwise you will not be able to apply for educational credit. Choose the basic support option. The other support options are designed for businesses. We will provide AWS support to one another via the class Slack channel. 
 
 Once your AWS account is setup, make note of your AWS Account ID (found in your
   account profile on the AWS console). Then, apply for educational credit by filling out an
