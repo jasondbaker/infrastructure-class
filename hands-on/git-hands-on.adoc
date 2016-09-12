@@ -77,6 +77,14 @@ the state of the files by typing: `git status`
 
   * Files in the staging area are queued up for committing to the repository.
 
+=== Removing staged files
+If you accidentally added a file to the staging area, you can remove the file using the `git reset HEAD <filename>` command. This command seems a little strange, but it works!
+
+.Example:
+----
+$ git reset HEAD index.html
+----
+
 === Adding files (committing) to the repository
 Committing files to the repository creates a _snapshot_ of all the tracked
 files in the current working directory. Commit files to the repository by
@@ -93,6 +101,18 @@ $ git commit -m 'refactor data processing module'
   * Each commit creates a hash (something like _bc264fb37d88bbde1adc25ba8337f7f929c85d02_) which is
   used to reference the commit in future operations.
 
+=== Amend a commit
+Sometimes after you add a commit to the repository you realize that you forgot to
+stage all of the changed files. You could stage the remaining changed files and
+issue another commit, but then your repository contains multiple commit messages
+for one set of changes. Another option is to amend the previous commit using
+the `git commit --amend` command. This command modifies the previous commit by adding additional changed files.
+
+.Example:
+----
+$ git commit --amend
+----
+
 === Removing files from the repository
 Every change made to the repository is additive -- even deletions. Remember,
 commits are simply snapshots of the current working directory. If a previous
@@ -106,6 +126,14 @@ This is a very good thing!
   * Many organizations expressly forbid users from manipulating git history.
 
   * Assume everything you commit to the repository is permanent.
+
+=== Reverting file changes
+Once a file is committed to a repository, you can easily revert future changes made to that file. For example, let's say you are working on an `index.html` file. You make some changes to the file and it no longer works as expected. You want to revert it back to its original state before you made changes to it. The following command allows you to revert back to the previous state of the file: `git checkout -- <filename>`. Note, this command is very dangerous because it overwrites saved data. You should know what you are doing when you issue this command.
+
+.Example:
+----
+$ git checkout -- index.html
+----
 
 === Viewing list of commits to repository
 Display the list of commits in the repository by typing: `git log`
@@ -140,7 +168,7 @@ Create a branch by typing in the command: `git branch <name>`
 
 .Example:
 ----
-$ git commit branch test
+$ git branch test
 ----
 
   * It's common practice to create a new branch for every feature or bug fix you
