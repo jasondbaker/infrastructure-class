@@ -135,6 +135,33 @@ Once a file is committed to a repository, you can easily revert future changes m
 $ git checkout -- index.html
 ----
 
+=== Reverting to a previous commit
+Let's say that you made a commit to the git repository but you accidentally committed the wrong file changes. Your commit history now looks like the following diagram, where `C` represents your unwanted commit.
+
+   (F)
+A-B-C
+    ↑
+  master
+
+You can reverse the changes made by the commit by using the `git revert <commit hash>` command. This command creates a new commit that reverses the changes made in the specified commit. Your commit history will now look like the following diagram, where `D` represents a new commit that reverses the changes made in the `C` commit (or whatever commit you specify):
+
+     (F)
+A-B-C-D
+      ↑
+    master
+
+
+Sometimes you might want to reverse a commit and remove the commit and its file changes from the repository. It's like the commit never happened. You can revert back to the previous commit and state of your file system by using the command: `git reset --hard HEAD~1`
+
+Note that this command is a little dangerous and you will lose the changes made in your most recent commit. Your commit history will now look like the following, where `B` represents the previous (and now current) commit:
+
+ (F)
+A-B
+  ↑
+master
+
+It's possible to revert to the previous commit without changing the current status of the files. In other words, you can revert the repository back to the time right before you issued the last commit. All the files will still contain the changes you recently made. You can perform this type of soft revert by using the command: `git reset --soft HEAD~1`
+
 === Viewing list of commits to repository
 Display the list of commits in the repository by typing: `git log`
 
@@ -153,6 +180,10 @@ Date:   Sat Mar 19 22:05:13 2016 -0500
 
     create linux hands on guide
 ----
+
+If your repository contains dozens or hundreds of commits, the standard log listing can get pretty long. You can generate a shorter, more concise log listing using the command: `git log --oneline`
+
+
 
 == Branching
 Branching is super easy in Git and one of the reasons it is so popular. A branch
@@ -237,6 +268,45 @@ $ git branch -d testing
 
   * Git will produce a warning if you try to delete a branch that contains unmerged
   files. Git tries to prevent you from accidentally deleting files.
+
+=== Comparing changes in commits
+It's useful to be able to see the changes made to files in specific commits or see the differences between two different commits. The `git diff` command allows you to see these differences.
+
+To see the file changes made in a specific commit, use the `git diff <commit hash>` command. For example:
+
+  $ git diff f83d738
+
+This command will display a list of changes made in the commit:
+
+----
+index d23b06e..e795bc2 100644
+--- a/index.html
++++ b/index.html
+@@ -1,5 +1,5 @@
+ <html>
+   <body>
+-    <h1>Hello World</h1>
++    <h1>Hello Great World</h1>
+   </body>
+ </html>
+diff --git a/site.xml b/site.xml
+new file mode 100644
+index 0000000..e69de29
+----
+
+In this example, the word `Great` was added to the html code and a new file called `site.xml` was added to the file directory.
+
+You can compare the changes between two different commits by using the command: `git diff <hash>..<hash>`. For example:
+
+  $ git diff f83d738..HEAD
+
+This command compares the file changes made between the f83d738 commit and the current HEAD.
+
+Finally, you can also easily compare the file changes between two different branches using the command: `git diff <branch name>..<branch name>`. For example:
+
+  $ git diff master..develop
+
+Note that the diff command output can be a little bit cryptic depending on the number of changes present in the commits being analyzed. Oftentimes it is more helpful to use a graphical diff tool to review file changes.
 
 === Collaboration
 The basic commands describe how to establish and manage a local git repository.
