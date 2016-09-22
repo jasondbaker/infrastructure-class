@@ -624,9 +624,9 @@ the file changes in your repository. Nothing is actually in your repository yet.
 Change back to the parent directory (`cd ..`). Next, let's move some of our
 files into the repository. Type:
 
-  $ mv archive infrastructure-assignment1
-  $ mv namelist infrastructure-assignment1
-  $ mv myfile.conf infrastructure-assignment1
+  $ mv archive assignment-2-linux-git-<username>
+  $ mv namelist assignment-2-linux-git-<username>
+  $ mv myfile.conf assignment-2-linux-git-<username>
 
 Hopefully you remembered to use the auto-complete function to reduce some of that
 typing. Change to the `assignment-2-linux-git-<username>` directory and list the directory
