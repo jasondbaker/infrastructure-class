@@ -434,6 +434,8 @@ output from the `ls` command and redirects it to the `less` command where
 the resulting output is paged. Pipes are super powerful and used all the
 time by savvy Linux operators.
 
+Hit the `q` key to quit the paginated directory listing command.
+
 === Working with shell scripts
 Now things are going to get interesting.
 
