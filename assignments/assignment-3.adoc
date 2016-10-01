@@ -90,7 +90,7 @@ the Linux instance by running a `yum update`:
   $ sudo yum update -y
 
 Remember, it's a good practice to always update the Linux software packages
-immediately after building the server. Amazon Linux is a _rolling release,
+immediately after building the server. Amazon Linux is a _rolling_ release,
 which means that the Linux image is being rebuilt with newer packages
 several times a week. This means that when you launch an Amazon Linux
 instance the software is very current.
@@ -105,6 +105,8 @@ initially log into a Linux server? Your home directory. Remember, each user
 on a Linux system has their own unique home directory. Verify the location:
 
   $ pwd
+
+You should see that you are currently in the `/home/ec2-user` directory.
 
 Next, we're going to create a sub-directory in our home directory to store this
 week's assignment files. Let's call it `project1`. Go ahead and create this
@@ -157,7 +159,7 @@ In the script code, the `ARG1` variable is assigned to a funny looking value
 called `${1}`. This value represents the first argument listed after the command.
 Technically, the command name is also treated like an argument. It's value is
 represented by `${0}`. How do you think the second argument value is
-represented? Right, `${2}`.
+represented? Right, using `${2}`.
 
 Let's save our hard work by committing it to the Git repository.
 
@@ -185,6 +187,8 @@ Run the code without supplying an argument:
 
   $ ./script2
 
+Did you get a permission denied error when trying to run the script? Hint: make sure it is executable.
+
 Now, run the script again with an argument:
 
   $ ./script2 update
@@ -196,18 +200,20 @@ to the variable ACTION, but if the argument doesn't exist then use `launch`
 as the default value of the variable".
 
 The if-then-else code structure performs an initial test `[ -z "$1" ]` which
-checks to see if the first argument is an empty string. In other words, this
+checks to see if the first argument is an empty string. This
 test evaluates as true if the first argument doesn't exist. Note, the spaces
 in this code are very important. The bash interpreter will not understand
 the code statement properly if the spaces are left out.
 
-One of the key use-cases for a bash script is building up a set of arguments
+One of the key use-cases for this type of script code is building up a set of arguments
 that can be used to control the execution of the script. When a user doesn't
-provide a value for a required argument, sometimes the script needs to use
+provide a value for a required argument, sometimes a script needs to use
 a default value instead.
 
 Go ahead and add this file to the Git repository and make another Git commit.
 Use an appropriate commit message during your commit.
+
+Enter the `git log` command to verify that your local git repository now contains two commits.
 
 Next, create a new script file called `script3`. The script code is a little
 longer than previous scripts. Here is the code:
@@ -243,7 +249,7 @@ case "$ACTION" in
 esac
 ----
 
-Okay, take a breath. There are several new concepts introduced in this script
+Okay, take a break. There are several new concepts introduced in this script
 file. First, notice the function definition for `display_help()`. We can use
 functions in script files to encapsulate a set of code which we may want to
 execute one or more times. You can build complex shell scripts by incrementally
@@ -263,11 +269,11 @@ specified set of statements. The case statement block begins with the `case` com
 and ends with the `esac` command (case spelled backwards).
 
 In this case statement, if the `ACTION` variable matches the value `-h` *or*
-the value `--help`, the `display_help` function is called. Otherwise, if
+the value `--help` (the or operator is signified by the vertical bar character `|`), the `display_help` function is called. Otherwise, if
 the ACTION variable doesn't match anything (denoted by the `*` character),
 a command usage statement is displayed to the user and the script exits. Note
-that exiting a script with the value of 1 is the proper way to signify that
-the script was executed improperly.
+that exiting a script with the value of 1 is the appropriate way to signify that
+the script terminated improperly.
 
 There's one more strange looking thing going on with this script. Look at the
 `display_help` function code. What's up with this `cat << EOF` stuff? That's
@@ -315,7 +321,7 @@ and immediately checks it out. If you type:
 
   $ git branch
 
-You will see that the `feature/script3` branch is currently checked out. Git
+You will see that the `feature/script3` branch is currently checked out (denoted by the highlighting and asterisk). Git
 doesn't care about forward-slashes (`/`) in the branch name, and these are
 commonly used to help categorize the purpose of the branch. In this case, we
 are going to add more functionality to the `script3` file.
@@ -386,7 +392,7 @@ create a file. Adding the command required a couple basic steps:
 
 One additional trick we are using in this script is passing the second
 argument from the command line into the `create_file` function. This function
-really executes like a command, so it can interpret arguments as well.
+really works just like a command, so it can accept arguments as well.
 The filename is passed as the second argument on the command line, but when
 it is passed to the `create_file` function (`create file "${2:-server}"`) it
 becomes the *first* argument in the function: `touch "${1}-54321"`.
@@ -405,8 +411,8 @@ create new files but it would be nice if the script could also delete files.
 Your mission is to modify `script3` to add this deletion feature. Here are the
 requirements:
 
-  * The `-d` or `--delete` flags should execute the `delete_file` function
-  * The `delete_file` function should remove a specified file.
+  * The `-d` or `--delete` flags should execute the `delete_file` function.
+  * The `delete_file` function should remove a specified file `<filename>-54321`
   * If a filename isn't provided as an argument to the script, then use `server`
   as the default filename
   * The usage statement should display the new deletion flag option.
@@ -458,10 +464,10 @@ Now, to calm you fears take a look at the script3 file:
 
 All your modified code is back! The key concept to understand is that
 the files in your current working directory always represent a single point
-in time in the Git repository (a commit). Git manipulates the files
+in time in the Git repository (a commit). Git updates the files
 in the current directory as you change branches. The lesson here is that you
 always need to understand *where* you are in the repository, because this
-directly effects what files and changes you see in the file directory.
+directly effects which files and changes you see in the file directory.
 
 Before we push our code up to GitHub, let's merge our feature branch into
 the master branch. Think of this like merging our new feature into our
