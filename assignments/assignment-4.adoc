@@ -254,7 +254,7 @@ instance? You will take care of that shortly.
 
 Since you are going to modify the existing website you should make sure your
 work is managed under source control. Go ahead and initialize a new git repo
-in the `/user/share/nginx` directory. This is the parent directory of your
+in the `/usr/share/nginx` directory. This is the parent directory of your
 current working directory. If the `git` command doesn't work, that means you missed
 the step to install the Git client earlier in the assignment. Verify that a
 git repository is installed in the `/usr/share/nginx` directory.
@@ -334,7 +334,7 @@ EC2 instances.
 === Create a script
 
 We're going to take our new found knowledge of instance meta-data and put it
-to work. Start by creating a directory in `/user/share/nginx` (your current
+to work. Start by creating a directory in `/usr/share/nginx` (your current
   working directory) called `scripts`. Then change directory to the new
   `scripts` directory.
 
@@ -372,7 +372,7 @@ Here are a couple hints for writing this script:
 
 === Commit the work
 
-Once your script is working properly, change back to the `/user/share/nginx`
+Once your script is working properly, change back to the `/usr/share/nginx`
 directory and add all the files in its subdirectories to the Git
 staging area. Confirm that your new script and its output file are in the
 Git staging area. Commit the files to your local Git repository.
