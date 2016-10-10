@@ -40,7 +40,7 @@ of like a user.
 For example, you can create a role that allows access to data
 stored on S3 and then assign this role to an EC2 instance. Applications running
 on the EC2 instance can use the role to access S3 data without having to
-store an access key and secret key. This represents a superior security configuration.
+store an access key and secret key on the application server somewhere. This represents a superior security configuration.
 
 Let's create this S3 access role now.
 
@@ -97,7 +97,7 @@ on the S3 dashboard and look at its *properties*.
   can be any sort of key/value pair. Organizations use tags to track resources by
   tagging resources with an owner name, organizational unit, or budget ID.
 
-  * Next, open a text editor on your local workstation and create a new file
+  * Next, open a text editor on your local workstation and create a new text file
   called `index.html`. The file should contain the following text:
 
 ----
@@ -116,19 +116,19 @@ on the S3 dashboard and look at its *properties*.
 ----
 
   * Select the appropriate button or link on the S3 console to *upload* a file
-  to your new bucket. Either drag your `index.html` file into the browser or
+  to your new bucket. Either drag your `index.html` file into the browser window or
   click the link to *add* the file to the bucket.
 
-You should now see the `index.html` file listed in the bucket file listing. Did
+You should now see the `index.html` file in the bucket file listing. Did
 you notice that you can also create folders inside S3 buckets? Folders are a
 useful way to organize your data within buckets.
 
 === Encrypt S3 data
 
 You can easily encrypt data that's stored on S3. When you uploaded your file to
-the S3 bucket the data transfer occurred over an SSL/TLS-secured communications
+the S3 bucket, the data transfer occurred over an SSL/TLS-secured communications
 channel. S3 encryption allows you to encrypt your data-at-rest. This prevents
-someone from retrieving your data from the physical hard drive it's stored on.
+someone from retrieving your data from the physical hard drive or SSD it's stored on.
 
   * Select your `index.html` file in the S3 console and look at its properties.
   To view the file's properties, you may need to select an *actions* button or
@@ -149,7 +149,7 @@ In previous assignments, you accepted all of the server launch defaults when lau
 Linux instance. This time you will customize some of the launch settings by
 *configuring the instance details*. In particular,
 you will associate the S3-full-access role you created previously with the new instance. You
-can only associate an instance with a role when it's being launched. The role cannot
+can only associate an instance with a role when it's being launched for the first time. The role cannot
 be added to the instance configuration later.
 
 The server should have the following characteristics:
@@ -264,10 +264,12 @@ make an initial commit. Note, if you receive a `permission denied` error
 while working with Git you may need to use `sudo`. These files aren't in your
 home directory so you will need expanded privileges to work with them.
 
+=== Copy index.html from S3
+
 Next, let's copy the `index.html` file from your S3 bucket into the web server
 document root directory. Your instance already has access to the S3 bucket
 because you created a role called `S3-full-access` and associated it with the
-instance when you launched it earlier. The role assigned full access
+instance when you launched it earlier. The role assigned full S3 access
 privileges to the instance.
 
 AWS features may be accessed via the web-based console or an API. So far we've
@@ -317,16 +319,16 @@ out:
   $ curl http://169.254.169.254/latest/meta-data/
 
 You should receive a list of meta-data categories in the response. The `curl`
-command is a really basic text-based web browser. The curl browser accessed
+command is a simple text-based web browser. The curl browser accessed
 a virtual website located at a special private ip address, `169.254.129.254`.
 All of the meta-data associated with the instance can be accessed by
-constructing appropriate URLs. For example, if you want to retrieve the
+constructing appropriate URL paths. For example, if you want to retrieve the
 instance type for the current instance, enter:
 
   $ curl http://169.254.169.254/latest/meta-data/instance-type
 
 You should see `t2.micro` in the response. Understanding how to access
-instance meta-data is critically important when programmatically working with
+instance meta-data is important when programmatically working with
 EC2 instances.
 
 === Create a script
@@ -371,7 +373,7 @@ Here are a couple hints for writing this script:
 === Commit the work
 
 Once your script is working properly, change back to the `/user/share/nginx`
-directory and add the `scripts` directory and your new files to the Git
+directory and add all the files in its subdirectories to the Git
 staging area. Confirm that your new script and its output file are in the
 Git staging area. Commit the files to your local Git repository.
 
