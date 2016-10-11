@@ -96,7 +96,7 @@ this route table: `infrastructure-public-routes`. Make sure to designate the
 proper VPC when creating the route table.
 
 Select the new route table and look at its route listing. You will notice a single
-route with the network 10.0.0.0/18 and target of `local`. This route will
+route with the network 10.0.0.0/20 and target of `local`. This route will
 route traffic from any subnet in the VPC to any other subnet. That configuration
 is fine, however we need to add a route to send all traffic to Internet destinations
 through the Internet Gateway.
