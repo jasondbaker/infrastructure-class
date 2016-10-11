@@ -108,7 +108,7 @@ identifier. Make sure you save the updated route table when you are done.
 image:../images/assignment5/route-table.png["600","600"]
 
 Your new route table isn't associated with any subnets so it isn't actually doing
-anything yet. Click on the *subnet associations* for the new subnet and edit
+anything yet. Click on the *subnet associations* for the new route table and edit
 the current properties by adding the `infrastructure-public` subnet to the
 routing table. Save your work.
 
