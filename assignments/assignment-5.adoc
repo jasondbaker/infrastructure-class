@@ -411,7 +411,7 @@ are in the same VPC. Also, both web servers share the same security group.
 Therefore, yes the two web servers can communicate.
 
 Before you launch a load balancer, open a terminal connection to `webserver1`.
-Change to the directory `/usr/share/nginx` and edit the existing `index.html`
+Change to the directory `/usr/share/nginx/html/` and edit the existing `index.html`
 file so that it looks like the following:
 
 ----
@@ -420,11 +420,11 @@ file so that it looks like the following:
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Infrastructure Assignment 4</title>
+  <title>Infrastructure Assignment 5</title>
 </head>
 
 <body>
-  <h1>My 4th Infrastructure Assignment</h1>
+  <h1>My 5th Infrastructure Assignment</h1>
   Webserver 1!
 </body>
 </html>
