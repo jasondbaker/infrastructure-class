@@ -445,7 +445,7 @@ Select the *Load Balancers* link on the EC2 dashboard and click the button to
   * Create it inside your VPC
   * Select the two public subnets
   * Assign the existing `webservers` security group
-  * The load balancer does not need a secure listener (https).
+  * The load balancer should only have an http listener (port 80) configured.
   * Health Check
     ** Normally you probably wouldn't use `/index.html` as the health check path
     for a load balancer. You would create a separate health check web page.
