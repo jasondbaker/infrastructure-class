@@ -8,18 +8,18 @@ Jason Baker <bake2352@stthomas.edu>
 
 == Overview
 
-Exam 1 will cover content from week 1 through week 6 class lectures, weekly readings, and assignments. In general, exams will focus on material discussed in lectures. However, that doesn't mean you should dismiss the readings or assignments. For example, this exam will include questions directly related to some of the weekly assignments. If you do not completely understand an assignment, you should go back and practice it again.
+Exam 1 will cover content from week 1 through week 6 class lectures and assignments. In general, exams will focus on material discussed in lectures. However, this exam will also include questions directly related to some of the weekly assignments. For example, I may ask you how short blocks of shell script code work or how you might configure a VPC with public and private subnets. If you do not completely understand an assignment, you should go back and practice it again.
 
-The exam will include X multiple choice questions and X true/false questions. You will have the entire class period to take the exam. The exam is closed book.
+The exam will include multiple choice questions and true/false questions. You will have the entire class period to take the exam. The exam is closed book. We will likely use Blackboard to take the exam.
 
 == Study outline
 
 * Version control systems
-  ** What is source control (version control) management?
+  ** What is source control management?
   ** Difference between centralized and decentralized version control
   ** Git data storage -- how does it work?
   ** Git local repository versus origin repository
-  ** Git working directory versus staging area versus repository
+  ** Git working directory vs. staging area vs. repository
   ** Understand Git cloning
   ** Understand basic Git commands:
     *** git init
@@ -27,13 +27,14 @@ The exam will include X multiple choice questions and X true/false questions. Yo
     *** git rm
     *** git commit
     *** git clone
+    *** git push
 
 * Automation
   ** Different types of automation approaches:
     *** Left-over principle
     *** Compensatory principle
     *** Complementary principle
-  ** Difference between tool building and Automation
+  ** Difference between tool building and automation
   ** Best practices in automating tasks
 * Linux
   ** What is Linux?
@@ -42,8 +43,12 @@ The exam will include X multiple choice questions and X true/false questions. Yo
     *** Package management: yum
     *** Service management: service, ps
   ** Understand how to read and interpret the code in a basic shell script
+    *** Conditional statements (if-then-else)
+    *** Argument parsing
+    *** Loop structures
+    *** I/O redirection
 * Distributed infrastructure
-  ** Scaling up vs. scaling out
+  ** Pros and cons of scaling up vs. scaling out
   ** Composition patterns:
     *** Load balancer with multiple backends
     *** Server with multiple backends
@@ -57,6 +62,7 @@ The exam will include X multiple choice questions and X true/false questions. Yo
     *** Database sharding
     *** CAP Principle: Consistency, Availability, Partition tolerance
   ** NoSQL vs. relational databases
+  ** Types of NoSQL databases
     *** Key/Value
     *** Columnar
     *** Document
@@ -84,13 +90,13 @@ The exam will include X multiple choice questions and X true/false questions. Yo
     *** Storage tiers: standard, infrequently accessed, reduced redundancy storage, Glacier
   ** S3 versioning
   ** CloudFront
-  ** EC2 -- what is it?
+  ** EC2
     *** Deployment options: on-demand, reserve, spot
     *** Amazon Machine Images
     *** EBS -- what is it and how is it different than S3?
     *** EBS volume types: general, provisioned IOPS, magnetic
     *** EBS snapshots
-    *** Instance store -- what is it?
+    *** Instance store
   ** Security groups -- what is it?
     *** Understand stateful nature of groups
     *** Relationship between EC2 instances and security groups
@@ -98,9 +104,9 @@ The exam will include X multiple choice questions and X true/false questions. Yo
     *** Key benefits
     *** Understand load balancing algorithms
     *** Other features: SSL support and sticky sessions
-  ** EC2 Placement Group -- what is it?
-  ** Elastic File System -- what is it?
-    *** EFS vs. S3 vs. EBS
+  ** EC2 Placement Group purpose and benefits
+  ** Elastic File System
+    *** EFS vs. S3 vs. EBS -- when would you use each type?
   ** Virtual Private Cloud (VPC)
     *** Understand what it is and how to configure
     *** Subnets
@@ -115,11 +121,9 @@ The exam will include X multiple choice questions and X true/false questions. Yo
   ** Relational Database Service -- what is it?
     *** Multi-AZ feature
     *** Read replica
-  ** DynamoDB -- what is it?
-    *** Understand how it is different than RDS
-  ** Redshift -- what is it?
-    *** Understand how it is different than RDS
-  ** Directory Service -- what is it?
+  ** DynamoDB -- what type of NoSQL database is it?
+  ** Redshift -- OLTP vs. OLAP
+  ** Directory Service -- what is its purpose?
 * Additional AWS Topics
   ** CloudWatch
   ** CloudTrail vs AWS Config
@@ -132,19 +136,19 @@ The exam will include X multiple choice questions and X true/false questions. Yo
   ** ElastiCache
     *** Key benefits
     *** Memcache vs. Redis
-  ** SNS -- what is it?
+  ** SNS
     *** What is a topic?
     *** Push or pull-based service?
-  ** SQS -- what is it?
+  ** SQS
     *** Explain how it is used in an application architecture
     *** Push or pull?
     *** Explain the visibility timeout mechanism
     *** How is queue prioritization handled?
-  ** SES -- what is it?
-  ** Route53 -- what is it?
+  ** SES
+  ** Route53
     *** How does DNS work?
     *** Routing policies: simple, weighted, latency, fail-over, and geolocation
-  ** ElasticBeanstalk -- what is it?
+  ** ElasticBeanstalk
     *** All at once vs. rolling. vs immutable deployments
-  ** Lambda -- what is it?
+  ** Lambda
   ** Understand shared security model -- what is AWS responsible and what is the customer responsible for
