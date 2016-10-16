@@ -55,6 +55,10 @@ The subnets should have the following parameters:
     ** AZ: us-east-1b
     ** CIDR: 10.0.2.0/24
 
+Note, if the us-east-1a or us-east-1b availability zones are not currently
+listed, you may select any other availability zone in the region. The two
+subnets just have to be located in different AZs.
+
 === Create an Internet Gateway
 
 The next step is to create an Internet Gateway for the new VPC. The Internet
@@ -154,9 +158,9 @@ private subnet. The second instance should have the following properties:
 * Root volume size set to 10 GiB
 * Create a tag with a key of `Name` and a value of `backend1`
 * Create a new security group for the instance called `backends` with the following policies:
-  ** SSH from anywhere sg-<webservers ID>  (where webservers ID is your webservers ecurity group identifier, example: sg-f0321d88)
-  ** HTTP from anywhere sg-<webservers ID>
-  ** HTTPS from anywhere sg-<webservers ID>
+  ** SSH from sg-<webservers ID>  (where webservers ID is your webservers security group identifier, example: sg-f0321d88)
+  ** HTTP from sg-<webservers ID>
+  ** HTTPS from sg-<webservers ID>
 * Review your configuration settings and launch the new instance.
 
 The rules you created for the `backends` security group restrict incoming ssh, http,
