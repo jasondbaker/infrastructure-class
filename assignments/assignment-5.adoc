@@ -209,7 +209,7 @@ security group configuration allows `webserver1` to communicate with `backend1`
 via http.
 
 Now let's try to ssh into the `backend1` instance. In order to do that you will
-need to copy your ssh key pair from your local workstation onto the `webserver1`
+need to copy your private ssh key from your local workstation onto the `webserver1`
 instance.
 
 You should still be connected to `webserver1` via your terminal program. Open
@@ -342,14 +342,14 @@ the data returned by accessing the URL:
   http://169.254.169.254/latest/dynamic/instance-identity/document/
 
 Use the `curl` command with the `-vs` flag (verbose, silent) to create a file called `backend1-message.json` containing
-the data returned by accessing the URL. You will need to redirect the output
+the data returned by accessing the following URL. You will need to redirect the output
 in a special way based on the way the `curl` command works (using the `tee` command).
 
   https://s3.amazonaws.com/seis665/message.json
 
 .Example
 ----
-$ curl -vs https://s3.amazonaws.com/seis665/message.json 2>&1 | tee message.json
+$ curl -vs https://s3.amazonaws.com/seis665/message.json 2>&1 | tee backend1-message.json
 ----
 
 Copy the file `/var/log/nginx/access.log` into the current directory.
