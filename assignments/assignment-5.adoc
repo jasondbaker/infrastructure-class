@@ -341,7 +341,7 @@ the data returned by accessing the URL:
 
   http://169.254.169.254/latest/dynamic/instance-identity/document/
 
-Use the `curl` command with the `-vs` flag (verbose, silent) to create a file called `backend1-message.json` containing
+Use the `curl` command with the `-vs` flag (verbose, silent) to create a file called `backend1-message.txt` containing
 the data returned by accessing the following URL. You will need to redirect the output
 in a special way based on the way the `curl` command works (using the `tee` command).
 
@@ -349,7 +349,7 @@ in a special way based on the way the `curl` command works (using the `tee` comm
 
 .Example
 ----
-$ curl -vs https://s3.amazonaws.com/seis665/message.json 2>&1 | tee backend1-message.json
+$ curl -vs https://s3.amazonaws.com/seis665/message.json 2>&1 | tee backend1-message.txt
 ----
 
 Copy the file `/var/log/nginx/access.log` into the current directory.
@@ -443,7 +443,7 @@ browser. Let's launch a load balancer next.
 === Launch an Elastic Load Balancer
 
 Select the *Load Balancers* link on the EC2 dashboard and click the button to
-*create a load balancer*. The load balancer will have the following properties:
+*create a classic load balancer*. The load balancer will have the following properties:
 
   * Name: `infrastructure-lb`
   * Create it inside your VPC
