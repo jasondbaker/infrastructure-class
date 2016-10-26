@@ -171,7 +171,7 @@ and installed a number of basic components needed by Wordpress, including
 the Apache web server, PHP, and a MySQL library.
 
 Connect to the new instance using a terminal program. Type in the following
-command:
+command in your home directory:
 
   $ wget https://wordpress.org/latest.tar.gz
 
@@ -277,13 +277,19 @@ files. Enter the following commands:
   $ find /var/www -type d -exec sudo chmod 2775 {} \;
   $ find /var/www -type f -exec sudo chmod 0664 {} \;
 
-Finally, restart the Apache web server so that it picks up the new server
+Restart the Apache web server so that it picks up the new server
 configuration changes:
 
   $ sudo service httpd restart
 
-The WordPress site is available but it is configured to use your load
-balancer. Therefore, you need to associate the instance with the load
+Finally, you can copy the Wordpress web application files from your home directory into the website document root directory (/var/www/html). Change back to your home directory and run the command:
+
+  $ sudo cp -R wordpress/* /var/www/html
+
+The `-R` option in the copy command will recursively copy all of the files and directories below the `wordpress` directory.
+
+The WordPress site should now be accessible via a web browser but it is configured to use your load
+balancer. Therefore, you need to associate the EC2 instance with the load
 balancer. Go to the `instances` property of your load balancer and
 *edit* the instances to add the `wordpress1` server.
 
