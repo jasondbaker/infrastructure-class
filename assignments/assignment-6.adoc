@@ -36,16 +36,18 @@ You will build a VPC and set of AWS services which conforms to the service
 diagram below.
 image:../images/assignment6/diagram.png["600","600"]
 
-Start the assignment by creating a VPC named `productionVpc` in the `us-west`
-region with a CIDR block of `10.0.0.0/16`. The VPC will have two subnets:
+Start the assignment by creating a VPC named `productionVpc` in the `us-west (Oregon)`
+region with a CIDR block of `10.0.0.0/16`. The VPC needs to have two subnets, each located in *separate* availability zones (your choice):
 
-  * `production-public-1` subnet located in the `us-west-1a` availability zone
+  * `production-public-1` subnet
   will use the `10.0.1.0/25` network.
-  * `production-public-2` subnet located in the `us-west-1b` availability zone
+  * `production-public-2` subnet
   will use the `10.0.1.128/25` network.
 
 All instances on the two production subnets will need to be able to communicate with
 the Internet. You will need to configure the VPC to allow this communication.
+
+N
 
 === Create Security Groups
 
@@ -68,7 +70,7 @@ first security group:
       *** SSH from source 0.0.0.0/0
       *** HTTP from source 0.0.0.0/0
 
-The second security group will allow only the web serves to communicate with
+The second security group will allow only the web servers to communicate with
 the MySQL database instances using port 3306. Here are the requirements for the
 second security group:
 
@@ -124,19 +126,19 @@ application.
 === Create a load balancer
 
 The auto scaling group will deploy multiple WordPress servers into your VPC.
-You will need a load balancer to distribute the load across the servers and
+You will need a load balancer to distribute requests to the web servers
 to ensure that the service is highly available.
 
 Go to the EC2 dashboard and select the `Load Balancers` menu item. Create a
 new *classic* load balancer called `wordpress-lb` that will distribute HTTP (port 80) requests across
-web servers located in both the us-west-1a and us-west-1b subnets. The load
+web servers located in both us-west subnets. The load
 balancer should use `/readme.html` as the health check ping path. You won't
 be able to associate any EC2 instances with the load balancer yet. That's not
 a problem since you can associate an instance with the load balancer later.
 
 Note, make sure you select the correct VPC, subnet, and security group
 settings for the load balancer. Review previous assignments if you are unsure
-how to set these properties.
+how to set these properties. Also, don't forget to tag the load balancer.
 
 === Create WordPress instance and AMI
 
@@ -163,6 +165,8 @@ Launch an EC2 instance with the following properties:
 
   * Tag: Name = wordpress1
   * Security group: production-web
+
+Note, if this is the first time you are launching instances in the us-west region, AWS will likely prompt you to create a new set of SSH access keys.
 
 Once the instance is running, open a web browser on your desktop and browse
 to the public IP address of the new instance. You should see a test page
