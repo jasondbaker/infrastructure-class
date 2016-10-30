@@ -224,7 +224,7 @@ Fourth, modify the following line to include your MySQL instance endpoint:
 
   define('DB_HOST', 'localhost');
 
-  define('DB_HOST', 'wordpressdb.cqgfjsasiodi.us-west-1.rds.amazonaws.com');
+  define('DB_HOST', 'wordpressdb.cqgfjsasiodi.us-west-1.rds.amazonaws.com:3306');
 
 Finally, add the following two lines to the configuration file right under
 the line `define('DB_NAME', 'wordpress');`. You will need to enter the
