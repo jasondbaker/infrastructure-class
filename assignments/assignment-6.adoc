@@ -302,6 +302,30 @@ balancer as the URL. You should see a Wordpress installation page.
 Congratulations! If you don't see the installation page, check to make sure
 that the instance status in the load balancer properties is set to _InService_.
 
+[NOTE]
+====
+If you encounter a *database connection error* when trying to view your wordpress website, there could be a couple things wrong with your setup.
+
+Check to make sure the web server can communicate with the database instance. Run the following command from the webserver (substitute your RDS endpoint for the one in this example). If you don't see a "connection succeeded!" message then you should review the security group configuration for both your webserver and the RDS instance.
+
+    $ nc -zv wordpressdb.coqhf0zpvdaj.us-west-2.rds.amazonaws.com 3306
+
+Verify your login credentials on the database instance. If the web server is able to connect to the database instance and the wordpress application is unable to access the database, then the access credentials you entered into the wordpress configuration file are probably incorrect.
+
+You can use the mysql client application to test the database credentials. Install the client application on the web server by typing the command:
+
+    $ sudo yum install mysql -y
+
+Next, log into your RDS instance using the following command (substituting your instance endpoint for the one in this example):
+
+    $ mysql -h wordpressdb.coqhf0zpvdaj.us-west-2.rds.amazonaws.com -P 3306 -u wpdbadmin -p
+
+You will be prompted to enter the administrative password you setup on the RDS instance. If you receive an "access denied" error message, that means the username or password you are providing to the database server is incorrect. You will need to reset the administrative password on the RDS instance and try to connect with the mysql client again.
+
+====
+
+=== Configure Wordpress server
+
 The next step of the process is to configure the Wordpress website settings.
 Type in the following properties:
 
