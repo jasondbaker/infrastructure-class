@@ -66,6 +66,11 @@ region is supported by Elastic Beanstalk. The us-east-1 or us-west-1 regions
 are recommended.
 ====
 
+[WARNING]
+====
+AWS is beta testing a new Elastic Beanstalk console. If you opt into or are automatically placed into this console you will need to follow the beta instructions.
+====
+
 Your application should use the following configuration settings:
 
   * Application name: *Wordpress application*
@@ -112,8 +117,40 @@ wordpress-jbaker
 
   * Permissions: (select default instance and service role)
 
-Once you have entered in all the application settings, click the
-*launch* button. Now monitor the launch events for the next fifteen minutes or
+Once you have entered in all the application settings, click the *launch* button.
+
+
+====
+
+*Beta Console Instructions*
+
+If you are using the new Elastic Beanstalk console, use these settings:
+
+* Application name: *Wordpress application*
+* Tier: *Web Server*
+* Platform: *PHP*
+* Application Code: *Upload your code*
+    ** Upload the wordpress.zip file
+
+Click on the *Configure more options* button.
+
+* Select the *Low cost* (Free Tier eligible) option.
+* Select the *Modify* link under the Database box.
+    ** Engine: *mysql*
+    ** Engine version: *5.6.27*
+    ** Instance class: *db.t1.micro*
+    ** Storage: *10GB*
+    ** Username: *wpdbadmin*
+    ** Password: (your choice)
+    ** Retention: *Delete*
+    ** Availability: *Low*
+
+Click the *Save* button, and then click the
+*Create app* button.
+
+====
+
+Now monitor the launch events for the next fifteen minutes or
 so. Notice how the Elastic Beanstalk service automatically configures
 a load balancer, security group, auto scaling group, CloudWatch alarms,
 and RDS instances for you. It's basically setting up everything you had to do
@@ -131,6 +168,10 @@ You should see a URL listed at the top of the dashboard. The URL will look
 something like this:
 
   wordpress-jbaker.us-west-1.elasticbeanstalk.com
+
+or this if you are using the new console:
+
+  Sample-env-1.vp3prx5kdx.us-west-2.elasticbeanstalk.com
 
 Go ahead and click on the URL. A browser tab should open and you should be
 able to see the Wordpress installation site. Configure the WordPress installation
@@ -168,6 +209,20 @@ the following property:
 Apply your changes after updating the instance count. You will now see that
 Elastic Beanstalk is updating your application environment. Go to the EC2
 dashboard and you will see that a new instance is launching.
+
+====
+
+*Beta Console Instructions*
+
+In the scaling configuration page, change the environment type to: *Load balancing, auto scaling*.
+
+Apply and save the change. Elastic Beanstalk will update your application environment and replace the existing EC2 instance. Wait until the updating is complete.
+
+Once the new EC2 instance is in place, go back to the scaling configuration page and set the Auto Scaling Minimum instance count to: *2*.
+
+Click the *Apply* button.
+
+====
 
 Go back to the Elastic Beanstalk dashboard and select your application. Wait
 until the application health is OK (green).
@@ -210,6 +265,16 @@ deployment process based on your predefined deployment settings. Awesome!
 Connect to the running EC2 instance using a terminal program. Make a sub-directory
 in the home directory called `assignment-7-elastic-beanstalk-<username>` (where <username> is your GitHub account name). Change to that directory and
 create a Git repository (the Git client should already be installed on the server).
+
+====
+
+*Beta Console Instructions*
+
+In the configuration section, select the Instances configuration options and set the key-pair to one that you have installed on your workstation.
+
+Click the *Apply* button. This will cause Elastic Beanstalk to update the EC2 instance. Once the instance is updated, you should be able to log into the instance with your private key.
+
+====
 
 Next, configure the AWS CLI with your access key, secret key, and the current
 region. Review the previous assignment if you don't recall how to configure the

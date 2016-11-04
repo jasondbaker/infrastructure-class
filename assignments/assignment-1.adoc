@@ -76,6 +76,8 @@ Once your AWS account is setup, make note of your AWS Account ID (found in your
   time for AWS to process your application so submit it as
 soon as you can.
 
+If AWS accepts your application, you will receive an e-mail containing a special credit code. You need to enter this credit code into your account profile (look in the Billing/Credit Codes section of your AWS account). *AWS will charge your credit card for all service fees if you do not enter the educational credit code into your account.*
+
 == _Try Git_ (optional)
 
 The _Try Git_ online class provides a quick introduction to Git where you can
