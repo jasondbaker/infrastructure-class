@@ -57,7 +57,7 @@ The engineering manager would like to be able to provide two *input parameters*:
 
 Also, she would like the stack to *output* the load balancer dns name.
 
-  * Create a new stack called *Webservers-dev*.
+  * Create a new stack called *WebserversDev*.
   * Create a new VPC called: *EngineeringVPC*
     ** CIDR block should be: 10.0.0.0/16
     ** The VPC should enable DNS hostnames.
@@ -69,10 +69,10 @@ Also, she would like the stack to *output* the load balancer dns name.
     ** Use this AMI image: *ami-3ea13f29*
     ** Create the instances using your key pair.
 
-  * Create a security group named *Webservers-SG* in the VPC.
+  * Create a security group named *WebserversSG* in the VPC.
     ** Allow incoming requests on port 22 from 0.0.0.0/0
     ** Allow incoming requests on port 80 from 0.0.0.0/0
-  * Create a load balancer (classic v1) named *Application1-LB*
+  * Create a load balancer (classic v1) named *Application1LB*
     ** Load balance incoming requests on port 80 and send to instance port 80 using the http protocol.
     ** Load balancer health check via http on port 80 to the "/" url location.
 
