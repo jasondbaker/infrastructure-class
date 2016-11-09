@@ -57,7 +57,7 @@ The engineering manager would like to be able to provide two *input parameters*:
 
 Also, she would like the stack to *output* the load balancer dns name.
 
-  * Create a new stack called *WebserversDev*.
+  * Create a new stack called *WebserversDev* in us-east-1.
   * Create a new VPC called: *EngineeringVPC*
     ** CIDR block should be: 10.0.0.0/16
     ** The VPC should enable DNS hostnames.
