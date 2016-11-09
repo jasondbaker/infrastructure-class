@@ -37,6 +37,12 @@ code a bit to build the required solution. You can review the class powerpoint
 presentation, AWS CloudFormation documentation, and YouTube resources if you
 need to figure out how to configure a resource.
 
+You may use the following template as a starting point for the assignment:
+
+====
+https://s3.amazonaws.com/seis665/BasicWebserverInVPC.json
+====
+
 Here's the story. The engineering manager at your office came to you and asked
 if you could build a new stack for the development team. The stack must have
 two Amazon Linux EC2 instances located behind an Elastic Load Balancer. The

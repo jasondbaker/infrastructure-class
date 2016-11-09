@@ -17,7 +17,7 @@ You need to have a personal AWS account and GitHub account for this assignment.
 
 == The assignment
 
-Let's start controlling that confi!
+Let's start controlling that configuration!
 
 
 == Submitting your assignment
