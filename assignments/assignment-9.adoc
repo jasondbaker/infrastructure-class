@@ -29,23 +29,75 @@ Let's start managing configuration!
 
 You will need to launch three EC2 instances for this assignment. We will configure the
 first instance as a management server with the Ansible tool installed. The second
-instance will become a webserver, and the third instance will become a database server.
+instance will become a webserver, and the third instance will become a MySQL database server.
 
 Create a CloudFormation template to launch a stack with a VPC, subnet, routing
 table, Internet gateway, and security group with the same configuration as the
 previous assignment. Additionally, configure the template to launch three t2.micro EC2
 instances named: mgmt1, web1, and database1. The servers should use the latest
-Amazon Linux AMI.
+Amazon Linux AMI. The CloudFormation template does not need to support any input
+parameters, but it should output the public IP addresses of the web1 and database1
+instances.
 
 Additionally, the CloudFormation template should send a shell script via the
-userdata property to the mgm1 server which will automatically update all the current
+userdata property to the mgmt1 server which will automatically update all the current
 software packages on the system and then install Ansible software. The following command
 installs Ansible on an Amazon Linux system:
 
-    sudo pip install ansible
+    pip install ansible
 
+Once the three instances have finished launching, connect to the mgmt1 server and
+verify that Ansible is installed:
 
+    $ ansible
 
+You should see some usage information for the ansible command. Next, create a
+directory called `configuration` in your home directory. Create a git repository
+in the configuration directory. This is where you will setup an Ansible playbook
+and related configuration files. All files in this assignment should be setup
+in this directory.
+
+== Configure servers
+
+You will use the Ansible software installed on mgmt1 to configure the web1 and
+database1 systems. Ansible communicates with remote hosts using the SSH protocol
+which means that the proper access credentials need to be in place on mgmt1 in
+order to establish shell connections with the two other servers. Setup this
+access now. You can test your credentials by trying to establish a shell connection
+from mgmt1 to web1 and from mgmt1 to database1.
+
+[NOTE]
+We setup this type of access in a previous assignment, so review previous assignments if you don't remember how to setup this configuration.
+
+Ansible uses an inventory file to track managed hosts. The inventory file specifies
+how Ansible should connect to a remote host. It usually contains the IP address or
+fully-qualified domain name of a host, as well as the username and key required to
+access a host.
+
+Create an inventory file called `hosts` and add the web1 and web2 hosts to this
+file. Refer to the class lecture notes or the Ansible documentation to understand
+the required format for this file. You will need to specify the username (ec2-user)
+and private key required to connect to the remote host in the inventory file. Hint,
+the argument used to specify the private key is `ansible_ssh_private_key_file`.
+
+Now that you have an inventory file setup, let's tell Ansible to use this
+inventory file. Ansible will look in the /etc/ansible directory for an inventory
+file by default. We want Ansible to look in the new `hosts` file we created. Create
+a new file called `ansible.cfg` and add the following contents:
+
+    [defaults]
+    inventory = /home/ec2-user/configure/hosts
+
+At this point Ansible is configured to use the hosts file as an inventory. You
+can verify that Ansible can successfully access the remote hosts by typing the
+following commands:
+
+    $ ansible web1 -m ping
+    $ ansible database -m ping
+
+If Ansible returns a successful `pong` for each host then you are ready to move
+on! If not, then your `hosts` file is likely setup incorrectly. Carefully review
+the configuration of your inventory file.
 
 
 == Submitting your assignment

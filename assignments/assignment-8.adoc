@@ -29,7 +29,7 @@ You need to have a personal AWS account and GitHub account for this assignment.
 
 Your first stack awaits! Let's go.
 
-=== Download WordPress application
+=== Download CloudFormation template
 
 This week's assignment isn't as prescriptive as some of the previous assignments.
 You will likely need to experiment with the CloudFormation Designer and template
