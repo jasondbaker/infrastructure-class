@@ -99,6 +99,53 @@ If Ansible returns a successful `pong` for each host then you are ready to move
 on! If not, then your `hosts` file is likely setup incorrectly. Carefully review
 the configuration of your inventory file.
 
+== Configure servers
+
+You will create an Ansible playbook to configure the two remote hosts. Before beginning the playbook, take a look at the facts that Ansible can
+collect from a remote host:
+
+    $ ansible web1 -m setup
+
+You will need to use a fact in your playbook, so take note of the fact variables that are returned by the setup module.
+
+You can create a playbook file on the mgmt1 server using a local text editor like nano or vi. Alternatively, you can use your favorite source code editor on your local workstation and copy (scp) the file from your local workstation to the `configure` directory on mgmt1. Use whatever method is most comfortable for you.
+
+Create a playbook called `playbook.yml` to perform the following tasks on each of the hosts:
+
+    * Update the current software packages on the system.
+    * Create a user called `corpadmin` on each system with a password (your choice).
+
+Perform the following tasks on the web1 server:
+
+    * Install the Nginx server package.
+    * Copy the following `nginx.conf` template to the system substituting the text <hostname> with the name of the webserver (using a fact variable).
+    * Ensure the nginx service is running and will automatically start during the system boot.
+
+Perform the following tasks on the database1 server:
+
+    * Install the mysql server package.
+    * Configure the system to ensure mysql is running.
+    * Use a loop to configure 5 data backup directories called:
+        * /var/backup/data1
+        * /var/backup/data2
+        * /var/backup/data3
+        * /var/backup/data4
+        * /var/backup/data5
+
+Execute the playbook to configure the two hosts. If you encounter any error messages, review the playbook script and correct any mistakes.
+
+=== Save your work
+
+Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/68c6b367013ed3711b1b1c9aa7bf8678
+
+Commit your git repository (in the `configure` directory) to this repository.
+
+=== Terminate application environment
+
+The last step in the assignment is to delete all the AWS services you created.
+Go to the CloudFormation dashboard, select your running stack, and choose the
+delete option. Watch as CloudFormation deletes all the resources previously
+created.
 
 == Submitting your assignment
 I will review your published work on GitHub after the homework due date.
