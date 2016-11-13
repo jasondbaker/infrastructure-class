@@ -5,11 +5,17 @@
 
 = SEIS 665 Assignment 9: Configuration Management
 Jason Baker <bake2352@stthomas.edu>
-1.0, 8/26/2016
+1.0, 11/12/2016
 
 == Overview
 
-TBD
+Configuration management is an important methodology we use in IT to build and
+maintain systems in our organizations. It helps us manage change more effectively
+by leveraging key infrastructure as code principles. Instead of managing systems
+with a complex graphical program storing data hidden away in a proprietary database,
+we can use simple code scripts that are easy to read and place under version control.
+In this assignment you will work with Ansible, one of the leading configuration
+management tools in the marketplace.
 
 == Requirements
 
@@ -17,7 +23,29 @@ You need to have a personal AWS account and GitHub account for this assignment.
 
 == The assignment
 
-Let's start controlling that configuration!
+Let's start managing configuration!
+
+== Launch three instances
+
+You will need to launch three EC2 instances for this assignment. We will configure the
+first instance as a management server with the Ansible tool installed. The second
+instance will become a webserver, and the third instance will become a database server.
+
+Create a CloudFormation template to launch a stack with a VPC, subnet, routing
+table, Internet gateway, and security group with the same configuration as the
+previous assignment. Additionally, configure the template to launch three t2.micro EC2
+instances named: mgmt1, web1, and database1. The servers should use the latest
+Amazon Linux AMI.
+
+Additionally, the CloudFormation template should send a shell script via the
+userdata property to the mgm1 server which will automatically update all the current
+software packages on the system and then install Ansible software. The following command
+installs Ansible on an Amazon Linux system:
+
+    sudo pip install ansible
+
+
+
 
 
 == Submitting your assignment
