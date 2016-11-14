@@ -114,7 +114,8 @@ You can create a playbook file on the mgmt1 server using a local text editor lik
 Create a playbook called `playbook.yml` to perform the following tasks on each of the hosts:
 
     * Update the current software packages on the system.
-    * Create a user called `corpadmin` on each system with a password (your choice).
+    * Creae a variable called `administrator_name` with a value of `corpadmin` in the play.
+    * Create a user with the value of the `administrator_name` variable on each system with a password (your choice).
 
 Perform the following tasks on the web1 server:
 
