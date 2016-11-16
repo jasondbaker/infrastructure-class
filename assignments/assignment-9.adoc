@@ -31,7 +31,7 @@ You will need to launch three EC2 instances for this assignment. We will configu
 first instance as a management server with the Ansible tool installed. The second
 instance will become a webserver, and the third instance will become a MySQL database server.
 
-Create a CloudFormation template to launch a stack with a VPC, subnet, routing
+Create a CloudFormation template named `webstack.json` to launch a stack with a VPC, subnet, routing
 table, Internet gateway, and security group with the same configuration as the
 previous assignment. Additionally, configure the template to launch three t2.micro EC2
 instances named: mgmt1, web1, and database1. The servers should use the latest
@@ -86,7 +86,7 @@ file by default. We want Ansible to look in the new `hosts` file we created. Cre
 a new file called `ansible.cfg` and add the following contents:
 
     [defaults]
-    inventory = /home/ec2-user/configure/hosts
+    inventory = /home/ec2-user/configuration/hosts
     host_key_checking = False
 
 At this point Ansible is configured to use the hosts file as an inventory. You
@@ -109,12 +109,12 @@ collect from a remote host:
 
 You will need to use a fact in your playbook, so take note of the fact variables that are returned by the setup module.
 
-You can create a playbook file on the mgmt1 server using a local text editor like nano or vi. Alternatively, you can use your favorite source code editor on your local workstation and copy (scp) the file from your local workstation to the `configure` directory on mgmt1. Use whatever method is most comfortable for you.
+You can create a playbook file on the mgmt1 server using a local text editor like nano or vi. Alternatively, you can use your favorite source code editor on your local workstation and copy (scp) the file from your local workstation to the `configuration` directory on mgmt1. Use whatever method is most comfortable for you.
 
 Create a playbook called `playbook.yml` to perform the following tasks on each of the hosts:
 
     * Update the current software packages on the system.
-    * Creae a variable called `administrator_name` with a value of `corpadmin` in the play.
+    * Create a variable called `administrator_name` with a value of `corpadmin` in the play.
     * Create a user with the value of the `administrator_name` variable on each system with a password (your choice).
 
 Perform the following tasks on the web1 server:
@@ -157,7 +157,9 @@ Execute the playbook to configure the two hosts. If you encounter any error mess
 
 Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/68c6b367013ed3711b1b1c9aa7bf8678
 
-Commit your git repository (in the `configure` directory) to this repository.
+Commit your git repository (in the `configuration` directory) to this repository.
+
+Additionally, commit your `webstack.json` CloudFormation template file to the repository as well.
 
 === Terminate application environment
 
