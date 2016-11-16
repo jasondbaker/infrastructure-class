@@ -74,7 +74,7 @@ how Ansible should connect to a remote host. It usually contains the IP address 
 fully-qualified domain name of a host, as well as the username and key required to
 access a host.
 
-Create an inventory file called `hosts` and add the web1 and web2 hosts to this
+Create an inventory file called `hosts` and add the web1 and database1 hosts to this
 file. Refer to the class lecture notes or the Ansible documentation to understand
 the required format for this file. You will need to specify the username (ec2-user)
 and private key required to connect to the remote host in the inventory file. Hint,
@@ -94,7 +94,7 @@ can verify that Ansible can successfully access the remote hosts by typing the
 following commands:
 
     $ ansible web1 -m ping
-    $ ansible database -m ping
+    $ ansible database1 -m ping
 
 If Ansible returns a successful `pong` for each host then you are ready to move
 on! If not, then your `hosts` file is likely setup incorrectly. Carefully review
