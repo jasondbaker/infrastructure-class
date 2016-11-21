@@ -46,6 +46,14 @@ installs Ansible on an Amazon Linux system:
 
     pip install ansible
 
+The userdata property is a little tricky because the data needs to be in Base64 format. Fortunately, CloudFormation provides a function for this. Here's an example of a userdata property configuration in a CloudFormation template:
+
+  "UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+             "yum update -y\n",
+             "/opt/aws/bin/cfn-init -v\n "
+		]]}}
+
 Once the three instances have finished launching, connect to the mgmt1 server and
 verify that Ansible is installed:
 

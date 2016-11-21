@@ -24,7 +24,7 @@ Let's start shipping those containers!
 
 The first step in the assignment is to build a Docker server running on EC2.
 
-Create a stack using CloudFormation containing a single EC2 t2.micro instance running the standard Amazon Linux AMI. You will need to be able to access this instance on port 22 (ssh) and port 8080. Also, configure the userdata property of this instance to update the system packages and install Docker.
+Create a CloudFormation template called `docker-template.json` containing a single EC2 t2.micro instance running the standard Amazon Linux AMI. You will need to be able to access this instance on port 22 (ssh) and port 8080. Also, configure the userdata property of this instance to update the system packages and install Docker.
 
 Here are the commands you will need to use in the userdata field:
 
@@ -32,14 +32,6 @@ Here are the commands you will need to use in the userdata field:
   yum install -y docker
   service docker start
   usermod -a -G docker ec2-user
-
-The userdata property is a little tricky because the data needs to be in Base64 format. Fortunately, CloudFormation provides a function for this. Here's an example of a userdata property configuration in a CloudFormation template:
-
-  "UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
-             "#!/bin/bash -xe\n",
-             "yum update -y\n",
-             "/opt/aws/bin/cfn-init -v\n "
-		]]}}
 
 Launch your template to create a new stack. Shell into the new EC2 instance and run the following command:
 
