@@ -120,7 +120,7 @@ Create a playbook called `playbook.yml` to perform the following tasks on each o
 Perform the following tasks on the web1 server:
 
     * Install the Nginx server package.
-    * Copy the following `default.conf.j2` template to the system directory `/etc/nginx/conf.d/default.conf` substituting the text `example.com` with the name of the webserver (using a fact variable).
+    * Copy the following `default.conf.j2` template to the system directory `/etc/nginx/conf.d/default.conf` substituting the text `example.com` with the hostname of the webserver (using a fact variable). Note, the hostname of the server isn't web1. AWS automatically generates a hostname based on the private IP address of the instance.
 
 
     server {
@@ -139,7 +139,7 @@ Perform the following tasks on the database1 server:
 
     * Install the mysql server package.
     * Configure the system to ensure mysql is running and will automatically start during the system boot.
-    * Use a loop to configure 5 data backup directories called:
+    * Use a loop to create 5 directories called:
         ** /var/backup/data1
         ** /var/backup/data2
         ** /var/backup/data3

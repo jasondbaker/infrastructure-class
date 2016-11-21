@@ -70,7 +70,7 @@ On the *Specify Details* page, enter the following:
 6. In *GitHubRepoName*, leave the repo name set to aws-codedeploy-sample-tomcat.
 7. In *GitHubBranchName*, leave the branch name set to master.
 8. In *Key Name*, choose the name of your Amazon EC2 key pair.
-9. In *YourIP*, type the IP address from which you will access the resources created by this template. If you do not know your current public IP address, you can open up a new web browser window and go to the URL: http://checkip.amazonaws.com/
+9. In *YourIP*, type the IP address (appending /32) from which you will access the resources created by this template. If you do not know your current public IP address, you can open up a new web browser window and go to the URL: http://checkip.amazonaws.com/
 
 Click the *Next* button.
 
@@ -139,6 +139,8 @@ Go to the AWS CodePipeline console and click on the *Details* link in the Build 
 Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/874ccbb14cf1edafbdf104af22f7812f
 
 Commit your Jenkins screenshot file into the repository.
+
+Also, shell into the JenkinsServer instance and use the AWS API to retrieve a list of your stack resources in JSON format (use the `cloudformation describe-stack-resources` command). Store the output of this API command in a file called `stack.json` and commit this file into the repository.
 
 === Terminate application environment
 
