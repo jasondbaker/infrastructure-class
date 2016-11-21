@@ -54,7 +54,7 @@ You will use a CloudFormation template to launch a stack containing the code pip
 
 * A pipeline in AWS CodePipeline that builds the sample application and deploys it. This includes creating an Amazon S3 bucket to use as the artifact store for this pipeline.
 
-Go to the AWS CloudFront console and select the *Create Stack* button.
+Go to the AWS CloudFormation console and select the *Create Stack* button.
 
 Choose a stack template by specifying the following S3 template URL:
 

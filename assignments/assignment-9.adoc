@@ -35,7 +35,7 @@ Create a CloudFormation template named `webstack.json` to launch a stack with a 
 table, Internet gateway, and security group with the same configuration as the
 previous assignment. Additionally, configure the template to launch three t2.micro EC2
 instances named: mgmt1, web1, and database1. The servers should use the latest
-Amazon Linux AMI. The CloudFormation template does not need to support any input
+Amazon Linux AMI (you can find the AMI id in the AWS console). The CloudFormation template does not need to support any input
 parameters, but it should output the public IP addresses of the web1 and database1
 instances.
 
