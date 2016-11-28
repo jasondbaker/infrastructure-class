@@ -44,7 +44,7 @@ https://s3.amazonaws.com/seis665/BasicWebserverInVPC.json
 ====
 
 Here's the story. The engineering manager at your office came to you and asked
-if you could build a new stack for the development team. The stack must have
+if you could build a new stack template called `corpweb.json' for the development team. The stack must have
 two Amazon Linux EC2 instances located behind an Elastic Load Balancer. The
 load balancer must handle incoming requests on port 80 and send those to the
 EC2 instances on port 80.Additionally, the two instances need to be members of a security group which
@@ -102,7 +102,7 @@ properly.
 
 Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/4bb37342c50150f66bef6b83443c44fc
 
-Commit your stack template file to this repository. You could create a new Git repository on your local machine, commit the template file to it, and then push the local repository up to GitHub. Or, you could use the GitHub web console to create a new repository and upload your template file to it. The
+Commit your `corpweb.json` stack template file to this repository. You could create a new Git repository on your local machine, commit the template file to it, and then push the local repository up to GitHub. Or, you could use the GitHub web console to create a new repository and upload your template file to it. The
 latter method is probably a little quicker for this assignment.
 
 === Terminate application environment
