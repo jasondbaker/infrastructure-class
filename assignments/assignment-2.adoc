@@ -21,6 +21,12 @@ You need to have a personal AWS account and GitHub account for this assignment. 
 read the https://github.com/jasondbaker/infrastructure-class/blob/master/hands-on/git-hands-on.adoc[_Git Hands-on Guide_] and https://github.com/jasondbaker/infrastructure-class/blob/master/hands-on/linux-hands-on.adoc[_Linux Hands-on Guide_] before beginning this
 exercise.
 
+== A word about grading
+
+One of the key DevOps practices we learn about in this class is the use of automation to increase the speed and repeatability of processes. Automation is utilized during the assignment grading process to review and assess your work.
+
+It's important that you follow the instructions in each assignment and type in required files and resources with the proper names. All names are case sensitive, so a name like "Web1" is not the same as "web1". If you misspell a name, use the wrong case, or put a file in the wrong directory location you will lose points on your assignment. This is the easiest way to lose points, and also the most preventable. You should *always double-check your work* to make sure it accurately reflects the requirements specified in the assignment.
+
 == The assignment
 
 Let's get started!

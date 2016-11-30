@@ -44,18 +44,19 @@ https://s3.amazonaws.com/seis665/BasicWebserverInVPC.json
 ====
 
 Here's the story. The engineering manager at your office came to you and asked
-if you could build a new stack template called `corpweb.json' for the development team. The stack must have
+if you could build a new stack template called `corpweb.json` for the development team. The stack must have
 two Amazon Linux EC2 instances located behind an Elastic Load Balancer. The
 load balancer must handle incoming requests on port 80 and send those to the
-EC2 instances on port 80.Additionally, the two instances need to be members of a security group which
+EC2 instances on port 80. Additionally, the two instances need to be members of a security group which
 allows incoming traffic on ports 22, 80, and 443.
 
 The engineering manager would like to be able to provide two *input parameters*:
-    * A parameter that defines the instance type for the instances.
+    * A parameter called *InstanceType* that defines the instance type for the instances.
         ** Type must be one of the following: t2.micro or t2.small
-    * A parameter that defines the key-pair file for the EC2 instances.
+    * A parameter called *KeyPair* that defines the key-pair file for the EC2 instances.
 
-Also, she would like the stack to *output* the load balancer dns name.
+Also, she would like you to create an output called *URL* that displays the load balancer dns name
+after the stack is launched.
 
   * Create a new stack called *WebserversDev* in us-east-1.
   * Create a new VPC called: *EngineeringVPC*
@@ -72,9 +73,15 @@ Also, she would like the stack to *output* the load balancer dns name.
   * Create a security group named *WebserversSG* in the VPC.
     ** Allow incoming requests on port 22 from 0.0.0.0/0
     ** Allow incoming requests on port 80 from 0.0.0.0/0
+    ** Allow incoming requests on port 443 from 0.0.0.0/0
   * Create a load balancer (classic v1) named *Application1LB*
     ** Load balance incoming requests on port 80 and send to instance port 80 using the http protocol.
     ** Load balancer health check via http on port 80 to the "/" url location.
+
+[NOTE]
+====
+The names of the resources you configure in your stack template must *exactly* match the values above. The names are case-sensitive, so a resource with the name of "Web1" is not the same as "web1". You will lose points on this assignment if your resource names do not match the expected names. You should always double-check your work.
+====
 
 === Launch the stack
 
@@ -104,6 +111,11 @@ Create a new GitHub Classroom repository by clicking on this link: https://class
 
 Commit your `corpweb.json` stack template file to this repository. You could create a new Git repository on your local machine, commit the template file to it, and then push the local repository up to GitHub. Or, you could use the GitHub web console to create a new repository and upload your template file to it. The
 latter method is probably a little quicker for this assignment.
+
+[WARNING]
+====
+You are responsible for ensuring that the corpweb.json template file you commit to your respository actually works on AWS CloudFormation. In the past, some students have used text editors which made small changes to the template when it was saved to disk and committed to the git repository. The result is that the template no longer worked properly on CloudFormation and the students' grades were negatively impacted. *You should strongly consider testing the template after you commit it to the git repository to ensure that it still works.*
+====
 
 === Terminate application environment
 
