@@ -24,7 +24,7 @@ Let's start shipping those containers!
 
 The first step in the assignment is to build a Docker server running on EC2.
 
-Create a CloudFormation template called `docker-template.json` containing a single EC2 t2.micro instance running the standard Amazon Linux AMI. You will need to be able to access this instance on port 22 (ssh) and port 8080. Also, configure the userdata property of this instance to update the system packages and install Docker.
+Create a CloudFormation template called `docker-template.json` containing a single EC2 t2.micro instance named `web1` running the standard Amazon Linux AMI. You will need to be able to access this instance on port 22 (ssh) and port 8080. Also, configure the userdata property of this instance to update the system packages and install Docker.
 
 Here are the commands you will need to use in the userdata field:
 
@@ -73,31 +73,41 @@ You should see this container running on the system. Check the docker process li
 
   $ docker ps
 
+=== Repository
+
+Create a git repository in the ec2-user's home directory (/home/ec-user). Create a sub-directory in the home directory called `html`. Create a small text file called `index.html` inside the `html` directory with the following content:
+
+    <html>
+    <body>
+      <h1>My webserver</h1>
+    </body>
+    </html>
+
 === The Dockerfile
 
-The Dockerfile is a handy way to encapsulate all the configuration commands required to build a single container. The remaining part of your assignment this week is to build a simple nginx webserver container using a Dockerfile. Here are the requirements for the container:
+The Dockerfile is a handy way to encapsulate all the configuration commands required to build a single container. The remaining part of your assignment this week is to build a simple nginx webserver container using a Dockerfile. Create the `Dockerfile` in the ec2-users's home directory (`/home/ec2-user`). Here are the requirements for the Dockerfile:
 
   * The container must use the `nginx` image.
-  * The container should map port 80 in the container to port 8080 on the host.
-  * The container should map the local host server directory /home/ec2-user to the directory /usr/share/nginx/html on the container.
+  * Set the maintainer of the Dockerfile to your name and email address.
+  * The container should expose port 80.
+  * Copy the files from the `html` directory you created in the previous step to the /usr/share/nginx/html directory in the container.
   * The container should have an environment variable mapping the key `NGINX_PORT` to the value `80`.
 
-Finally, create a small file in the `/home/ec2-user` directory called `index.html`. Inside this file, type the following text:
 
-  <html>
-  <body>
-    <h1>My webserver</h1>
-  </body>
-  </html>
+After you create the Dockerfile, you need to create a small shell script called `launch.sh` which performs the following tasks:
+  * Builds a Docker image called `corp-nginx` based on the instructions in the `Dockerfile`.
+  * Launches a Docker container named `corpweb` using the `corp-nginx` image.
+  * The running container should map port 80 in the container to port 8080 on the host.
 
-After you create the Dockerfile and build a container from it, you should be able to access the webpage you created by going to the instance address on port 8080 in your web browser. If you can't access the instance, make sure that port 8080 is open on the security group associated with your instance.
+After running the `launch.sh` script, you should be able to access the webpage you created by going to the instance address on port 8080 in your web browser. If you can't access the instance, make sure that port 8080 is open on the security group associated with your instance. Alternatively, you can just use the `curl` command to view the website via the command line:
+
+    $ curl localhost:8080
 
 === Save your work
 
-
 Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/eeea11fb5604fd931c30393c935aba6b
 
-Commit a copy of your CloudFormation template and your Dockerfile to this repository.
+Copy your CloudFormation template to the local git repository (located in the /home/ec2-user directory) on the web1 server. Make sure all of the files in this directory are committed to the git repository. Then, push the local git repository to Github.
 
 === Terminate application environment
 
