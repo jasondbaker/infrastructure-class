@@ -1,0 +1,110 @@
+:blank: pass:[ +]
+
+= Exam 2 Study Guide
+Jason Baker <bake2352@stthomas.edu>
+1.0, 12/2/2016
+
+:sectnums!:
+
+== Overview
+
+Exam 2 will cover content from week 8 through week 13 class lectures and assignments. In general, exams will focus on material discussed in lectures. However, this exam will also include questions directly related to some of the weekly assignments. For example, I may ask you to interpret a JSON object or tell me something about an Ansible playbook. If you do not completely understand an assignment, you should go back and practice it again.
+
+The exam will include multiple choice questions and true/false questions. You will have the entire class period to take the exam. The exam is closed book. We will likely use Blackboard to take the exam.
+
+== Study outline
+
+* Application architectures
+    ** Mainframe applications
+    ** Client/Server application architecture
+        *** Presentation vs. logic vs data tiers
+        *** Purpose of each of these tiers. Does each layer have direct access to all the other layers?
+        *** Model/View/Controller (MVC) -- How did this relate to Presentation/Logic/Data tier?
+    *** Three-tier/Four-tier application architecture
+    *** How is modern web application architecture different than traditional web application architecture?
+* Scaling applications
+    *** Load balancers vs reverse proxy systems
+* Application state
+    ** What are sticky-sessions and what is the impact on scaling?
+    ** How do we architect shared state in an application platform?
+* Scaling design patterns
+    ** What is premature optimization?
+    ** Know the 3 basic options for scaling: horizontal, functional, and lookup
+    ** Caching -- understand its benefits.
+        *** Why may we need to pre-warm cache?
+* Service Oriented Architecture (SOA)
+* Microservice Architecture -- pros and cons
+* API's -- what are they and why are they important?
+* XML vs. JSON
+* REST and SOAP
+    ** What is the difference between REST and SOAP?
+    ** How is JSON used with REST?
+    ** How does REST use HTTP methods?
+* YAML
+    ** Be comfortable converting JSON to YAML (and the reverse!)
+* Infrastructure as code
+    ** Goals, key principles, common practices
+    ** Cattle vs. Pets
+    ** Anti-fragility -- What does this mean?
+    ** Chaos Engineering
+    ** Know the 3 things required to build and maintain dynamic infrastructure
+* Infrastructure definition tools
+    ** Characteristics and common practices
+    ** Procedural vs Declarative configuration files
+    ** Terraform -- what is it?
+* CloudFormation
+    ** How it works
+    ** Know the keys sections of the template and the purpose of each
+* Application Deployment strategies
+    ** Understand the benefits and risks associated with the following deployment strategies: Single server, Big Bang, Minimum in service, Rolling (Canary), Blue-Green
+* Baking vs. Frying a server template -- benefits and risks of each method
+    ** Packer -- what is it?
+* Understand the 4 models for updating a server configuration
+* Understand the 3 methods for continuous server sychronization
+* Ansible
+    ** What is it?
+    ** Understand terms: Playbooks, plays, tasks, roles, modules, handlers
+    ** Inventory file -- how is it used?
+    ** Review basic commands (modules). You may be asked to describe what a short playbook does.
+* DevOps
+    ** What is it?
+    ** Why does it matter?
+    ** The 3 pillars of DevOps
+    ** Cultural priorities
+* Lean theory
+    ** The theory of constraints
+    ** Utilization thinking vs. throughput thinking
+    ** Little's law
+    ** Design for operations
+    ** Blameless culture and postmortems
+    ** Shift left -- what does it mean in terms of quality assurance practices?
+* Continuous integration common practices
+    ** Feature toggle pattern
+    ** Code pipeline -- how does it work?
+    ** Continuous delivery vs. continuous deployment
+* Metrics and decision-making in a DevOps organization
+* Containers
+    ** What are they and what problems do they solve?
+    ** Containers vs. Virtual machines
+    ** Developer and Operations benefits
+* Docker
+    ** How does it work?
+    ** Terms: host, image, container, registry, volume
+    ** Running a container interactive vs. detached
+* Dockerfile
+    ** What is it?
+    ** Understand basic commands
+* Datacenter
+    ** What is it?
+    ** Key components and their purpose
+* DC power generation
+    ** Understand how power is distributed to customers
+    ** Basic power generation architecture
+    ** Battery vs. Flywheel technology
+* DC climate control
+    ** What are the two main concerns?
+    ** Heat containment solutions in a data center
+* Common DC security technologies and practices
+* Basic fire suppression technologies
+* PUE -- what is it? Know the basic formula!
+* Data center tier classification system
