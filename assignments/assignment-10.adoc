@@ -134,7 +134,7 @@ When the pipeline completes the deployment of the application to *Prod*, refresh
 
 === Save your work
 
-Go to the AWS CodePipeline console and click on the *Details* link in the Build stage to pull up the Jenkins server website. Next, select the *Back to Project* link on the Jenkins menu. You should see a webpage with the header *Maven project app-name*. Take a screenshot of this browser page and save it in a file on your desktop.
+Go to the AWS CodePipeline console and click on the *Details* link in the Build stage to pull up the Jenkins server website. Next, select the *Back to Project* link on the Jenkins menu. You should see a webpage with the header *Maven project app-name*. Take a screenshot of this browser page and save it in a file called `jenkins-screen.jpg` or `jenkins-screen.png` on your desktop. The file must be either a JPEG or PNG file. No other file formats are accepted.
 
 Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/874ccbb14cf1edafbdf104af22f7812f
 

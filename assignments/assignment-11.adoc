@@ -95,9 +95,10 @@ The Dockerfile is a handy way to encapsulate all the configuration commands requ
 
 
 After you create the Dockerfile, you need to create a small shell script called `launch.sh` which performs the following tasks:
-  * Builds a Docker image called `corp-nginx` based on the instructions in the `Dockerfile`.
-  * Launches a Docker container named `corpweb` using the `corp-nginx` image.
-  * The running container should map port 80 in the container to port 8080 on the host.
+
+* Builds a Docker image called `corp-nginx` based on the instructions in the `Dockerfile`.
+* Launches a *detached* Docker container named `corpweb` using the `corp-nginx` image.
+* The running container should map port 80 in the container to port 8080 on the host.
 
 After running the `launch.sh` script, you should be able to access the webpage you created by going to the instance address on port 8080 in your web browser. If you can't access the instance, make sure that port 8080 is open on the security group associated with your instance. Alternatively, you can just use the `curl` command to view the website via the command line:
 
@@ -108,6 +109,18 @@ After running the `launch.sh` script, you should be able to access the webpage y
 Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/eeea11fb5604fd931c30393c935aba6b
 
 Copy your CloudFormation template to the local git repository (located in the /home/ec2-user directory) on the web1 server. Make sure all of the files in this directory are committed to the git repository. Then, push the local git repository to Github.
+
+=== Confirm your work
+
+Your Github repository should contain the following files:
+
+----
+docker-template.json
+Dockerfile
+launch.sh
+----
+
+Confirm that your repository contains these files in the correct location, spelling, and case. You will lose points for any incorrectly spelled or missing files.
 
 === Terminate application environment
 
