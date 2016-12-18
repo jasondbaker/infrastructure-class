@@ -55,7 +55,7 @@ Let's do something a little more sophisticated. Type in the following command:
 
 This tells docker to load the `ubuntu` image and run the `bash` command. Additionally, docker was told to setup a virtual terminal connection to the container (-it). You should see the docker client download the ubuntu image and launch the container. It may take a minute or two the first time you run this command.
 
-Now that you are in the container terminal, look around a little bit. Type in `ls \` to view the root directory. Containers have their own filesystem that overlays the filesystem on the host. Exit out of the container terminal by typing `exit`.
+Now that you are in the container terminal, look around a little bit. Type in `ls / ` to view the root directory. Containers have their own filesystem that overlays the filesystem on the host. Exit out of the container terminal by typing `exit`.
 
 Notice that the container you just launched is now stopped (`docker ps`). This was an interactive container just like the first container you created. Try to run the container again, type:
 
