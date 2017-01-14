@@ -36,9 +36,7 @@ The next few courses introduce students to fundamental infrastructure deployment
 
 Students build on their infrastructure experience by learning how distributed applications are designed to take advantage of this dynamic infrastructure. They will learn that this infrastructure isn't built using traditional ad hoc methods. Students learn how to create infrastructure using code and how to programatically manage the configuration of that infrastructure over time.
 
-Finally, students are formally introduced to DevOps practices, including continuous integration and delivery. I struggled with the placement of the formal DevOps introduction in the course. Should students learn about DevOps culture and practices right away despite the fact that many of them would have no context for these practices? Or should I reveal DevOps as a set of practices that embraces many of the learnings from previous lessons in the course? For now the latter option has won out. This option carries greater risk and I won't be surprised if it changes in the future.
-
-The course completes with lessons on containerization and data center architectures. The latter is an area where I have significant professional experience and can add unique value as an educator. However, this topic may be replaced in the future -- perhaps by a greater focus on containerization as that technology matures.
+Finally, during the last quarter of the course students are formally introduced to DevOps practices, including continuous integration and delivery. The course finishes with lectures on containerization and microservices architecture.
 
 Course Description
 ------------------
@@ -81,7 +79,7 @@ Lecture Schedule
 | 10   | Configuration Management                                               |
 | 11   | DevOps, Continuous integration & delivery                              |
 | 12   | Containers, Docker                                                     |
-| 13   | Data center architecture                                               |
+| 13   | Microservices architecture                                               |
 | 14   | Final exam                                                             |
 
 Build
@@ -101,8 +99,8 @@ version of the course syllabus.
 TO DO
 -----
 
-* I don't know if the current lecture content will fill a 3-hour lecture period. It's likely that some of the lectures are too short and some are too long.
 * I need to improve the skill connection between assignments. I originally designed each lecture as a separate module. Assignments should leverage skills attained in previous learnings.
+* The hands-on portion of lectures isn't very interactive at this point. I need to improve that element of the course based on student feedback.
 
 License
 -------
