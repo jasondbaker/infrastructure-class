@@ -6,15 +6,15 @@ University of St. Thomas +
 St. Paul, MN 55105
 
 [.text-center]
-*SYLLABUS Fall 2016 SEIS 665* +
-Version 2016.8.27
+*SYLLABUS Spring 2017 SEIS 665* +
+Version 2017.01.08
 
 {blank}
 *[.underline]#Course Title#* +
 DevOps & Cloud Infrastructure
 
 *[.underline]#Meeting Time Place#* +
-Mondays, 5:45 - 9:00 PM, OSS 428
+Mondays, 5:45 - 9:00 PM, OSS 326
 
 *[.underline]#Credit Value#* +
 3 semester credits
@@ -146,17 +146,17 @@ system administration skills.
 * Attendance (10%)
   ** Up to two excused lecture absences are acceptable.
   ** Additional absences will result in attendance score reduction.
-* Weekly reading quizzes (10%)
+* Weekly reading quizzes (5%)
   ** 11 Weekly Blackboard quizzes on reading, 5 questions and 10 points per question (50 per quiz).
   ** Complete each week’s quiz online before next class ALONE.
   ** Reading quiz will be available approximately 1 week in advance. No makeups, because you have all week and can do them remotely.
-* Homework assignments (30%)
+* Homework assignments (35%)
   ** 10 graded assignments.
-  ** Late submission penalty of 20% per day.
+  ** Late submission penalty of 25% per day.
   ** Extra credit points may be given for helping others troubleshoot issues through Slack.
 * Midterm (25%)
 * Final (25%)
-* The usual (but not forced) distribution will be ~50/50 between A grades and B grades.
+* Fall 2016 grade distribution: A=45%, B=35%, C=20%.
 * Factors that may severely impact your grade:
   ** Significant disregard for assignments.
   ** More than 2 class absences.
@@ -177,12 +177,12 @@ without the written permission of the instructor. (See Class Session Recording
 |=========================================================
 |Week | Date | Topic | Assignment Due
 
-|1 | 9/12 | Course Introduction +
+|1 | 1/30 | Course Introduction +
 Source control +
 Git |
 
 
-|2 | 9/19 | Linux fundamentals +
+|2 | 2/6 | Linux fundamentals +
 Package management +
 Shell scripting
  |
@@ -191,7 +191,7 @@ Read _Practice of Cloud Systems Administration_ Chapter 12 +
 Read _Git Hands On Guide_ +
 Start reading _Linux Hands On Guide_
 
-|3 | 9/26 | Infrastructure fundamentals +
+|3 | 2/13 | Infrastructure fundamentals +
 Virtualization +
 Distributed infrastructure design and operations +
  |
@@ -200,65 +200,64 @@ Read _Practice of Cloud Systems Administration_ Chapter 1 +
 Read _Infrastructure as Code_ Chapter 1 +
 Finish reading _Linux Hands on Guide_
 
-|4 | 10/3 | Cloud computing +
+|4 | 2/20 | Cloud computing +
 AWS +
 IAM, EC2, S3 |
 Assignment 3 +
 Read _Practice of Cloud Systems Administration_ Chapter 3 +
 Read _Overview of Amazon Web Services_ (White paper December 2015)
 
-|5 | 10/10 | Cloud computing +
+|5 | 2/27 | Cloud computing +
 AWS +
 VPC, RDS, ELB |
 Assignment 4 +
 Read _Architecting for the Cloud: AWS Best Practices_ (White paper February 2016) +
 Read _Infrastructure as Code_ Chapter 2
 
-|6 | 10/17 | Cloud computing +
+|6 | 3/6 | Cloud computing +
 AWS +
 Autoscaling, Cloud Watch, Route53, +
 SQS, SNS, SES |
 Assignment 5 +
 Read _Infrastructure as Code_ Chapters 3 & 4
 
-|7 | 10/24 | Midterm |
+|7 | 3/13 | Midterm |
 
 
-|8 | 10/31 | Distributed application architecture +
+|8 | 3/27 | Distributed application architecture +
 Web services +
 REST/ JSON / YAML |
 Assignment 6 +
 Read _Practice of Cloud Systems Administration_ Chapters 4 & 5
 
-|9 | 11/7 | Infrastructure as Code +
+|9 | 4/3 | Infrastructure as Code +
 CloudFormation
  |
 Assignment 7 +
 Read _Infrastructure as Code_ Chapters 5 & 6
 
-|10 | 11/14 | Infrastructure as Code +
+|10 | 4/10 | Infrastructure as Code +
  |
 Assignment 8 +
 Read _Infrastructure as Code_ Chapters 7 & 8
 
-|11 | 11/21 | DevOps +
+|11 | 4/24 | DevOps +
 Continuous integration & delivery +
  |
 Assignment 9 +
 Read _Infrastructure as Code_ Chapters 9 & 10
 
-|12 | 11/28 | Containers +
+|12 | 5/1 | Containers +
 Docker |
 Assignment 10 +
 Read _Infrastructure as Code_ Chapters 11 & 12
 
-|13 | 12/5 | Data center architecture |
+|13 | 5/8 | Microservices |
 Assignment 11 +
 Read _Infrastructure as Code_ Chapter 15 +
-Read _How Cloud Has Changed The Data Center Architect_ +
-Read _6 Models Of The Modern Data Center_
 
-|14 | 12/12 | Final exam |
+
+|14 | 5/15 | Final exam |
 
 
 |=========================================================
