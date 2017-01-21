@@ -104,6 +104,13 @@ for the load balancer that was created. Enter this DNS address into your
 web browser to confirm that it is distributing requests across the instances
 properly.
 
+=== Check your work
+
+Here is what the contents of your git repository should look like before final submission:
+
+====
+&#x2523; corpweb.json +
+====
 
 === Save your work
 

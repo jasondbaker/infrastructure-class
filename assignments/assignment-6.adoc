@@ -476,9 +476,17 @@ Create a small batch script called `getdata.sh` which performs the following:
 Note, you may need to use `sudo` to copy the `wp-config.php` and `access_log`
 files.
 
-After running the script, you should have four files in the current directory:
+=== Check your work
+Here is what the contents of your git repository should look like before final submission:
 
-  access_log  activity.json  getdata.sh  wp-config.php
+====
+&#x2523; access_log +
+&#x2523; activity.json +
+&#x2523; getdata.sh +
+&#x2517; wp-config.php +
+====
+
+=== Submit your work
 
 Check each of the files to make sure the files contain data. Add all of the
 files to the Git repository and commit your work.

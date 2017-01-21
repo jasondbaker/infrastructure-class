@@ -5,7 +5,7 @@
 
 = SEIS 665 Assignment 5: VPC
 Jason Baker <bake2352@stthomas.edu>
-1.0, 4/6/2016
+1.1, 1/21/2017
 
 == Overview
 This week we will build a VPC from scratch and work with an elastic load
@@ -334,35 +334,42 @@ your local Git identity by running these commands:
   $ git config --global user.email "your@email.com"
   $ git config --global user.name "your GitHub username"
 
-You need to create three files in the current directory.
+=== Create a shell script
 
-Use the `curl` command to create a file called `backend1-identity.json` containing
+Create a shell script called `metadata.sh` inside the assignment directory where you setup the git repository. The shell script should meet the following requirements:
+
+* If the user runs the script with no arguments, the script will perform the following operations:
+** Create a file called `backend1-identity.json` in the present working directory containing
 the data returned by accessing the URL:
 
   http://169.254.169.254/latest/dynamic/instance-identity/document/
 
-Use the `curl` command with the `-vs` flag (verbose, silent) to create a file called `backend1-message.txt` containing
-the data returned by accessing the following URL. You will need to redirect the output
+** Create a file called `backend1-message.txt` in the present working directory containing the data returned by accessing the following URL. Note, you will need to pass the `-vs` flag (verbose/silent) to the `curl` command to output this data properly. Also, you will need to redirect the output
 in a special way based on the way the `curl` command works (using the `tee` command).
 
   https://s3.amazonaws.com/seis665/message.json
 
-.Example
-----
-$ curl -vs https://s3.amazonaws.com/seis665/message.json 2>&1 | tee backend1-message.txt
-----
+    Example:
+    $ curl -vs https://s3.amazonaws.com/seis665/message.json 2>&1 | tee backend1-message.txt
 
-Copy the file `/var/log/nginx/access.log` into the current directory.
 
-Add and commit the files to the repository. Next, you will need to push your local
-repository up to GitHub.
+** Copy the file `/var/log/nginx/access.log` into the present working directory.
+
+* If the user starts the script with a `-v` or `--version` argument, the script will return the value `0.5.0`
+
+* If the user starts the script with a `-h` or `--help` argument, the script will provide useful help information.
+
+* You should encapsulate all of the features of the script in functions.
+
+Once you have completed the shell script, add and commit all the files in the present working directory to the repository. Next, you will need to push your local
+repository up to GitHub:
 
 * Create a new repository on GiHub Classroom by clicking this link: https://classroom.github.com/assignment-invitations/a76427f483ecfc98a401a1fef07473d4
 * Modify the origin remote on your local Git repository to point to the
 address of this new GitHub repository
 * Push your local master branch up to the GitHub repository
 
-Confirm that the three files are now in your new GitHub repository.
+Confirm that the four files are now in your new GitHub repository.
 
 === Remove NAT and backend server
 
@@ -553,6 +560,19 @@ Enter these commands, substituting the values as necessary:
 Now add the `access2.log` file to the repository and commit your changes. Push the
 repository back up to GitHub. Verify that the new `access2.log` file exists on
 your GitHub repository.
+
+=== Check your work
+Here is what the contents of your git repository should look like before final submission:
+
+====
+&#x2523; access.log +
+&#x2523; access2.log +
+&#x2523; backend1-identity.json +
+&#x2523; backend1-message.txt +
+&#x2517; metadata.sh
+====
+
+Note, the shell script file should be executable.
 
 === Terminate server
 

@@ -5,7 +5,7 @@
 
 = SEIS 665 Assignment 2: Linux & Git
 Jason Baker <bake2352@stthomas.edu>
-1.0, 3/18/2016
+1.1, 1/23/2017
 
 == Overview
 This week we will focus on becoming familiar with launching a Linux server and
@@ -209,7 +209,9 @@ personal home directory. Keep in mind that since every user has their own home
 directory, the tilda shortcut will refer to a unique directory for each logged-in
 user.
 
-Let's do some damage, er, make some changes to the file system. We can easily
+Most students are used to navigating a file system by clicking a mouse in nested graphical folders. When they start using a command-line to navigate a file system, they sometimes get confused and lose track of their current position in the file system. Remember, you can always use the `pwd` command to quickly figure out what directory you are currently working in.
+
+Let's make some changes to the file system. We can easily
 make our own directories on the file system. Type:
 
   mkdir test
@@ -551,7 +553,7 @@ if-then-else. These building blocks allow you to create fairly complex scripts f
 automating tasks.
 
 === Installing packages and services
-We're nearing the end of this exercise. But before we finish, let's install some
+We're nearing the end of this assignment. But before we finish, let's install some
 new software packages on our server. The first thing we should do is make sure
 all the current packages installed on our Linux server are up-to-date. Type in:
 
@@ -600,6 +602,20 @@ We're almost across the finish line. Let's make sure all of our valuable work
 is stored in a git repository. First we need to install git. Type in the command:
 
   $ sudo yum install git -y
+
+=== Check your work
+It's very important to check your work before submitting it for grading. A misspelled, misplaced or missing file will cost you points. This may seem harsh, but the reality is that these sorts of mistakes have consequences in the real world. For example, a server instance could fail to launch properly and impact customers because a single required file is missing.
+
+Here is what the contents of your git repository should look like before final submission:
+
+====
+&#x2523;archive +
+&#x2503;&#160;&#160;&#x2523; file1 +
+&#x2503;&#160;&#160;&#x2523; file2 +
+&#x2503;&#160;&#160;&#x2517; file3 +
+&#x2523; namelist +
+&#x2517; myfile.conf +
+====
 
 === Saving our work in the git repository
 Next, make sure you are still in your home directory (`/home/ec2-user`). We will

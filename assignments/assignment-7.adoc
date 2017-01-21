@@ -309,6 +309,15 @@ a file called `data.yaml` in the current directory.
   "greeting": "Hello World"
 }
 
+=== Check your work
+
+Here is what the contents of your git repository should look like before final submission:
+
+====
+&#x2523; data.yaml +
+&#x2517; eb-events.json +
+====
+
 === Save your work
 
 Add the `data.yaml` and `eb-events.json` files to the Git repository. Commit

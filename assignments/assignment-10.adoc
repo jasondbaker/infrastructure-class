@@ -132,6 +132,15 @@ Now, go back to the AWS CodePipeline console and take a look at your pipeline. Y
 
 When the pipeline completes the deployment of the application to *Prod*, refresh the browser window pointing to the deployed website on the production server. You should see your code change. How cool is that!
 
+=== Check your work
+
+Here is what the contents of your git repository should look like before final submission:
+
+====
+&#x2523; jenkins-screen.jpg +
+&#x2517; stack.json +
+====
+
 === Save your work
 
 Go to the AWS CodePipeline console and click on the *Details* link in the Build stage to pull up the Jenkins server website. Next, select the *Back to Project* link on the Jenkins menu. You should see a webpage with the header *Maven project app-name*. Take a screenshot of this browser page and save it in a file called `jenkins-screen.jpg` or `jenkins-screen.png` on your desktop. The file must be either a JPEG or PNG file. No other file formats are accepted.

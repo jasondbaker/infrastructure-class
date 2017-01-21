@@ -104,23 +104,22 @@ After running the `launch.sh` script, you should be able to access the webpage y
 
     $ curl localhost:8080
 
+=== Check your work
+
+Here is what the contents of your git repository should look like before final submission:
+
+====
+&#x2523; Dockerfile +
+&#x2523; docker-template.json +
+&#x2517; launch.sh
+
+====
+
 === Save your work
 
 Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/eeea11fb5604fd931c30393c935aba6b
 
 Copy your CloudFormation template to the local git repository (located in the /home/ec2-user directory) on the web1 server. Make sure all of the files in this directory are committed to the git repository. Then, push the local git repository to Github.
-
-=== Confirm your work
-
-Your Github repository should contain the following files:
-
-----
-docker-template.json
-Dockerfile
-launch.sh
-----
-
-Confirm that your repository contains these files in the correct location, spelling, and case. You will lose points for any incorrectly spelled or missing files.
 
 === Terminate application environment
 

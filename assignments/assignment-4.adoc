@@ -331,21 +331,36 @@ You should see `t2.micro` in the response. Understanding how to access
 instance meta-data is important when programmatically working with
 EC2 instances.
 
-=== Create a script
+=== Create a couple scripts
 
-We're going to take our new found knowledge of instance meta-data and put it
-to work. Start by creating a directory in `/usr/share/nginx` (your current
-  working directory) called `scripts`. Then change directory to the new
-  `scripts` directory.
+Let's create a couple scripts for this week's assignment submission. The first script will automate many of the tasks you performed earlier in this assignment. Remember, automation is the key to producing reliable and repeatable results. The second script will take our new found knowledge of instance meta-data and put it to work.
 
-Inside this directory you need to create a new shell script called `instancedata.sh`
+Start by creating a directory in your home directory called `scripts`. Then change directory to the new `scripts` directory.
+
+Create the first shell script and name it `provision.sh`. A user can run the `provision.sh` script to automatically update the software packages on the instance, install Nginx, and copy files into the website document root directory. This script should support the following requirements:
+
+* When executed without any arguments, the script will perform the following steps:
+** Update all system packages
+** Install the Nginx software package
+** Configure nginx to automatically start at system boot up.
+** Copy the website documents to the web document root directory.
+** Start the Nginx service.
+* If the user starts the script with a `-r` or `--remove` argument, the script will perform the following steps:
+** Stop the Nginx service.
+** Delete the files in the website document root directory.
+** Uninstall the Nginx software package.
+* If the user starts the script with a `-v` or `--version` argument, the script will return the value `1.0.0`
+* If the user starts the script with a `-h` or `--help` argument, the script will provide useful help information.
+* You should encapsulate all of the features of the script in functions.
+
+The script script will retrieve some data from the Instance Metadata service. Inside the `scripts` directory you need to create a new shell script called `instancedata.sh`
 which does the following:
 
-  1. Creates a file called `metadata.txt` in the current directory
-  2. Retrieves and stores the following meta-data in the `metadata.txt` file:
-    a. The instance *hostname*
-    b. The *iam info* associated with the instance
-    c. The *security groups* associated with the instance
+* Creates a file called `metadata.txt` in the current directory
+* Retrieves and stores the following meta-data in the `metadata.txt` file:
+** The instance *hostname*
+** The *iam info* associated with the instance
+** The *security groups* associated with the instance
 
 The contents of the `metadata.txt` file should look similar to this after
   executing the script:
@@ -369,6 +384,17 @@ Here are a couple hints for writing this script:
   written on separate lines. The `curl` command can automatically add a
   linefeed character to it's output by using a flag: `curl -w "\n" <url>`,
   where `<url>` is the website address being accessed.
+
+=== Check your work
+Here is what the contents of your git repository should look like before final submission:
+
+====
+&#x2523; provision.sh +
+&#x2523; instancedata.sh +
+&#x2517; metadata.txt +
+====
+
+Note, the shell script files should be executable.
 
 === Commit the work
 
