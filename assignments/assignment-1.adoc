@@ -68,7 +68,7 @@ Go to http://aws.amazon.com/ and click on the `Sign In` link to sign up for a
 new AWS account. You should use your @stthomas.edu email address when signing
 up for the account. Also, you need to provide Amazon with a valid credit card during the account setup process otherwise you will not be able to apply for educational credit. Choose the basic support option. The other support options are designed for businesses. We will provide AWS support to one another via the class Slack channel.
 
-*Note, do not select the AWS Educate Starter Account option when signing up for an account.* If you select this option, you *will not* be able to apply for educational credit.
+*Note, do not select the AWS Educate Starter Account option when signing up for an account.* If you select this option, you *will not* be able to apply for educational credit. Also, make sure you type in the name of your educational institution (University of St. Thomas) on the application form.
 
 Once your AWS account is setup, make note of your AWS Account ID (found in your
   account profile on the AWS console). Then, apply for educational credit by filling out an
@@ -77,6 +77,8 @@ Once your AWS account is setup, make note of your AWS Account ID (found in your
 soon as you can.
 
 If AWS accepts your application, you will receive an e-mail containing a special credit code. You need to enter this credit code into your account profile (look in the Billing/Credit Codes section of your AWS account). *AWS will charge your credit card for all service fees if you do not enter the educational credit code into your account.*
+
+In the past, some students have reported that they received a $40 credit instead of the full $100 credit. Students from non-member institutions receive a $40 credit. The University of St. Thomas is an AWS Educate Institution and our students should receive a $100 credit. If you do not receive the full credit amount, you will need to contact AWS support to inform them that you are a student at an AWS Educate Institution.
 
 == _Try Git_ (optional)
 
