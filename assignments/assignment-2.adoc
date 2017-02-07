@@ -470,7 +470,7 @@ Next, type in:
 Is that what you expected? The shell just interprets the variable value
 as a string. It's not going to do any sort of computation.
 
-Typing in shell script commands on the command line in sort of pointless. We
+Typing in shell script commands on the command line is sort of pointless. We
 want to be able to create scripts that we can run over-and-over. Let's create
 our first shell script.
 
