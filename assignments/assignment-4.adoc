@@ -202,6 +202,8 @@ the term `nginx`:
 
   $ ps -ax | grep nginx
 
+Remember learning about the pipe operator (vertical bar)? In this command we are piping the output from the list processes command (ps) into a text search command (grep). Putting it all together, this command tells the system to list out all running process and look for one named nginx.
+
 Go ahead and start up the Nginx webserver:
 
   $ sudo service nginx start
@@ -353,14 +355,14 @@ Create the first shell script and name it `provision.sh`. A user can run the `pr
 * If the user starts the script with a `-h` or `--help` argument, the script will provide useful help information.
 * You should encapsulate all of the features of the script in functions.
 
-The script script will retrieve some data from the Instance Metadata service. Inside the `scripts` directory you need to create a new shell script called `instancedata.sh`
+The second script will retrieve some data from the Instance Metadata service. Inside the `scripts` directory you need to create a new shell script called `instancedata.sh`
 which does the following:
 
 * Creates a file called `metadata.txt` in the current directory
 * Retrieves and stores the following meta-data in the `metadata.txt` file:
-** The instance *hostname*
-** The *iam info* associated with the instance
-** The *security groups* associated with the instance
+** The instance *hostname*.
+** The *iam info* associated with the instance.
+** The *security groups* associated with the instance.
 
 The contents of the `metadata.txt` file should look similar to this after
   executing the script:
@@ -410,7 +412,7 @@ need to recall the specific commands.
 
   * Create the assignment repository on GiHub Classroom: https://classroom.github.com/assignment-invitations/5ee41c34f8397fc833df21d8fdc485fa
   * Modify the origin remote on your local Git repository to point to the
-  address of this new GitHub repository, something like: https://github.com/seis665/assignment-2-linux-git-<username>.git
+  address of this new GitHub repository, something like: https://github.com/seis665/assignment-4-linux-git-<username>.git
 
   * Push your local master branch up to the GitHub repository
 

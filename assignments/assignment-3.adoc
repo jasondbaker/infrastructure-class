@@ -413,7 +413,7 @@ requirements:
 
   * Create a variable called `version` with a value of `1.0.1`
   * The `-d` or `--delete` flags should execute the `delete_file` function.
-  * The `delete_file` function should remove a specified file `<filename>-54321`
+  * The `delete_file` function should remove a specified file when provided a name: `<name>-54321`
   * If a filename isn't provided as an argument to the script, then use `server`
   as the default filename
   * The `-v` or `--version` flags should output the version of the script (value of the `version` variable) using the `show_version` function..
