@@ -200,7 +200,7 @@ You've installed Nginx, but the web service isn't actually running yet. You can
 confirm this by checking the running processes on the system and searching for
 the term `nginx`:
 
-  $ ps -ax | grep nginx
+  $ ps ax | grep nginx
 
 Remember learning about the pipe operator (vertical bar)? In this command we are piping the output from the list processes command (ps) into a text search command (grep). Putting it all together, this command tells the system to list out all running process and look for one named nginx.
 
