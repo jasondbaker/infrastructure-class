@@ -252,23 +252,11 @@ send.
 
 You're going to update the `index.html` file with the one you stored on
 Amazon S3. But how are you going to copy the file from the S3 bucket onto your
-instance? You will take care of that shortly.
-
-Since you are going to modify the existing website you should make sure your
-work is managed under source control. Go ahead and initialize a new git repo
-in the `/usr/share/nginx` directory. This is the parent directory of your
-current working directory. If the `git` command doesn't work, that means you missed
-the step to install the Git client earlier in the assignment. Verify that a
-git repository is installed in the `/usr/share/nginx` directory.
-
-Add all of the existing files (`sudo git add *`) in the directory to the Git staging area and
-make an initial commit. Note, if you receive a `permission denied` error
-while working with Git you may need to use `sudo`. These files aren't in your
-home directory so you will need expanded privileges to work with them.
+instance? You will take care of that next.
 
 === Copy index.html from S3
 
-Next, let's copy the `index.html` file from your S3 bucket into the web server
+Let's copy the `index.html` file from your S3 bucket into the web server
 document root directory. Your instance already has access to the S3 bucket
 because you created a role called `S3-full-access` and associated it with the
 instance when you launched it earlier. The role assigned full S3 access
@@ -337,7 +325,7 @@ EC2 instances.
 
 Let's create a couple scripts for this week's assignment submission. The first script will automate many of the tasks you performed earlier in this assignment. Remember, automation is the key to producing reliable and repeatable results. The second script will take our new found knowledge of instance meta-data and put it to work.
 
-Start by creating a directory in your home directory called `scripts`. Then change directory to the new `scripts` directory.
+Start by creating a directory in your home directory called `scripts`. Then change directory to the new `scripts` directory and initialize a new git repository.
 
 Create the first shell script and name it `provision.sh`. A user can run the `provision.sh` script to automatically update the software packages on the instance, install Nginx, and copy files into the website document root directory. This script should support the following requirements:
 
@@ -400,10 +388,7 @@ Note, the shell script files should be executable.
 
 === Commit the work
 
-Once your script is working properly, change back to the `/usr/share/nginx`
-directory and add all the files in its subdirectories to the Git
-staging area. Confirm that your new script and its output file are in the
-Git staging area. Commit the files to your local Git repository.
+Once your scripts are working properly, commit the files in the scripts directory to you local Git repository.
 
 In the previous assignment, we created a new assignment repository on GitHub and then
 pushed an existing local repository up to GitHub. We are going to follow the
