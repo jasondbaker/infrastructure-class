@@ -61,7 +61,7 @@ Let's create this S3 access role now.
   table listing by typing `s3` into a filter text input. Once you see the correct
   policy, check it and move on to the next step.
 
-  * You should now be able to *create* the policy.
+  * You should now be able to *create* the role.
 
 If you created the new role properly, you should see the `S3-full-access` role listed
 in the IAM roles table.
