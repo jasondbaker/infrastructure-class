@@ -9,7 +9,7 @@ Jason Baker <bake2352@stthomas.edu>
 
 == Overview
 This week we will build a VPC from scratch and work with an elastic load
-balancer to deploy a resilient website.
+balancer to deploy a resilient website for our company, Next Gen Solutions.
 
 Like the previous assignment, you may have to work through some of the detailed
 steps to complete the requirements. If you get stuck on a step, do a little
@@ -32,7 +32,7 @@ the Northern Virginia (us-east) region. Select the *Your VPCs*
 menu option and click the button or link to *create a VPC*. Your new VPC should
 have the following parameters:
 
-  * Name: infrastructureVPC
+  * Name: nextgen-vpc
   * CIDR: 10.0.0.0/20
   * Tenancy: Default
 
@@ -44,14 +44,14 @@ to go through this process twice, once for each subnet.
 The subnets should have the following parameters:
 
   * Subnet #1
-    ** Name: infrastructure-public
-    ** VPC: infrastructureVPC
+    ** Name: nextgen-public
+    ** VPC: nextgen-vpc
     ** AZ: us-east-1a
     ** CIDR: 10.0.1.0/24
 
   * Subnet #2
-    ** Name: infrastructure-private
-    ** VPC: infrastructureVPC
+    ** Name: nextgen-private
+    ** VPC: nextgen-vpc
     ** AZ: us-east-1b
     ** CIDR: 10.0.2.0/24
 
@@ -67,7 +67,7 @@ devices on the Internet.
 
 Go to the *Internet Gateways* menu on the VPC dashboard and click the
 *create Internet Gateway* button or link. Name your Internet gateway:
-`infrastructure-IG`.
+`nextgen-ig`.
 
 Once the Internet Gateway is created, you will need to attach it to your
 new VPC by selecting the gateway and clicking the *attach to VPC* button.
@@ -96,7 +96,7 @@ all subnets not explicitly associated with another subnet use this route
 table. Read that last sentence twice, because the concept is a little confusing.
 
 Go ahead and *create a route table* by clicking on the appropriate button. Name
-this route table: `infrastructure-public-routes`. Make sure to designate the
+this route table: `nextgen-public-routes`. Make sure to designate the
 proper VPC when creating the route table.
 
 Select the new route table and look at its route listing. You will notice a single
@@ -113,7 +113,7 @@ image:../images/assignment5/route-table.png["600","600"]
 
 Your new route table isn't associated with any subnets so it isn't actually doing
 anything yet. Click on the *subnet associations* for the new route table and edit
-the current properties by adding the `infrastructure-public` subnet to the
+the current properties by adding the `nextgen-public` subnet to the
 routing table. Save your work.
 
 Now if you launch an instance into the VPC's public subnet it should be able to
@@ -134,8 +134,8 @@ instance should have the following properties:
     during the AMI selection)
   * Located in Northern Virginia (us-east)
   * t2.micro instance type
-  * Network is `infrastructureVPC`
-  * Subnet is `infrastructure-public`
+  * Network is `nextgen-vpc`
+  * Subnet is `nextgen-public`
   * Auto-assign Public IP is enabled
   * Root volume size set to 10 GiB
   * Create a tag with a key of `Name` and a value of `webserver1`
@@ -152,8 +152,8 @@ private subnet. The second instance should have the following properties:
   during the AMI selection)
 * Located in Northern Virginia (us-east)
 * t2.micro instance type
-* Network is `infrastructureVPC`
-* Subnet is `infrastructure-private`
+* Network is `nextgen-vpc`
+* Subnet is `nextgen-private`
 * Auto-assign Public IP is disabled
 * Root volume size set to 10 GiB
 * Create a tag with a key of `Name` and a value of `backend1`
@@ -334,11 +334,13 @@ your local Git identity by running these commands:
   $ git config --global user.email "your@email.com"
   $ git config --global user.name "your GitHub username"
 
+When you create a Git repository and start working with files, the master branch of the repository is checked out by default. We generally try to avoid working directly on the master branch in the real world. Go ahead and create a new branch called `develop` and check it out.
+
 === Create a shell script
 
-Create a shell script called `metadata.sh` inside the assignment directory where you setup the git repository. The shell script should meet the following requirements:
+The next step is to create a shell script called `metadata.sh` inside the assignment directory. The shell script should meet the following requirements:
 
-* If the user runs the script with no arguments, the script will perform the following operations:
+* If the user runs the script with the `-c` or `--create` arguments, the script will perform the following operations:
 ** Create a file called `backend1-identity.json` in the present working directory containing
 the data returned by accessing the URL:
 
@@ -359,17 +361,23 @@ in a special way based on the way the `curl` command works (using the `tee` comm
 
 * If the user starts the script with a `-h` or `--help` argument, the script will provide useful help information.
 
+* If the user doesn't provide any arguments the script will provide basic usage information.
+
 * You should encapsulate all of the features of the script in functions.
 
-Once you have completed the shell script, add and commit all the files in the present working directory to the repository. Next, you will need to push your local
+Once you have completed the shell script, make sure you run the script properly to create the two required files. Commit all the files in the assignment directory to the repository. Next, you will need to push your local
 repository up to GitHub:
 
 * Create a new repository on GiHub Classroom by clicking this link: https://classroom.github.com/assignment-invitations/a76427f483ecfc98a401a1fef07473d4
-* Modify the origin remote on your local Git repository to point to the
-address of this new GitHub repository
-* Push your local master branch up to the GitHub repository
+* Merge your `develop` branch into the `master` branch on your local Git repository.
+* Push your local master branch up to the GitHub repository.
 
-Confirm that the four files are now in your new GitHub repository.
+Confirm that the four files are now in your new GitHub repository:
+
+* metadata.sh
+* backend1-identity.json
+* backend1-message.txt
+* access.log
 
 === Remove NAT and backend server
 
@@ -402,17 +410,17 @@ the web server in the other availability zone.
 Go to the VPC dashboard and create a third subnet in your VPC:
 
 * Subnet #3
-  ** Name: infrastructure-public-2
-  ** VPC: infrastructureVPC
+  ** Name: nextgen-public-2
+  ** VPC: nextgen-vpc
   ** AZ: us-east-1c
   ** CIDR: 10.0.3.0/24
 
 Modify the appropriate routing table so that instances within this new subnet
 can communicate with the Internet (hint: look at subnet associations).
 
-Go back to the EC2 dashboard and launch a new web server. The new server should
+Go back to the EC2 dashboard and launch a new web server named `webserver2`. The new server should
 have the same characteristics as the first web server with the exception that
-it should be launched into the new `infrastructure-public-2` subnet. This way
+it should be launched into the new `nextgen-public-2` subnet. This way
 each web server is located in a separate subnet.
 
 Can the two web servers communicate with one another? Let's think about that
@@ -431,18 +439,19 @@ file so that it looks like the following:
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Infrastructure Assignment 5</title>
+  <title>Next Gen Solutions</title>
 </head>
 
 <body>
-  <h1>My 5th Infrastructure Assignment</h1>
+  <h1>Next Gen Solutions</h1>
   Webserver 1!
 </body>
 </html>
 ----
 
-Basically, all you need to do is add the text `Webserver 1!` under the main
-header text. Make sure you save the file when you are finished editing it. The
+Make sure you save the file when you are finished editing it. Open a terminal connection to `webserver2` and modify the index.html file using the same code above, except enter "Webserver 2!" in the body of the html file.
+
+The
 websites hosted on `webserver1` and `webserver2` are now slightly different so
 that you can visually see which server is providing the content to your web
 browser. Let's launch a load balancer next.
@@ -452,7 +461,7 @@ browser. Let's launch a load balancer next.
 Select the *Load Balancers* link on the EC2 dashboard and click the button to
 *create a classic load balancer*. The load balancer will have the following properties:
 
-  * Name: `infrastructure-lb`
+  * Name: `nextgen-lb`
   * Create it inside your VPC
   * Select the two public subnets
   * Assign the existing `webservers` security group
@@ -495,7 +504,7 @@ as the URL.
 
 .Example
 ----
-infrastructure-lb-1175121939.us-east-1.elb.amazonaws.com
+nextgen-lb-1175121939.us-east-1.elb.amazonaws.com
 ----
 
 You should see the website you created in the previous assignment. Hit the
@@ -511,7 +520,7 @@ software bug, human error, or even a complete data center failure.
 
 Let's say
 that one of Amazon's data centers experiences a complete power outage and
-takes down the `infrastructure-public-2` subnet. Go to the EC2 dashboard,
+takes down the `nextgen-public-2` subnet. Go to the EC2 dashboard,
 select the `webserver2` instance and stop it.
 
 Next, go back to the *Load Balancers*
@@ -548,7 +557,7 @@ https://github.com/seis665/assignment-5-vpc-jasondbaker.git
 If you recall, the Git clone operation makes a copy of the public GitHub repository in
 your current directory. Next, change to the `assignment-5-vpc-<username>` directory.
 
-Copy the `/var/log/nginx/access.log` file to a new file named `access2.log` in
+Copy the `/var/log/nginx/access.log` file on the server to a new file named `access2.log` in
 the current directory.
 
 It's likely that you will need to set the Git identity settings before committing.
@@ -557,8 +566,7 @@ Enter these commands, substituting the values as necessary:
   $ git config --global user.email "your@email.com"
   $ git config --global user.name "your GitHub username"
 
-Now add the `access2.log` file to the repository and commit your changes. Push the
-repository back up to GitHub. Verify that the new `access2.log` file exists on
+Create a new `develop` Git branch and check it out. Now add the `access2.log` file to the repository and commit your changes. Merge the `develop` branch into the `master` branch. Push the master branch back up to GitHub. Verify that the new `access2.log` file exists on
 your GitHub repository.
 
 === Check your work
@@ -578,8 +586,7 @@ Note, the shell script file should be executable.
 
 The last step in the assignment is to terminate the EC2 instances, delete
 the load balancer, and delete the VPC. I'll leave this as an exercise for you to
-figure out how to complete. Remember, you will get billed for each hour these
-services are running (or at least consume free credits).
+figure out how to complete. Remember, you will get billed for each hour the EC2 instances and ELB are running (or at least consume your credits).
 
 == Submitting your assignment
 I will review your published work on GitHub after the homework due date.
