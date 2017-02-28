@@ -216,17 +216,18 @@ You should still be connected to `webserver1` via your terminal program. Open
 up the ssh key pair on your local workstation in a text editing program and
 copy the contents of the file into your clipboard.
 
-Next, create a file called `server-key.pem` using a text editor on `webserver1`
-(nano or vim) and paste the contents of your clipboard into this file. Make
+Next, create a file called `server-key.pem` in the `~/.ssh` directory using a text editor on `webserver1` (nano or vim) and paste the contents of your clipboard into this file. Make
 sure you save the file.
+
+You could also copy the key file from your local workstation to the cloud instance using the Secure Copy command (`scp`). This is something you can try to figure out on your own if you are interested.
 
 Now, open a terminal connection from `webserver1` to `backend1`:
 
-  $ ssh -i server-key ec2-user@<backend1 private IP address>
+  $ ssh -i ~/.ssh/server-key ec2-user@<backend1 private IP address>
 
 .Example
 ----
-$ ssh -i server-key ec2-user@10.0.2.241
+$ ssh -i ~/.ssh/server-key ec2-user@10.0.2.241
 ----
 
 You probably received a security error after trying this connection request.

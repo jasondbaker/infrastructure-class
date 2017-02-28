@@ -337,7 +337,7 @@ Create the first shell script and name it `provision.sh`. A user can run the `pr
 ** Start the Nginx service.
 * If the user starts the script with a `-r` or `--remove` argument, the script will perform the following steps:
 ** Stop the Nginx service.
-** Delete the files in the website document root directory.
+** Delete the files in the website document root directory (/usr/share/nginx/html).
 ** Uninstall the Nginx software package.
 * If the user starts the script with a `-v` or `--version` argument, the script will return the value `1.0.0`
 * If the user starts the script with a `-h` or `--help` argument, the script will provide useful help information.
@@ -366,7 +366,7 @@ The contents of the `metadata.txt` file should look similar to this after
 
 Here are a couple hints for writing this script:
 
-  * You can write this script in as little as 4 lines of code.
+  * You can write this script in as little as 4 lines of code. You do not need to handle any input arguments or create a function.
   * Remember that you can take the output from a command like curl and redirect
   it into a file using the right angle-bracket character (`>`). If you want
   to append data to a file then use double brackets (`>>`).
