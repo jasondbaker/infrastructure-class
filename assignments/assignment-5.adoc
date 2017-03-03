@@ -1,4 +1,5 @@
-:doctype: article
+:doctype:
+article
 :blank: pass:[ +]
 
 :sectnums!:
@@ -210,10 +211,10 @@ via http.
 
 Now let's try to ssh into the `backend1` instance. In order to do that you will
 need to copy your private ssh key from your local workstation onto the `webserver1`
-instance.
+instance. The private ssh key is the key that you use to create an ssh connection to your EC2 instances.
 
 You should still be connected to `webserver1` via your terminal program. Open
-up the ssh key pair on your local workstation in a text editing program and
+up the private ssh key on your local workstation in a text editing program and
 copy the contents of the file into your clipboard.
 
 Next, create a file called `server-key.pem` in the `~/.ssh` directory using a text editor on `webserver1` (nano or vim) and paste the contents of your clipboard into this file. Make
@@ -335,7 +336,13 @@ your local Git identity by running these commands:
   $ git config --global user.email "your@email.com"
   $ git config --global user.name "your GitHub username"
 
-When you create a Git repository and start working with files, the master branch of the repository is checked out by default. We generally try to avoid working directly on the master branch in the real world. Go ahead and create a new branch called `develop` and check it out.
+When you create a Git repository and start working with files, the master branch of the repository is checked out by default. Go ahead and create a file in the directory called `README.md` and add the following contents:
+
+  *Assignment 5 Files*
+
+Commit the file to repository.
+
+We generally try to avoid working directly on the master branch in the real world. Go ahead and create a new branch called `develop` and check it out.
 
 === Create a shell script
 
