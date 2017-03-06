@@ -193,62 +193,63 @@ instance is hosted within a subnet that doesn't have a route connected to
 an Internet Gateway.
 
 The `backend1` instance may not be accessible from the Internet, but you
-should be able to access it from `webserver1`. Test that out by opening a
-terminal connection to `webserver1`. Once you have logged into `webserver1`,
-try to connect to the website hosted on `backend1`:
+should be able to access it from `webserver1` using this server as a bastion host.
+Basically you need to establish an ssh connection to `webserver1` and tunnel through
+this host to `backend1`.
 
-  $ curl <backend1 private IP address>
+===== Windows Proxy Configuration
+Let's cover how to configure Putty on Windows first. Go to your Windows Start Menu
+and look for your Putty application. Inside the Putty folder you should see an
+application called Pageant. Go ahead and start this application and add your
+EC2 private keyfile (the Putty version ending in the .ppk extension). If you get
+a message saying that Pageant is already running on your computer then look for the
+Putty application icon running in your Windows notification taskbar. You can right-click the
+Pageant icon and add your private key.
 
-.Example
-----
-$ curl 10.0.2.241
-----
+Next, you need to configure a Putty session like usual, with the host name set to the public IP
+address of `webserver1`, the ssh private key specified, and the `ec2-user` login name
+configured. This is the basic ssh configuration you have been using throughout the class.
 
-You should see the text from your web site displayed in the terminal output. The
-security group configuration allows `webserver1` to communicate with `backend1`
-via http.
+Go to the `Connection -> SSH -> Auth`
+configuration page in Putty and check the box next to the *Allow agent forwarding*
+parameter.
 
-Now let's try to ssh into the `backend1` instance. In order to do that you will
-need to copy your private ssh key from your local workstation onto the `webserver1`
-instance.
+At this point you should be able to open a new session and connect to the `webserver1` server.
+Once you have connected to the server, use the ssh command to connect to the `backend1`
+server:
 
-You should still be connected to `webserver1` via your terminal program. Open
-up the ssh key pair on your local workstation in a text editing program and
-copy the contents of the file into your clipboard.
+  ssh ec2-user@<backend1 private IP address>
 
-Next, create a file called `server-key.pem` in the `~/.ssh` directory using a text editor on `webserver1` (nano or vim) and paste the contents of your clipboard into this file. Make
-sure you save the file.
+===== Mac Proxy configuration
+The Mac proxy configuration is a bit easier than the Windows Putty configuration. The
+first step is to add your EC2 private key to the Mac keychain:
 
-You could also copy the key file from your local workstation to the cloud instance using the Secure Copy command (`scp`). This is something you can try to figure out on your own if you are interested.
+  ssh-add -K server-key.pem
 
-Now, open a terminal connection from `webserver1` to `backend1`:
+Next you can ssh to `webserver1` using the ssh command:
 
-  $ ssh -i ~/.ssh/server-key ec2-user@<backend1 private IP address>
+  ssh -A ec2-user@<webserver1 public IP>
 
-.Example
-----
-$ ssh -i ~/.ssh/server-key ec2-user@10.0.2.241
-----
+Note the use of the `-A` argument flag in this command. This argument tells ssh to
+look for your private server key in the keychain.
 
-You probably received a security error after trying this connection request.
-The access permisions on the `server-key.pem` file you create are too insecure.
-Let's fix that:
+Finally, once you have connected to `webserver1` you should be able to ssh into
+the `backend1` server:
 
-  $ chmod 600 server-key.pem
+  ssh ec2-user@<backend1 private IP>
 
-Hit the up arrow key a few times to replay the `ssh` command. You should
-successfully connect to the `backend1` instance. Congratulations, you just
-used `webserver1` as a bastion host!
+===== Troubleshooting the SSH connection
 
-In a real production environment, the bastion host access, security groups,
-and network access control lists would be more carefully locked down than in
-this assignment. You would probably never use a web server as a bastion host.
-The key is understanding conceptually what a bastion host is
-and how it fits in the overall network architecture.
+If you can't connect to the `backend1` server from `webserver1` there are several
+things you can check:
+
+* Check your Putty or Mac ssh configuration.
+* Verify that the proper security group is setup for `backend1`. It should allow incoming ssh from the webserver security group.
+
 
 === Update the backend server
 
-We should make sure that our backend server has all the latest software updates.
+Now that you have connected to the `backend1` server, we should make sure that our backend server has all the latest software updates.
 Go ahead and issue the `yum` command to update the server.
 
 Whoa, what's up with the connection timeout errors? Think about the VPC subnet
@@ -324,6 +325,11 @@ command. Viola! The package manager should begin updating the system. The
 NAT Gateway. Note that this communication can only be initiated in one
 direction. There is no way an Internet device can initiate a connection to
 the `backend1` server through the NAT Gateway.
+
+Note, there are times when the yum package manager has no packages to update.
+That's because the Amazon Linux image is a rolling AMI. Amazon periodically
+applies updates to the instance. If you happen to launch the AMI at the right
+time you will find that all of the Linux packages are up-to-date.
 
 === Create a Git repo
 
