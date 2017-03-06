@@ -37,7 +37,8 @@ diagram below.
 image:../images/assignment6/diagram.png["600","600"]
 
 Start the assignment by creating a VPC named `productionVpc` in the `us-west-2 (Oregon)`
-region with a CIDR block of `10.0.0.0/16`. The VPC needs to have two subnets, each located in *separate* availability zones (your choice):
+region with a CIDR block of `10.0.0.0/16`. Note, we're using a different region than
+previous assignments! The VPC needs to have two subnets, each located in *separate* availability zones (your choice):
 
   * `production-public-1` subnet
   will use the `10.0.1.0/25` network.
@@ -45,9 +46,9 @@ region with a CIDR block of `10.0.0.0/16`. The VPC needs to have two subnets, ea
   will use the `10.0.1.128/25` network.
 
 All instances on the two production subnets will need to be able to communicate with
-the Internet. You will need to configure the VPC to allow this communication.
-
-N
+the Internet. You will need to configure the subnets and routing tables in the VPC to
+allow this communication. How do you do this? You should be able to use the
+knowledge you gained from previous assignments to figure this out.
 
 === Create Security Groups
 
@@ -71,7 +72,7 @@ first security group:
       *** HTTP from source 0.0.0.0/0
 
 The second security group will allow only the web servers to communicate with
-the MySQL database instances using port 3306. Here are the requirements for the
+the MySQL database instance using port 3306. Here are the requirements for the
 second security group:
 
   * production-db
@@ -113,7 +114,7 @@ The MySQL instance should have the following properties:
   * VPC Security Group: production-db
   * Database Name: wordpress
 
-The MySQL database instance will take a few minutes to launch. Once the
+The MySQL database instance will take several minutes to launch. Once the
 instance is available, take a look at the instance properties and copy or
 write down the database endpoint address. The address will look something
 like this:
@@ -136,7 +137,7 @@ balancer should use `/readme.html` as the health check ping path. You won't
 be able to associate any EC2 instances with the load balancer yet. That's not
 a problem since you can associate an instance with the load balancer later.
 
-Note, make sure you select the correct VPC, subnet, and security group
+Note, make sure you select the correct VPC, subnets, and security group
 settings for the load balancer. Review previous assignments if you are unsure
 how to set these properties. Also, don't forget to tag the load balancer.
 
@@ -166,7 +167,11 @@ Launch an EC2 instance with the following properties:
   * Tag: Name = wordpress1
   * Security group: production-web
 
-Note, if this is the first time you are launching instances in the us-west region, AWS will likely prompt you to create a new set of SSH access keys.
+Note, if this is the first time you are launching instances in the us-west region, AWS
+will likely prompt you to create a new set of SSH access keys. You should give this
+keypair a different name than your other keypair. Also, if you are running Putty on
+Windows you will need to use the Puttygen tool to create a private key that you can
+import into Putty (see Assignment 2 video if you forgot how to do this step).
 
 Once the instance is running, open a web browser on your desktop and browse
 to the public IP address of the new instance. You should see a test page
@@ -174,7 +179,7 @@ appear in your browser. The user data script automatically updated the server
 and installed a number of basic components needed by Wordpress, including
 the Apache web server, PHP, and a MySQL library.
 
-Connect to the new instance using a terminal program. Type in the following
+Connect to the new instance using an ssh terminal program. Type in the following
 command in your home directory:
 
   $ wget https://wordpress.org/latest.tar.gz
