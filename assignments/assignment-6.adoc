@@ -229,7 +229,7 @@ Fourth, modify the following line to include your MySQL instance endpoint:
 
   define('DB_HOST', 'localhost');
 
-  define('DB_HOST', 'wordpressdb.cqgfjsasiodi.us-west-1.rds.amazonaws.com:3306');
+  define('DB_HOST', 'wordpressdb.cqgfjsasiodi.us-west-2.rds.amazonaws.com:3306');
 
 Finally, add the following two lines to the configuration file right under
 the line `define('DB_NAME', 'wordpress');`. You will need to enter the
@@ -241,8 +241,8 @@ DNS name for your load balancer.
 .Example
 ----
 define('DB_NAME', 'wordpress');
-define('WP_HOME', 'http://wordpressLB-2127306763.us-west-1.elb.amazonaws.com');
-define('WP_SITEURL', 'http://wordpressLB-2127306763.us-west-1.elb.amazonaws.com');
+define('WP_HOME', 'http://wordpressLB-2127306763.us-west-2.elb.amazonaws.com');
+define('WP_SITEURL', 'http://wordpressLB-2127306763.us-west-2.elb.amazonaws.com');
 ----
 
 [WARNING]
@@ -392,7 +392,7 @@ If the auto scaling process is working properly you should see two new instanced
 being launched in the EC2 dashboard. Once the instances are running, locate
 the DNS name of your load balancer. It should look something like:
 
-  wordpressLB-2127306763.us-west-1.elb.amazonaws.com
+  wordpressLB-2127306763.us-west-2.elb.amazonaws.com
 
 Type the load balancer DNS name into your web browser. You should see the
 Hello World page from your WordPress site. Hit the refresh button on your
@@ -452,7 +452,7 @@ your account properties in the IAM dashboard. However, your secret key cannot
 be recovered. You would need to generate a new secret key for your access account
 if you lost the previous key. Don't lose this key!
 
-The default region name for the AWS CLI configuration is: `us-west-1` and just
+The default region name for the AWS CLI configuration is: `us-west-2` and just
 select the default output format (none).
 
 Next, type in the following command to view all the autoscaling activities:
