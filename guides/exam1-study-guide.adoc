@@ -88,7 +88,6 @@ The exam will include multiple choice questions and true/false questions. You wi
     *** Buckets
     *** Data consistency model
     *** Storage tiers: standard, infrequently accessed, reduced redundancy storage, Glacier
-  ** S3 versioning
   ** CloudFront
   ** EC2
     *** Deployment options: on-demand, reserve, spot
@@ -102,7 +101,7 @@ The exam will include multiple choice questions and true/false questions. You wi
     *** Relationship between EC2 instances and security groups
   ** Elastic load balancer -- what is it?
     *** Key benefits
-    *** Understand load balancing algorithms
+    *** Understand load balancing algorithm
     *** Other features: SSL support and sticky sessions
   ** EC2 Placement Group purpose and benefits
   ** Elastic File System
@@ -114,7 +113,7 @@ The exam will include multiple choice questions and true/false questions. You wi
     *** Elastic IPs
     *** Internet Gateway
     *** NAT Gateway
-    *** Virtual Private Gateway vs Direct Connect
+    *** Virtual Private Gateway
     *** Access Control Lists -- how are these different than Security Groups?
     *** Default vs. dedicated vs. host tenancy
     *** VPC peering -- understand transitive issue
@@ -123,7 +122,6 @@ The exam will include multiple choice questions and true/false questions. You wi
     *** Read replica
   ** DynamoDB -- what type of NoSQL database is it?
   ** Redshift -- OLTP vs. OLAP
-  ** Directory Service -- what is its purpose?
 * Additional AWS Topics
   ** CloudWatch
   ** CloudTrail vs AWS Config
