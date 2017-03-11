@@ -179,68 +179,96 @@ appear in your browser. The user data script automatically updated the server
 and installed a number of basic components needed by Wordpress, including
 the Apache web server, PHP, and a MySQL library.
 
-Connect to the new instance using an ssh terminal program. Type in the following
-command in your home directory:
+Connect to the new instance using an ssh terminal program. Create a new directory
+in your home directory called `wpinstall` and create a git repository inside this
+new directory.
 
-  $ wget https://wordpress.org/latest.tar.gz
+While you are working inside the `wpinstall` directory, create a new file called
+`database.conf`. Add the following text content to this file:
+
+  dbserver = database_name_here
+
+One of the most common tasks we need to perform when automating the installation
+of new services on systems is to modify service configuration files. We could
+open configuration files using a text editor and manually make changes to the service
+settings, but that isn't a very repeatable or scalable process. Let's look at a
+programmatic way to update configuration files.
+
+You can treat the `database.conf` file like a template which contains a key (dbserver)
+and a value placeholder (database_name_here). What we need is a way to open the
+file, find the placeholder value, and replace the placeholder with a new value.
+We can do that using a nifty Linux program called `sed` -- the stream editor.
+
+Let's try it out. Type in the following command:
+
+  $ sed 's/database_name_here/mydb.domain/' database.conf
+
+You should see the stream editor output the text:
+
+  dbserver = mydb.domain
+
+The sed command opened the file, searched for the text "database_name_here" and
+replaced it with "mydb.domain". Take a quick look at the contents of the
+`database.conf` file. Hmm, that's strange. The contents of the file haven't
+actually changed. That's because by default sed just makes the changes we
+specified in a memory buffer. It doesn't write the updated file to disk unless
+we pass in the `-i` flag. Let's try to run this command again:
+
+  $ sed 's/database_name_here/mydb.domain/' -i database.conf
+
+Now take a look at the contents of the `database.conf` file. That's better!
+
+=== Create install script
+
+Let's start building a script to automate the installation of wordpress software
+on the instance. Create a new shell script called `wordpress_install`. The
+script should perform the following tasks in order:
+
+1) Download the latest Wordpress software using this command:
+
+  wget -O /var/www/html/wp.tar.gz https://wordpress.org/latest.tar.gz
 
 The `wget` command is similar to the `curl` command we have used in previous
 assignments. You can use the `wget` command to retrieve and download
-data, whereas `curl` may be used to upload data as well.
+data from a website, whereas `curl` may be used to upload data as well.
 
-Now that you have downloaded the latest version of the Wordpress software,
-unpack the software archive:
+2) Now that the script has downloaded the latest version of the Wordpress software, it should unpack the software archive:
 
-  $ tar -xzf latest.tar.gz
+  tar xf wp.tar.gz -C /var/www/html/
 
-You will notice that the unpacked archive is located in a new sub-directory
-called `wordpress`. You need to configure the Wordpress software before
-deploying it on the web server. Wordpress, like many software applications,
+3) Remove the archive package (`wp.tar.gz`) from the /var/www/html directory.
+
+4) The contents of the software archive package were installed in a new directory
+called `wordpress` within the `/var/www/html/` directory. You need to configure the Wordpress software before
+accessing it on the web server. Wordpress, like many software applications,
 is configured using a text file containing settings and properties. Wordpress
-comes with a sample configuration file. Start out by copying the sample
-file to another file which you will use in production:
+comes with a sample configuration file. Your script should copy the sample configuration file to another file which you will use in production. In the `wordpress` directory, copy the `wp-config-sample.php` file to a file named `wp-config.php`.
 
-  $ cd wordpress
-  $ cp wp-config-sample.php wp-config.php
+5) Your script needs to set the MySQL database access information in the configuration file by modifying values in six places.
 
-Next, open the `wp-config.php` file in a text editor. You need to set the
-MySQL database access information in the configuration file by modifying
-6 lines.
-
-First, modify the following line to include the `wordpress` database name:
+a) Modify the following line to replace `database_name_here` with the value `wordpress`:
 
   define('DB_NAME', 'database_name_here');
 
-  define('DB_NAME', 'wordpress');
-
-Second, modify the following line to include the `wpdbadmin` username:
+b) Modify the following line to replace `username_here` with the `wpdbadmin` username:
 
   define('DB_USER', 'username_here');
 
-  define('DB_USER', 'wpdbadmin');
-
-Third, modify the following line to include the admin password:
+c) Modify the following line to replace `password_here` with the admin password value you entered when creating the Mysql database:
 
   define('DB_PASSWORD', 'password_here');
 
-  define('DB_PASSWORD', 'your-password');
-
-Fourth, modify the following line to include your MySQL instance endpoint:
+d) Modify the following line to replace `localhost` with your MySQL RDS instance endpoint address:
 
   define('DB_HOST', 'localhost');
 
-  define('DB_HOST', 'wordpressdb.cqgfjsasiodi.us-west-2.rds.amazonaws.com:3306');
-
-Finally, add the following two lines to the configuration file right under
-the line `define('DB_NAME', 'wordpress');`. You will need to enter the
-DNS name for your load balancer.
+e) Finally, add the following two lines to the configuration file. You will need to enter the DNS name for your load balancer.
 
   define('WP_HOME', 'http://(load balancer DNS name)');
   define('WP_SITEURL', 'http://(load balancer DNS name)');
 
 .Example
 ----
-define('DB_NAME', 'wordpress');
 define('WP_HOME', 'http://wordpressLB-2127306763.us-west-2.elb.amazonaws.com');
 define('WP_SITEURL', 'http://wordpressLB-2127306763.us-west-2.elb.amazonaws.com');
 ----
@@ -254,51 +282,31 @@ application. In this case, we're just using the administrative account as
 a shortcut. Don't rely on this as a best practice!
 ====
 
-Next, you need to make a change to the web server configuration to improve
-the security of the Wordpress application. The change will allow .htaccess
-files to work properly.
+6) Next, your script needs to make a change to the Apache web server configuration to improve
+the security of the Wordpress application. The change will allow `.htaccess`
+files to work properly. The proper `sed` command required to make this change is a little tricky, so it is provided for you below:
 
-Open the /etc/httpd/conf/httpd.conf file in an editor. Note, since this
-file is outside your home directory you will need to use `sudo`. Find the
-section of the file that starts with:
+  sed '/Directory \"\/var\/www\/html/,/AllowOverride None/s/AllowOverride None/AllowOverride All/' -i /etc/httpd/conf/httpd.conf
 
-  <Directory "/var/www/html">
 
-There are several lines that look similar to this section, so make sure you
-are looking in the correct spot. Next, look for this setting:
-
-  AllowOverride None
-
-Change this existing setting to:
-
-  AllowOverride All
-
-Close and save the configuration file.
-
-You also need to make some changes to the file access permissions on the
+7) The script will also need to make some changes to the file access permissions on the
 Wordpress directory because the application needs to be able to update local
-files. Enter the following commands:
+files. Execute the following set of commands:
 
-  $ sudo groupadd www
-  $ sudo usermod -a -G www apache
-  $ sudo chown -R apache:www /var/www
-  $ sudo chmod 2775 /var/www
-  $ find /var/www -type d -exec sudo chmod 2775 {} \;
-  $ find /var/www -type f -exec sudo chmod 0664 {} \;
+  groupadd www
+  usermod -a -G www apache
+  chown -R apache:www /var/www
+  chmod 2775 /var/www
+  find /var/www -type d -exec sudo chmod 2775 {} \;
+  find /var/www -type f -exec sudo chmod 0664 {} \;
 
-Restart the Apache web server so that it picks up the new server
+8) Restart the Apache web server so that it picks up the new server
 configuration changes:
 
-  $ sudo service httpd restart
+  service httpd restart
 
-Finally, you can copy the Wordpress web application files from your home directory into the website document root directory (/var/www/html). Change back to your home directory and run the command:
-
-  $ sudo cp -R wordpress/* /var/www/html
-
-The `-R` option in the copy command will recursively copy all of the files and directories below the `wordpress` directory.
-
-The WordPress site should now be accessible via a web browser but it is configured to use your load
-balancer. Therefore, you need to associate the EC2 instance with the load
+After creating and successfully executing the script, the WordPress site should now be accessible via a web browser. The site is configured to use your elastic load
+balancer, therefore you need to associate the EC2 instance with the load
 balancer. Go to the `instances` property of your load balancer and
 *edit* the instances to add the `wordpress1` server.
 
@@ -436,7 +444,7 @@ way to solve this issue for new implementations.
 
 === Collecting session data
 
-Connect to one of the running instances using a terminal program. In assignment
+Connect to your original web server instances using a terminal program. In assignment
 4, you used the AWS command line interface to interact with S3. Let's use the
 same CLI to pull some event information from the EC2 auto scaling service.
 
@@ -462,8 +470,7 @@ Next, type in the following command to view all the autoscaling activities:
 You should see a long text output including a list of activities with each
 having a Description, ActivityId, StartTime, etc.
 
-Next, create a sub-directory in your home directory called `assignment-6-autoscaling-<username>` (where <username> is your GitHub account name) and
-change to this new directory. Initialize a new Git repository in the directory.
+Next, change to the `wpinstall` directory in your home directory.
 
 Create a small batch script called `getdata.sh` which performs the following:
 
@@ -487,8 +494,10 @@ Here is what the contents of your git repository should look like before final s
 ====
 &#x2523; access_log +
 &#x2523; activity.json +
+&#x2523; database.conf +
 &#x2523; getdata.sh +
-&#x2517; wp-config.php +
+&#x2523; wp-config.php +
+&#x2517; wordpress_install +
 ====
 
 === Submit your work
