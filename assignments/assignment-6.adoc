@@ -133,7 +133,7 @@ to ensure that the service is highly available.
 Go to the EC2 dashboard and select the `Load Balancers` menu item. Create a
 new *classic* load balancer called `wordpress-lb` that will distribute HTTP (port 80) requests across
 web servers located in both us-west subnets. The load
-balancer should use `/readme.html` as the health check ping path. You won't
+balancer should use `/wordpress/readme.html` as the health check ping path. You won't
 be able to associate any EC2 instances with the load balancer yet. That's not
 a problem since you can associate an instance with the load balancer later.
 
@@ -234,7 +234,7 @@ data from a website, whereas `curl` may be used to upload data as well.
 
 2) Now that the script has downloaded the latest version of the Wordpress software, it should unpack the software archive:
 
-  tar xf wp.tar.gz -C /var/www/html/
+  tar xf /var/www/html/wp.tar.gz -C /var/www/html/
 
 3) Remove the archive package (`wp.tar.gz`) from the /var/www/html directory.
 
@@ -264,13 +264,13 @@ d) Modify the following line to replace `localhost` with your MySQL RDS instance
 
 e) Finally, add the following two lines to the configuration file. You will need to enter the DNS name for your load balancer.
 
-  define('WP_HOME', 'http://(load balancer DNS name)');
-  define('WP_SITEURL', 'http://(load balancer DNS name)');
+  define('WP_HOME', 'http://(load balancer DNS name)/wordpress');
+  define('WP_SITEURL', 'http://(load balancer DNS name)/wordpress');
 
 .Example
 ----
-define('WP_HOME', 'http://wordpressLB-2127306763.us-west-2.elb.amazonaws.com');
-define('WP_SITEURL', 'http://wordpressLB-2127306763.us-west-2.elb.amazonaws.com');
+define('WP_HOME', 'http://wordpressLB-2127306763.us-west-2.elb.amazonaws.com/wordpress');
+define('WP_SITEURL', 'http://wordpressLB-2127306763.us-west-2.elb.amazonaws.com/wordpress');
 ----
 
 [WARNING]
@@ -311,7 +311,11 @@ balancer. Go to the `instances` property of your load balancer and
 *edit* the instances to add the `wordpress1` server.
 
 Open up a web browser on your desktop and type in the DNS name of the load
-balancer as the URL. You should see a Wordpress installation page.
+balancer as the URL with the `/wordpress` path. For example:
+
+  http://wordpressLB-2127306763.us-west-2.elb.amazonaws.com/wordpress
+
+You should see a Wordpress installation page.
 Congratulations! If you don't see the installation page, check to make sure
 that the instance status in the load balancer properties is set to _InService_.
 
