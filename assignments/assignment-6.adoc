@@ -458,11 +458,7 @@ IAM Role with the instance. Type in the following command:
 
   $ aws configure
 
-The CLI will prompt you for your account credentials. Hopefully you have these
-written down from assignment 2! If you forgot your access key, you can look at
-your account properties in the IAM dashboard. However, your secret key cannot
-be recovered. You would need to generate a new secret key for your access account
-if you lost the previous key. Don't lose this key!
+The CLI will prompt you for your API credentials. Your AWS user account has an Access Key and a Secret Key configured to allow you to programmatically access the AWS API. The keys are located in your account properties in IAM. If you do not know your secret key, you can use IAM to generate a new one since previously generated keys cannot be recovered. Note, this secret API is not the same as your private server key. 
 
 The default region name for the AWS CLI configuration is: `us-west-2` and just
 select the default output format (none).
@@ -483,7 +479,7 @@ Create a small batch script called `getdata.sh` which performs the following:
 
   aws autoscaling describe-scaling-activities --auto-scaling-group-name wordpress-web-group
 
-  * Copies the /var/www/html/wp-config.php file to the current directory into
+  * Copies the /var/www/html/wordpress/wp-config.php file to the current directory into
   a file with the same name.
 
   * Copies the /var/log/httpd/access_log file to the current directory into
