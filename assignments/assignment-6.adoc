@@ -222,9 +222,9 @@ Now take a look at the contents of the `database.conf` file. That's better!
 
 Let's start building a script to automate the installation of wordpress software
 on the instance. Create a new shell script called `wordpress_install`. The
-script should perform the following tasks in order:
+script should perform the following tasks in the order below:
 
-1) Download the latest Wordpress software using this command:
+1) Download the latest Wordpress software using the `wget` command:
 
   wget -O /var/www/html/wp.tar.gz https://wordpress.org/latest.tar.gz
 
@@ -232,19 +232,23 @@ The `wget` command is similar to the `curl` command we have used in previous
 assignments. You can use the `wget` command to retrieve and download
 data from a website, whereas `curl` may be used to upload data as well.
 
-2) Now that the script has downloaded the latest version of the Wordpress software, it should unpack the software archive:
+2) Now that the script has downloaded the latest version of the Wordpress software, it should unpack the software archive into the `/var/www/html/` directory:
 
   tar xf /var/www/html/wp.tar.gz -C /var/www/html/
 
+A `tar` archive is kind of like the Linux version of a `.zip` archive on a Windows system. The `x` argument tells the `tar` command that it needs to extract files from the tar archive.
+
 3) Remove the archive package (`wp.tar.gz`) from the /var/www/html directory.
 
-4) The contents of the software archive package were installed in a new directory
-called `wordpress` within the `/var/www/html/` directory. You need to configure the Wordpress software before
-accessing it on the web server. Wordpress, like many software applications,
-is configured using a text file containing settings and properties. Wordpress
-comes with a sample configuration file. Your script should copy the sample configuration file to another file which you will use in production. In the `wordpress` directory, copy the `wp-config-sample.php` file to a file named `wp-config.php`.
+4) The `tar` command extracts the contents of the software archive package in a new directory
+called `wordpress` within the `/var/www/html/` directory. Technically the Wordpress web application is installed in the website document root now. However, you need to configure the Wordpress software before
+accessing it on the web server.
 
-5) Your script needs to set the MySQL database access information in the configuration file by modifying values in six places.
+Wordpress, like many software applications,
+is configured using a text file containing various application settings and properties. Wordpress
+comes with a sample configuration file called `wp-config-sample.php`. Your script should copy the sample configuration file to another file which your script will edit. In the `wordpress` directory, copy the existing `wp-config-sample.php` file to a new file named `wp-config.php`.
+
+5) Next, modify the value of several configuration settings in the `wp-config.php` file. You learned a technique for updating configuration values in the `database.conf` file earlier in this assignment. You should use the same technique here. Your script needs to set the MySQL database access information in the `wp-config.php` configuration file by modifying values in six specific places:
 
 a) Modify the following line to replace `database_name_here` with the value `wordpress`:
 
@@ -262,7 +266,7 @@ d) Modify the following line to replace `localhost` with your MySQL RDS instance
 
   define('DB_HOST', 'localhost');
 
-e) Finally, add the following two lines to the configuration file. You will need to enter the DNS name for your load balancer.
+e) Finally, add the following two lines to the configuration file substituting `(load balancer DNS name)` with the DNS name of your load balancer.
 
   define('WP_HOME', 'http://(load balancer DNS name)/wordpress');
   define('WP_SITEURL', 'http://(load balancer DNS name)/wordpress');
@@ -458,7 +462,7 @@ IAM Role with the instance. Type in the following command:
 
   $ aws configure
 
-The CLI will prompt you for your API credentials. Your AWS user account has an Access Key and a Secret Key configured to allow you to programmatically access the AWS API. The keys are located in your account properties in IAM. If you do not know your secret key, you can use IAM to generate a new one since previously generated keys cannot be recovered. Note, this secret API is not the same as your private server key. 
+The CLI will prompt you for your API credentials. Your AWS user account has an Access Key and a Secret Key configured to allow you to programmatically access the AWS API. The keys are located in your account properties in IAM. If you do not know your secret key, you can use IAM to generate a new one since previously generated keys cannot be recovered. Note, this secret API is not the same as your private server key.
 
 The default region name for the AWS CLI configuration is: `us-west-2` and just
 select the default output format (none).
