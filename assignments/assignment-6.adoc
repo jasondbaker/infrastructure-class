@@ -199,6 +199,12 @@ and a value placeholder (database_name_here). What we need is a way to open the
 file, find the placeholder value, and replace the placeholder with a new value.
 We can do that using a nifty Linux program called `sed` -- the stream editor.
 
+The `sed` command syntax we are going to use looks like:
+
+  sed 's/value1/value2/' file
+
+The `s` character means that you want `sed` to perform a value substitution. You provide two different values delimited by forward-slash (`/`) characters. The `sed` command will substitute any text matching `value1` for `value2` in the specified `file`.
+
 Let's try it out. Type in the following command:
 
   $ sed 's/database_name_here/mydb.domain/' database.conf
@@ -217,6 +223,20 @@ we pass in the `-i` flag. Let's try to run this command again:
   $ sed 's/database_name_here/mydb.domain/' -i database.conf
 
 Now take a look at the contents of the `database.conf` file. That's better!
+
+Now open up the `database.conf` file again in an editor and add a second line of text:
+
+  define('WEBSITE_URL', 'your_website');
+
+Let's try to use the `sed` command again to replace the value `your_website` with an actual website URL address. Try this:
+
+  sed 's/your_website/http://www.google.com/' -i database.conf
+
+Uh, oh. You probably received an error saying something like `bad flag in substitute command: '/'`. You received this error because the `sed` command is trying to replace one value (`your_website`) with another value. The problem is that the other value contains a couple forward-slash (`/`) characters. The `sed` command uses the forward-slash character as a delimiter between the two values. The forward-slash characters in the substitution value (`http://www.google.com`) are confusing the `sed` command. The way to deal with this issue is to use a backward-slash as an escape character to tell the `sed` command that the forward-slash characters are really part of the substitution value. Let's try the command again:
+
+  sed 's/your_website/http:\/\/www.google.com/' -i database.conf
+
+The special escape characters make the `sed` command string look a little strange, but it works!
 
 === Create install script
 
@@ -250,7 +270,7 @@ comes with a sample configuration file called `wp-config-sample.php`. Your scrip
 
 5) Next, modify the value of several configuration settings in the `wp-config.php` file. You learned a technique for updating configuration values in the `database.conf` file earlier in this assignment. You should use the same technique here. Your script needs to set the MySQL database access information in the `wp-config.php` configuration file by modifying values in six specific places:
 
-a) Modify the following line to replace `database_name_here` with the value `wordpress`:
+a) Modify the following line in the `wp-config.php` file to replace `database_name_here` with the value `wordpress`:
 
   define('DB_NAME', 'database_name_here');
 
