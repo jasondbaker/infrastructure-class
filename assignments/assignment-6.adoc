@@ -183,6 +183,8 @@ Connect to the new instance using an ssh terminal program. Create a new director
 in your home directory called `wpinstall` and create a git repository inside this
 new directory.
 
+=== Using the sed command
+
 While you are working inside the `wpinstall` directory, create a new file called
 `database.conf`. Add the following text content to this file:
 
