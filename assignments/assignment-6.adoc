@@ -246,7 +246,9 @@ Let's start building a script to automate the installation of wordpress software
 on the instance. Create a new shell script called `wordpress_install`. The
 script should perform the following tasks in the order below:
 
-1) Download the latest Wordpress software using the `wget` command:
+{blank}
+
+*Step 1)* Download the latest Wordpress software to the instance using the `wget` command:
 
   wget -O /var/www/html/wp.tar.gz https://wordpress.org/latest.tar.gz
 
@@ -254,23 +256,30 @@ The `wget` command is similar to the `curl` command we have used in previous
 assignments. You can use the `wget` command to retrieve and download
 data from a website, whereas `curl` may be used to upload data as well.
 
-2) Now that the script has downloaded the latest version of the Wordpress software, it should unpack the software archive into the `/var/www/html/` directory:
+{blank}
+
+*Step 2)* Now that the script has downloaded the latest version of the Wordpress software, it should unpack the software archive into the `/var/www/html/` directory using the `tar` command:
 
   tar xf /var/www/html/wp.tar.gz -C /var/www/html/
 
-A `tar` archive is kind of like the Linux version of a `.zip` archive on a Windows system. The `x` argument tells the `tar` command that it needs to extract files from the tar archive.
+A tar archive is kind of like the Linux version of a zip archive on a Windows system. The `x` argument tells the `tar` command that it needs to extract files from the tar archive.
 
-3) Remove the archive package (`wp.tar.gz`) from the /var/www/html directory.
+{blank}
 
-4) The `tar` command extracts the contents of the software archive package in a new directory
-called `wordpress` within the `/var/www/html/` directory. Technically the Wordpress web application is installed in the website document root now. However, you need to configure the Wordpress software before
-accessing it on the web server.
+*Step 3)* Remove the downloaded archive package (`wp.tar.gz`) from the /var/www/html directory.
+
+{blank}
+
+*Step 4)* The `tar` command extracted the contents of the software archive package into a new directory
+called `wordpress` within the `/var/www/html/` directory. Technically the Wordpress web application is installed in the website document root at this point. However, you need to configure the Wordpress software to communicate with your database instance before accessing the Wordpress site on the web server.
 
 Wordpress, like many software applications,
-is configured using a text file containing various application settings and properties. Wordpress
-comes with a sample configuration file called `wp-config-sample.php`. Your script should copy the sample configuration file to another file which your script will edit. In the `wordpress` directory, copy the existing `wp-config-sample.php` file to a new file named `wp-config.php`.
+is configured using a text file containing various application configuration settings. The Wordpress software files include
+a sample configuration file called `wp-config-sample.php`. Your script should copy this sample configuration file to another file in the same directory called `wp-config.php`.
 
-5) Next, modify the value of several configuration settings in the `wp-config.php` file. You learned a technique for updating configuration values in the `database.conf` file earlier in this assignment. You should use the same technique here. Your script needs to set the MySQL database access information in the `wp-config.php` configuration file by modifying values in six specific places:
+{blank}
+
+*Step 5)* Next, your script needs to modify the value of several configuration settings in the `wp-config.php` file. You learned how to use the `sed` command to update configuration values in the `database.conf` file earlier in this assignment. You should use the same technique here. Your script needs to configure the MySQL database access information in the `wp-config.php` configuration file by modifying values in six specific places:
 
 a) Modify the following line in the `wp-config.php` file to replace `database_name_here` with the value `wordpress`:
 
@@ -288,7 +297,7 @@ d) Modify the following line to replace `localhost` with your MySQL RDS instance
 
   define('DB_HOST', 'localhost');
 
-e) Finally, add the following two lines to the configuration file substituting `(load balancer DNS name)` with the DNS name of your load balancer.
+e) Finally, add the following two lines to the configuration file replacing `(load balancer DNS name)` with the DNS name of your load balancer.
 
   define('WP_HOME', 'http://(load balancer DNS name)/wordpress');
   define('WP_SITEURL', 'http://(load balancer DNS name)/wordpress');
@@ -308,16 +317,19 @@ application. In this case, we're just using the administrative account as
 a shortcut. Don't rely on this as a best practice!
 ====
 
-6) Next, your script needs to make a change to the Apache web server configuration to improve
+{blank}
+
+*Step 6)* Next, your script needs to make a change to the Apache web server configuration to improve
 the security of the Wordpress application. The change will allow `.htaccess`
-files to work properly. The proper `sed` command required to make this change is a little tricky, so it is provided for you below:
+files to work properly. The proper `sed` command required in your script to make this change is a little tricky, so it is provided for you below:
 
   sed '/Directory \"\/var\/www\/html/,/AllowOverride None/s/AllowOverride None/AllowOverride All/' -i /etc/httpd/conf/httpd.conf
 
+{blank}
 
-7) The script will also need to make some changes to the file access permissions on the
+*Step 7)* The script will also need to make some changes to the file access permissions on the
 Wordpress directory because the application needs to be able to update local
-files. Execute the following set of commands:
+files. The script should execute the following set of commands:
 
   groupadd www
   usermod -a -G www apache
@@ -326,7 +338,9 @@ files. Execute the following set of commands:
   find /var/www -type d -exec sudo chmod 2775 {} \;
   find /var/www -type f -exec sudo chmod 0664 {} \;
 
-8) Restart the Apache web server so that it picks up the new server
+{blank}
+
+*Step 8)* Finally, the script should restart the Apache web server so that it picks up the new server
 configuration changes:
 
   service httpd restart
