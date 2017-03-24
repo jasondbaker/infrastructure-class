@@ -377,7 +377,7 @@ Next, log into your RDS instance using the following command (substituting your 
 
     $ mysql -h wordpressdb.coqhf0zpvdaj.us-west-2.rds.amazonaws.com -P 3306 -u wpdbadmin -p
 
-You will be prompted to enter the administrative password you setup on the RDS instance. If you receive an "access denied" error message, that means the username or password you are providing to the database server is incorrect. You will need to reset the administrative password on the RDS instance and try to connect with the mysql client again.
+You will be prompted to enter the master (administrative) password you setup on the RDS instance. If you receive an "access denied" error message, that means the username or password you are providing to the database server is incorrect. You will need to reset the master password on the RDS instance and try to connect with the mysql client again.
 
 ====
 
@@ -394,7 +394,8 @@ Type in the following properties:
 Then click the install button to install the Wordpress website. Once the
 site is installed, you can enter your admin username and password to access
 the WordPress administrative console. Open up a new tab on your web browser
-and type in the public IP address of your EC2 instance. You should see the
+and type in the public IP address of your EC2 instance along with the `/wordpress`
+path (i.e., `http://52.21.33.24/wordpress`). You should see the
 default WordPress page. You now have a fully functioning WordPress application
 running on EC2 connected to a database managed by RDS.
 
@@ -442,9 +443,10 @@ scaling group to build the configuration again.
 
 If the auto scaling process is working properly you should see two new instanced
 being launched in the EC2 dashboard. Once the instances are running, locate
-the DNS name of your load balancer. It should look something like:
+the DNS name of your load balancer and type it into your browser along with
+the `/wordpress` path. It should look something like:
 
-  wordpressLB-2127306763.us-west-2.elb.amazonaws.com
+  http://wordpressLB-2127306763.us-west-2.elb.amazonaws.com/wordpress
 
 Type the load balancer DNS name into your web browser. You should see the
 Hello World page from your WordPress site. Hit the refresh button on your
@@ -524,9 +526,6 @@ Create a small batch script called `getdata.sh` which performs the following:
 
   * Copies the /var/log/httpd/access_log file to the current directory into
   a file with the same name
-
-Note, you may need to use `sudo` to copy the `wp-config.php` and `access_log`
-files.
 
 === Check your work
 Here is what the contents of your git repository should look like before final submission:
