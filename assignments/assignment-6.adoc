@@ -285,19 +285,22 @@ a) Modify the following line in the `wp-config.php` file to replace `database_na
 
   define('DB_NAME', 'database_name_here');
 
+[WARNING]
+*Do not copy this code into your script file!* This is not shell script code. It is PHP code that lives in the `wp-config.php` file. You need to write shell script code which substitutes the `database_name_here` placeholder value in the `wp-config.php` file with the value `wordpress`.
+
 b) Modify the following line to replace `username_here` with the `wpdbadmin` username:
 
   define('DB_USER', 'username_here');
 
-c) Modify the following line to replace `password_here` with the admin password value you entered when creating the Mysql database:
+c) Modify the following line in the `wp-config.php` file to replace `password_here` with the admin password value you entered when creating the Mysql database:
 
   define('DB_PASSWORD', 'password_here');
 
-d) Modify the following line to replace `localhost` with your MySQL RDS instance endpoint address:
+d) Modify the following line in the `wp-config.php` file to replace `localhost` with your MySQL RDS instance endpoint address:
 
   define('DB_HOST', 'localhost');
 
-e) Finally, the script should add the following two lines to the configuration file, using the DSN name of your load balancer instead of `(load balancer DNS name)`.
+e) Finally, the script should add the following two lines to the `wp-config.php` configuration file, using the DSN name of your load balancer instead of `(load balancer DNS name)`.
 
   define('WP_HOME', 'http://(load balancer DNS name)/wordpress');
   define('WP_SITEURL', 'http://(load balancer DNS name)/wordpress');
