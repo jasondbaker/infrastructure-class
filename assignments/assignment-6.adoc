@@ -345,6 +345,11 @@ configuration changes:
 
   service httpd restart
 
+Note, when restarting the Apache web server the script might generate a warning message
+like: `httpd: apr_sockaddr_info_get() failed for ip-10-0-1-4`. You can safely ignore
+this message. The Apache server is complaining that it cannot determine the
+fully qualified domain name associated with the private IP address of the server.
+
 After creating and successfully executing the script, the WordPress site should now be accessible via a web browser. The site is configured to use your elastic load
 balancer, therefore you need to associate the EC2 instance with the load
 balancer. Go to the `instances` property of your load balancer and
