@@ -403,7 +403,8 @@ You can shutdown the EC2 instance now that you have confirmed that the
 WordPress application is running properly. Make sure you shutdown the instance,
 not terminate it! Stopping the instance will allow the data on the server to
 quiesce. After the instance stops, create an image based on the instance
-called `wordpressweb`. AWS will take a few minutes to build the new AMI.
+called `wordpressweb`. AWS will take a few minutes to build the new AMI. Make
+sure the AMI is configured to use hardware assisted virtualization.
 
 Go back to the load balancer properties and remove the instance from the
 load balancer.
