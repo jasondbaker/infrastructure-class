@@ -8,7 +8,7 @@ Jason Baker <bake2352@stthomas.edu>
 1.0, 4/8/2016
 
 == Overview
-During the last assignment, you built a complete 3-tier web application
+During the last assignment, you built a highly available web application
 deployment by manually configuring a VPC, RDS database, and an EC2 auto scaling
 group. You probably figured out pretty quickly that this manual creation
 process involves many different components and it's easy to make a mistake
@@ -17,33 +17,10 @@ during the configuration process.
 This week's assignment has two parts. You will use the Elastic Beanstalk service
 in the first part of the assignment to deploy another scalable web application.
 You will learn how Platform as a Service can greatly simplify certain types of
-application deployments
+application deployments.
 
 The second part of the assignment will focus on JSON and YAML. You will complete
-a short set of exercises using each of these data formats.
-
-== Requirements
-
-You need to have a personal AWS account and GitHub account for this assignment.
-
-== The assignment
-
-It's time to launch some services on a PaaS.
-
-=== Download WordPress application
-
-You will need to download a WordPress application archive located at the
-following URL:
-
-  https://s3.amazonaws.com/seis665/wordpress.zip
-
-The WordPress archive was configured in advance to properly deploy on
-the Elastic Beanstalk service. Basically, the `wp-config.php` file was modified
-to automatically set some key configuration values, such as the database
-name and access information, based on the Elastic Beanstalk application
-configuration.
-
-=== Launch Elastic Beanstalk application
+a short set of exercises using each of these data formats. JSON is commonly used as a data exchange format for machine-to-machine communications (i.e., one application talking to another application). YAML is oftentimes used to store configuration values for applications.
 
 Elastic Beanstalk can greatly simplify an application deployment on AWS because
 it takes care of much of the underlying infrastructure configuration. While the
@@ -53,261 +30,162 @@ our goal is to build scalable, secure, and reliable IT services. A service
 architecture built around a Platform as a Service allows us to achieve these
 goals with greater repeatability and consistency.
 
-Start out by going to the Elastic Beanstalk dashboard on AWS and clicking on
-the *create new application* link. You will build the application configuration
-by setting a number of application properties using the new application
-wizard.
+== Requirements
 
-[NOTE]
-====
-It
-doesn't matter which region you launch your services into as long as the
-region is supported by Elastic Beanstalk. The us-east-1 or us-west-1 regions
-are recommended.
-====
+You need to have a personal AWS account and GitHub account for this assignment.
 
-[WARNING]
-====
-AWS is beta testing a new Elastic Beanstalk console. If you opt into or are automatically placed into this console you will need to follow the beta instructions.
-====
+== The assignment
 
-Your application should use the following configuration settings:
+It's time to launch some services using a Platform-as-a-Service (PaaS).
 
-  * Application name: *Wordpress application*
-  * Elastic Beanstalk supports both web and worker applications. You will deploy
-  a *web server*.
+=== Launch management instance
 
-  * Predefined configuration: *PHP*. Why PHP? We could have
-  selected any of the available platforms for this exercise. However, we are using
-  a similar type of platform as the previous assignment so that you can better compare
-  the amount of work required to stand up both web applications.
+We're going to take a different approach to creating AWS resources in this assignment. Until this point in the course, you have been working primarily with the AWS web console to create resources. In the real world we try to use web consoles as little as possible. Our preference is to define infrastructure as code rather than using point-and-click interfaces.
 
-  * Environment type: *Load balancing, auto scaling*
+Why is this the case? The Elastic Beanstalk (EB) service provides a great example of why infrastructure as code is a preferred practice. AWS constantly updates and changes the web interface for the EB service. If you documented the web-based process for deploying an application on EB, you would have to update your documentation a couple times a year. Additionally, some EB users will see updates to the EB web console before other users. Good luck trying to keep all your team members happy.
 
-  * Application version source: *Upload the wordpress.zip file*
+The bottom line is that a code-based approach is easier to document, automate, and run. It is a much more scalable and reliable approach to building infrastructure. Let's start practicing what we preach.
 
-  * Deployment policies: (keep defaults)
+Go ahead and create a new t2.micro linux instance called `mgmt1` in a default VPC in the us-east-1 (N. Virginia) region. Yes, you can use the AWS console for this task (but this is the last time!).
 
-  * Environment name: *wordpress-<your username>* (must be unique!)
+=== Setup EB CLI configuration
 
-.Example
-----
-wordpress-jbaker
-----
+Connect to the instance via ssh once it is available and install the Elastic Beanstalk CLI. The EB CLI is a command-line tool you can use to control the AWS EB service. It's kind of like a service-specific version of the AWS CLI. Type in the following command to install the EB CLI on the instance:
 
-  * Create an RDS DB instance: Enabled
+  pip install awsebcli --upgrade --user
 
-  * Configuration details:
+Next, clone the following Wordpress application git repository to the instance and change to the `seis665-wordpress` directory:
 
-    ** Instance type: t1.micro
-    ** EC2 key pair: (select one of your pairs or create a new one)
-    ** Application health check URL: *HTTP:80/readme.html*
+	 git clone https://github.com/jasondbaker/seis665-wordpress.git
 
-  * Environment tag
-    ** Key = *Product*
-    ** Value = *Wordpress*
+Inside the `seis665-wordpress` directory, run the `eb init` command:
 
-  * RDS Configuration
-    ** DB engine: *mysql*
-    ** Instance class: *db.t1.micro*
-    ** Username: *wpdbadmin*
-    ** Password: (choose an appropriate password)
-    ** Retention setting: *Delete*
-    ** Availability: *Single Availability Zone*
+  eb init
 
-  * Permissions: (select default instance and service role)
+First, the EB CLI prompts you to select a region. Type the number that corresponds to the region that you would like to use and press Enter.
 
-Once you have entered in all the application settings, click the *launch* button.
+	us-east-1 (N. Virginia)
 
+Next, provide your API access key and secret key so that the EB CLI can manage resources for you. Access keys are created in the AWS Identity and Access Management management console.
 
-====
+	(aws-access-id): (type in your aws-access-id)
+	(aws-secret-key): (type in your aws-secret-key)
 
-*Beta Console Instructions*
+An application in Elastic Beanstalk is a resource that contains a set of application versions (source), environments, and saved configurations that are associated with a single web application. Each time you deploy your source code to Elastic Beanstalk using the EB CLI, a new application version is created. Select the `Create New Application` option.
 
-If you are using the new Elastic Beanstalk console, use these settings:
+The default application name is the name of the folder in which you ran `eb init`. Let’s set this to `wordpress`:
 
-* Application name: *Wordpress application*
-* Tier: *Web Server*
-* Platform: *PHP*
-* Application Code: *Upload your code*
-    ** Upload the wordpress.zip file
+	Application name: wordpress
 
-Click on the *Configure more options* button.
+Next, the EB CLI should automatically detect that our application is using `PHP`. It will ask us what version of PHP our application needs. The PHP platform version we want is `5.6`.
 
-* Select the *Low cost* (Free Tier eligible) option.
-* Select the *Modify* link under the Database box.
-    ** Engine: *mysql*
-    ** Engine version: *5.6.27*
-    ** Instance class: *db.t1.micro*
-    ** Storage: *10GB*
-    ** Username: *wpdbadmin*
-    ** Password: (your choice)
-    ** Retention: *Delete*
-    ** Availability: *Low*
+We don’t need to use CodeCommit for this project, choose `no` when prompted.
 
-Click the *Save* button, and then click the
-*Create app* button.
+We also don’t need to connect to the instances created by EB, so choose `no` when asked to setup SSH.
 
-====
+Notice how the EB CLI setup a hidden subdirectory called `.elasticbeanstalk` within the current directory. The settings you just entered are stored in a YAML file within this subdirectory. Check it out:
 
-Now monitor the launch events for the next fifteen minutes or
-so. Notice how the Elastic Beanstalk service automatically configures
-a load balancer, security group, auto scaling group, CloudWatch alarms,
-and RDS instances for you. It's basically setting up everything you had to do
-manually in the previous assignment. This method is much easier!
+	cat .elasticbeanstalk/config.yml
 
-image:../images/assignment7/eb-events.png["600","600"]
+=== Launch Wordpress environment
 
-Why don't we always just use Elastic Beanstalk to launch our applications?
-Well, Elastic Beanstalk is great for certain kinds of applications, but it
-certainly can't support every possible application architecture. You will
-learn how to support more complex application architectures in an
-automated fashion in future assignments.
+Now we need to create a new environment which will support our application. An environment consists of all the AWS resources needed to power the app -- EC2 instances, ELB, RDS database, auto-scaling group, security groups, etc. Launch the environment by running the command:
 
-You should see a URL listed at the top of the dashboard. The URL will look
-something like this:
+	eb create --database --scale 2 --timeout 30
 
-  wordpress-jbaker.us-west-1.elasticbeanstalk.com
+This command will ask a series of questions before launching the environment. Use the following settings, substituting `<name>` in the DNS CNAME prefix setting with your unique UST userId (i.e., `bake2352-wordpress-dev`):
 
-or this if you are using the new console:
+	Environment name: wordpress-dev
+	DNS CNAME prefix: <name>-wordpress-dev
+	Load balancer type: classic
+	RDS DB name: wordpressdb
+	RDS DB master password: (choose one)
 
-  Sample-env-1.vp3prx5kdx.us-west-2.elasticbeanstalk.com
+The EB CLI will automatically upload the Wordpress application to EB as a deployment package. Now watch as the EB service builds the infrastructure environment for your application. This process may take about 20 minutes.
 
-Go ahead and click on the URL. A browser tab should open and you should be
-able to see the Wordpress installation site. Configure the WordPress installation
-like you did in the previous assignment. The settings don't have to be exactly
-the same as last time. Congrats, you just launched a scalable WordPress site!
+After the launch process completes, check out the status of your EB environment by using the following command:
 
-Let's check out how the Elastic Beanstalk service setup our application. Go
-to the EC2 dashboard and look at the running instances. What do you notice?
-Just one running instance. How come EB didn't create two instances?
+	eb status
 
-In the
-previous assignment, we setup an auto scaling group that required a minimum
-of two instances at all times. Click on the Auto Scaling Groups menu item
-and check out the scaling policies for the scaling group. How many minimum
-and maximum instances are required in the scaling group? Under what conditions
-will the scaling group increase or decrease the number of running instances?
+You should see something like:
 
-Go back to the Elastic Beanstalk dashboard and select your application. Check
-out some of the menu options on the left-side of the dashboard: Configuration,
-Logs, Health, Monitoring, etc. Take a look at the monitoring section. Here you
-can find overall health information for your application.
+	Environment details for: wordpress-dev
+	Application name: wordpress
+	Region: us-east-1
+	Deployed Version: app-309e-170325_215522
+	Environment ID: e-2jxqcjvjkh
+	Platform: arn:aws:elasticbeanstalk:us-east-1::platform/PHP 5.6 running on 64bit Amazon Linux/2.3.2
+	Tier: WebServer-Standard
+	CNAME: jbaker-wordpress-dev.us-east-1.elasticbeanstalk.com
+	Updated: 2017-03-25 22:13:34.241000+00:00
+	Status: Ready
+	Health: Green
 
-Next, click on the Configuration menu link and select the small gear icon
-in the Scaling properties window.
+If the Status attribute is `Ready` and the Health is `Green` then you should be able to open up the Wordpress application in a browser using the CNAME address in the output above. For example:
 
-image:../images/assignment7/eb-scaling.png["200","200"]
+	http://jbaker-wordpress-dev.us-east-1.elasticbeanstalk.com
 
-You can modify the minimum or maximum
-number of instances and the scaling policies in this section. Let's increase
-the minimum number of instances to 2. In the Auto Scaling section, set
-the following property:
+Go ahead and configure the Wordpress application like the previous assignment. Feel free to log into the Wordpress application and play around with the interface a little bit. For example, try to create a new blog post.
 
-  Minimum instance count: 2
+You just launched a highly-available Wordpress environment! What do you think? Was it easier to build the environment using the EB CLI and code versus using the AWS web console?
 
-Apply your changes after updating the instance count. You will now see that
-Elastic Beanstalk is updating your application environment. Go to the EC2
-dashboard and you will see that a new instance is launching.
+=== Modify the environment configuration
 
-====
+Go back to your terminal and check out the health of your deployed Wordpress environment:
 
-*Beta Console Instructions*
+	eb health
 
-In the scaling configuration page, change the environment type to: *Load balancing, auto scaling*.
+You should see two healthy instances. When we executed the `eb create` command we specified that the environment should launch with 2 instances (`--scale 2`). Let’s change the number of running instances in the environment to 1.
 
-Apply and save the change. Elastic Beanstalk will update your application environment and replace the existing EC2 instance. Wait until the updating is complete.
+You can modify the EB application environment by typing in the following command:
 
-Once the new EC2 instance is in place, go back to the scaling configuration page and set the Auto Scaling Minimum instance count to: *2*.
+	eb config
 
-Click the *Apply* button.
+This will open up a text editor containing the current application environment configuration. Look for the `aws:autoscaling:asg:` configuration section and change the MinSize attribute to `1`.
 
-====
+Save your file changes and exit the text editor. Notice how EB immediately begins to modify the deployed application environment. Wait for the update to complete.
 
-Go back to the Elastic Beanstalk dashboard and select your application. Wait
-until the application health is OK (green).
+Now, try checking the health of the EB environment again. The health command output might still show two running instances. If so, wait a few more minutes and check again. EB will eventually terminate one of the running instances.
 
-image:../images/assignment7/eb-ok.png["600","600"]
+Terminate the deployed application by running the command:
 
-Now, click on the application URL
-to open the WordPress site in your browser. Hit the browser refresh button a
-couple times. Your WordPress application is running on multiple instances --
-just like the previous assignment.
+	eb terminate --timeout 30
 
-Once you are satisfied that the web application is running properly, go
-back to the scaling properties of the application configuration and change
-the minimum instance count back to 1. After making the change, go to the EC2
-dashboard and look at the running instances.
+Watch as EB deletes all the infrastructure resources that were created to run your application.
 
-Um, shouldn't something be happening? Why isn't the auto scaling group setup
-by Elastic Beanstalk terminating one of the instances? Give it a few more
-minutes. You reduced the number of minimum instances to 1, but the number of
-maximum instances is 4. Therefore, the minimum and maximum required instances
-policy will have no impact on the two instances that are currently running.
-However, after a few minutes the auto scaling group will automatically
-terminate one of the instances due to a lack of requests being handled. Pretty
-cool, huh?
-
-You might be wondering how to go about updating the WordPress application in
-the future. You can't just log into each server and upload new code. Well,
-okay you could technically do that but anytime the auto scaling group
-launches a new EC2 instance it will load the old version of your code on the
-instance.
-
-Elastic Beanstalk makes it really easy to upload new code on running instances.
-If you go to the EB dashboard and select your application, you will notice
-a button on the application dashboard titled *Upload and Deploy*. This
-feature allows you to upload a new application archive. EB takes care of the
-deployment process based on your predefined deployment settings. Awesome!
 
 === Collect session data
 
-Connect to the running EC2 instance using a terminal program. Make a sub-directory
-in the home directory called `assignment-7-elastic-beanstalk-<username>` (where <username> is your GitHub account name). Change to that directory and
-create a Git repository (the Git client should already be installed on the server).
+Make a sub-directory in your home directory called `assignment7`. Change to that directory and
+create a git repository.
 
-====
+Next, configure the AWS CLI with your access key, secret key, and the current region. Review the previous assignment if you don't recall how to configure the CLI.
 
-*Beta Console Instructions*
+Run the following command to retrieve the Elastic Beanstalk events and store the events in a JSON file:
 
-In the configuration section, select the Instances configuration options and set the key-pair to one that you have installed on your workstation.
-
-Click the *Apply* button. This will cause Elastic Beanstalk to update the EC2 instance. Once the instance is updated, you should be able to log into the instance with your private key.
-
-====
-
-Next, configure the AWS CLI with your access key, secret key, and the current
-region. Review the previous assignment if you don't recall how to configure the
-CLI.
-
-Run the following command to retrieve the Elastic Beanstalk events and store
-the events in a JSON file:
-
-  $ aws elasticbeanstalk describe-events > eb-events.json
+  $ aws elasticbeanstalk describe-events --application-name wordpress > eb-events.json
 
 === Write YAML
 
-We learned in our class that YAML was designed to be a more human readable
-version of JSON (although I don't feel there's much of a difference in readability).
-Convert the following JSON data to YAML format. Enter the converted data into
+We learned in our class that YAML was designed to be a more human readable version of JSON (although I don't feel there's much of a difference in readability). Convert the following JSON data to YAML format. Enter the converted data into
 a file called `data.yaml` in the current directory.
 
-{
-  "Members": [
-    "Steve",
-    "Li",
-    "Marcel"
-  ],
-  "active": true,
-  "number": 3,
-  "items": {
-    "home": "table",
-    "work": [
-      "table", "chairs", "lamps"
-      ]
-  },
-  "greeting": "Hello World"
-}
+  {
+    "Members": [
+      "Steve",
+      "Li",
+      "Marcel"
+    ],
+    "active": true,
+    "number": 3,
+    "items": {
+      "home": "table",
+      "work": [
+        "table", "chairs", "lamps"
+        ]
+    },
+    "greeting": "Hello World"
+  }
 
 === Check your work
 
@@ -320,8 +198,7 @@ Here is what the contents of your git repository should look like before final s
 
 === Save your work
 
-Add the `data.yaml` and `eb-events.json` files to the Git repository. Commit
-the files to the repository.
+Add the `data.yaml` and `eb-events.json` files to the Git staging area and commit the files to the repository.
 
 Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/7b133d3aa0bc7920c4c6c116206e70e6
 
@@ -329,11 +206,7 @@ Configure your local Git repository to connect to this new GitHub repository. Pu
 
 === Terminate application environment
 
-The last step in the assignment is to delete all the AWS services you created.
-Unlike the previous assignment, removing these services is really easy since
-everything is managed by Elastic Beanstalk. Simply go to the EB dashboard,
-click on your application, and choose the terminate action. EB will terminate
-and clean up all the AWS resources for you.
+The last step in the assignment is to delete all the AWS resources you created. In this case, the only AWS resource still remaining is the `mgmt1` EC2 instance.
 
 == Submitting your assignment
 I will review your published work on GitHub after the homework due date.

@@ -244,7 +244,7 @@ The special escape characters make the `sed` command string look a little strang
 
 Let's start building a script to automate the installation of wordpress software
 on the instance. Create a new shell script called `wordpress_install`. The
-script should perform the following tasks in the order below:
+script should perform all of the following tasks in the order below:
 
 {blank}
 
@@ -297,7 +297,7 @@ d) Modify the following line to replace `localhost` with your MySQL RDS instance
 
   define('DB_HOST', 'localhost');
 
-e) Finally, add the following two lines to the configuration file replacing `(load balancer DNS name)` with the DNS name of your load balancer.
+e) Finally, the script should add the following two lines to the configuration file, using the DSN name of your load balancer instead of `(load balancer DNS name)`.
 
   define('WP_HOME', 'http://(load balancer DNS name)/wordpress');
   define('WP_SITEURL', 'http://(load balancer DNS name)/wordpress');
@@ -519,7 +519,7 @@ Create a small batch script called `getdata.sh` which performs the following:
   * Copies the output of the following command into a text file in the current
   directory called `activity.json`:
 
-  aws autoscaling describe-scaling-activities --auto-scaling-group-name wordpress-web-group
+  aws autoscaling describe-scaling-activities --auto-scaling-group-name wordpress-web-group --region us-west-2 --output json
 
   * Copies the /var/www/html/wordpress/wp-config.php file to the current directory into
   a file with the same name.
