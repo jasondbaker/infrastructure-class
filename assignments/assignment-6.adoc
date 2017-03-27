@@ -514,21 +514,16 @@ The CLI will prompt you for your API credentials. Your AWS user account has an A
 The default region name for the AWS CLI configuration is: `us-west-2` and just
 select the default output format (none).
 
-Next, type in the following command to view all the autoscaling activities:
-
-  $ aws autoscaling describe-scaling-activities --auto-scaling-group-name wordpress-web-group
-
-You should see a long text output including a list of activities with each
-having a Description, ActivityId, StartTime, etc.
-
 Next, change to the `wpinstall` directory in your home directory.
 
+Type in the following command to view all the autoscaling activities and copy them to a test file called `activity.json`:
+
+  $ aws autoscaling describe-scaling-activities --auto-scaling-group-name wordpress-web-group --output json > activity.json
+
+Take a look at the contents of the `activity.json` file. You should see a long text output including a list of activities with each
+having a Description, ActivityId, StartTime, etc.
+
 Create a small batch script called `getdata.sh` which performs the following:
-
-  * Copies the output of the following command into a text file in the current
-  directory called `activity.json`:
-
-  aws autoscaling describe-scaling-activities --auto-scaling-group-name wordpress-web-group --region us-west-2 --output json
 
   * Copies the /var/www/html/wordpress/wp-config.php file to the current directory into
   a file with the same name.
