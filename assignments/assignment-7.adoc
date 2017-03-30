@@ -48,6 +48,9 @@ The bottom line is that a code-based approach is easier to document, automate, a
 
 Go ahead and create a new t2.micro linux instance called `mgmt1` in a default VPC in the us-east-1 (N. Virginia) region. Yes, you can use the AWS console for this task (but this is the last time!).
 
+[NOTE]
+If you accidentally deleted the default VPC in the us-east-1 region you can try to use one of the other regions such as us-west-1. You will have to modify the assignment instructions accordingly. You can also contact AWS support and ask them to recreate the default VPC in us-east-1 for you.
+
 === Setup EB CLI configuration
 
 Connect to the instance via ssh once it is available and install the Elastic Beanstalk CLI. The EB CLI is a command-line tool you can use to control the AWS EB service. It's kind of like a service-specific version of the AWS CLI. Type in the following command to install the EB CLI on the instance:
@@ -71,7 +74,7 @@ Next, provide your API access key and secret key so that the EB CLI can manage r
 	(aws-access-id): (type in your aws-access-id)
 	(aws-secret-key): (type in your aws-secret-key)
 
-An application in Elastic Beanstalk is a resource that contains a set of application versions (source), environments, and saved configurations that are associated with a single web application. Each time you deploy your source code to Elastic Beanstalk using the EB CLI, a new application version is created. Select the `Create New Application` option.
+An application in Elastic Beanstalk is a resource that contains a set of application versions (source), environments, and saved configurations that are associated with a single web application. Each time you deploy your source code to Elastic Beanstalk using the EB CLI, a new application version is created.
 
 The default application name is the name of the folder in which you ran `eb init`. Let’s set this to `wordpress`:
 
@@ -91,7 +94,7 @@ Notice how the EB CLI setup a hidden subdirectory called `.elasticbeanstalk` wit
 
 Now we need to create a new environment which will support our application. An environment consists of all the AWS resources needed to power the app -- EC2 instances, ELB, RDS database, auto-scaling group, security groups, etc. Launch the environment by running the command:
 
-	eb create --database --scale 2 --timeout 30
+	eb create wordpress-dev --vpc --database --scale 2 --timeout 30
 
 This command will ask a series of questions before launching the environment. Use the following settings, substituting `<name>` in the DNS CNAME prefix setting with your unique UST userId (i.e., `bake2352-wordpress-dev`):
 
@@ -102,6 +105,9 @@ This command will ask a series of questions before launching the environment. Us
 	RDS DB master password: (choose one)
 
 The EB CLI will automatically upload the Wordpress application to EB as a deployment package. Now watch as the EB service builds the infrastructure environment for your application. This process may take about 20 minutes.
+
+[NOTE]
+Elastic Beanstalk uses the access permissions associated with your IAM account to create resources such as EC2 instances and security groups. If the creation process fails, your IAM account may not have the proper permissions in place to create all the necessary resources. You should go into the IAM console and add the AdministratorAccess policy to your account.
 
 After the launch process completes, check out the status of your EB environment by using the following command:
 
