@@ -94,7 +94,7 @@ Notice how the EB CLI setup a hidden subdirectory called `.elasticbeanstalk` wit
 
 Now we need to create a new environment which will support our application. An environment consists of all the AWS resources needed to power the app -- EC2 instances, ELB, RDS database, auto-scaling group, security groups, etc. Launch the environment by running the command:
 
-	eb create wordpress-dev --vpc --database --scale 2 --timeout 30
+	eb create wordpress-dev --database --scale 2 --timeout 30
 
 This command will ask a series of questions before launching the environment. Use the following settings, substituting `<name>` in the DNS CNAME prefix setting with your unique UST userId (i.e., `bake2352-wordpress-dev`):
 
