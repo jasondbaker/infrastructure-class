@@ -98,8 +98,6 @@ Now we need to create a new environment which will support our application. An e
 
 This command will ask a series of questions before launching the environment. Use the following settings, substituting `<name>` in the DNS CNAME prefix setting with your unique UST userId (i.e., `bake2352-wordpress-dev`):
 
-	Environment name: wordpress-dev
-	DNS CNAME prefix: <name>-wordpress-dev
 	Load balancer type: classic
 	RDS DB name: wordpressdb
 	RDS DB master password: (choose one)
