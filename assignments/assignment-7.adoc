@@ -96,7 +96,7 @@ Now we need to create a new environment which will support our application. An e
 
 	eb create wordpress-dev --database --scale 2 --timeout 30
 
-This command will ask a series of questions before launching the environment. Use the following settings, substituting `<name>` in the DNS CNAME prefix setting with your unique UST userId (i.e., `bake2352-wordpress-dev`):
+This command will ask a series of questions before launching the environment:
 
 	Load balancer type: classic
 	RDS DB name: wordpressdb
@@ -167,7 +167,7 @@ Next, configure the AWS CLI with your access key, secret key, and the current re
 
 Run the following command to retrieve the Elastic Beanstalk events and store the events in a JSON file:
 
-  $ aws elasticbeanstalk describe-events --application-name wordpress > eb-events.json
+  $ aws elasticbeanstalk describe-events --application-name wordpress-dev > eb-events.json
 
 === Write YAML
 
