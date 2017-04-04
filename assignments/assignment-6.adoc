@@ -501,14 +501,14 @@ IAM Role with the instance. Type in the following command:
 
 The CLI will prompt you for your API credentials. Your AWS user account has an Access Key and a Secret Key configured to allow you to programmatically access the AWS API. The keys are located in your account properties in IAM. If you do not know your secret key, you can use IAM to generate a new one since previously generated keys cannot be recovered. Note, this secret API is not the same as your private server key.
 
-The default region name for the AWS CLI configuration is: `us-west-2` and just
-select the default output format (none).
+The default region name for the AWS CLI configuration is: `us-west-2` and
+select the `json` output format.
 
 Next, change to the `wpinstall` directory in your home directory.
 
 Type in the following command to view all the autoscaling activities and copy them to a test file called `activity.json`:
 
-  $ aws autoscaling describe-scaling-activities --auto-scaling-group-name wordpress-web-group --output json > activity.json
+  $ aws autoscaling describe-scaling-activities --auto-scaling-group-name wordpress-web-group > activity.json
 
 Take a look at the contents of the `activity.json` file. You should see a long text output including a list of activities with each
 having a Description, ActivityId, StartTime, etc.
