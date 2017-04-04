@@ -300,16 +300,6 @@ d) Modify the following line in the `wp-config.php` file to replace `localhost` 
 
   define('DB_HOST', 'localhost');
 
-e) Finally, the script should add the following two lines to the `wp-config.php` configuration file, using the DSN name of your load balancer instead of `(load balancer DNS name)`.
-
-  define('WP_HOME', 'http://(load balancer DNS name)/wordpress');
-  define('WP_SITEURL', 'http://(load balancer DNS name)/wordpress');
-
-.Example
-----
-define('WP_HOME', 'http://wordpressLB-2127306763.us-west-2.elb.amazonaws.com/wordpress');
-define('WP_SITEURL', 'http://wordpressLB-2127306763.us-west-2.elb.amazonaws.com/wordpress');
-----
 
 [WARNING]
 ====
