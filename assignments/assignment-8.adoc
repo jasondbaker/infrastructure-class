@@ -51,9 +51,10 @@ EC2 instances on port 80. Additionally, the two instances need to be members of 
 allows incoming traffic on ports 22 and 80.
 
 The engineering manager would like users to be able to provide two *input parameters* when launching the stack:
-    * A parameter called *InstanceType* that defines the instance type for the instances.
-        ** The allowable type must be one of the following: t2.micro or t2.small
-    * A parameter called *KeyPair* that specifies the server key-pair name for the EC2 instances.
+
+  * A parameter called *InstanceType* that defines the instance type for the instances.
+      ** The allowable type must be one of the following: t2.micro or t2.small
+  * A parameter called *KeyPair* that specifies the server key-pair name for the EC2 instances.
 
 Also, she would like you to create an output called *URL* that displays the load balancer dns name
 after the stack is launched.
