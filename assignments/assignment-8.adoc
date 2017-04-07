@@ -59,22 +59,23 @@ The engineering manager would like users to be able to provide two *input parame
 Also, she would like you to create an output called *URL* that displays the load balancer dns name
 after the stack is launched.
 
-  * Create a new stack called *WebserversDev* in us-east-1.
-  * Create a new VPC called: *EngineeringVPC*
+The stack template should create the following resources:
+
+  * A new VPC called: *EngineeringVPC*
     ** CIDR block should be: 10.0.0.0/16
     ** The VPC should enable DNS hostnames.
     ** The VPC should have one subnet called: *PublicSubnet*
         *** Subnet has a CIDR block of 10.0.0.0/24
     ** The subnet should be able to route data out to the Internet.
-  * Create two EC2 instances named (tagged) *web1* and *web2* in the PublicSubnet.
+  * Two EC2 instances named (tagged) *web1* and *web2* in the PublicSubnet.
     ** Instance type: <use input parameter>
     ** Use this public AMI image: *ami-3ea13f29*
     ** Server key-pair: <use input parameter>
 
-  * Create a security group named *WebserversSG* in the VPC.
+  * A security group named *WebserversSG* in the VPC.
     ** Allow incoming requests on port 22 from 0.0.0.0/0
     ** Allow incoming requests on port 80 from 0.0.0.0/0
-  * Create a load balancer (classic v1) named *EngineeringLB*
+  * A load balancer (classic v1) named *EngineeringLB*
     ** Load balance incoming requests on port 80 and send to instance port 80 using the http protocol.
     ** Load balancer health check via http on port 80 to the "/" url location.
 
@@ -86,8 +87,8 @@ The names of the resources you configure in your stack template must *exactly* m
 === Launch the stack
 
 Once you have created and validated your template, save it to your local file
-system. Next launch your new stack, provide the proper input parameters, and watch AWS CloudFormation go through the
-build process. It will take a few minutes for CloudFormation to build the stack
+system. Next launch your new stack, called *WebserversDev*, in us-east-1 and provide the proper input parameters. Watch as AWS CloudFormation goes through the
+build process and creates the resources defined in the template. It will take a few minutes for CloudFormation to build the stack
 resources.
 
 It's likely that your stack launch will fail to complete the first time you try
