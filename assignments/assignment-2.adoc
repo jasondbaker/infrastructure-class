@@ -27,6 +27,8 @@ One of the key DevOps practices we learn about in this class is the use of autom
 
 It's important that you follow the instructions in each assignment and type in required files and resources with the proper names. All names are case sensitive, so a name like "Web1" is not the same as "web1". If you misspell a name, use the wrong case, or put a file in the wrong directory location you will lose points on your assignment. This is the easiest way to lose points, and also the most preventable. You should *always double-check your work* to make sure it accurately reflects the requirements specified in the assignment.
 
+I will never ask you to submit an empty file -- in other words, a file with no contents. If I ask you to run a command and store the output of a command in a file, I expect the file to contain meaningful information. You should always carefully review the content of your files before submitting your assignment. 
+
 == The assignment
 
 Let's get started!
