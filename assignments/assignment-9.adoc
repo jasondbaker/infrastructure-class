@@ -49,15 +49,14 @@ You will use the Ansible software installed on `mgmt1` to configure the `web1` a
 which means that the proper access credentials need to be in place on `mgmt1` in
 order to establish shell connections with the two other servers.
 
+Once the stack launch successfully completes, log into the `mgmt1` system and change to the `/home/ec2-user/.ssh` directory. Notice that there is a set of access keys located in this directory -- `key.pem` and `key.pem.pub`. These are the ssh keys that Ansible will use to connect with the managed hosts -- `web1` and `database1`.
 
-Once the stack launch successfully completes, log into the `mgmt1` system and change to the `/home/ec2-user/.ssh` directory. We will create a new pair of security keys that Ansible can use to ssh from the `mgmt1` server to the servers it is configuring. Use the following command to create a new pair of keys. Note, there is no need to setup a passphrase when creating these keys.
+You need to copy the public key, basically the contents of the `key.pem.pub` file, into the `/home/ec2-user/.ssh/authorized_keys` files on the `web1` and `database1` instances. Do not overwrite the existing contents of the `authorized_keys` files! If you do, you will need to start this assignment over. Simply append the new public key to the existing contents of these files.
 
-  ssh-keygen -f key.pem
-
-Next, you need to copy the new public key, basically the contents of the `key.pem.pub` file, into the `/home/ec2-user/.ssh/authorized_keys` files on the `web1` and `database1` instances. Do not overwrite the existing contents of the `authorized_keys` files! If you do, you will need to start this assignment over. Simply append the new public key to the existing contents of these files.
+You can use your terminal program to copy this data from one system to another. You can also use the secure copy (`scp`) command to copy the public key to your local workstation, and then copy it from your local workstation to each of the managed hosts.
 
 [WARNING]
-Make sure your copy-and-paste operation isn't inserting extra newline characters into the `authorized_keys` files. If Ansible is unable to connect to the other services because of a publickey error, this is most likely the reason.
+If you use your terminal program to copy-and-paste the key from one system to another, make sure this operation isn't inserting extra newline characters into the `authorized_keys` files. If Ansible is unable to connect to the other services because of a publickey error, this is most likely the reason.
 
 
 == Test Ansible
