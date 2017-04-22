@@ -42,39 +42,25 @@ automatically install and configure Ansible software on the management server. I
 common to use a small amount of scripting code to bootstrap configuration management software
 onto a new system.
 
-Launch a new stack using the `AnsibleSystems.json` template into the us-east-1 region. Remember to specify your server keypair name when launching the stack. You can give the stack any name you like.
+Launch a new stack using the `AnsibleSystems.json` template into the us-east-1 region. Remember to specify your server keypair name when launching the stack. You can give the stack any name you like. When you create the stack, you will need to click a checkbox acknowledging the creation of IAM resources.
 
 You will use the Ansible software installed on `mgmt1` to configure the `web1` and
 `database1` systems. Ansible communicates with remote hosts using the SSH protocol
 which means that the proper access credentials need to be in place on `mgmt1` in
-order to establish shell connections with the two other servers.
-
-Once the stack launch successfully completes, log into the `mgmt1` system and change to the `/home/ec2-user/.ssh` directory. Notice that there is a set of access keys located in this directory -- `key.pem` and `key.pem.pub`. These are the ssh keys that Ansible will use to connect with the managed hosts -- `web1` and `database1`.
-
-You need to copy the public key, basically the contents of the `key.pem.pub` file, into the `/home/ec2-user/.ssh/authorized_keys` files on the `web1` and `database1` instances. Do not overwrite the existing contents of the `authorized_keys` files! If you do, you will need to start this assignment over. Simply append the new public key to the existing contents of these files.
-
-You can use your terminal program to copy this data from one system to another. You can also use the secure copy (`scp`) command to copy the public key to your local workstation, and then copy it from your local workstation to each of the managed hosts.
-
-[WARNING]
-If you use your terminal program to copy-and-paste the key from one system to another, make sure this operation isn't inserting extra newline characters into the `authorized_keys` files. If Ansible is unable to connect to the other services because of a publickey error, this is most likely the reason.
+order to establish shell connections with the two other servers. Fortunately, the CloudFormation stack automates the setup of ssh credentials on all of the hosts.
 
 
 == Test Ansible
 
-Log into the `mgmt1` instance and change into a directory called `ansible`. Initialize a new git repository in this directory. Notice that the `ansible`
-directory contains a couple configuration files, including a `hosts` file. Take a look at this file now.
+Log into the `mgmt1` instance and create a new directory in your home directory called `ansible`. Initialize a new Git repository in this directory.
 
 Ansible uses an inventory file to track managed hosts. The inventory file specifies
 how Ansible should connect to a remote host. It usually contains the IP address or
 fully-qualified domain name of a host, as well as the username and key required to
 access a host. The `hosts` file was dynamically created by CloudFormation, so it already
-contains the IP addresses of the `web1` and `database1` instances.
+contains the IP addresses of the `web1` and `database1` instances. Take a look at the hosts file located at `/etc/ansible/hosts`.
 
-Ansible will look in the `/etc/ansible` directory for an inventory
-file by default. However, the `ansible.cfg` file directs Ansible to use the hosts file
-in the `/home/ec2-user/ansible` directory instead.
-
-You can verify that Ansible can successfully access the remote hosts by typing the
+You can verify that Ansible can successfully access the managed hosts by typing the
 following commands:
 
     $ ansible all -m ping
@@ -90,8 +76,7 @@ You should see a response from Ansible that looks like this:
       "ping": "pong"
   }
 
-If Ansible returns a successful `pong` for each host then you are ready to move
-on! If not, then your private key file is likely setup incorrectly.
+If Ansible returns a successful `pong` for each host then you are ready to move on!
 
 == Configure servers
 
@@ -163,9 +148,7 @@ Commit your git repository (in the `ansible` directory) to this repository.
 Here is what the contents of your git repository should look like before final submission:
 
 ====
-&#x2523; ansible.cfg +
 &#x2523; default.conf.j2 +
-&#x2523; hosts +
 &#x2517; playbook.yml +
 
 ====
@@ -176,6 +159,8 @@ The last step in the assignment is to delete all the AWS services you created.
 Go to the CloudFormation dashboard, select your running stack, and choose the
 delete option. Watch as CloudFormation deletes all the resources previously
 created.
+
+CloudFormation will not remove the S3 bucket it created for the stack because the bucket contains a couple files. Remember, AWS will not allow you to delete a bucket that contains files. You will need to manually delete these files and then the bucket. The bucket name will look something like: `<stack name>-tokenbucket-284jd923jf0`.
 
 == Submitting your assignment
 I will review your published work on GitHub after the homework due date.
