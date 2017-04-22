@@ -231,13 +231,14 @@ REST/ JSON / YAML |
 Assignment 6 +
 Read _Practice of Cloud Systems Administration_ Chapters 4 & 5
 
-|9 | 4/3 | Infrastructure as Code +
-CloudFormation
+|9 | 4/3 | Infrastructure as code +
+CloudFormation +
  |
 Assignment 7 +
 Read _Infrastructure as Code_ Chapters 5 & 6
 
-|10 | 4/10 | Infrastructure as Code +
+|10 | 4/10 | Configuration Management +
+Ansible +
  |
 Assignment 8 +
 Read _Infrastructure as Code_ Chapters 7 & 8
@@ -253,7 +254,10 @@ Docker |
 Assignment 10 +
 Read _Infrastructure as Code_ Chapters 11 & 12
 
-|13 | 5/8 | Microservices |
+|13 | 5/8 | Service Discovery +
+Container Orchestration +
+Docker Swarm +
+ |
 Assignment 11 +
 Read _Infrastructure as Code_ Chapter 15 +
 
