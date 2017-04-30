@@ -22,22 +22,17 @@ Let's start shipping those containers!
 
 === Build a Docker server
 
-The first step in the assignment is to build a Docker server running on EC2.
+The first step in the assignment is to build a Docker server running on EC2 using the following CloudFormation template:
 
-Create a CloudFormation template called `docker-template.json` containing a single EC2 t2.micro instance named `web1` running the standard Amazon Linux AMI. You will need to be able to access this instance on port 22 (ssh) and port 8080. Also, configure the userdata property of this instance to update the system packages and install Docker.
+  https://s3.amazonaws.com/seis665/docker-single-server.json
 
-Here are the commands you will need to use in the userdata field:
-
-  yum update -y
-  yum install -y docker
-  service docker start
-  usermod -a -G docker ec2-user
-
-Launch your template to create a new stack. Shell into the new EC2 instance and run the following command:
+Launch the template to create a new stack. Shell into the new EC2 instance and run the following command:
 
   $ docker --version
 
-The system should respond with the docker client version.
+The system should respond with the docker client version. Something like:
+
+  Docker version 1.12.6, build 7392c3b/1.12.6
 
 === Working with containers
 
@@ -55,7 +50,7 @@ Let's do something a little more sophisticated. Type in the following command:
 
 This tells docker to load the `ubuntu` image and run the `bash` command. Additionally, docker was told to setup a virtual terminal connection to the container (-it). You should see the docker client download the ubuntu image and launch the container. It may take a minute or two the first time you run this command.
 
-Now that you are in the container terminal, look around a little bit. Type in `ls / ` to view the root directory. Containers have their own filesystem that overlays the filesystem on the host. Exit out of the container terminal by typing `exit`.
+Now that you are in the container terminal, look around a little bit. Type in `ls /` to view the root directory. Containers have their own filesystem that overlays the filesystem on the host. Exit out of the container terminal by typing `exit`.
 
 Notice that the container you just launched is now stopped (`docker ps`). This was an interactive container just like the first container you created. Try to run the container again, type:
 
@@ -75,7 +70,7 @@ You should see this container running on the system. Check the docker process li
 
 === Repository
 
-Create a git repository in the ec2-user's home directory (/home/ec-user). Create a sub-directory in the home directory called `html`. Create a small text file called `index.html` inside the `html` directory with the following content:
+Create sub-directory in the ec2-user's home directory called `docker` and create a Git repository within this directory. Create another sub-directory in the home directory called `html`. Create a small text file called `index.html` inside the `html` directory with the following content:
 
     <html>
     <body>
@@ -85,16 +80,16 @@ Create a git repository in the ec2-user's home directory (/home/ec-user). Create
 
 === The Dockerfile
 
-The Dockerfile is a handy way to encapsulate all the configuration commands required to build a single container. The remaining part of your assignment this week is to build a simple nginx webserver container using a Dockerfile. Create the `Dockerfile` in the ec2-users's home directory (`/home/ec2-user`). Here are the requirements for the Dockerfile:
+The Dockerfile is a handy way to encapsulate all the configuration commands required to build a single container. The remaining part of your assignment this week is to build a simple nginx webserver container using a Dockerfile. Create the `Dockerfile` in the `docker` directory. Here are the actions the Dockerfile should do:
 
   * The container must use the `nginx` image.
   * Set the maintainer of the Dockerfile to your name and email address.
   * The container should expose port 80.
-  * Copy the files from the `html` directory you created in the previous step to the /usr/share/nginx/html directory in the container.
+  * Copy the files from the `html` directory you created earlier in the assignment to the /usr/share/nginx/html directory in the container.
   * The container should have an environment variable mapping the key `NGINX_PORT` to the value `80`.
 
 
-After you create the Dockerfile, you need to create a small shell script called `launch.sh` which performs the following tasks:
+After you create the Dockerfile, you need to create a small shell script called `launch.sh` in the `docker` directory which performs the following tasks:
 
 * Builds a Docker image called `corp-nginx` based on the instructions in the `Dockerfile`.
 * Launches a *detached* Docker container named `corpweb` using the `corp-nginx` image.
@@ -110,7 +105,6 @@ Here is what the contents of your git repository should look like before final s
 
 ====
 &#x2523; Dockerfile +
-&#x2523; docker-template.json +
 &#x2517; launch.sh
 
 ====
@@ -119,7 +113,7 @@ Here is what the contents of your git repository should look like before final s
 
 Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/eeea11fb5604fd931c30393c935aba6b
 
-Copy your CloudFormation template to the local git repository (located in the /home/ec2-user directory) on the web1 server. Make sure all of the files in this directory are committed to the git repository. Then, push the local git repository to Github.
+Then, push the local git repository to Github.
 
 === Terminate application environment
 
