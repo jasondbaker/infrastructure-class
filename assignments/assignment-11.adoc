@@ -70,13 +70,21 @@ You should see this container running on the system. Check the docker process li
 
 === Repository
 
-Create sub-directory in the ec2-user's home directory called `docker` and create a Git repository within this directory. Create another sub-directory in the home directory called `html`. Create a small text file called `index.html` inside the `html` directory with the following content:
+Create a sub-directory in the ec2-user's home directory called `docker` and create a Git repository within this directory. Create another sub-directory within the `docker` directory called `html`. Create a small text file called `index.html` inside the `html` directory with the following content:
 
     <html>
     <body>
       <h1>My webserver</h1>
     </body>
     </html>
+
+The directory structure and location of the `index.html` file should look something like this:
+
+====
+&#x2523;docker +
+&#x2503;&#160;&#160;&#x2517; html +
+&#x2503;&#160;&#160;&#160;&#160;&#x2517; index.html +
+====
 
 === The Dockerfile
 
