@@ -1,0 +1,3 @@
+[webserver]
+webserver ansible_host=54.172.201.188 ansible_user=ec2-user
+localhost ansible_host=127.0.0.1 ansible_connection=local 

@@ -1,0 +1,29 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+# Configure the vagrant instance
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.box = 'geerlingguy/centos6' 
+  config.vm.box_version = '1.1.6' 
+
+  config.vm.host_name = "classweb1.seis665.vm"
+  config.vm.network "private_network", ip: '192.168.44.44'
+  config.vm.network "forwarded_port", guest: 80, host: 8081
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "512"
+  end
+
+  # bootstrap the system
+  config.vm.provision "shell" do |s|
+    s.name = "bootstrap"
+    s.path = "provision.sh"
+  end
+
+  # default shared folders
+  config.vm.synced_folder ".", "/vagrant"
+
+end

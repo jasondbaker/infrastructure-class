@@ -1,0 +1,589 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Metadata": {
+        "AWS::CloudFormation::Designer": {
+            "af6b3b52-8737-4190-840d-c3563b2a0f7e": {
+                "size": {
+                    "width": 720,
+                    "height": 570
+                },
+                "position": {
+                    "x": 240,
+                    "y": 260
+                },
+                "z": 1,
+                "embeds": [
+                    "5070a22e-7d4f-4dcf-9895-af5cc70d7a1c",
+                    "236cdb38-5f35-4f53-96ab-20e3b9089028",
+                    "726684f1-2312-4d39-9be4-1ccbcf99b6a6"
+                ]
+            },
+            "726684f1-2312-4d39-9be4-1ccbcf99b6a6": {
+                "size": {
+                    "width": 510,
+                    "height": 510
+                },
+                "position": {
+                    "x": 300,
+                    "y": 290
+                },
+                "z": 2,
+                "parent": "af6b3b52-8737-4190-840d-c3563b2a0f7e",
+                "embeds": [
+                    "58cfe257-cba1-44b9-9e3c-82bb4696685a",
+                    "e92450e7-4dd6-437b-aebd-d4612e59b824",
+                    "6da2f739-386f-4f4f-b21c-f0cd5b72f8fe"
+                ]
+            },
+            "6da2f739-386f-4f4f-b21c-f0cd5b72f8fe": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 480,
+                    "y": 470
+                },
+                "z": 3,
+                "parent": "726684f1-2312-4d39-9be4-1ccbcf99b6a6",
+                "embeds": [],
+                "dependson": [
+                    "fe16df86-4d84-4bf3-9807-46feb4f5125e"
+                ],
+                "isrelatedto": [
+                    "236cdb38-5f35-4f53-96ab-20e3b9089028"
+                ]
+            },
+            "236cdb38-5f35-4f53-96ab-20e3b9089028": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 480,
+                    "y": 290
+                },
+                "z": 2,
+                "parent": "af6b3b52-8737-4190-840d-c3563b2a0f7e",
+                "embeds": []
+            },
+            "61782f4a-6895-47a2-92a6-8c834573b4b0": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 510,
+                    "y": 210
+                },
+                "z": 1,
+                "embeds": []
+            },
+            "8679848c-c217-453d-a811-bbd3373d3560": {
+                "source": {
+                    "id": "61782f4a-6895-47a2-92a6-8c834573b4b0"
+                },
+                "target": {
+                    "id": "af6b3b52-8737-4190-840d-c3563b2a0f7e"
+                },
+                "z": 1
+            },
+            "5070a22e-7d4f-4dcf-9895-af5cc70d7a1c": {
+                "size": {
+                    "width": 310,
+                    "height": 260
+                },
+                "position": {
+                    "x": 600,
+                    "y": 470
+                },
+                "z": 0,
+                "parent": "af6b3b52-8737-4190-840d-c3563b2a0f7e",
+                "embeds": [
+                    "fe16df86-4d84-4bf3-9807-46feb4f5125e"
+                ]
+            },
+            "fe16df86-4d84-4bf3-9807-46feb4f5125e": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 670,
+                    "y": 490
+                },
+                "z": 3,
+                "parent": "5070a22e-7d4f-4dcf-9895-af5cc70d7a1c",
+                "embeds": [],
+                "references": [
+                    "61782f4a-6895-47a2-92a6-8c834573b4b0"
+                ],
+                "dependson": [
+                    "61782f4a-6895-47a2-92a6-8c834573b4b0"
+                ]
+            },
+            "206bdfdf-81c7-4cb1-a63b-f4042e6efd7e": {
+                "source": {
+                    "id": "fe16df86-4d84-4bf3-9807-46feb4f5125e"
+                },
+                "target": {
+                    "id": "61782f4a-6895-47a2-92a6-8c834573b4b0"
+                },
+                "z": 4
+            },
+            "99a01b59-7102-4801-93ab-f7e49cb028d4": {
+                "source": {
+                    "id": "fe16df86-4d84-4bf3-9807-46feb4f5125e"
+                },
+                "target": {
+                    "id": "61782f4a-6895-47a2-92a6-8c834573b4b0"
+                },
+                "z": 5
+            },
+            "ece76d74-8e45-45b3-8411-15a1eae2b203": {
+                "source": {
+                    "id": "6da2f739-386f-4f4f-b21c-f0cd5b72f8fe"
+                },
+                "target": {
+                    "id": "fe16df86-4d84-4bf3-9807-46feb4f5125e"
+                },
+                "z": 6
+            },
+            "ffc2448b-bc15-438d-b6c8-3bb6971ef98f": {
+                "source": {
+                    "id": "5070a22e-7d4f-4dcf-9895-af5cc70d7a1c"
+                },
+                "target": {
+                    "id": "726684f1-2312-4d39-9be4-1ccbcf99b6a6"
+                },
+                "z": 0
+            },
+            "a5c2c38f-fc09-462f-b0ea-b519505677cf": {
+                "source": {
+                    "id": "fe16df86-4d84-4bf3-9807-46feb4f5125e",
+                    "selector": "g:nth-child(1) g:nth-child(4) g:nth-child(5) circle:nth-child(1)     ",
+                    "port": "AWS::DependencyLink-*"
+                },
+                "target": {
+                    "id": "61782f4a-6895-47a2-92a6-8c834573b4b0"
+                },
+                "z": 4
+            },
+            "e92450e7-4dd6-437b-aebd-d4612e59b824": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 380,
+                    "y": 470
+                },
+                "z": 3,
+                "parent": "726684f1-2312-4d39-9be4-1ccbcf99b6a6",
+                "embeds": [],
+                "dependson": [
+                    "fe16df86-4d84-4bf3-9807-46feb4f5125e"
+                ],
+                "isrelatedto": [
+                    "236cdb38-5f35-4f53-96ab-20e3b9089028"
+                ]
+            },
+            "58cfe257-cba1-44b9-9e3c-82bb4696685a": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 330,
+                    "y": 350
+                },
+                "z": 3,
+                "parent": "726684f1-2312-4d39-9be4-1ccbcf99b6a6",
+                "embeds": [],
+                "dependson": [
+                    "fe16df86-4d84-4bf3-9807-46feb4f5125e"
+                ],
+                "isrelatedto": [
+                    "236cdb38-5f35-4f53-96ab-20e3b9089028"
+                ]
+            }
+        }
+    },
+    "Resources": {
+        "S3AccessRole": {
+           "Type": "AWS::IAM::Role",
+           "Properties": {
+              "AssumeRolePolicyDocument": {
+                 "Version" : "2012-10-17",
+                 "Statement": [ {
+                    "Effect": "Allow",
+                    "Principal": {
+                       "Service": [ "ec2.amazonaws.com" ]
+                    },
+                    "Action": [ "sts:AssumeRole" ]
+                 } ]
+              },
+              "Path": "/"
+           }
+        },
+        "S3RolePolicies": {
+                 "Type": "AWS::IAM::Policy",
+                 "Properties": {
+                    "PolicyName": "s3full",
+                    "PolicyDocument": {
+                       "Version" : "2012-10-17",
+                       "Statement": [ {
+                          "Effect": "Allow",
+                          "Action": "s3:*",
+                          "Resource": "*"
+                       } ]
+                    },
+                    "Roles": [ { "Ref": "S3AccessRole" } ]
+                 }
+              },
+        "S3InstanceProfile": {
+           "Type": "AWS::IAM::InstanceProfile",
+           "Properties": {
+              "Path": "/",
+              "Roles": [ { "Ref": "S3AccessRole" } ]
+           }
+        },
+        "TokenBucket": {
+            "Type": "AWS::S3::Bucket",
+            "DeletionPolicy" : "Retain",
+            "Properties": {},
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "574154c4-1686-4470-9bce-c6e4c989798a"
+                }
+            }
+        },
+        "classVpc": {
+            "Type": "AWS::EC2::VPC",
+            "Properties": {
+                "EnableDnsSupport": "true",
+                "EnableDnsHostnames": "true",
+                "CidrBlock": "10.0.0.0/16",
+                "Tags": [
+                    {
+                        "Key": "Environment",
+                        "Value": "Test"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "af6b3b52-8737-4190-840d-c3563b2a0f7e"
+                }
+            }
+        },
+        "publicSubnet": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "classVpc"
+                },
+                "CidrBlock": "10.0.0.0/24"
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "726684f1-2312-4d39-9be4-1ccbcf99b6a6"
+                }
+            }
+        },
+        "web1": {
+            "Type": "AWS::EC2::Instance",
+            "DependsOn": [
+                "TokenBucket"
+            ],
+            "Properties": {
+                "InstanceType": "t2.micro",
+                "ImageId": "ami-22ce4934",
+                "IamInstanceProfile": {
+                  "Ref": "S3InstanceProfile"
+                },
+                "KeyName": {
+                    "Ref": "KeyName"
+                },
+                "NetworkInterfaces": [
+                    {
+                        "GroupSet": [
+                            {
+                                "Ref": "WebServerSecurityGroup"
+                            }
+                        ],
+                        "AssociatePublicIpAddress": "true",
+                        "DeviceIndex": "0",
+                        "DeleteOnTermination": "true",
+                        "SubnetId": {
+                            "Ref": "publicSubnet"
+                        }
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "web1"
+                    }
+                ],
+                "UserData" : {
+                  "Fn::Base64" : {
+                    "Fn::Join" : [
+                      "", [
+                        "#!/bin/bash -xe\n",
+                        "ssh-keygen -f /home/ec2-user/.ssh/web1-key.pem -q -N \"\"\n",
+                        "chown ec2-user:ec2-user /home/ec2-user/.ssh/web1-key.pem\n",
+                        "chown ec2-user:ec2-user /home/ec2-user/.ssh/web1-key.pem.pub\n",
+                        "aws s3 cp /home/ec2-user/.ssh/web1-key.pem s3://", { "Fn::Select" : [ "0", { "Fn::Split" : [ ".", {"Fn::GetAtt": ["TokenBucket","DomainName"]}] }] }, "/web1-key.pem --sse\n",
+                        "cat /home/ec2-user/.ssh/web1-key.pem.pub >> /home/ec2-user/.ssh/authorized_keys\n"
+                      ]
+                    ]
+                  }
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "6da2f739-386f-4f4f-b21c-f0cd5b72f8fe"
+                }
+            }
+        },
+        "database1": {
+            "Type": "AWS::EC2::Instance",
+            "DependsOn": [
+                "TokenBucket"
+            ],
+            "Properties": {
+                "InstanceType": "t2.micro",
+                "ImageId": "ami-22ce4934",
+                "IamInstanceProfile": {
+                  "Ref": "S3InstanceProfile"
+                },
+                "KeyName": {
+                    "Ref": "KeyName"
+                },
+                "NetworkInterfaces": [
+                    {
+                        "GroupSet": [
+                            {
+                                "Ref": "WebServerSecurityGroup"
+                            }
+                        ],
+                        "AssociatePublicIpAddress": "true",
+                        "DeviceIndex": "0",
+                        "DeleteOnTermination": "true",
+                        "SubnetId": {
+                            "Ref": "publicSubnet"
+                        }
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "database1"
+                    }
+                ],
+                "UserData" : {
+                  "Fn::Base64" : {
+                    "Fn::Join" : [
+                      "", [
+                        "#!/bin/bash -xe\n",
+                        "ssh-keygen -f /home/ec2-user/.ssh/database1-key.pem -q -N \"\"\n",
+                        "chown ec2-user:ec2-user /home/ec2-user/.ssh/database1-key.pem\n",
+                        "chown ec2-user:ec2-user /home/ec2-user/.ssh/database1-key.pem.pub\n",
+                        "aws s3 cp /home/ec2-user/.ssh/database1-key.pem s3://", { "Fn::Select" : [ "0", { "Fn::Split" : [ ".", {"Fn::GetAtt": ["TokenBucket","DomainName"]}] }] }, "/database1-key.pem --sse\n",
+                        "cat /home/ec2-user/.ssh/database1-key.pem.pub >> /home/ec2-user/.ssh/authorized_keys\n"
+                      ]
+                    ]
+                  }
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "e92450e7-4dd6-437b-aebd-d4612e59b824"
+                }
+            }
+        },
+        "mgmt1": {
+            "Type": "AWS::EC2::Instance",
+            "DependsOn" : ["TokenBucket", "web1", "database1"],
+            "Properties": {
+                "InstanceType": "t2.micro",
+                "ImageId": "ami-22ce4934",
+                "IamInstanceProfile": {
+                  "Ref": "S3InstanceProfile"
+                },
+                "KeyName": {
+                    "Ref": "KeyName"
+                },
+                "NetworkInterfaces": [
+                    {
+                        "GroupSet": [
+                            {
+                                "Ref": "WebServerSecurityGroup"
+                            }
+                        ],
+                        "AssociatePublicIpAddress": "true",
+                        "DeviceIndex": "0",
+                        "DeleteOnTermination": "true",
+                        "SubnetId": {
+                            "Ref": "publicSubnet"
+                        }
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "mgmt1"
+                    }
+                ],
+                "UserData" : {
+                  "Fn::Base64" : {
+                    "Fn::Join" : [
+                      "", [
+                        "#!/bin/bash -xe\n",
+                        "yum update -y\n",
+                        "yum install ansible --enablerepo=epel -y\n",
+                        "yum install git -y\n",
+                        "echo \"web1 ansible_host=", {"Fn::GetAtt" : ["web1","PrivateIp"]}, " ansible_user=ec2-user ansible_ssh_private_key_file=/home/ec2-user/.ssh/web1-key.pem\" > /etc/ansible/hosts\n",
+                        "echo \"database1 ansible_host=", {"Fn::GetAtt" : ["database1","PrivateIp"]}, " ansible_user=ec2-user ansible_ssh_private_key_file=/home/ec2-user/.ssh/database1-key.pem\" >> /etc/ansible/hosts\n",
+                        "echo \"[defaults]\" > /etc/ansible/ansible.cfg\n",
+                        "echo \"inventory = /etc/ansible/hosts\" >> /etc/ansible/ansible.cfg\n",
+                        "echo \"host_key_checking = False\" >> /etc/ansible/ansible.cfg\n",
+                        "aws s3 cp s3://", { "Fn::Select" : [ "0", { "Fn::Split" : [ ".", {"Fn::GetAtt": ["TokenBucket","DomainName"]}] }] }, "/web1-key.pem /home/ec2-user/.ssh/web1-key.pem\n",
+                        "aws s3 cp s3://", { "Fn::Select" : [ "0", { "Fn::Split" : [ ".", {"Fn::GetAtt": ["TokenBucket","DomainName"]}] }] }, "/database1-key.pem /home/ec2-user/.ssh/database1-key.pem\n"
+                      ]
+                    ]
+                  }
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "58cfe257-cba1-44b9-9e3c-82bb4696685a"
+                }
+            }
+        },
+        "WebServerSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "classVpc"
+                },
+                "GroupDescription": "Allow access from HTTP and SSH traffic",
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "80",
+                        "ToPort": "80",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "22",
+                        "ToPort": "22",
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "236cdb38-5f35-4f53-96ab-20e3b9089028"
+                }
+            }
+        },
+        "InternetGateway": {
+            "Type": "AWS::EC2::InternetGateway",
+            "Properties": {},
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "61782f4a-6895-47a2-92a6-8c834573b4b0"
+                }
+            }
+        },
+        "EC2VPCG509RW": {
+            "Type": "AWS::EC2::VPCGatewayAttachment",
+            "Properties": {
+                "InternetGatewayId": {
+                    "Ref": "InternetGateway"
+                },
+                "VpcId": {
+                    "Ref": "classVpc"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "8679848c-c217-453d-a811-bbd3373d3560"
+                }
+            }
+        },
+        "PublicRouteTable": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "classVpc"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "5070a22e-7d4f-4dcf-9895-af5cc70d7a1c"
+                }
+            }
+        },
+        "PublicRoute": {
+            "Type": "AWS::EC2::Route",
+            "Properties": {
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "RouteTableId": {
+                    "Ref": "PublicRouteTable"
+                },
+                "GatewayId": {
+                    "Ref": "InternetGateway"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "fe16df86-4d84-4bf3-9807-46feb4f5125e"
+                }
+            },
+            "DependsOn": [
+                "InternetGateway"
+            ]
+        },
+        "EC2SRTA56MZL": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PublicRouteTable"
+                },
+                "SubnetId": {
+                    "Ref": "publicSubnet"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "ffc2448b-bc15-438d-b6c8-3bb6971ef98f"
+                }
+            }
+        }
+    },
+    "Parameters": {
+        "KeyName": {
+            "Description": "Name of your EC2 KeyPair to enable SSH access to the instances.",
+            "Type": "AWS::EC2::KeyPair::KeyName",
+            "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
+        }
+    },
+    "Outputs": {
+        "web1PublicIp": {
+          "Value": {"Fn::GetAtt": ["web1","PublicIp"]},
+          "Description": "web1 public IP"
+        },
+        "database1PublicIp": {
+          "Value": {"Fn::GetAtt": ["database1","PublicIp"]},
+          "Description": "database1 public IP"
+        },
+        "mgmt1PublicIp": {
+            "Value": {"Fn::GetAtt": ["mgmt1","PublicIp"]},
+            "Description": "mgmt1 public IP"
+        }
+    }
+}

@@ -1,0 +1,45 @@
+{
+    "variables": {
+        "aws_access_key": "",
+        "aws_secret_key": ""
+    },
+
+    "builders": [{
+        "type": "amazon-ebs",
+        "access_key": "{{user `aws_access_key`}}",
+        "secret_key": "{{user `aws_secret_key`}}",
+        "region": "us-east-1",
+        "source_ami": "ami-2d39803a",
+        "instance_type": "t2.micro",
+        "ssh_username": "ubuntu",
+        "ami_name": "jbaker-testing {{timestamp}}",
+        "vpc_id": "vpc-9e4550f9",
+        "subnet_id": "subnet-2501dd08"
+        },
+
+        {
+        "type": "docker",
+        "image": "ubuntu:14.04",
+        "export_path": "docker-image.tar"
+
+    }],
+
+    "provisioners": [{
+        "type": "shell",
+        "inline": [
+            "sleep 30",
+            "sudo apt-get update -y",
+            "sudo apt-get install -y redis-server"
+        ]
+    }],
+
+    "post-processors": [
+        [
+            {
+                "type": "docker-import",
+                "repository": "jbaker/redis",
+                "tag": "latest"
+            }
+        ]
+    ]
+}

@@ -1,0 +1,420 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Resources": {
+        "SSMAccessRole": {
+           "Type": "AWS::IAM::Role",
+           "Properties": {
+              "AssumeRolePolicyDocument": {
+                 "Version" : "2012-10-17",
+                 "Statement": [ {
+                    "Effect": "Allow",
+                    "Principal": {
+                       "Service": [ "ec2.amazonaws.com" ]
+                    },
+                    "Action": [ "sts:AssumeRole" ]
+                 } ]
+              },
+              "Path": "/"
+           }
+        },
+        "SSMRolePolicies": {
+                 "Type": "AWS::IAM::Policy",
+                 "Properties": {
+                    "PolicyName": "ssmProperties",
+                    "PolicyDocument": {
+                       "Version" : "2012-10-17",
+                       "Statement": [ {
+                          "Effect": "Allow",
+                          "Action": [
+                            "ssm:DescribeParameters",
+                            "ssm:PutParameter",
+                            "ssm:GetParameters",
+                            "ssm:DeleteParameter"
+                          ],
+                          "Resource": { "Fn::Join" : [ "", [
+                            "arn:aws:ssm:",
+                            { "Ref" : "AWS::Region" },
+                            ":",
+                            { "Ref" : "AWS::AccountId"},
+                            ":parameter/swarm.*",
+                            ]]}
+                       } ]
+                    },
+                    "Roles": [ { "Ref": "SSMAccessRole" } ]
+                 }
+              },
+        "SSMInstanceProfile": {
+           "Type": "AWS::IAM::InstanceProfile",
+           "Properties": {
+              "Path": "/",
+              "Roles": [ { "Ref": "SSMAccessRole" } ]
+           }
+        },
+        "swarmVpc": {
+            "Type": "AWS::EC2::VPC",
+            "Properties": {
+                "EnableDnsSupport": "true",
+                "EnableDnsHostnames": "true",
+                "CidrBlock": "10.0.0.0/16",
+                "Tags": [
+                    {
+                        "Key": "Project",
+                        "Value": "SwarmCluster"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "af6b3b52-8737-4190-840d-c3563b2a0f7e"
+                }
+            }
+        },
+        "publicSubnet": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "swarmVpc"
+                },
+                "CidrBlock": "10.0.0.0/24"
+            }
+        },
+        "manager1": {
+            "Type": "AWS::EC2::Instance",
+            "Properties": {
+                "InstanceType": { "Ref": "InstanceTypeManager" },
+                "ImageId": { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "AMI" ]},
+                "IamInstanceProfile": {
+                  "Ref": "SSMInstanceProfile"
+                },
+                "KeyName": {
+                    "Ref": "KeyName"
+                },
+                "NetworkInterfaces": [
+                    {
+                        "GroupSet": [
+                            {
+                                "Ref": "SwarmSecurityGroup"
+                            }
+                        ],
+                        "AssociatePublicIpAddress": "true",
+                        "DeviceIndex": "0",
+                        "DeleteOnTermination": "true",
+                        "SubnetId": {
+                            "Ref": "publicSubnet"
+                        }
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "manager1"
+                    }
+                ],
+                "UserData" : {
+                  "Fn::Base64" : {
+                    "Fn::Join" : [
+                      "", [
+                        "#!/bin/bash -xe\n",
+                        "DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::=\"--force-confdef\" -o Dpkg::Options::=\"--force-confold\" upgrade\n",
+                        "apt-get install apt-transport-https ca-certificates curl software-properties-common\n",
+                        "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -\n",
+                        "add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"\n",
+                        "apt-get update\n",
+                        "apt-get install python3-pip -y\n",
+                        "pip3 install --upgrade awscli\n",
+                        "apt-get install jq -y\n",
+                        "apt-get install docker-ce=17.03.1~ce-0~ubuntu-xenial -y\n",
+                        "docker swarm init --advertise-addr $(curl http://169.254.169.254/latest/meta-data/local-ipv4)\n",
+                        "TOKEN=$(docker swarm join-token worker -q)\n",
+                        "aws ssm put-parameter --name swarm.token --type String --value \"${TOKEN}\" --overwrite --region ", { "Ref" : "AWS::Region" },"\n",
+                        "MGRTOKEN=$(docker swarm join-token manager -q)\n",
+                        "aws ssm put-parameter --name swarm.mgrtoken --type String --value \"${TOKEN}\" --overwrite --region ", { "Ref" : "AWS::Region" },"\n",
+                        "docker node update --availability drain $(hostname)\n"
+                      ]
+                    ]
+                  }
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "6da2f739-386f-4f4f-b21c-f0cd5b72f8fe"
+                }
+            },
+            "DependsOn": [
+                "PublicRoute"
+            ]
+        },
+        "SwarmELB": {
+            "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+            "Properties": {
+              "Subnets": [ {"Ref": "publicSubnet"} ],
+              "Listeners": [
+                {
+                  "InstancePort" : "80",
+                  "Protocol": "TCP",
+                  "LoadBalancerPort": "80",
+
+                }
+              ],
+              "HealthCheck": {
+                "HealthyThreshold" : "2",
+                "Interval" : "30",
+                "Target" : "HTTP:80/health",
+                "Timeout" : "10",
+                "UnhealthyThreshold" : "2"
+              },
+              "SecurityGroups": [{"Ref": "SwarmSecurityGroup"}]
+
+            }
+        },
+        "SwarmWorkerGroup": {
+            "Type": "AWS::AutoScaling::AutoScalingGroup",
+            "DependsOn": ["manager1"],
+            "Properties": {
+              "LaunchConfigurationName": {"Ref": "SwarmWorkerLaunchConf"},
+              "VPCZoneIdentifier": [{ "Ref": "publicSubnet" }],
+              "MinSize": { "Ref": "WorkerCount" },
+              "MaxSize": { "Ref": "WorkerCount" },
+              "DesiredCapacity": { "Ref": "WorkerCount" },
+              "LoadBalancerNames": [ {"Ref": "SwarmELB"} ],
+              "Tags": [
+                {
+                  "Key": "Name",
+                  "Value": "cluster worker",
+                  "PropagateAtLaunch": "true"
+                }
+              ]
+            }
+        },
+        "SwarmWorkerLaunchConf": {
+            "Type": "AWS::AutoScaling::LaunchConfiguration",
+            "DependsOn" : ["VPCGatewayAttachment"],
+            "Properties": {
+                "AssociatePublicIpAddress": true,
+                "InstanceType": { "Ref": "InstanceTypeWorker" },
+                "ImageId": { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "AMI" ]},
+                "IamInstanceProfile": {
+                  "Ref": "SSMInstanceProfile"
+                },
+                "KeyName": { "Ref": "KeyName" },
+                "SecurityGroups": [{"Ref": "SwarmSecurityGroup"}],
+                "UserData" : {
+                  "Fn::Base64" : {
+                    "Fn::Join" : [
+                      "", [
+                        "#!/bin/bash -xe\n",
+                        "DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::=\"--force-confdef\" -o Dpkg::Options::=\"--force-confold\" upgrade\n",
+                        "apt-get install apt-transport-https ca-certificates curl software-properties-common\n",
+                        "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -\n",
+                        "add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"\n",
+                        "apt-get update\n",
+                        "apt-get install python3-pip -y\n",
+                        "pip3 install --upgrade awscli\n",
+                        "apt-get install jq -y\n",
+                        "apt-get install docker-ce=17.03.1~ce-0~ubuntu-xenial -y\n",
+                        "TOKEN=$(aws ssm get-parameters --name \"swarm.token\" --region ", { "Ref" : "AWS::Region" }, " | jq '.Parameters[0].Value' --raw-output)\n",
+                        "docker swarm join --token $TOKEN ", {"Fn::GetAtt": ["manager1","PrivateIp"]}, ":2377\n"
+                      ]
+                    ]
+                  }
+                }
+            }
+        },
+        "SwarmSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "swarmVpc"
+                },
+                "GroupDescription": "Allow access from HTTP and SSH traffic",
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "80",
+                        "ToPort": "80",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "22",
+                        "ToPort": "22",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "2377",
+                        "ToPort": "2377",
+                        "CidrIp": "10.0.0.0/24"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "7946",
+                        "ToPort": "7946",
+                        "CidrIp": "10.0.0.0/24"
+                    },
+                    {
+                        "IpProtocol": "udp",
+                        "FromPort": "7946",
+                        "ToPort": "7946",
+                        "CidrIp": "10.0.0.0/24"
+                    },
+                    {
+                        "IpProtocol": "udp",
+                        "FromPort": "4789",
+                        "ToPort": "4789",
+                        "CidrIp": "10.0.0.0/24"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "236cdb38-5f35-4f53-96ab-20e3b9089028"
+                }
+            }
+        },
+        "InternetGateway": {
+            "Type": "AWS::EC2::InternetGateway",
+            "Properties": {},
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "61782f4a-6895-47a2-92a6-8c834573b4b0"
+                }
+            }
+        },
+        "VPCGatewayAttachment": {
+            "Type": "AWS::EC2::VPCGatewayAttachment",
+            "Properties": {
+                "InternetGatewayId": {
+                    "Ref": "InternetGateway"
+                },
+                "VpcId": {
+                    "Ref": "swarmVpc"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "8679848c-c217-453d-a811-bbd3373d3560"
+                }
+            }
+        },
+        "PublicRouteTable": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "swarmVpc"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "5070a22e-7d4f-4dcf-9895-af5cc70d7a1c"
+                }
+            }
+        },
+        "PublicRoute": {
+            "Type": "AWS::EC2::Route",
+            "Properties": {
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "RouteTableId": {
+                    "Ref": "PublicRouteTable"
+                },
+                "GatewayId": {
+                    "Ref": "InternetGateway"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "fe16df86-4d84-4bf3-9807-46feb4f5125e"
+                }
+            },
+            "DependsOn": [
+                "InternetGateway"
+            ]
+        },
+        "EC2SRTA56MZL": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PublicRouteTable"
+                },
+                "SubnetId": {
+                    "Ref": "publicSubnet"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "ffc2448b-bc15-438d-b6c8-3bb6971ef98f"
+                }
+            }
+        }
+    },
+    "Mappings" : {
+      "RegionMap" : {
+        "us-east-1" : {
+            "AMI" : "ami-80861296"
+        },
+        "us-east-2" : {
+            "AMI" : "ami-618fab04"
+        },
+        "us-west-1" : {
+            "AMI" : "ami-2afbde4a"
+        },
+        "us-west-2" : {
+            "AMI" : "ami-efd0428f"
+        }
+      }
+    },
+    "Parameters": {
+      "InstanceTypeManager": {
+            "Description": "Cluster manager nodes EC2 instance type",
+            "Type": "String",
+            "Default": "t2.micro",
+            "AllowedValues": [
+              "t2.micro",
+              "t2.small",
+              "t2.medium",
+              "m3.medium",
+              "m3.large",
+              "m3.xlarge",
+              "m3.2xlarge"
+            ],
+            "ConstraintDescription": "must be a valid EC2 instance type."
+          },
+      "InstanceTypeWorker": {
+            "Description": "Cluster worker nodes EC2 instance type",
+            "Type": "String",
+            "Default": "t2.micro",
+            "AllowedValues": [
+              "t2.micro",
+              "t2.small",
+              "t2.medium",
+              "m3.medium",
+              "m3.large",
+              "m3.xlarge",
+              "m3.2xlarge"
+            ],
+            "ConstraintDescription": "must be a valid EC2 instance type."
+          },
+      "KeyName": {
+          "Description": "Name of your EC2 KeyPair to enable SSH access to the instances.",
+          "Type": "AWS::EC2::KeyPair::KeyName",
+          "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
+      },
+      "WorkerCount": {
+          "Description": "Number of swarm cluster worker nodes to create.",
+          "Type": "Number",
+          "MinValue": "1",
+          "MaxValue": "5",
+          "Default": "2"
+      }
+    },
+    "Outputs": {
+        "manager1PublicIp": {
+          "Value": {"Fn::GetAtt": ["manager1","PublicIp"]},
+          "Description": "manager1 public IP (login as ubuntu user)"
+        },
+        "swarmELB": {
+          "Value": {"Fn::GetAtt": ["SwarmELB","DNSName"]},
+          "Description": "swarm load balancer dns name"
+        },
+    }
+}
