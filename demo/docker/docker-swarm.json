@@ -171,7 +171,7 @@
               "Tags": [
                 {
                   "Key": "Name",
-                  "Value": "swarm manager",
+                  "Value": "swarm initiator",
                   "PropagateAtLaunch": "true"
                 }
               ]
@@ -207,9 +207,63 @@
                         "TOKEN=$(docker swarm join-token worker -q)\n",
                         "aws ssm put-parameter --name ", { "Ref" : "workerToken" }, " --type String --value \"${TOKEN}\" --overwrite --region ", { "Ref" : "AWS::Region" },"\n",
                         "MGRTOKEN=$(docker swarm join-token manager -q)\n",
-                        "aws ssm put-parameter --name ", { "Ref" : "managerToken" }, " --type String --value \"${TOKEN}\" --overwrite --region ", { "Ref" : "AWS::Region" },"\n",
+                        "aws ssm put-parameter --name ", { "Ref" : "managerToken" }, " --type String --value \"${MGRTOKEN}\" --overwrite --region ", { "Ref" : "AWS::Region" },"\n",
                         "INITIP=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)\n",
                         "aws ssm put-parameter --name ", { "Ref" : "initiatorIp" }, " --type String --value \"${INITIP}\" --overwrite --region ", { "Ref" : "AWS::Region" },"\n",
+                        "docker node update --availability drain $(hostname)\n"
+                      ]
+                    ]
+                  }
+                }
+            }
+        },
+        "SwarmManagerGroup": {
+            "Type": "AWS::AutoScaling::AutoScalingGroup",
+            "DependsOn": ["SwarmInitiatorGroup"],
+            "Properties": {
+              "LaunchConfigurationName": {"Ref": "SwarmManagerLaunchConf"},
+              "VPCZoneIdentifier": [ {"Ref": "swarmSubnet0"}, {"Ref": "swarmSubnet1"}, {"Ref": "swarmSubnet2"} ],
+              "MinSize": { "Ref": "SwarmManagerCount" },
+              "MaxSize": { "Ref": "SwarmManagerCount" },
+              "DesiredCapacity": { "Ref": "SwarmManagerCount" },
+              "Tags": [
+                {
+                  "Key": "Name",
+                  "Value": "swarm manager",
+                  "PropagateAtLaunch": "true"
+                }
+              ]
+            }
+        },
+        "SwarmManagerLaunchConf": {
+            "Type": "AWS::AutoScaling::LaunchConfiguration",
+            "DependsOn" : ["VPCGatewayAttachment"],
+            "Properties": {
+                "AssociatePublicIpAddress": true,
+                "InstanceType": { "Ref": "InstanceTypeManager" },
+                "ImageId": { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "AMI" ]},
+                "IamInstanceProfile": {
+                  "Ref": "SSMInstanceProfile"
+                },
+                "KeyName": { "Ref": "KeyName" },
+                "SecurityGroups": [{"Ref": "SwarmSecurityGroup"}],
+                "UserData" : {
+                  "Fn::Base64" : {
+                    "Fn::Join" : [
+                      "", [
+                        "#!/bin/bash -xe\n",
+                        "DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::=\"--force-confdef\" -o Dpkg::Options::=\"--force-confold\" upgrade\n",
+                        "apt-get install apt-transport-https ca-certificates curl software-properties-common\n",
+                        "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -\n",
+                        "add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"\n",
+                        "apt-get update\n",
+                        "apt-get install python3-pip -y\n",
+                        "pip3 install --upgrade awscli\n",
+                        "apt-get install jq -y\n",
+                        "apt-get install docker-ce=17.03.1~ce-0~ubuntu-xenial -y\n",
+                        "MGRTOKEN=$(aws ssm get-parameters --name \"", { "Ref" : "managerToken" }, "\" --region ", { "Ref" : "AWS::Region" }, " | jq '.Parameters[0].Value' --raw-output)\n",
+                        "INITIP=$(aws ssm get-parameters --name \"", { "Ref" : "initiatorIp" }, "\" --region ", { "Ref" : "AWS::Region" }, " | jq '.Parameters[0].Value' --raw-output)\n",
+                        "docker swarm join --token $MGRTOKEN ${INITIP}:2377\n",
                         "docker node update --availability drain $(hostname)\n"
                       ]
                     ]
@@ -245,9 +299,9 @@
             "Properties": {
               "LaunchConfigurationName": {"Ref": "SwarmWorkerLaunchConf"},
               "VPCZoneIdentifier": [{ "Ref": "swarmSubnet0" }, { "Ref": "swarmSubnet1" }, { "Ref": "swarmSubnet2" }],
-              "MinSize": { "Ref": "WorkerCount" },
-              "MaxSize": { "Ref": "WorkerCount" },
-              "DesiredCapacity": { "Ref": "WorkerCount" },
+              "MinSize": { "Ref": "SwarmWorkerCount" },
+              "MaxSize": { "Ref": "SwarmWorkerCount" },
+              "DesiredCapacity": { "Ref": "SwarmWorkerCount" },
               "LoadBalancerNames": [ {"Ref": "SwarmELB"} ],
               "Tags": [
                 {
@@ -489,7 +543,14 @@
           "Type": "AWS::EC2::KeyPair::KeyName",
           "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
       },
-      "WorkerCount": {
+      "SwarmManagerCount": {
+          "Description": "Number of swarm cluster manager nodes to create.",
+          "Type": "Number",
+          "MinValue": "1",
+          "MaxValue": "5",
+          "Default": "2"
+      },
+      "SwarmWorkerCount": {
           "Description": "Number of swarm cluster worker nodes to create.",
           "Type": "Number",
           "MinValue": "1",
