@@ -40,7 +40,12 @@
                                  { "Ref" : "AWS::Region" },
                                  ":",
                                  { "Ref" : "AWS::AccountId"},
-                                 ":parameter/swarm.*"
+                                 {
+                                   "Fn::Join" : [
+                                     "",
+                                     [ ":parameter/", { "Ref": "AWS::StackName" }, ".*" ]
+                                   ]
+                                 }
                                ]
                              ]
                             }
@@ -56,6 +61,48 @@
               "Path": "/",
               "Roles": [ { "Ref": "SSMAccessRole" } ]
            }
+        },
+        "initiatorIp" : {
+          "Type" : "AWS::SSM::Parameter",
+          "Properties" : {
+            "Name" : {
+              "Fn::Join" : [
+                "",
+                [ { "Ref": "AWS::StackName" }, ".initiatorIp" ]
+              ]
+            },
+            "Type" : "String",
+            "Value" : "0",
+            "Description": "IP address of initial swarm cluster manager."
+          }
+        },
+        "managerToken" : {
+          "Type" : "AWS::SSM::Parameter",
+          "Properties" : {
+            "Name" : {
+              "Fn::Join" : [
+                "",
+                [ { "Ref": "AWS::StackName" }, ".managerToken" ]
+              ]
+            },
+            "Type" : "String",
+            "Value" : "0",
+            "Description": "Swarm cluster manager token."
+          }
+        },
+        "workerToken" : {
+          "Type" : "AWS::SSM::Parameter",
+          "Properties" : {
+            "Name" : {
+              "Fn::Join" : [
+                "",
+                [ { "Ref": "AWS::StackName" }, ".workerToken" ]
+              ]
+            },
+            "Type" : "String",
+            "Value" : "0",
+            "Description": "Swarm cluster worker token."
+          }
         },
         "swarmVpc": {
             "Type": "AWS::EC2::VPC",
@@ -158,11 +205,11 @@
                         "apt-get install docker-ce=17.03.1~ce-0~ubuntu-xenial -y\n",
                         "docker swarm init --advertise-addr $(curl http://169.254.169.254/latest/meta-data/local-ipv4)\n",
                         "TOKEN=$(docker swarm join-token worker -q)\n",
-                        "aws ssm put-parameter --name swarm.", { "Ref" : "AWS::StackName" }, ".token --type String --value \"${TOKEN}\" --overwrite --region ", { "Ref" : "AWS::Region" },"\n",
+                        "aws ssm put-parameter --name ", { "Ref" : "workerToken" }, " --type String --value \"${TOKEN}\" --overwrite --region ", { "Ref" : "AWS::Region" },"\n",
                         "MGRTOKEN=$(docker swarm join-token manager -q)\n",
-                        "aws ssm put-parameter --name swarm.", { "Ref" : "AWS::StackName" }, ".mgrtoken --type String --value \"${TOKEN}\" --overwrite --region ", { "Ref" : "AWS::Region" },"\n",
+                        "aws ssm put-parameter --name ", { "Ref" : "managerToken" }, " --type String --value \"${TOKEN}\" --overwrite --region ", { "Ref" : "AWS::Region" },"\n",
                         "INITIP=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)\n",
-                        "aws ssm put-parameter --name swarm.", { "Ref" : "AWS::StackName" }, ".initip --type String --value \"${INITIP}\" --overwrite --region ", { "Ref" : "AWS::Region" },"\n",
+                        "aws ssm put-parameter --name ", { "Ref" : "initiatorIp" }, " --type String --value \"${INITIP}\" --overwrite --region ", { "Ref" : "AWS::Region" },"\n",
                         "docker node update --availability drain $(hostname)\n"
                       ]
                     ]
@@ -237,8 +284,8 @@
                         "pip3 install --upgrade awscli\n",
                         "apt-get install jq -y\n",
                         "apt-get install docker-ce=17.03.1~ce-0~ubuntu-xenial -y\n",
-                        "TOKEN=$(aws ssm get-parameters --name \"swarm.", { "Ref" : "AWS::StackName" }, ".token\" --region ", { "Ref" : "AWS::Region" }, " | jq '.Parameters[0].Value' --raw-output)\n",
-                        "INITIP=$(aws ssm get-parameters --name \"swarm.", { "Ref" : "AWS::StackName" }, ".initip\" --region ", { "Ref" : "AWS::Region" }, " | jq '.Parameters[0].Value' --raw-output)\n",
+                        "TOKEN=$(aws ssm get-parameters --name \"", { "Ref" : "workerToken" }, "\" --region ", { "Ref" : "AWS::Region" }, " | jq '.Parameters[0].Value' --raw-output)\n",
+                        "INITIP=$(aws ssm get-parameters --name \"", { "Ref" : "initiatorIp" }, "\" --region ", { "Ref" : "AWS::Region" }, " | jq '.Parameters[0].Value' --raw-output)\n",
                         "docker swarm join --token $TOKEN ${INITIP}:2377\n"
                       ]
                     ]
