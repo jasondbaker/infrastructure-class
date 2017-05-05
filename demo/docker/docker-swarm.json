@@ -78,38 +78,36 @@
                 "CidrBlock": "10.0.0.0/24"
             }
         },
-        "manager1": {
-            "Type": "AWS::EC2::Instance",
+        "SwarmInitiatorGroup": {
+            "Type": "AWS::AutoScaling::AutoScalingGroup",
+            "DependsOn": ["PublicRoute"],
             "Properties": {
+              "LaunchConfigurationName": {"Ref": "SwarmInitiatorLaunchConf"},
+              "VPCZoneIdentifier": [{ "Ref": "publicSubnet" }],
+              "MinSize": "1",
+              "MaxSize": "1",
+              "DesiredCapacity": "1",
+              "Tags": [
+                {
+                  "Key": "Name",
+                  "Value": "swarm manager",
+                  "PropagateAtLaunch": "true"
+                }
+              ]
+            }
+        },
+        "SwarmInitiatorLaunchConf": {
+            "Type": "AWS::AutoScaling::LaunchConfiguration",
+            "DependsOn" : ["VPCGatewayAttachment"],
+            "Properties": {
+                "AssociatePublicIpAddress": true,
                 "InstanceType": { "Ref": "InstanceTypeManager" },
                 "ImageId": { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "AMI" ]},
                 "IamInstanceProfile": {
                   "Ref": "SSMInstanceProfile"
                 },
-                "KeyName": {
-                    "Ref": "KeyName"
-                },
-                "NetworkInterfaces": [
-                    {
-                        "GroupSet": [
-                            {
-                                "Ref": "SwarmSecurityGroup"
-                            }
-                        ],
-                        "AssociatePublicIpAddress": "true",
-                        "DeviceIndex": "0",
-                        "DeleteOnTermination": "true",
-                        "SubnetId": {
-                            "Ref": "publicSubnet"
-                        }
-                    }
-                ],
-                "Tags": [
-                    {
-                        "Key": "Name",
-                        "Value": "manager1"
-                    }
-                ],
+                "KeyName": { "Ref": "KeyName" },
+                "SecurityGroups": [{"Ref": "SwarmSecurityGroup"}],
                 "UserData" : {
                   "Fn::Base64" : {
                     "Fn::Join" : [
@@ -129,20 +127,14 @@
                         "aws ssm put-parameter --name swarm.token --type String --value \"${TOKEN}\" --overwrite --region ", { "Ref" : "AWS::Region" },"\n",
                         "MGRTOKEN=$(docker swarm join-token manager -q)\n",
                         "aws ssm put-parameter --name swarm.mgrtoken --type String --value \"${TOKEN}\" --overwrite --region ", { "Ref" : "AWS::Region" },"\n",
+                        "INITIP=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)\n",
+                        "aws ssm put-parameter --name swarm.initip --type String --value \"${INITIP}\" --overwrite --region ", { "Ref" : "AWS::Region" },"\n",
                         "docker node update --availability drain $(hostname)\n"
                       ]
                     ]
                   }
                 }
-            },
-            "Metadata": {
-                "AWS::CloudFormation::Designer": {
-                    "id": "6da2f739-386f-4f4f-b21c-f0cd5b72f8fe"
-                }
-            },
-            "DependsOn": [
-                "PublicRoute"
-            ]
+            }
         },
         "SwarmELB": {
             "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
@@ -169,7 +161,7 @@
         },
         "SwarmWorkerGroup": {
             "Type": "AWS::AutoScaling::AutoScalingGroup",
-            "DependsOn": ["manager1"],
+            "DependsOn": ["SwarmInitiatorGroup"],
             "Properties": {
               "LaunchConfigurationName": {"Ref": "SwarmWorkerLaunchConf"},
               "VPCZoneIdentifier": [{ "Ref": "publicSubnet" }],
@@ -213,7 +205,8 @@
                         "apt-get install jq -y\n",
                         "apt-get install docker-ce=17.03.1~ce-0~ubuntu-xenial -y\n",
                         "TOKEN=$(aws ssm get-parameters --name \"swarm.token\" --region ", { "Ref" : "AWS::Region" }, " | jq '.Parameters[0].Value' --raw-output)\n",
-                        "docker swarm join --token $TOKEN ", {"Fn::GetAtt": ["manager1","PrivateIp"]}, ":2377\n"
+                        "INITIP=$(aws ssm get-parameters --name \"swarm.initip\" --region ", { "Ref" : "AWS::Region" }, " | jq '.Parameters[0].Value' --raw-output)\n",
+                        "docker swarm join --token $TOKEN ${INITIP}:2377\n"
                       ]
                     ]
                   }
@@ -408,10 +401,6 @@
       }
     },
     "Outputs": {
-        "manager1PublicIp": {
-          "Value": {"Fn::GetAtt": ["manager1","PublicIp"]},
-          "Description": "manager1 public IP (login as ubuntu user)"
-        },
         "swarmELB": {
           "Value": {"Fn::GetAtt": ["SwarmELB","DNSName"]},
           "Description": "swarm load balancer dns name"
