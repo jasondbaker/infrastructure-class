@@ -18,43 +18,43 @@
            }
         },
         "SSMRolePolicies": {
-                 "Type": "AWS::IAM::Policy",
-                 "Properties": {
-                    "PolicyName": "ssmProperties",
-                    "PolicyDocument": {
-                       "Version" : "2012-10-17",
-                       "Statement": [
-                         {
-                           "Effect": "Allow",
-                           "Action": [
-                             "ssm:DescribeParameters",
-                             "ssm:PutParameter",
-                             "ssm:GetParameters",
-                             "ssm:DeleteParameter"
-                           ],
-                           "Resource": {
+           "Type": "AWS::IAM::Policy",
+           "Properties": {
+              "PolicyName": "ssmProperties",
+              "PolicyDocument": {
+                 "Version" : "2012-10-17",
+                 "Statement": [
+                   {
+                     "Effect": "Allow",
+                     "Action": [
+                       "ssm:DescribeParameters",
+                       "ssm:PutParameter",
+                       "ssm:GetParameters",
+                       "ssm:DeleteParameter"
+                     ],
+                     "Resource": {
+                       "Fn::Join" : [
+                         "",
+                         [
+                           "arn:aws:ssm:",
+                           { "Ref" : "AWS::Region" },
+                           ":",
+                           { "Ref" : "AWS::AccountId"},
+                           {
                              "Fn::Join" : [
                                "",
-                               [
-                                 "arn:aws:ssm:",
-                                 { "Ref" : "AWS::Region" },
-                                 ":",
-                                 { "Ref" : "AWS::AccountId"},
-                                 {
-                                   "Fn::Join" : [
-                                     "",
-                                     [ ":parameter/", { "Ref": "AWS::StackName" }, ".*" ]
-                                   ]
-                                 }
-                               ]
+                               [ ":parameter/", { "Ref": "AWS::StackName" }, ".*" ]
                              ]
-                            }
                            }
                          ]
-                    },
-                    "Roles": [ { "Ref": "SSMAccessRole" } ]
-                 }
+                       ]
+                      }
+                     }
+                   ]
               },
+              "Roles": [ { "Ref": "SSMAccessRole" } ]
+           }
+        },
         "SSMInstanceProfile": {
            "Type": "AWS::IAM::InstanceProfile",
            "Properties": {
@@ -109,62 +109,210 @@
             "Properties": {
                 "EnableDnsSupport": "true",
                 "EnableDnsHostnames": "true",
-                "CidrBlock": "10.0.0.0/16",
+                "CidrBlock": { "Ref": "VPCCIDR" },
                 "Tags": [
                     {
-                        "Key": "Project",
-                        "Value": "SwarmCluster"
+                        "Key": "Name",
+                        "Value": "swarmVpc"
                     }
                 ]
-            },
-            "Metadata": {
-                "AWS::CloudFormation::Designer": {
-                    "id": "af6b3b52-8737-4190-840d-c3563b2a0f7e"
-                }
             }
         },
-        "swarmSubnet0": {
+        "swarmPrivateSubnet1": {
             "Type": "AWS::EC2::Subnet",
             "Properties": {
                 "VpcId": {
                     "Ref": "swarmVpc"
                 },
-                "CidrBlock": "10.0.0.0/24",
+                "CidrBlock": { "Fn::Join" : [ "",
+                    [
+                      { "Fn::Select" : [ "0", { "Fn::Split" : [ ".", { "Ref": "VPCCIDR" } ] } ] },
+                      ".",
+                      { "Fn::Select" : [ "1", { "Fn::Split" : [ ".", { "Ref": "VPCCIDR" } ] } ] },
+                      ".",
+                      "1",
+                      ".",
+                      "0/24"
+                    ]
+                  ]
+                },
                 "AvailabilityZone" : {
                   "Fn::Select" : [ "0", { "Fn::GetAZs" : { "Ref" : "AWS::Region" }}]
-                }
+                },
+                "Tags" : [ { "Key": "Name", "Value": "swarmPrivateSubnet1"}]
             }
         },
-        "swarmSubnet1": {
+        "swarmPublicSubnet1": {
             "Type": "AWS::EC2::Subnet",
             "Properties": {
                 "VpcId": {
                     "Ref": "swarmVpc"
                 },
-                "CidrBlock": "10.0.1.0/24",
+                "MapPublicIpOnLaunch" : "true",
+                "CidrBlock": { "Fn::Join" : [ "",
+                    [
+                      { "Fn::Select" : [ "0", { "Fn::Split" : [ ".", { "Ref": "VPCCIDR" } ] } ] },
+                      ".",
+                      { "Fn::Select" : [ "1", { "Fn::Split" : [ ".", { "Ref": "VPCCIDR" } ] } ] },
+                      ".",
+                      "2",
+                      ".",
+                      "0/24"
+                    ]
+                  ]
+                },
+                "AvailabilityZone" : {
+                  "Fn::Select" : [ "0", { "Fn::GetAZs" : { "Ref" : "AWS::Region" }}]
+                },
+                "Tags" : [ { "Key": "Name", "Value": "swarmPublicSubnet1"}]
+            }
+        },
+        "swarmNat1EIP" : {
+          "Type" : "AWS::EC2::EIP",
+          "DependsOn" : "swarmVpc",
+          "Properties" : {
+            "Domain" : { "Ref" : "swarmVpc" }
+          }
+        },
+        "swarmNat1": {
+          "Type" : "AWS::EC2::NatGateway",
+          "Properties" : {
+            "AllocationId" : { "Fn::GetAtt" : [ "swarmNat1EIP", "AllocationId" ]},
+            "SubnetId" : { "Ref": "swarmPublicSubnet1" }
+          }
+        },
+        "swarmPrivateSubnet2": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "swarmVpc"
+                },
+                "CidrBlock": { "Fn::Join" : [ "",
+                    [
+                      { "Fn::Select" : [ "0", { "Fn::Split" : [ ".", { "Ref": "VPCCIDR" } ] } ] },
+                      ".",
+                      { "Fn::Select" : [ "1", { "Fn::Split" : [ ".", { "Ref": "VPCCIDR" } ] } ] },
+                      ".",
+                      "3",
+                      ".",
+                      "0/24"
+                    ]
+                  ]
+                },
                 "AvailabilityZone" : {
                   "Fn::Select" : [ "1", { "Fn::GetAZs" : { "Ref" : "AWS::Region" }}]
-                }
+                },
+                "Tags" : [ { "Key": "Name", "Value": "swarmPrivateSubnet2"}]
             }
         },
-        "swarmSubnet2": {
+        "swarmPublicSubnet2": {
             "Type": "AWS::EC2::Subnet",
             "Properties": {
                 "VpcId": {
                     "Ref": "swarmVpc"
                 },
-                "CidrBlock": "10.0.2.0/24",
+                "MapPublicIpOnLaunch" : "true",
+                "CidrBlock": { "Fn::Join" : [ "",
+                    [
+                      { "Fn::Select" : [ "0", { "Fn::Split" : [ ".", { "Ref": "VPCCIDR" } ] } ] },
+                      ".",
+                      { "Fn::Select" : [ "1", { "Fn::Split" : [ ".", { "Ref": "VPCCIDR" } ] } ] },
+                      ".",
+                      "4",
+                      ".",
+                      "0/24"
+                    ]
+                  ]
+                },
+                "AvailabilityZone" : {
+                  "Fn::Select" : [ "1", { "Fn::GetAZs" : { "Ref" : "AWS::Region" }}]
+                },
+                "Tags" : [ { "Key": "Name", "Value": "swarmPublicSubnet2"}]
+            }
+        },
+        "swarmNat2EIP" : {
+          "Type" : "AWS::EC2::EIP",
+          "DependsOn" : "swarmVpc",
+          "Properties" : {
+            "Domain" : { "Ref" : "swarmVpc" }
+          }
+        },
+        "swarmNat2": {
+          "Type" : "AWS::EC2::NatGateway",
+          "Properties" : {
+            "AllocationId" : { "Fn::GetAtt" : [ "swarmNat2EIP", "AllocationId" ]},
+            "SubnetId" : { "Ref": "swarmPublicSubnet2" }
+          }
+        },
+        "swarmPrivateSubnet3": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "swarmVpc"
+                },
+                "CidrBlock": { "Fn::Join" : [ "",
+                    [
+                      { "Fn::Select" : [ "0", { "Fn::Split" : [ ".", { "Ref": "VPCCIDR" } ] } ] },
+                      ".",
+                      { "Fn::Select" : [ "1", { "Fn::Split" : [ ".", { "Ref": "VPCCIDR" } ] } ] },
+                      ".",
+                      "5",
+                      ".",
+                      "0/24"
+                    ]
+                  ]
+                },
                 "AvailabilityZone" : {
                   "Fn::Select" : [ "2", { "Fn::GetAZs" : { "Ref" : "AWS::Region" }}]
-                }
+                },
+                "Tags" : [ { "Key": "Name", "Value": "swarmPrivateSubnet3"}]
             }
+        },
+        "swarmPublicSubnet3": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "swarmVpc"
+                },
+                "MapPublicIpOnLaunch" : "true",
+                "CidrBlock": { "Fn::Join" : [ "",
+                    [
+                      { "Fn::Select" : [ "0", { "Fn::Split" : [ ".", { "Ref": "VPCCIDR" } ] } ] },
+                      ".",
+                      { "Fn::Select" : [ "1", { "Fn::Split" : [ ".", { "Ref": "VPCCIDR" } ] } ] },
+                      ".",
+                      "6",
+                      ".",
+                      "0/24"
+                    ]
+                  ]
+                },
+                "AvailabilityZone" : {
+                  "Fn::Select" : [ "2", { "Fn::GetAZs" : { "Ref" : "AWS::Region" }}]
+                },
+                "Tags" : [ { "Key": "Name", "Value": "swarmPublicSubnet3"}]
+            }
+        },
+        "swarmNat3EIP" : {
+          "Type" : "AWS::EC2::EIP",
+          "DependsOn" : "swarmVpc",
+          "Properties" : {
+            "Domain" : { "Ref" : "swarmVpc" }
+          }
+        },
+        "swarmNat3": {
+          "Type" : "AWS::EC2::NatGateway",
+          "Properties" : {
+            "AllocationId" : { "Fn::GetAtt" : [ "swarmNat3EIP", "AllocationId" ]},
+            "SubnetId" : { "Ref": "swarmPublicSubnet3" }
+          }
         },
         "SwarmInitiatorGroup": {
             "Type": "AWS::AutoScaling::AutoScalingGroup",
-            "DependsOn": ["PublicRoute"],
+            "DependsOn": ["PublicSubnet1Route", "PublicSubnet2Route", "PublicSubnet3Route", "PrivateSubnet1Route", "PrivateSubnet2Route", "PrivateSubnet3Route"],
             "Properties": {
               "LaunchConfigurationName": {"Ref": "SwarmInitiatorLaunchConf"},
-              "VPCZoneIdentifier": [{"Ref": "swarmSubnet0"}, {"Ref": "swarmSubnet1"}, {"Ref": "swarmSubnet2"}],
+              "VPCZoneIdentifier": [{"Ref": "swarmPublicSubnet1"}, {"Ref": "swarmPublicSubnet2"}, {"Ref": "swarmPublicSubnet3"}],
               "MinSize": { "Ref": "SwarmInitiatorCount" },
               "MaxSize": { "Ref": "SwarmInitiatorCount" },
               "DesiredCapacity": { "Ref": "SwarmInitiatorCount" },
@@ -188,7 +336,7 @@
                   "Ref": "SSMInstanceProfile"
                 },
                 "KeyName": { "Ref": "KeyName" },
-                "SecurityGroups": [{"Ref": "SwarmSecurityGroup"}],
+                "SecurityGroups": [{"Ref": "SwarmSecurityGroup"}, { "Ref": "SwarmInitiatorSecurityGroup" }],
                 "UserData" : {
                   "Fn::Base64" : {
                     "Fn::Join" : [
@@ -222,7 +370,7 @@
             "DependsOn": ["SwarmInitiatorGroup"],
             "Properties": {
               "LaunchConfigurationName": {"Ref": "SwarmManagerLaunchConf"},
-              "VPCZoneIdentifier": [ {"Ref": "swarmSubnet0"}, {"Ref": "swarmSubnet1"}, {"Ref": "swarmSubnet2"} ],
+              "VPCZoneIdentifier": [ {"Ref": "swarmPrivateSubnet1"}, {"Ref": "swarmPrivateSubnet2"}, {"Ref": "swarmPrivateSubnet3"} ],
               "MinSize": { "Ref": "SwarmManagerCount" },
               "MaxSize": { "Ref": "SwarmManagerCount" },
               "DesiredCapacity": { "Ref": "SwarmManagerCount" },
@@ -274,7 +422,7 @@
         "SwarmELB": {
             "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
             "Properties": {
-              "Subnets": [ {"Ref": "swarmSubnet0"}, {"Ref": "swarmSubnet1"}, {"Ref": "swarmSubnet2"} ],
+              "Subnets": [ {"Ref": "swarmPublicSubnet1"}, {"Ref": "swarmPublicSubnet2"}, {"Ref": "swarmPublicSubnet3"} ],
               "Listeners": [
                 {
                   "InstancePort" : "80",
@@ -298,7 +446,7 @@
             "DependsOn": ["SwarmInitiatorGroup"],
             "Properties": {
               "LaunchConfigurationName": {"Ref": "SwarmWorkerLaunchConf"},
-              "VPCZoneIdentifier": [{ "Ref": "swarmSubnet0" }, { "Ref": "swarmSubnet1" }, { "Ref": "swarmSubnet2" }],
+              "VPCZoneIdentifier": [{ "Ref": "swarmPrivateSubnet1" }, { "Ref": "swarmPrivateSubnet2" }, { "Ref": "swarmPrivateSubnet3" }],
               "MinSize": { "Ref": "SwarmWorkerCount" },
               "MaxSize": { "Ref": "SwarmWorkerCount" },
               "DesiredCapacity": { "Ref": "SwarmWorkerCount" },
@@ -347,57 +495,49 @@
                 }
             }
         },
-        "SwarmSecurityGroup": {
-            "Type": "AWS::EC2::SecurityGroup",
-            "Properties": {
-                "VpcId": {
-                    "Ref": "swarmVpc"
-                },
-                "GroupDescription": "Allow access from HTTP and SSH traffic",
-                "SecurityGroupIngress": [
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": "80",
-                        "ToPort": "80",
-                        "CidrIp": "0.0.0.0/0"
-                    },
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": "22",
-                        "ToPort": "22",
-                        "CidrIp": "0.0.0.0/0"
-                    },
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": "2377",
-                        "ToPort": "2377",
-                        "CidrIp": "10.0.0.0/16"
-                    },
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": "7946",
-                        "ToPort": "7946",
-                        "CidrIp": "10.0.0.0/16"
-                    },
-                    {
-                        "IpProtocol": "udp",
-                        "FromPort": "7946",
-                        "ToPort": "7946",
-                        "CidrIp": "10.0.0.0/16"
-                    },
-                    {
-                        "IpProtocol": "udp",
-                        "FromPort": "4789",
-                        "ToPort": "4789",
-                        "CidrIp": "10.0.0.0/16"
-                    }
-                ]
-            },
-            "Metadata": {
-                "AWS::CloudFormation::Designer": {
-                    "id": "236cdb38-5f35-4f53-96ab-20e3b9089028"
-                }
-            }
+      "SwarmSecurityGroup": {
+          "Type": "AWS::EC2::SecurityGroup",
+          "Properties": {
+              "VpcId": {
+                  "Ref": "swarmVpc"
+              },
+              "GroupDescription": "Allow access from HTTP and SSH traffic",
+              "SecurityGroupIngress": [
+                  {
+                      "IpProtocol": "tcp",
+                      "FromPort": "80",
+                      "ToPort": "80",
+                      "CidrIp": "0.0.0.0/0"
+                  }
+              ],
+              "Tags" : [ { "Key": "Name", "Value": "SwarmSecurityGroup"}]
+          }
+        },
+        "SwarmSecurityGroupIngress": {
+          "Type": "AWS::EC2::SecurityGroupIngress",
+          "Properties" : {
+            "IpProtocol": "-1",
+            "FromPort": "-1",
+            "ToPort": "-1",
+            "SourceSecurityGroupId": { "Ref": "SwarmSecurityGroup" },
+            "GroupId": { "Fn::GetAtt": ["SwarmSecurityGroup", "GroupId"]}
+          }
+        },
+        "SwarmInitiatorSecurityGroup": {
+          "Type": "AWS::EC2::SecurityGroup",
+          "Properties": {
+              "VpcId": { "Ref": "swarmVpc" },
+              "GroupDescription": "Allow access from HTTP and SSH traffic",
+              "SecurityGroupIngress": [
+                  {
+                      "IpProtocol": "tcp",
+                      "FromPort": "22",
+                      "ToPort": "22",
+                      "CidrIp": "0.0.0.0/0"
+                  }
+              ],
+                "Tags" : [ { "Key": "Name", "Value": "SwarmInitiatorSecurityGroup"}]
+          }
         },
         "InternetGateway": {
             "Type": "AWS::EC2::InternetGateway",
@@ -424,69 +564,213 @@
                 }
             }
         },
-        "PublicRouteTable": {
+        "PublicSubnet1RouteTable": {
             "Type": "AWS::EC2::RouteTable",
             "Properties": {
                 "VpcId": {
                     "Ref": "swarmVpc"
-                }
-            },
-            "Metadata": {
-                "AWS::CloudFormation::Designer": {
-                    "id": "5070a22e-7d4f-4dcf-9895-af5cc70d7a1c"
-                }
+                },
+                "Tags" : [ { "Key": "Name", "Value": "PublicSubnet1RouteTable"}]
             }
         },
-        "PublicRoute": {
+        "PublicSubnet2RouteTable": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "swarmVpc"
+                },
+                "Tags" : [ { "Key": "Name", "Value": "PublicSubnet2RouteTable"}]
+            }
+        },
+        "PublicSubnet3RouteTable": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "swarmVpc"
+                },
+                "Tags" : [ { "Key": "Name", "Value": "PublicSubnet3RouteTable"}]
+            }
+        },
+        "PrivateSubnet1RouteTable": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "swarmVpc"
+                },
+                "Tags" : [ { "Key": "Name", "Value": "PrivateSubnet1RouteTable"}]
+            }
+        },
+        "PrivateSubnet2RouteTable": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "swarmVpc"
+                },
+                "Tags" : [ { "Key": "Name", "Value": "PrivateSubnet2RouteTable"}]
+            }
+        },
+        "PrivateSubnet3RouteTable": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "swarmVpc"
+                },
+                "Tags" : [ { "Key": "Name", "Value": "PrivateSubnet3RouteTable"}]
+            }
+        },
+        "PublicSubnet1Route": {
             "Type": "AWS::EC2::Route",
             "Properties": {
                 "DestinationCidrBlock": "0.0.0.0/0",
                 "RouteTableId": {
-                    "Ref": "PublicRouteTable"
+                    "Ref": "PublicSubnet1RouteTable"
                 },
                 "GatewayId": {
                     "Ref": "InternetGateway"
-                }
-            },
-            "Metadata": {
-                "AWS::CloudFormation::Designer": {
-                    "id": "fe16df86-4d84-4bf3-9807-46feb4f5125e"
                 }
             },
             "DependsOn": [
                 "InternetGateway"
             ]
         },
-        "swarmSubnet0RouteAssociation": {
+        "PublicSubnet2Route": {
+            "Type": "AWS::EC2::Route",
+            "Properties": {
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "RouteTableId": {
+                    "Ref": "PublicSubnet2RouteTable"
+                },
+                "GatewayId": {
+                    "Ref": "InternetGateway"
+                }
+            },
+            "DependsOn": [
+                "InternetGateway"
+            ]
+        },
+        "PublicSubnet3Route": {
+            "Type": "AWS::EC2::Route",
+            "Properties": {
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "RouteTableId": {
+                    "Ref": "PublicSubnet3RouteTable"
+                },
+                "GatewayId": {
+                    "Ref": "InternetGateway"
+                }
+            },
+            "DependsOn": [
+                "InternetGateway"
+            ]
+        },
+        "PrivateSubnet1Route": {
+            "Type": "AWS::EC2::Route",
+            "Properties": {
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "RouteTableId": {
+                    "Ref": "PrivateSubnet1RouteTable"
+                },
+                "NatGatewayId": {
+                    "Ref": "swarmNat1"
+                }
+            },
+            "DependsOn": [
+                "swarmNat1"
+            ]
+        },
+        "PrivateSubnet2Route": {
+            "Type": "AWS::EC2::Route",
+            "Properties": {
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "RouteTableId": {
+                    "Ref": "PrivateSubnet2RouteTable"
+                },
+                "NatGatewayId": {
+                    "Ref": "swarmNat2"
+                }
+            },
+            "DependsOn": [
+                "swarmNat2"
+            ]
+        },
+        "PrivateSubnet3Route": {
+            "Type": "AWS::EC2::Route",
+            "Properties": {
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "RouteTableId": {
+                    "Ref": "PrivateSubnet3RouteTable"
+                },
+                "NatGatewayId": {
+                    "Ref": "swarmNat3"
+                }
+            },
+            "DependsOn": [
+                "swarmNat3"
+            ]
+        },
+        "swarmPrivateSubnet1RouteAssociation": {
             "Type": "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": {
-                    "Ref": "PublicRouteTable"
+                    "Ref": "PrivateSubnet1RouteTable"
                 },
                 "SubnetId": {
-                    "Ref": "swarmSubnet0"
+                    "Ref": "swarmPrivateSubnet1"
                 }
             }
         },
-        "swarmSubnet1RouteAssociation": {
+        "swarmPublicSubnet1RouteAssociation": {
             "Type": "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": {
-                    "Ref": "PublicRouteTable"
+                    "Ref": "PublicSubnet1RouteTable"
                 },
                 "SubnetId": {
-                    "Ref": "swarmSubnet1"
+                    "Ref": "swarmPublicSubnet1"
                 }
             }
         },
-        "swarmSubnet2RouteAssociation": {
+        "swarmPrivateSubnet2RouteAssociation": {
             "Type": "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": {
-                    "Ref": "PublicRouteTable"
+                    "Ref": "PrivateSubnet2RouteTable"
                 },
                 "SubnetId": {
-                    "Ref": "swarmSubnet2"
+                    "Ref": "swarmPrivateSubnet2"
+                }
+            }
+        },
+        "swarmPublicSubnet2RouteAssociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PublicSubnet2RouteTable"
+                },
+                "SubnetId": {
+                    "Ref": "swarmPublicSubnet2"
+                }
+            }
+        },
+        "swarmPrivateSubnet3RouteAssociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PrivateSubnet3RouteTable"
+                },
+                "SubnetId": {
+                    "Ref": "swarmPrivateSubnet3"
+                }
+            }
+        },
+        "swarmPublicSubnet3RouteAssociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PublicSubnet3RouteTable"
+                },
+                "SubnetId": {
+                    "Ref": "swarmPublicSubnet3"
                 }
             }
         }
@@ -509,35 +793,35 @@
     },
     "Parameters": {
       "InstanceTypeManager": {
-            "Description": "Cluster manager nodes EC2 instance type",
-            "Type": "String",
-            "Default": "t2.micro",
-            "AllowedValues": [
-              "t2.micro",
-              "t2.small",
-              "t2.medium",
-              "m3.medium",
-              "m3.large",
-              "m3.xlarge",
-              "m3.2xlarge"
-            ],
-            "ConstraintDescription": "must be a valid EC2 instance type."
-          },
+          "Description": "Cluster manager nodes EC2 instance type",
+          "Type": "String",
+          "Default": "t2.micro",
+          "AllowedValues": [
+            "t2.micro",
+            "t2.small",
+            "t2.medium",
+            "m3.medium",
+            "m3.large",
+            "m3.xlarge",
+            "m3.2xlarge"
+          ],
+          "ConstraintDescription": "must be a valid EC2 instance type."
+      },
       "InstanceTypeWorker": {
-            "Description": "Cluster worker nodes EC2 instance type",
-            "Type": "String",
-            "Default": "t2.micro",
-            "AllowedValues": [
-              "t2.micro",
-              "t2.small",
-              "t2.medium",
-              "m3.medium",
-              "m3.large",
-              "m3.xlarge",
-              "m3.2xlarge"
-            ],
-            "ConstraintDescription": "must be a valid EC2 instance type."
-          },
+          "Description": "Cluster worker nodes EC2 instance type",
+          "Type": "String",
+          "Default": "t2.micro",
+          "AllowedValues": [
+            "t2.micro",
+            "t2.small",
+            "t2.medium",
+            "m3.medium",
+            "m3.large",
+            "m3.xlarge",
+            "m3.2xlarge"
+          ],
+          "ConstraintDescription": "must be a valid EC2 instance type."
+      },
       "KeyName": {
           "Description": "Name of your EC2 KeyPair to enable SSH access to the instances.",
           "Type": "AWS::EC2::KeyPair::KeyName",
@@ -563,6 +847,11 @@
           "MinValue": "1",
           "MaxValue": "5",
           "Default": "2"
+      },
+      "VPCCIDR": {
+          "Description": "VPC CIDR network address.",
+          "Type": "String",
+          "Default": "10.10.0.0/18"
       }
     },
     "Outputs": {
