@@ -164,10 +164,10 @@
             "DependsOn": ["PublicRoute"],
             "Properties": {
               "LaunchConfigurationName": {"Ref": "SwarmInitiatorLaunchConf"},
-              "VPCZoneIdentifier": [{ "Ref": "swarmSubnet0" }],
-              "MinSize": "1",
-              "MaxSize": "1",
-              "DesiredCapacity": "1",
+              "VPCZoneIdentifier": [{"Ref": "swarmSubnet0"}, {"Ref": "swarmSubnet1"}, {"Ref": "swarmSubnet2"}],
+              "MinSize": { "Ref": "SwarmInitiatorCount" },
+              "MaxSize": { "Ref": "SwarmInitiatorCount" },
+              "DesiredCapacity": { "Ref": "SwarmInitiatorCount" },
               "Tags": [
                 {
                   "Key": "Name",
@@ -543,11 +543,18 @@
           "Type": "AWS::EC2::KeyPair::KeyName",
           "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
       },
-      "SwarmManagerCount": {
-          "Description": "Number of swarm cluster manager nodes to create.",
+      "SwarmInitiatorCount": {
+          "Description": "Number of swarm cluster initiator manager nodes to create (must be 1).",
           "Type": "Number",
           "MinValue": "1",
-          "MaxValue": "5",
+          "MaxValue": "1",
+          "Default": "1"
+      },
+      "SwarmManagerCount": {
+          "Description": "Number of additional swarm cluster manager nodes to create.",
+          "Type": "Number",
+          "MinValue": "0",
+          "MaxValue": "6",
           "Default": "2"
       },
       "SwarmWorkerCount": {
