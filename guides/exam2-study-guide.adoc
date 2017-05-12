@@ -60,7 +60,7 @@ The exam will include multiple choice questions and true/false questions. You wi
 * Baking vs. Frying a server template -- benefits and risks of each method
     ** Packer -- what is it?
 * Understand the 4 models for updating a server configuration
-* Understand the 3 methods for continuous server sychronization
+* Understand the 3 methods for continuous server synchronization
 * Ansible
     ** What is it?
     ** Understand terms: Playbooks, plays, tasks, roles, modules, handlers
@@ -73,7 +73,7 @@ The exam will include multiple choice questions and true/false questions. You wi
     ** Cultural priorities
 * Lean theory
     ** The theory of constraints
-    ** Utilization thinking vs. throughput thinking
+    ** Utilization thinking vs. systems thinking
     ** Little's law
     ** Design for operations
     ** Blameless culture and postmortems
@@ -94,17 +94,13 @@ The exam will include multiple choice questions and true/false questions. You wi
 * Dockerfile
     ** What is it?
     ** Understand basic commands
-* Datacenter
-    ** What is it?
-    ** Key components and their purpose
-* DC power generation
-    ** Understand how power is distributed to customers
-    ** Basic power generation architecture
-    ** Battery vs. Flywheel technology
-* DC climate control
-    ** What are the two main concerns?
-    ** Heat containment solutions in a data center
-* Common DC security technologies and practices
-* Basic fire suppression technologies
-* PUE -- what is it? Know the basic formula!
-* Data center tier classification system
+* Service Discovery
+    ** What is it and why is it important?
+    ** Lock server
+    ** RAFT Algorithm -- what is it used for?
+    ** What is Consul and its main features?
+* Container orchestration
+    ** Know the basic components of Docker swarm
+    ** Swarm manager role versus worker role
+    ** What is a swarm service?
+    ** Understand basic features of a swarm cluster 
