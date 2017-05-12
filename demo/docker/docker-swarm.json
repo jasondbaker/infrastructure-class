@@ -358,7 +358,8 @@
                         "aws ssm put-parameter --name ", { "Ref" : "managerToken" }, " --type String --value \"${MGRTOKEN}\" --overwrite --region ", { "Ref" : "AWS::Region" },"\n",
                         "INITIP=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)\n",
                         "aws ssm put-parameter --name ", { "Ref" : "initiatorIp" }, " --type String --value \"${INITIP}\" --overwrite --region ", { "Ref" : "AWS::Region" },"\n",
-                        "docker node update --availability drain $(hostname)\n"
+                        "docker node update --availability drain $(hostname)\n",
+                        "docker run -it -d -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock dockersamples/visualizer \n"
                       ]
                     ]
                   }
@@ -527,12 +528,18 @@
           "Type": "AWS::EC2::SecurityGroup",
           "Properties": {
               "VpcId": { "Ref": "swarmVpc" },
-              "GroupDescription": "Allow access from HTTP and SSH traffic",
+              "GroupDescription": "Allow access from SSH and port 8080 traffic to initiator",
               "SecurityGroupIngress": [
                   {
                       "IpProtocol": "tcp",
                       "FromPort": "22",
                       "ToPort": "22",
+                      "CidrIp": "0.0.0.0/0"
+                  },
+                  {
+                      "IpProtocol": "tcp",
+                      "FromPort": "8080",
+                      "ToPort": "8080",
                       "CidrIp": "0.0.0.0/0"
                   }
               ],
