@@ -6,8 +6,8 @@ University of St. Thomas +
 St. Paul, MN 55105
 
 [.text-center]
-*SYLLABUS Spring 2017 SEIS 665* +
-Version 2017.01.08
+*SYLLABUS Fall 2017 SEIS 665* +
+Version 2017.07.12
 
 {blank}
 *[.underline]#Course Title#* +
@@ -32,7 +32,7 @@ bake2352@stthomas.edu
 612-695-7775 (cell)
 
 *[.underline]#Office Address#* +
-OSS 228
+By Appointment
 
 *[.underline]#Office Hours#* +
 Before class or by appointment +
@@ -64,9 +64,6 @@ patterns used to enhance scalability and reliability within these systems.
 {blank}
 *[.underline]#Required Texts#* +
 
-_Practice of Cloud Systems Administration Volume 2_ by Thomas Limoncelli, Strata Challup, & Christina Hogan. +
-ISBN: 9780321943187
-
 _Infrastructure as Code_ by Kief Morris, 1st Edition. +
 ISBN: 9781491924358
 
@@ -97,7 +94,7 @@ paying any expenses not covered by these credits.
 {blank}
 *[.underline]#Blackboard#* +
 Lecture notes (powerpoint/pdf format), and grades will be available on
-Blackboard. We will also use Blackboard for some of the reading quizzes.
+Blackboard.
 
 {blank}
 *[.underline]#Github#* +
@@ -113,7 +110,7 @@ before the start of the semester: https://www.codeschool.com/courses/try-git
 Slack is a great real-time chat and collaboration tool for teams. Sign up for a
 free account at https://ustseis665.slack.com/signup using your @stthomas.edu
 email address. We will all join this team for the duration of the course and make use
-of chat channels to work on projects.
+of chat channels while working on projects.
 
 {blank}
 *[.underline]#Computers#* +
@@ -137,27 +134,22 @@ to successfully complete assignments.
 It's not possible to teach Linux in a few hours. If you have never used Linux
 before, you will need to invest extra time in the early weeks of this course
 getting comfortable with the operating system. By completing the required
-learning assignments and working with DevOps processes, you will gain basic Linux
+learning assignments you will gain basic Linux
 system administration skills.
 
 {blank}
 *[.underline]#Grading Policy#*
 
-* Attendance (10%)
+* Attendance (15%)
   ** Up to two excused lecture absences are acceptable.
   ** Additional absences will result in attendance score reduction.
-* Weekly reading quizzes (5%)
-  ** 11 Weekly Blackboard quizzes on reading, 5 questions and 10 points per question (50 per quiz).
-  ** Quizzes are timed (20 minutes) and may only be taken once.
-  ** Complete each week’s quiz online before next class ALONE.
-  ** Reading quiz will be available approximately 1 week in advance. No makeups, because you have all week and can do them remotely.
 * Homework assignments (35%)
   ** 10 graded assignments.
   ** Late submission penalty of 25% per day.
   ** Extra credit points may be given for helping others troubleshoot issues through Slack.
 * Midterm (25%)
 * Final (25%)
-* Fall 2016 grade distribution: A=45%, B=35%, C=20%.
+* Historical grade distribution: A=~40%, B=~34%, C=~20%.
 * Factors that may severely impact your grade:
   ** Significant disregard for assignments.
   ** More than 2 class absences.
@@ -178,83 +170,79 @@ without the written permission of the instructor. (See Class Session Recording
 |=========================================================
 |Week | Date | Topic | Assignment Due
 
-|1 | 1/30 | Course Introduction +
+|1 | 9/11 | Course Introduction +
 Source control +
 Git |
 
 
-|2 | 2/6 | Linux fundamentals +
+|2 | 9/18 | Linux fundamentals +
 Package management +
 Shell scripting
  |
 Assignment 1 +
-Read _Practice of Cloud Systems Administration_ Chapter 12 +
 Read _Git Hands On Guide_ +
-Start reading _Linux Hands On Guide_
+Read _Linux Hands On Guide_
 
-|3 | 2/13 | Infrastructure fundamentals +
+|3 | 9/25 | Infrastructure fundamentals +
 Virtualization +
 Distributed infrastructure design and operations +
  |
 Assignment 2 +
-Read _Practice of Cloud Systems Administration_ Chapter 1 +
 Read _Infrastructure as Code_ Chapter 1 +
-Finish reading _Linux Hands on Guide_
 
-|4 | 2/20 | Cloud computing +
+|4 | 10/2 | Cloud computing +
 AWS +
 IAM, EC2, S3 |
 Assignment 3 +
-Read _Practice of Cloud Systems Administration_ Chapter 3 +
-Read _Overview of Amazon Web Services_ (White paper December 2015)
+Read _Overview of Amazon Web Services_ (White paper April 2017)
 
-|5 | 2/27 | Cloud computing +
+|5 | 10/9 | Cloud computing +
 AWS +
 VPC, RDS, ELB |
 Assignment 4 +
 Read _Architecting for the Cloud: AWS Best Practices_ (White paper February 2016) +
 Read _Infrastructure as Code_ Chapter 2
 
-|6 | 3/6 | Cloud computing +
+|6 | 10/16 | Cloud computing +
 AWS +
 Autoscaling, Cloud Watch, Route53, +
 SQS, SNS, SES |
 Assignment 5 +
 Read _Infrastructure as Code_ Chapters 3 & 4
 
-|7 | 3/13 | Midterm |
+|7 | 10/23 | Midterm |
 
 
-|8 | 3/27 | Distributed application architecture +
+|8 | 10/30 | Distributed application architecture +
 Web services +
 REST/ JSON / YAML |
 Assignment 6 +
 Read _Practice of Cloud Systems Administration_ Chapters 4 & 5
 
-|9 | 4/3 | Infrastructure as code +
+|9 | 11/6 | Infrastructure as code +
 CloudFormation +
  |
 Assignment 7 +
 Read _Infrastructure as Code_ Chapters 5 & 6
 
-|10 | 4/10 | Configuration Management +
+|10 | 11/13 | Configuration Management +
 Ansible +
  |
 Assignment 8 +
 Read _Infrastructure as Code_ Chapters 7 & 8
 
-|11 | 4/24 | DevOps +
+|11 | 11/20 | DevOps +
 Continuous integration & delivery +
  |
 Assignment 9 +
 Read _Infrastructure as Code_ Chapters 9 & 10
 
-|12 | 5/1 | Containers +
+|12 | 11/27 | Containers +
 Docker |
 Assignment 10 +
 Read _Infrastructure as Code_ Chapters 11 & 12
 
-|13 | 5/8 | Service Discovery +
+|13 | 12/4 | Service Discovery +
 Container Orchestration +
 Docker Swarm +
  |
@@ -262,13 +250,13 @@ Assignment 11 +
 Read _Infrastructure as Code_ Chapter 15 +
 
 
-|14 | 5/15 | Final exam |
+|14 | 12/11 | Final exam |
 
 
 |=========================================================
 
 {blank}
-*[.underline]#STUDENTS WITH DISABILTIES#* +
+*[.underline]#STUDENTS WITH DISABILITIES#* +
 
 I want to ensure that the classroom environment is conducive to your learning and ask that you discuss with me any concerns that are interfering with your learning as they arise. Classroom accommodations will be provided for students with documented disabilities. Students must contact the Disability Resources Office about accommodations for this course as early in the semester as possible. Appointments can be made by calling 651-962-6315 or 800-328-6819, extension 6315, or in person in Rm 110 Murray Herrick Center on the St. Paul campus. Further information is available at: http://www.stthomas.edu/enhancementprog/.
 
