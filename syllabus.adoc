@@ -7,14 +7,14 @@ St. Paul, MN 55105
 
 [.text-center]
 *SYLLABUS Fall 2017 SEIS 665* +
-Version 2017.07.12
+Version 2017.08.26
 
 {blank}
 *[.underline]#Course Title#* +
 DevOps & Cloud Infrastructure
 
 *[.underline]#Meeting Time Place#* +
-Mondays, 5:45 - 9:00 PM, OSS 326
+Mondays, 5:45 - 9:00 PM, OSS 428
 
 *[.underline]#Credit Value#* +
 3 semester credits
@@ -72,10 +72,10 @@ Additional writings (whitepapers, blogs, etc) as assigned by the instructor.
 {blank}
 *[.underline]#Attendance Policy and Studying#*
 
-* Instructor will enter attendance into Blackboard weekly
+* Instructor will enter attendance into Canvas weekly
 * 2-3 hours work for each hour of in class instruction is the academic standard,
 so plan on spending 6-9 hours a week out of class on readings and assignments.
-If you don't currently have much experience working with Linux, plan on
+If you don't currently have much experience working with GitHub and Linux, plan on
 budgeting more time.
 
 {blank}
@@ -92,18 +92,18 @@ AWS in this class throughout the semester. However, if you use AWS in other clas
 paying any expenses not covered by these credits.
 
 {blank}
-*[.underline]#Blackboard#* +
-Lecture notes (powerpoint/pdf format), and grades will be available on
-Blackboard.
+*[.underline]#Canvas#* +
+Lecture notes (powerpoint/pdf format), lecture recordings, and grades will be available on
+Canvas (https://stthomas.instructure.com).
 
 {blank}
 *[.underline]#Github#* +
-We will use Github throughout the course and a free Github account is required. You can
+We will use Github throughout the course and a free Github account is required to complete assignments. You can
 create an account, if you don't already have one, by going to the website:
 https://github.com/join
 
 Students are strongly encouraged to sign up and participate in free Git training
-before the start of the semester: https://www.codeschool.com/courses/try-git
+before the start of the semester if they haven't used Git before. Training is available at:  https://www.codeschool.com/courses/try-git
 
 {blank}
 *[.underline]#Slack#* +
@@ -114,7 +114,7 @@ of chat channels while working on projects.
 
 {blank}
 *[.underline]#Computers#* +
-A computer is an essential tool for this class since many of our assignments will involve hands-on learning. A personal computer is strongly encouraged.
+A computer is an essential tool for this class since several of the lectures will include opportunities for hands-on learning. A personal computer is strongly encouraged.
 
 A computer is a powerful learning tool, but it can also be a distraction in a
 classroom setting. The
@@ -134,7 +134,7 @@ to successfully complete assignments.
 It's not possible to teach Linux in a few hours. If you have never used Linux
 before, you will need to invest extra time in the early weeks of this course
 getting comfortable with the operating system. By completing the required
-learning assignments you will gain basic Linux
+course assignments you will gain basic Linux
 system administration skills.
 
 {blank}
@@ -143,13 +143,14 @@ system administration skills.
 * Attendance (15%)
   ** Up to two excused lecture absences are acceptable.
   ** Additional absences will result in attendance score reduction.
+  ** Four or more absences may result in a grade reduction.
 * Homework assignments (35%)
   ** 10 graded assignments.
   ** Late submission penalty of 25% per day.
-  ** Extra credit points may be given for helping others troubleshoot issues through Slack.
+  ** Extra credit points may be given for helping others troubleshoot technical issues through Slack.
 * Midterm (25%)
 * Final (25%)
-* Historical grade distribution: A=~40%, B=~34%, C=~20%.
+* Historical grade distribution: A=~40%, B=~40%, C=~20%.
 * Factors that may severely impact your grade:
   ** Significant disregard for assignments.
   ** More than 2 class absences.
@@ -176,7 +177,6 @@ Git |
 
 
 |2 | 9/18 | Linux fundamentals +
-Package management +
 Shell scripting
  |
 Assignment 1 +
@@ -213,11 +213,11 @@ Read _Infrastructure as Code_ Chapters 3 & 4
 |7 | 10/23 | Midterm |
 
 
-|8 | 10/30 | Distributed application architecture +
-Web services +
-REST/ JSON / YAML |
+|8 | 10/30 | DevOps +
+Continuous integration & delivery +
+ |
 Assignment 6 +
-Read _Practice of Cloud Systems Administration_ Chapters 4 & 5
+
 
 |9 | 11/6 | Infrastructure as code +
 CloudFormation +
@@ -231,8 +231,8 @@ Ansible +
 Assignment 8 +
 Read _Infrastructure as Code_ Chapters 7 & 8
 
-|11 | 11/20 | DevOps +
-Continuous integration & delivery +
+|11 | 11/20 | CI/CD Pipelines +
+Jenkins +
  |
 Assignment 9 +
 Read _Infrastructure as Code_ Chapters 9 & 10
