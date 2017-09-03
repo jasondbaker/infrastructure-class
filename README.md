@@ -4,7 +4,7 @@ DevOps & Cloud Infrastructure (SEIS 665) Curriculum
 Overview
 --------
 
-In late 2015, the faculty and administration at the [University of St. Thomas Graduate Programs in Software](http://www.stthomas.edu/gradsoftware/) asked me to review their current IT graduate curriculum to determine how well it aligned with current IT practices. While much of the curriculum was still relevant, it was clear that the program didn't address some of the dramatic changes reshaping regional IT organizations. The idea for a new graduate IT course was born from that review process and subsequent discussions with other practitioners in the IT field.
+In late 2015, the faculty and administration at the [University of St. Thomas Graduate Programs in Software](http://www.stthomas.edu/gradsoftware/) asked me to review their current IT graduate curriculum to determine how well it aligned with current IT practices. While much of the curriculum was still relevant, it was clear that the program didn't address some of the dramatic changes reshaping  IT organizations. The idea for a new graduate IT course was born from that review process and subsequent discussions with other practitioners in the IT field.
 
 DevOps is rapidly gaining adoption at IT organizations across the world. It represents an IT cultural transformation combining ideas from Lean, Agile, and software development. Cloud infrastructure is a key enabler of DevOps practices, and is a foundational component of modern Internet services.
 
@@ -13,16 +13,16 @@ Students that understand how to wield DevOps practices and create infrastructure
 Audience
 --------
 
-The curriculum was designed for graduate students at a large private university located near a major metropolitan area. The students represent a mixture of age groups, cultural backgrounds, and experience levels. Most students tend to be working professionals with 5-15 years of experience. Approximately 40% of the students are International students coming from a wide variety of educational systems.
+The curriculum was designed for graduate students at a large private university located near a major metropolitan area. The students represent a mixture of age groups, cultural backgrounds, and technical experience levels. Most students tend to be working professionals with 5-15 years of corporate experience. Approximately 40% of the students are International students coming from a wide variety of educational systems.
 
-Students taking this course may have 10+ years of IT experience or no experience at all. Some of the students are transitioning into IT as a new career. One of the challenges I faced while creating this curriculum was figuring out how to calibrate the technical depth of the content. In most instances, I opted to make the content more rigorous to challenge experienced students while at least giving less experienced students exposure to new ideas. The course calibration will likely require a few semesters to properly fine tune.
+Students taking this course may have 10+ years of IT experience or no experience at all. Some of the students are transitioning into IT as a new career. One of the challenges I faced while creating this curriculum was figuring out how to calibrate the technical depth of the content. In most instances, I opted to make the content more rigorous to challenge experienced students while at least giving less experienced students exposure to new ideas.
 
 Curriculum Approach
 -------------------
 
-Let me be completely transparent. I've never developed educational curriculum before and I didn't follow any particular methodology when creating this course. I created the kind of class that I'd like to take.
+I've never developed educational curriculum before and I didn't follow any particular methodology when creating this course. I created the kind of class that I'd like to take.
 
-The curriculum is based around a process of exploration and hands-on learning. Students are presented with a few theories and best practices, and then we dive straight into implementation. We learn by doing. My hope is that an appreciation for DevOps practices will emerge as students progress through the course.
+The curriculum is based around a process of exploration and hands-on learning. Students are presented with a few theories and best practices, and then we dive straight into real-world implementation. We learn by doing. My hope is that an appreciation for DevOps practices will emerge as students progress through the course.
 
 I'm treating this curriculum as a grand experiment and hope to receive fast feedback from students. I expect to make meaningful changes in future months based on student and peer critiques.
 
@@ -32,7 +32,7 @@ The 14-week course is partitioned into 12 lectures and 2 exams. Each lecture is 
 
 Students start out the course by learning fundamental version control and Linux system administration skills. The first two lessons are designed to bootstrap students into the core parts of the curriculum. Without these basic skills, it would be difficult for students to navigate many of the future assignments.
 
-The next few courses introduce students to fundamental infrastructure deployment patterns, virtualization, and cloud infrastructure. The cloud infrastructure curriculum is based on the AWS Solution Architect Certification blueprint. The idea is that after completing this course students can pursue an AWS certification with a small amount of incremental effort. Most of the lessons learned using AWS may be applied to other cloud providers such as Microsoft or Google.
+The next few courses introduce students to fundamental infrastructure deployment patterns, virtualization, and cloud infrastructure. The cloud infrastructure curriculum is loosely based on the AWS Solution Architect Certification blueprint. The idea is that after completing this course students can pursue an AWS certification with a small amount of incremental effort. Most of the lessons learned using AWS may be applied to other cloud providers such as Microsoft or Google.
 
 Students build on their infrastructure experience by learning how distributed applications are designed to take advantage of this dynamic infrastructure. They will learn that this infrastructure isn't built using traditional ad hoc methods. Students learn how to create infrastructure using code and how to programmatically manage the configuration of that infrastructure over time.
 
@@ -74,10 +74,10 @@ Lecture Schedule
 | 5    | Cloud computing, AWS, VPC, RDS, ELB                                    |
 | 6    | Cloud computing, AWS, Autoscaling, Cloud Watch, Route53, SQS, SNS, SES |
 | 7    | Midterm                                                                |
-| 8    | Distributed application architecture, Web services, REST/ JSON / YAML  |
+| 8    | Devops Practices, Continuous integration & delivery  |
 | 9    | Infrastructure as Code, CloudFormation                                 |
 | 10   | Configuration Management                                               |
-| 11   | DevOps, Continuous integration & delivery                              |
+| 11   | Jenkins & CI/CD Pipelines                              |
 | 12   | Containers, Docker                                                     |
 | 13   | Service discovery, Container orchestration                                              |
 | 14   | Final exam                                                             |

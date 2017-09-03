@@ -1,0 +1,174 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Metadata": {
+    "Template": {"Regions": "Launch only in us-east-1"}
+  },
+  "Resources": {
+    "JenkinsVpc": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+          "EnableDnsSupport": "true",
+          "EnableDnsHostnames": "true",
+          "CidrBlock": "10.120.0.0/16",
+          "Tags" : [
+            { "Key": "Name",
+              "Value": "Jenkins-VPC"
+            }
+          ]
+        }
+    },
+    "JenkinsSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "VpcId": {
+            "Ref": "JenkinsVpc"
+        },
+        "GroupDescription": "Security group rules for Jenkins host.",
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "22",
+            "ToPort": "22",
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "8080",
+            "ToPort": "8080",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "Tags" : [
+          { "Key": "Name",
+            "Value": "Jenkins-SG"
+          }
+        ]
+      }
+    },
+    "InternetGateway": {
+        "Type": "AWS::EC2::InternetGateway",
+        "Properties": {}
+    },
+    "VPCGatewayAttachment": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "InternetGatewayId": {
+          "Ref": "InternetGateway"
+        },
+        "VpcId": {
+          "Ref": "JenkinsVpc"
+        }
+      }
+    },
+    "PublicSubnet1": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+            "Ref": "JenkinsVpc"
+        },
+        "MapPublicIpOnLaunch" : "true",
+        "CidrBlock": "10.120.1.0/24",
+        "AvailabilityZone" : {
+          "Fn::Select" : [ "0", { "Fn::GetAZs" : { "Ref" : "AWS::Region" }}]
+        },
+        "Tags" : [
+          { "Key": "Name",
+            "Value": "Jenkins-Public-Subnet"
+          }
+        ]
+      }
+    },
+    "PublicSubnet1RouteTable": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "JenkinsVpc"
+        },
+        "Tags" : [
+          { "Key": "Name",
+            "Value": "Jenkins-RT"
+          }
+        ]
+      }
+    },
+    "PublicSubnet1Route": {
+        "Type": "AWS::EC2::Route",
+        "Properties": {
+            "DestinationCidrBlock": "0.0.0.0/0",
+            "RouteTableId": {
+                "Ref": "PublicSubnet1RouteTable"
+            },
+            "GatewayId": {
+                "Ref": "InternetGateway"
+            }
+        },
+        "DependsOn": [
+            "InternetGateway"
+        ]
+    },
+    "PublicSubnet1RouteAssociation": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+            "Ref": "PublicSubnet1RouteTable"
+        },
+        "SubnetId": {
+            "Ref": "PublicSubnet1"
+        }
+      }
+    },
+    "JenkinsServer": {
+      "Type": "AWS::EC2::Instance",
+      "Properties" : {
+        "InstanceType": "t2.medium",
+        "ImageId": "ami-6e293d15",
+        "SubnetId": { "Ref": "PublicSubnet1" },
+        "KeyName": { "Ref": "KeyName" },
+        "SecurityGroupIds": [
+          { "Ref": "JenkinsSecurityGroup"}
+        ],
+        "UserData" : {
+          "Fn::Base64" : {
+            "Fn::Join" : [
+              "", [
+                "#!/bin/bash -xe\n",
+                "docker swarm init\n",
+                "echo \"",{"Ref": "JenkinsUsername"},"\" | docker secret create jenkins-user -\n",
+                "echo \"",{"Ref": "JenkinsPassword"},"\" | docker secret create jenkins-pass -\n",
+                "docker service create --name jenkins -d -p 8080:8080 -e JAVA_OPTS=-Djenkins.install.runSetupWizard=false --secret jenkins-user --secret jenkins-pass jenkins:seis"
+              ]
+            ]
+          }
+        },
+        "Tags" : [
+          { "Key": "Name",
+            "Value": "JenkinsServer"
+          }
+        ]
+      }
+    }
+  },
+  "Parameters": {
+    "JenkinsUsername": {
+        "Description": "Jenkins administrative username.",
+        "Type": "String",
+        "Default": "admin"
+    },
+    "JenkinsPassword": {
+        "Description": "Jenkins administrative password.",
+        "Type": "String",
+        "NoEcho": "true"
+    },
+    "KeyName": {
+      "Description": "Name of your EC2 KeyPair to enable SSH access to the instances.",
+      "Type": "AWS::EC2::KeyPair::KeyName",
+      "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
+    }
+  },
+  "Outputs": {
+    "JenkinsIp" : {
+      "Value": {"Fn::GetAtt": ["JenkinsServer", "PublicIp"]},
+      "Description": "Jenkins server public IP address"
+    }
+  }
+}
