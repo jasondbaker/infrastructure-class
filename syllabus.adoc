@@ -94,7 +94,7 @@ paying any expenses not covered by these credits.
 {blank}
 *[.underline]#Canvas#* +
 Lecture notes (powerpoint/pdf format), lecture recordings, and grades will be available on
-Canvas (https://stthomas.instructure.com).
+Canvas (https://www.stthomas.edu/canvas).
 
 {blank}
 *[.underline]#Github#* +
@@ -131,11 +131,19 @@ with Linux while others have none. We will spend some time at the beginning of
 the course covering essential Linux skills so that everyone has an opportunity
 to successfully complete assignments.
 
-It's not possible to teach Linux in a few hours. If you have never used Linux
-before, you will need to invest extra time in the early weeks of this course
-getting comfortable with the operating system. By completing the required
-course assignments you will gain basic Linux
+It's not possible to teach Linux in a few hours during the class lectures. If you
+have never used Linux before, you will need to invest extra time in the early
+weeks of this course getting comfortable with the operating system. There are
+plenty of free Linux training videos on the Internet and I strongly encourage you
+to check these out if you lack Linux experience. For example, here is a free online
+course you can take:
+
+https://training.linuxfoundation.org/linux-courses/system-administration-training/introduction-to-linux
+
+By completing the required course assignments you will gain basic Linux
 system administration skills.
+
+
 
 {blank}
 *[.underline]#Grading Policy#*
@@ -188,7 +196,7 @@ Virtualization +
 Distributed infrastructure design and operations +
  |
 Assignment 2 +
-Read _Infrastructure as Code_ Chapter 1 +
+Read _Infrastructure as Code_ Chapters 1 & 2 +
 
 |4 | 10/2 | Cloud computing +
 AWS +
@@ -201,7 +209,6 @@ AWS +
 VPC, RDS, ELB |
 Assignment 4 +
 Read _Architecting for the Cloud: AWS Best Practices_ (White paper February 2016) +
-Read _Infrastructure as Code_ Chapter 2
 
 |6 | 10/16 | Cloud computing +
 AWS +
@@ -217,6 +224,7 @@ Read _Infrastructure as Code_ Chapters 3 & 4
 Continuous integration & delivery +
  |
 Assignment 6 +
+Read _Infrastructure as Code_ Chapters 10 & 11
 
 
 |9 | 11/6 | Infrastructure as code +
@@ -235,12 +243,12 @@ Read _Infrastructure as Code_ Chapters 7 & 8
 Jenkins +
  |
 Assignment 9 +
-Read _Infrastructure as Code_ Chapters 9 & 10
+Read _Infrastructure as Code_ Chapters 12 & 13
 
 |12 | 11/27 | Containers +
 Docker |
 Assignment 10 +
-Read _Infrastructure as Code_ Chapters 11 & 12
+Read _Infrastructure as Code_ Chapters 9 & 14
 
 |13 | 12/4 | Service Discovery +
 Container Orchestration +
