@@ -13,5 +13,6 @@ ssh-agent
 ssh-slaves
 timestamper
 warnings
+workflow-aggregator
 ws-cleanup
 xunit

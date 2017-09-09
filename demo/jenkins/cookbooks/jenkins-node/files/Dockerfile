@@ -2,6 +2,13 @@ FROM jenkins/jenkins:lts-alpine
 
 USER root
 
+RUN \
+	mkdir -p /aws && \
+	apk -Uuv add groff less python py-pip && \
+	pip install awscli && \
+	apk --purge -v del py-pip && \
+	rm /var/cache/apk/*
+
 RUN apk add apache-ant --update-cache --repository http://dl-4.alpinelinux.org/alpine/edge/testing/ --allow-untrusted
 ENV ANT_HOME /usr/share/java/apache-ant
 ENV PATH $PATH:$ANT_HOME/bin

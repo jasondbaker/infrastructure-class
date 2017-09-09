@@ -121,7 +121,7 @@
       "Type": "AWS::EC2::Instance",
       "Properties" : {
         "InstanceType": "t2.medium",
-        "ImageId": "ami-336d7f48",
+        "ImageId": "ami-e2071999",
         "SubnetId": { "Ref": "PublicSubnet1" },
         "KeyName": { "Ref": "KeyName" },
         "SecurityGroupIds": [
@@ -135,7 +135,7 @@
                 "docker swarm init\n",
                 "echo \"",{"Ref": "JenkinsUsername"},"\" | docker secret create jenkins-user -\n",
                 "echo \"",{"Ref": "JenkinsPassword"},"\" | docker secret create jenkins-pass -\n",
-                "docker service create --name jenkins -d -p 8080:8080 -e JAVA_OPTS=-Djenkins.install.runSetupWizard=false  --mount type=volume,destination=/var/jenkins_home --secret jenkins-user --secret jenkins-pass jenkins:seis"
+                "docker service create --name jenkins -d -p 8080:8080 -e JAVA_OPTS=-Djenkins.install.runSetupWizard=false  --mount type=volume,source=jenkins-vol,destination=/var/jenkins_home --secret jenkins-user --secret jenkins-pass jenkins:seis"
               ]
             ]
           }
