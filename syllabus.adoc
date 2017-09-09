@@ -154,6 +154,7 @@ system administration skills.
   ** Four or more absences may result in a grade reduction.
 * Homework assignments (35%)
   ** 10 graded assignments.
+  ** Assignments due by midnight on due date.
   ** Late submission penalty of 25% per day.
   ** Extra credit points may be given for helping others troubleshoot technical issues through Slack.
 * Midterm (25%)
