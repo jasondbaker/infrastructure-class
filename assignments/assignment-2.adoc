@@ -71,7 +71,7 @@ server should have the following characteristics:
 I've created a video showing you how to launch this EC2 instance. The video is
 available at:
 
-* https://youtu.be/D5kxRVWrsGo
+* https://youtu.be/aN6XXz192kQ
 
 Once you launch the new server, it may take a few minutes to provision.
 
