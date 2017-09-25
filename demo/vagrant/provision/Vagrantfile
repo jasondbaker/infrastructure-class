@@ -8,7 +8,7 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box = 'geerlingguy/centos6' 
-  config.vm.box_version = '1.1.6' 
+  config.vm.box_version = '1.2.1' 
 
   config.vm.host_name = "classweb1.seis665.vm"
   config.vm.network "private_network", ip: '192.168.44.44'
