@@ -8,11 +8,11 @@ Jason Baker <bake2352@stthomas.edu>
 1.0, 8/15/2016
 
 == Overview
-A DevOps code pipeline helps to automate continuous delivery processes for software development organizations. Developers, testers, and operations staff depend on a functioning pipeline to transform code changes into deployable software releases. While software developers are the primary users of the pipeline, IT operations professionals oftentimes have to maintain it.
+A DevOps code pipeline helps to automate continuous delivery processes for software development organizations. Developers, testers, and operations staff depend on functioning pipelines to transform code changes into deployable software releases. While software developers are the primary users of a pipeline, IT operations professionals oftentimes have to maintain it.
 
-In this week's assignment, you will build a complete code deployment pipeline using AWS CodePipeline (a continuous delivery service) and AWS CodeDeploy (an automated application deployment service). The application you will deploy is a Java application running on a Tomcat server platform.
+In this week's assignment, you will build a code deployment pipeline using Jenkins, a continuous integration tool. The pipeline will build, test, and deploy a very simple Java application.
 
-This assignment is based off the Pipeline Starter Kit developed by AWS. You won't need to figure out how to build the code pipeline. Much of the hard work has been done for you. Once the code pipeline is running, you will make a change to the application code and watch the pipeline deploy the updated application to a staging and production server.
+This assignment is based off the Jenkins pipeline we created in class, so you can refer back to the lecture notes to build parts of the pipeline.
 
 == Requirements
 
@@ -22,27 +22,19 @@ You need to have a personal AWS account and GitHub account for this assignment.
 
 Let's get that code pipeline flowing!
 
-=== Fork the Tomcat application
+=== Fork the Java application
 
-The first step in the assignment is to fork the GitHub repository containing the Tomcat application. Forking the repository will setup a copy of the repository in your personal GitHub account. You can then make changes to the application files in the repository without affecting the parent repository.
+The first step in the assignment is to fork the GitHub repository containing the Java application. Forking the repository will setup a copy of the repository in your personal GitHub account. You can then make changes to the application files in the repository without affecting the original (parent) repository.
 
 Go to GitHub and fork the following repository by clicking on the *Fork* button:
 
-  https://github.com/seis665/aws-codedeploy-sample-tomcat
+  https://github.com/seis665/java-project
 
-Next, in order to connect AWS CodePipeline to your personal GitHub repository you will need to provide AWS with a GitHub access token. This token provides AWS with the access credentials needed to fetch code updates from your personal repositories.
-
-Navigate to the following website:
-
-  https://github.com/settings/tokens
-
-Generate a personal token with the *repo* and *admin:repo_hook* permissions selected (see below). Copy the token to your clipboard and store it in a safe place -- perhaps something like a text file. You will need to copy this token into a CloudFormation input shortly.
-
-image:../images/assignment10/github-token-permissions.png["600","600"]
+After a short period of time you should see a forked copy of this repository in your personal GitHub account.
 
 === Launch the stack
 
-You will use a CloudFormation template to launch a stack containing the code pipeline and all of the production resources into the us-east-1 region. The template creates the following components:
+You will use a CloudFormation template to launch a stack containing a Jenkins server.
 
 * An AWS Virtual Private Cloud (VPC), including all the necessary routing tables and routes, an Internet gateway, and network ACLs for EC2 instances to be launched into.
 
@@ -58,19 +50,15 @@ Go to the AWS CloudFormation console and select the *Create Stack* button.
 
 Choose a stack template by specifying the following S3 template URL:
 
-  https://s3.amazonaws.com/seis665/aws-codedeploy-codepipeline-starter-kit.template
+  https://s3.amazonaws.com/seis665/jenkins-cf.json
 
 On the *Specify Details* page, enter the following:
 
 1. In *Stack name*, type a name for the stack. Choose something short and simple for easy reference.
-2. In *AppName*, you can leave the default as-is. Note that if you decide to launch this stack multiple times in your account, you will need to set the Appname to a different name each time.
-3. In *AppSourceType*, choose GitHub.
-4. In the *Application Source - GitHub* section, type the name of your GitHub username in the *GitHubUser* field.
-5. In *GitHubToken*, paste the GitHub token you created earlier.
-6. In *GitHubRepoName*, leave the repo name set to aws-codedeploy-sample-tomcat.
-7. In *GitHubBranchName*, leave the branch name set to master.
-8. In *Key Name*, choose the name of your Amazon EC2 key pair.
-9. In *YourIP*, type the public IP address (appending /32) of the computer system which you will access the resources created by this template. If you do not know your current public IP address, you can open up a new web browser window and go to the URL: http://checkip.amazonaws.com/
+2. In *JenkinsPassword*, provide an administrative password for this system (choose a hard password).
+3. In *JenkinsUsername*, you can leave this set to `admin` or choose a different admin username.
+4. In *Key Name*, choose the name of your Amazon EC2 key pair.
+5. In *YourIP*, type the public IP address (appending /32) of the computer system which you will access the resources created by this template. If you do not know your current public IP address, you can open up a new web browser window and go to the URL: http://checkip.amazonaws.com/
 
 Click the *Next* button.
 

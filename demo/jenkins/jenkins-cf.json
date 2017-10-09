@@ -4,6 +4,93 @@
     "Template": {"Regions": "Launch only in us-east-1"}
   },
   "Resources": {
+    "JavaAccessRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+           "Version" : "2012-10-17",
+           "Statement": [ {
+              "Effect": "Allow",
+              "Principal": {
+                 "Service": [ "ec2.amazonaws.com" ]
+              },
+              "Action": [ "sts:AssumeRole" ]
+           } ]
+        },
+        "Path": "/"
+     }
+    },
+    "JenkinsAccessRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+           "Version" : "2012-10-17",
+           "Statement": [ {
+              "Effect": "Allow",
+              "Principal": {
+                 "Service": [ "ec2.amazonaws.com" ]
+              },
+              "Action": [ "sts:AssumeRole" ]
+           } ]
+        },
+        "Path": "/"
+     }
+    },
+    "S3Policy": {
+       "Type": "AWS::IAM::Policy",
+       "Properties": {
+          "PolicyName": "s3Access",
+          "PolicyDocument": {
+             "Version" : "2012-10-17",
+             "Statement": [
+               {
+                 "Effect": "Allow",
+                 "Action": [
+                   "s3:GetObject",
+                   "s3:PutObject"
+                 ],
+                 "Resource": ["arn:aws:s3:::pipeline-*/*"]
+                 }
+               ]
+          },
+          "Roles": [ { "Ref": "JenkinsAccessRole" },
+                     { "Ref": "JavaAccessRole" }]
+       }
+    },
+    "EC2Policy": {
+       "Type": "AWS::IAM::Policy",
+       "Properties": {
+          "PolicyName": "ec2Access",
+          "PolicyDocument": {
+             "Version" : "2012-10-17",
+             "Statement": [
+               {
+                 "Effect": "Allow",
+                 "Action": [
+                   "ec2:TerminateInstances",
+                   "ec2:RunInstances"
+                 ],
+                 "Resource": ["arn:aws:s3:::pipeline-*/*"]
+                 }
+               ]
+          },
+          "Roles": [ { "Ref": "JenkinsAccessRole" } ]
+       }
+    },
+    "JenkinsInstanceProfile": {
+       "Type": "AWS::IAM::InstanceProfile",
+       "Properties": {
+          "Path": "/",
+          "Roles": [ { "Ref": "JenkinsAccessRole" } ]
+       }
+    },
+    "JavaInstanceProfile": {
+       "Type": "AWS::IAM::InstanceProfile",
+       "Properties": {
+          "Path": "/",
+          "Roles": [ { "Ref": "JavaAccessRole" } ]
+       }
+    },
     "JenkinsVpc": {
       "Type": "AWS::EC2::VPC",
       "Properties": {
@@ -29,7 +116,7 @@
             "IpProtocol": "tcp",
             "FromPort": "22",
             "ToPort": "22",
-            "CidrIp": "0.0.0.0/0"
+            "CidrIp": {"Ref": "YourIp"}
           },
           {
             "IpProtocol": "tcp",
@@ -163,6 +250,10 @@
       "Description": "Name of your EC2 KeyPair to enable SSH access to the instances.",
       "Type": "AWS::EC2::KeyPair::KeyName",
       "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
+    },
+    "YourIp": {
+      "Description": "The current CIDR IP address of your workstation (x.x.x.x/32).",
+      "Type": "String"
     }
   },
   "Outputs": {
