@@ -92,9 +92,9 @@ We've installed the bathtub and the sinks, but we haven't laid out the pipes
 yet. Let's work on that now.
 
 Click on the *Route Tables* link on the VPC dashboard. Notice that a route table
-already exists for your new VPC. This is the main route table for the VPC and
-all subnets not explicitly associated with another subnet use this route
-table. Read that last sentence twice, because the concept is a little confusing.
+already exists for your new VPC. This is the main route table for the VPC and it
+is used by all subnets that are not explicitly associated with a route table.
+Read that last sentence twice, because the concept is a little confusing.
 
 Go ahead and *create a route table* by clicking on the appropriate button. Name
 this route table: `nextgen-public-routes`. Make sure to designate the
