@@ -5,7 +5,7 @@
 
 = SEIS 665 Assignment 10: Code pipeline
 Jason Baker <bake2352@stthomas.edu>
-1.0, 8/15/2016
+1.1, 10/11/2017
 
 == Overview
 A DevOps code pipeline helps to automate continuous delivery processes for software development organizations. Developers, testers, and operations staff depend on functioning pipelines to transform code changes into deployable software releases. While software developers are the primary users of a pipeline, IT operations professionals oftentimes have to maintain it.
@@ -24,7 +24,7 @@ Let's get that code pipeline flowing!
 
 === Fork the Java application
 
-The first step in the assignment is to fork the GitHub repository containing the Java application. Forking the repository will setup a copy of the repository in your personal GitHub account. You can then make changes to the application files in the repository without affecting the original (parent) repository.
+The first step in the assignment is to fork the GitHub repository containing a Java application. Forking the repository will setup a copy of the repository in your personal GitHub account. You can then make changes to the application files in the repository without affecting the original (parent) repository.
 
 Go to GitHub and fork the following repository by clicking on the *Fork* button:
 
@@ -32,19 +32,17 @@ Go to GitHub and fork the following repository by clicking on the *Fork* button:
 
 After a short period of time you should see a forked copy of this repository in your personal GitHub account.
 
-=== Launch the stack
+=== Launch the Jenkins stack
 
-You will use a CloudFormation template to launch a stack containing a Jenkins server.
+You will use a CloudFormation template to launch a stack containing a Jenkins server. The stack will create the
+following AWS resources:
 
-* An AWS Virtual Private Cloud (VPC), including all the necessary routing tables and routes, an Internet gateway, and network ACLs for EC2 instances to be launched into.
+* An AWS Virtual Private Cloud (VPC), including all the necessary routing tables and routes, an Internet gateway, and security groups for EC2 instances to be launched into.
 
-* An Amazon EC2 instance that hosts a Jenkins server (also installed and configured for you).
+* An Amazon EC2 instance that hosts a Jenkins server, installed and configured for you with all the necessary
+plugins.
 
-* Two AWS CodeDeploy applications, each of which contains a deployment group that deploys to a single Amazon EC2 instance.
-
-* All IAM service and instance roles required to run the resources.
-
-* A pipeline in AWS CodePipeline that builds the sample application and deploys it. This includes creating an Amazon S3 bucket to use as the artifact store for this pipeline.
+* All IAM service and instance roles required to setup an infrastructure pipeline.
 
 Go to the AWS CloudFormation console and select the *Create Stack* button.
 
@@ -68,57 +66,48 @@ On the *Review* page, select the *I acknowledge that this template might cause A
 
 It will take several minutes for CloudFormation to create the resources on your behalf. You can watch the progress messages on the *Events* tab in the console. When the stack has been created, you will see a CREATE_COMPLETE message in the *Status* column of the console and on the *Overview* tab.
 
-Congratulations! You've created a code pipeline. The pipeline contains four different stages, and it will start automatically as soon as it is created.
+You will find the IP address of the Jenkins server in the stack
+outputs (select the stack name at look at the outputs tab). Log into
+the Jenkins server with a web browser on port 8080:
 
-[NOTE]
-====
-If CloudFormation fails to create your resources and pipeline, it will roll back all resource creation automatically.
-====
+  http://<Jenkins IP address>:8080
 
-=== Working with the Pipeline
+Log into the server using the username and password you provided
+during the stack creation process.
 
-Open the AWS CodePipeline console to view your new pipeline. On the dashboard page, choose the name of the pipeline. You can watch the progress of your pipeline as it completes the action configured for each of its four stages (a source stage, a build stage, and two deployment stages).
+Congratulations! You've created the infrastructure required to build a code pipeline.
 
-image:../images/assignment10/code-pipeline.png["600","200"]
+=== Setup GitHub integration
 
-The pipeline flows as follows:
+Before you start working on a build pipeline, you should configure Jenkins to integrate with your GitHub account. This will allow Jenkins to automatically pull source code from your forked Java repository during the pipeline build stage.
 
-1. The source stage contains an action that retrieves the application from the the GitHub repo you specified.
-2. The build stage contains an action that builds the app in Jenkins, which is hosted on an Amazon EC2 instance.
-3. The first deploy stage contains an action that uses AWS CodeDeploy to deploy the app to a beta website on an Amazon EC2 instance.
-4. The second deploy stage contains an action that again uses AWS CodeDeploy to deploy the app, this time to a separate, production website on a different Amazon EC2 instance.
+Here is a summary of the steps required to setup this integration. You can review the class lecture notes or online guides to understand the details.
 
-When each stage is complete, it turns from blue (in progress) to green (success).
+  * Create a new personal access token in your GitHub account. The token should have `admin:repo_hook`, `repo`, and `repo:status` permissions.
 
-You can view the details of any stage except the source stage by choosing the *Details* link for that stage. For example, choosing the *Details* link for the Jenkins build action in the build stage opens the status page for that Jenkins build. Click on the Jenkins details link now. Notice how the Jenkins server web page opens in your browser. Next, click on the *Console Output* link on the Jenkins server. This output log displays the build information for the Tomcat application.
+  * Add a new GitHub server in the Jenkins system configuration settings.
 
-When the *Succeeded* status is displayed for the pipeline status, you can view the application that was built and deployed by the pipeline:
+  * Add credentials for the GitHub server configuration
+    ** Kind: Secret Text
+    ** Copy GitHub token into secret field
 
-1. In the status area for the *ProdDeploy* action in the *Prod* stage, choose *Details*. The details of the deployment will appear in the AWS CodeDeploy console in a separate browser window.
-2. In the Deployment Details section of the CodeDeploy console, click on the instance ID of the successfully deployed instance. The EC2 console will appear in another browser window.
-3. Finally, on the instance Description tab, copy the Public DNS address  and then paste it into the address bar of your web browser. The address will look something like: ec2-52-90-152-35.compute-1.amazonaws.com
+  * Remember to select the GitHub token credential in the GitHub server settings after adding it!
 
-Your browser should open the Tomcat website on the production server. Aw, hope you like cute dogs!
+  * Click the Test connection button to verify that the credentials work and save the Jenkins system configuration.
 
-image:../images/assignment10/code-deploy-website.jpg["600","600"]
+=== Create a Pipeline
 
-=== Modify the application
+You will create a new build pipeline using the Jenkins Pipeline DSL. Jenkins supports two different types of Pipeline DSL formats: declarative and scripted. You should use the declarative format for this assignment.
 
-Let's modify the Tomcat application and watch the pipeline automatically rebuild and deploy the application.
+Begin by creating a new Jenkins pipeline project called *java-pipeline*. The project will use the Java GitHub project you forked into your personal repository.
 
-You can modify the application code in two different ways. You could clone the application repository to your desktop and modify the code files with your favorite text editor, commit the update to your local repository, and push the new code commit back up to GitHub.
+Setup a build trigger for this repository using the Github hook trigger for GITScm polling. Configure the project to create a pipeline (Pipeline script from SCM) based on file called Jenkinsfile located at the root (top) directory of the Java project.
 
-An easier option for this assignment is to use the web editor on the GitHub site to make a change to a file.
+Build the pipeline to verify that it is working properly. The pipeline should clone your Java git repository, run a set of unit tests, build the Java application, and produce a unit test report.
 
-Browse to the following path in the application repository on GitHub:
+=== Extend the Pipeline
 
-  aws-codedeploy-sample-tomcat/src/main/webapp/WEB-INF/pages/index.jsp
 
-Click on the *Edit* button to edit the index.jsp file. Locate code line 39 and change the word "Bespoke" to "Fancy". Next, scroll to the bottom of the page and commit the file change to the repository.
-
-Now, go back to the AWS CodePipeline console and take a look at your pipeline. You may have to refresh the page a couple times over the course of a few minutes. You should see your code pipeline automatically fetch the change that you made to the application repository. Watch as the pipeline moves your code change through each of the pipeline stages.
-
-When the pipeline completes the deployment of the application to *Prod*, refresh the browser window pointing to the deployed website on the production server. You should see your code change. How cool is that!
 
 === Check your work
 
@@ -131,13 +120,11 @@ Here is what the contents of your git repository should look like before final s
 
 === Save your work
 
-Go to the AWS CodePipeline console and click on the *Details* link in the Build stage to pull up the Jenkins server website. Next, select the *Back to Project* link on the Jenkins menu. You should see a webpage with the header *Maven project app-name*. Take a screenshot of this browser page and save it in a file called `jenkins-screen.jpg` or `jenkins-screen.png` on your desktop. The file must be either a JPEG or PNG file. No other file formats are accepted.
+
 
 Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/874ccbb14cf1edafbdf104af22f7812f
 
-Commit your Jenkins screenshot file into the repository.
 
-Also, shell into the JenkinsServer instance and use the AWS API to retrieve a list of your stack resources in JSON format (use the `cloudformation describe-stack-resources` command). Store the output of this API command in a file called `stack.json` and commit this file into the repository.
 
 === Terminate application environment
 
@@ -146,8 +133,6 @@ The last step in the assignment is to delete all the AWS resources created by th
 Go to the CloudFormation dashboard, select your running stack, and choose the
 delete option. Watch as CloudFormation deletes all the resources previously
 created.
-
-Note, CloudFormation does not remove an S3 bucket that it created. That's probably because it cannot delete a bucket that contains files. Go to the S3 console and locate a bucket that is named something like *demo-us-east-1-916700618655-app-name*. Select the bucket and chose the *Empty Bucket* action. Finally, delete the bucket from S3.
 
 == Submitting your assignment
 I will review your published work on GitHub after the homework due date.
