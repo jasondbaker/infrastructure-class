@@ -587,6 +587,7 @@ your GitHub repository.
 Here is what the contents of your git repository should look like before final submission:
 
 ====
+&#x2523; README.md +
 &#x2523; access.log +
 &#x2523; access2.log +
 &#x2523; backend1-identity.json +
