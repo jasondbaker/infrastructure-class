@@ -4,22 +4,6 @@
     "Template": {"Regions": "Launch only in us-east-1"}
   },
   "Resources": {
-    "JavaAccessRole": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-           "Version" : "2012-10-17",
-           "Statement": [ {
-              "Effect": "Allow",
-              "Principal": {
-                 "Service": [ "ec2.amazonaws.com" ]
-              },
-              "Action": [ "sts:AssumeRole" ]
-           } ]
-        },
-        "Path": "/"
-     }
-    },
     "JenkinsAccessRole": {
       "Type": "AWS::IAM::Role",
       "Properties": {
@@ -49,32 +33,16 @@
                    "s3:GetObject",
                    "s3:PutObject"
                  ],
-                 "Resource": ["arn:aws:s3:::pipeline-*/*"]
-                 }
+                 "Resource": [
+                   {"Fn::Join" : [ "",
+                     [ {"Fn::GetAtt": ["S3Bucket", "Arn"]}, "/*" ]
+                    ]
+                    }
+                  ]
+                }
                ]
           },
-          "Roles": [ { "Ref": "JenkinsAccessRole" },
-                     { "Ref": "JavaAccessRole" }]
-       }
-    },
-    "EC2Policy": {
-       "Type": "AWS::IAM::Policy",
-       "Properties": {
-          "PolicyName": "ec2Access",
-          "PolicyDocument": {
-             "Version" : "2012-10-17",
-             "Statement": [
-               {
-                 "Effect": "Allow",
-                 "Action": [
-                   "ec2:TerminateInstances",
-                   "ec2:RunInstances"
-                 ],
-                 "Resource": ["arn:aws:s3:::pipeline-*/*"]
-                 }
-               ]
-          },
-          "Roles": [ { "Ref": "JenkinsAccessRole" } ]
+          "Roles": [ { "Ref": "JenkinsAccessRole" }]
        }
     },
     "JenkinsInstanceProfile": {
@@ -82,13 +50,6 @@
        "Properties": {
           "Path": "/",
           "Roles": [ { "Ref": "JenkinsAccessRole" } ]
-       }
-    },
-    "JavaInstanceProfile": {
-       "Type": "AWS::IAM::InstanceProfile",
-       "Properties": {
-          "Path": "/",
-          "Roles": [ { "Ref": "JavaAccessRole" } ]
        }
     },
     "JenkinsVpc": {
@@ -207,6 +168,7 @@
     "JenkinsServer": {
       "Type": "AWS::EC2::Instance",
       "Properties" : {
+        "IamInstanceProfile": { "Ref": "JenkinsInstanceProfile"},
         "InstanceType": "t2.medium",
         "ImageId": "ami-e2071999",
         "SubnetId": { "Ref": "PublicSubnet1" },
@@ -233,6 +195,11 @@
           }
         ]
       }
+    },
+    "S3Bucket": {
+      "Type" : "AWS::S3::Bucket",
+      "DeletionPolicy" : "Retain"
+
     }
   },
   "Parameters": {
@@ -260,6 +227,10 @@
     "JenkinsIp" : {
       "Value": {"Fn::GetAtt": ["JenkinsServer", "PublicIp"]},
       "Description": "Jenkins server public IP address"
+    },
+    "S3BucketName" : {
+      "Value": {"Fn::GetAtt": ["S3Bucket", "DomainName"]},
+      "Description": "Jenkins S3 bucket name"
     }
   }
 }

@@ -2,3 +2,5 @@
 # also keep quizzes and exams out of the public repo
 /pdfs
 /exams
+.vagrant
+demo/jenkins/Jenkinsfile

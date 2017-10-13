@@ -10,9 +10,8 @@ Jason Baker <bake2352@stthomas.edu>
 == Overview
 A DevOps code pipeline helps to automate continuous delivery processes for software development organizations. Developers, testers, and operations staff depend on functioning pipelines to transform code changes into deployable software releases. While software developers are the primary users of a pipeline, IT operations professionals oftentimes have to maintain it.
 
-In this week's assignment, you will build a code deployment pipeline using Jenkins, a continuous integration tool. The pipeline will build, test, and deploy a very simple Java application.
+In this week's assignment, you will build a code deployment pipeline using Jenkins, a continuous integration tool. The pipeline will test, build, and deploy a very simple Java application.
 
-This assignment is based off the Jenkins pipeline we created in class, so you can refer back to the lecture notes to build parts of the pipeline.
 
 == Requirements
 
@@ -24,7 +23,7 @@ Let's get that code pipeline flowing!
 
 === Fork the Java application
 
-The first step in the assignment is to fork the GitHub repository containing a Java application. Forking the repository will setup a copy of the repository in your personal GitHub account. You can then make changes to the application files in the repository without affecting the original (parent) repository.
+The first step in the assignment is to fork a GitHub repository containing a Java application. Forking the repository will setup a copy of the repository in your personal GitHub account. You can then make changes to the application files in the repository without affecting the original (parent) repository.
 
 Go to GitHub and fork the following repository by clicking on the *Fork* button:
 
@@ -42,7 +41,9 @@ following AWS resources:
 * An Amazon EC2 instance that hosts a Jenkins server, installed and configured for you with all the necessary
 plugins.
 
-* All IAM service and instance roles required to setup an infrastructure pipeline.
+* An S3 bucket for storing build artifacts.
+
+* An IAM instance role which allows the Jenkins server to access the S3 bucket.
 
 Go to the AWS CloudFormation console and select the *Create Stack* button.
 
@@ -67,29 +68,29 @@ On the *Review* page, select the *I acknowledge that this template might cause A
 It will take several minutes for CloudFormation to create the resources on your behalf. You can watch the progress messages on the *Events* tab in the console. When the stack has been created, you will see a CREATE_COMPLETE message in the *Status* column of the console and on the *Overview* tab.
 
 You will find the IP address of the Jenkins server in the stack
-outputs (select the stack name at look at the outputs tab). Log into
+outputs (select the stack name and look at the outputs tab). Access
 the Jenkins server with a web browser on port 8080:
 
   http://<Jenkins IP address>:8080
 
-Log into the server using the username and password you provided
-during the stack creation process.
+Log into Jenkins using the username and password you provided
+during the stack creation process. Note that it might take a couple minutes for the Jenkins service to start up and display a login page.
 
 Congratulations! You've created the infrastructure required to build a code pipeline.
 
 === Setup GitHub integration
 
-Before you start working on a build pipeline, you should configure Jenkins to integrate with your GitHub account. This will allow Jenkins to automatically pull source code from your forked Java repository during the pipeline build stage.
+Before you start working on a build pipeline, you should configure Jenkins to integrate with your GitHub account. This will allow Jenkins to automatically pull source code from your forked Java repository when the build pipeline runs.
 
-Here is a summary of the steps required to setup this integration. You can review the class lecture notes or online guides to understand the details.
+Here is a summary of the steps required to setup this integration. You can review the class lecture notes or online how-to guides to complete this setup.
 
   * Create a new personal access token in your GitHub account. The token should have `admin:repo_hook`, `repo`, and `repo:status` permissions.
 
   * Add a new GitHub server in the Jenkins system configuration settings.
 
-  * Add credentials for the GitHub server configuration
+  * Add credentials for the GitHub server configuration.
     ** Kind: Secret Text
-    ** Copy GitHub token into secret field
+    ** Copy personal GitHub token into secret value field.
 
   * Remember to select the GitHub token credential in the GitHub server settings after adding it!
 
@@ -97,34 +98,47 @@ Here is a summary of the steps required to setup this integration. You can revie
 
 === Create a Pipeline
 
-You will create a new build pipeline using the Jenkins Pipeline DSL. Jenkins supports two different types of Pipeline DSL formats: declarative and scripted. You should use the declarative format for this assignment.
+You will create a new build pipeline using the Jenkins Pipeline DSL. Jenkins supports two different types of Pipeline DSL formats: declarative and scripted. We will use the declarative format for this assignment because it's a little easier to work with.
 
-Begin by creating a new Jenkins pipeline project called *java-pipeline*. The project will use the Java GitHub project you forked into your personal repository.
+Begin by creating a new pipeline project in Jenkins called *java-pipeline*. Configure the project to reference the Java GitHub repository you forked earlier in the assignment.
 
-Setup a build trigger for this repository using the Github hook trigger for GITScm polling. Configure the project to create a pipeline (Pipeline script from SCM) based on file called Jenkinsfile located at the root (top) directory of the Java project.
+Setup a build trigger for this project using the `GitHub hook trigger for GITScm polling` configuration setting. The project should create a pipeline (`Pipeline script from SCM`) based on a file called *Jenkinsfile* located at the root (top) directory of the Java project.
 
-Build the pipeline to verify that it is working properly. The pipeline should clone your Java git repository, run a set of unit tests, build the Java application, and produce a unit test report.
+The project pipeline should include the following named stages (highlighted in bold):
 
-=== Extend the Pipeline
+  * **Unit Tests**
+    - Jenkins will initiate unit tests using `ant` and create a junit report.
+    - The shell command to run ant tests is `ant -f test.xml -v`
+    - The junit report source data is located in `reports/result.xml`
+  *  **Build**
+    - Jenkins will compile the Java application using `ant`.
+    - The shell command to compile the application is `ant -f build.xml -v`
+  * **Deploy**
+    - Jenkins will copy the build output jar file into your Jenkins S3 bucket (look at the Cloudformation S3BucketName stack output for this unique bucket name).
+    - The name of the output jar file will look something like `rectangle-2.jar`, where the number represents the current Jenkins build number.
+    - You can use the AWS CLI to copy files from Jenkins to the S3 bucket. Don't worry about access credentials because the Jenkins server has a proper role attached which allows it to access the S3 bucket.
 
+=== Hints
 
+I recommend starting the pipeline by first creating a very basic Jenkinsfile and committing it to your forked repository. Then verify that the pipeline project automatically triggers and tries to create a build. Don't worry if the build initially fails.
+
+Next, begin adding build stages to the Jenkinsfile, committing changes to the GitHub repository as you add each new stage. You should monitor each build in Jenkins by reviewing the console output for each job. Once you are confident that a stage is working, move on to the next stage.
+
+It will likely take a handful of iterations and updates before you complete the pipeline. This is how we build and test pipelines in practice.
+
+=== Save your work
+
+Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/874ccbb14cf1edafbdf104af22f7812f
+
+Copy the Jenkinsfile you created for this assignment into this new repository and commit the code.
 
 === Check your work
 
 Here is what the contents of your git repository should look like before final submission:
 
 ====
-&#x2523; jenkins-screen.jpg +
-&#x2517; stack.json +
+&#x2523; Jenkinsfile
 ====
-
-=== Save your work
-
-
-
-Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/874ccbb14cf1edafbdf104af22f7812f
-
-
 
 === Terminate application environment
 
@@ -132,7 +146,7 @@ The last step in the assignment is to delete all the AWS resources created by th
 
 Go to the CloudFormation dashboard, select your running stack, and choose the
 delete option. Watch as CloudFormation deletes all the resources previously
-created.
+created. Note that CloudFormation will not automatically select the S3 bucket because it must be empty before deletion. You will need to delete this bucket and its contents manually.
 
 == Submitting your assignment
 I will review your published work on GitHub after the homework due date.
