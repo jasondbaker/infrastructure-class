@@ -404,7 +404,7 @@ link. Select your NAT Gateway and click on the appropriate button to
 We should also deallocate the elastic IP address we created because we will
 get charged for it even if we don't use it. Click on the *Elastic IP* link
 on the VPC dashboard. Select the elastic IP you created earlier and click on
-the action to *deallocate the address*.
+the action to *Release the addresses*.
 
 Finally, we no longer need to use the `backend1` instance in this lesson, so
 go to the EC2 dashboard and terminate this instance. Leave the `webserver1`
