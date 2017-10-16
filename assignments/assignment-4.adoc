@@ -68,14 +68,14 @@ in the IAM roles table.
 
 === Create an S3 bucket
 
-Next, let's create an S3 bucket to store some data. Go ahead and select the S3
+Next, let's create an S3 bucket in the us-east-1 region (Northern Virginia) to store some data. Go ahead and select the S3
 service on the AWS console. If you haven't created an S3 bucket before you might
 see some sort of welcome message explaining the purpose of the S3 service.
 
   * Once you see the S3 dashboard, click the button or link to *create a bucket*.
 
   * Name your new S3 bucket: `<AWS username>-assignment-4`, where <AWS username>
-  is your personal Amazon username. Also, select the `US Standard` region. Remember,
+  is your personal Amazon username (not your e-mail address). Remember,
   S3 bucket names are universal which means that your bucket name has to be unique
   worldwide. On the off chance that your bucket name is already in use, just
   try a slightly different name.
