@@ -346,9 +346,9 @@ When you create a Git repository and start working with files, the master branch
 
   *Assignment 5 Files*
 
-Commit the file to repository.
+Commit the file to the repository.
 
-We generally try to avoid working directly on the master branch in the real world. Go ahead and create a new branch called `develop` and check it out.
+You just committed the file to the master branch of the repository. We generally try to avoid working directly on the master branch in our professional life. Go ahead and create a new branch in the Git repository called `develop` and check it out. This branch will have the README.md file in it because you just branched from the most recent commit in master.
 
 === Create a shell script
 
@@ -379,11 +379,11 @@ in a special way based on the way the `curl` command works (using the `tee` comm
 
 * You should encapsulate all of the features of the script in functions.
 
-Once you have completed the shell script, make sure you run the script properly to create the two required files. Commit all the files in the assignment directory to the repository. Next, you will need to push your local
+Once you have completed the shell script, make sure you run the script properly to create the two required files. Commit all the files in the assignment directory to the develop branch in the repository. Next, you will need to push your local
 repository up to GitHub:
 
 * Create a new repository on GiHub Classroom by clicking this link: https://classroom.github.com/assignment-invitations/a76427f483ecfc98a401a1fef07473d4
-* Merge your `develop` branch into the `master` branch on your local Git repository.
+* Merge your `develop` branch back into the `master` branch on your local Git repository.
 * Push your local master branch up to the GitHub repository.
 
 Confirm that the four files are now in your new GitHub repository:
@@ -402,7 +402,7 @@ link. Select your NAT Gateway and click on the appropriate button to
 *delete the NAT Gateway*.
 
 We should also deallocate the elastic IP address we created because we will
-get charged for it even if we don't use it. Click on the *Elastic IP* link
+get charged for it if we don't use it. Click on the *Elastic IP* link
 on the VPC dashboard. Select the elastic IP you created earlier and click on
 the action to *Release the addresses*.
 
@@ -430,7 +430,7 @@ Go to the VPC dashboard and create a third subnet in your VPC:
   ** CIDR: 10.0.3.0/24
 
 Modify the appropriate routing table so that instances within this new subnet
-can communicate with the Internet (hint: look at subnet associations).
+can communicate with the Internet (hint: look at the subnet associations).
 
 Go back to the EC2 dashboard and launch a new web server named `webserver2`. The new server should
 have the same characteristics as the first web server with the exception that
@@ -580,7 +580,7 @@ Enter these commands, substituting the values as necessary:
   $ git config --global user.email "your@email.com"
   $ git config --global user.name "your GitHub username"
 
-Create a new `develop` Git branch and check it out. Now add the `access2.log` file to the repository and commit your changes. Merge the `develop` branch into the `master` branch. Push the master branch back up to GitHub. Verify that the new `access2.log` file exists on
+Create a new `develop` Git branch and check it out. Now add the `access2.log` file to the repository and commit your changes to the develop branch. Merge the `develop` branch into the `master` branch. Push the master branch back up to GitHub. Verify that the new `access2.log` file exists on
 your GitHub repository.
 
 === Check your work
@@ -595,7 +595,8 @@ Here is what the contents of your git repository should look like before final s
 &#x2517; metadata.sh
 ====
 
-Note, the shell script file should be executable.
+Note, the shell script file should be executable. Also, I'll never ask you to submit an
+empty file, so I recommend that you check the content of all your files before submission.
 
 === Terminate server
 

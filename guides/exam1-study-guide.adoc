@@ -2,15 +2,14 @@
 
 = Exam 1 Study Guide
 Jason Baker <bake2352@stthomas.edu>
-1.1, 9/2/2016
+1.2, 10/20/2017
 
 :sectnums!:
 
 == Overview
 
-Exam 1 will cover content from week 1 through week 6 class lectures and assignments. In general, exams will focus on material discussed in lectures. However, this exam will also include questions directly related to some of the weekly assignments. For example, I may ask you how short blocks of shell script code work or how you might configure a VPC with public and private subnets. If you do not completely understand an assignment, you should go back and practice it again.
-
-The exam will include multiple choice questions and true/false questions. You will have the entire class period to take the exam. The exam is closed book. We will likely use Blackboard to take the exam.
+Exam 1 will cover content from week 1 through week 6 class lectures and assignments. In general, exams will focus on material discussed in lectures. However, this exam will also include challenges directly related to some of the weekly assignments. For example, I may ask you to create small shell
+scripts or to configure a VPC with public and private subnets. If you do not completely understand an assignment, you should go back and practice it again.
 
 == Study outline
 
