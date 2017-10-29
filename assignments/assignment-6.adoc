@@ -103,7 +103,7 @@ The MySQL instance should have the following properties:
   * DB Engine Version = ~5.6 (most any recent release should work)
   * DB Class = db.t2.micro
   * Multi-AZ deployment: No
-  * Allocated Storage: 10GB
+  * Allocated Storage: 20GB
   * DB Instance Identifier: wordpressdb
   * Master Username: wpdbadmin
   * Master Password: (choose a suitable password)
