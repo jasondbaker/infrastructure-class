@@ -169,40 +169,18 @@ Run the following command to retrieve the Elastic Beanstalk events and store the
 
   $ aws elasticbeanstalk describe-events --application-name wordpress > eb-events.json
 
-=== Write YAML
-
-We learned in our class that YAML was designed to be a more human readable version of JSON (although I don't feel there's much of a difference in readability). Convert the following JSON data to YAML format. Enter the converted data into
-a file called `data.yaml` in the current directory.
-
-  {
-    "Members": [
-      "Steve",
-      "Li",
-      "Marcel"
-    ],
-    "active": true,
-    "number": 3,
-    "items": {
-      "home": "table",
-      "work": [
-        "table", "chairs", "lamps"
-        ]
-    },
-    "greeting": "Hello World"
-  }
 
 === Check your work
 
 Here is what the contents of your git repository should look like before final submission:
 
 ====
-&#x2523; data.yaml +
-&#x2517; eb-events.json +
+&#x2523; eb-events.json +
 ====
 
 === Save your work
 
-Add the `data.yaml` and `eb-events.json` files to the Git staging area and commit the files to the repository.
+Add the `eb-events.json` files to the Git staging area and commit the files to the repository.
 
 Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/7b133d3aa0bc7920c4c6c116206e70e6
 
