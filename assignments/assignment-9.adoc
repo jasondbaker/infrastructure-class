@@ -40,9 +40,19 @@ Take a quick look at the template in a text editor. Notice how the UserData prop
 the `mgmt1` instance is configured. When CloudFormation launches this stack, it will
 automatically install and configure Ansible software on the management server. It's very
 common to use a small amount of scripting code to bootstrap configuration management software
-onto a new system.
+onto a new system. Once Ansible is installed it can be used to install and configure other
+software packages.
 
-Launch a new stack using the `AnsibleSystems.json` template into the us-east-1 region. Remember to specify your server keypair name when launching the stack. You can give the stack any name you like. When you create the stack, you will need to click a checkbox acknowledging the creation of IAM resources.
+Launch a new stack using the `AnsibleSystems.json` template into the us-east-1 region. Remember to specify your server keypair name when launching the stack. You will also need to provide the current IP address of your workstation in CIDR
+format (x.x.x.x/32).
+
+In past assignments, AWS security groups were configured to allow SSH access
+from anywhere. This is a poor security practice (even for development) and in real world deployments you should configure
+security groups to minimize ssh access to your cloud resources. You can access the website https://checkip.amazonaws.com in a browser to quickly determine the IP address of your workstation. Remember that if you move your workstation from one
+network to another (like from home to work) you will need to update this workstation IP address in the CloudFormation stack
+by performing an update on the stack.
+
+You can give the stack any name you like. When you create the stack, you will need to click a checkbox acknowledging the creation of IAM resources.
 
 You will use the Ansible software installed on `mgmt1` to configure the `web1` and
 `database1` systems. Ansible communicates with remote hosts using the SSH protocol
@@ -52,12 +62,12 @@ order to establish shell connections with the two other servers. Fortunately, th
 
 == Test Ansible
 
-Log into the `mgmt1` instance and create a new directory in your home directory called `ansible`. Initialize a new Git repository in this directory.
+Log into the `mgmt1` instance and create a new directory in your home directory called `assignment9`. Initialize a new Git repository in this directory.
 
 Ansible uses an inventory file to track managed hosts. The inventory file specifies
 how Ansible should connect to a remote host. It usually contains the IP address or
 fully-qualified domain name of a host, as well as the username and key required to
-access a host. The `hosts` file was dynamically created by CloudFormation, so it already
+access a host. The `hosts` file was dynamically created by an EC2 userdata script, so it already
 contains the IP addresses of the `web1` and `database1` instances. Take a look at the hosts file located at `/etc/ansible/hosts`.
 
 You can verify that Ansible can successfully access the managed hosts by typing the
@@ -87,9 +97,9 @@ collect from a remote host:
 
 You will need to use a fact in your playbook, so take note of the fact variables that are returned by the setup module.
 
-You can create a playbook file on the `mgmt1` server using a local text editor like nano or vi. Alternatively, you can use your favorite source code editor on your local workstation and copy (scp) the file from your local workstation to the `ansible` directory on `mgmt1`. Use whichever method is easiest for you.
+You can create a playbook file on the `mgmt1` server using a local text editor like nano or vi. Alternatively, you can use your favorite source code editor on your local workstation and copy (scp) the file from your local workstation to the `assignment9` directory on `mgmt1`. Use whichever method is easiest for you.
 
-Create a playbook called `playbook.yml` in the `/home/ec2-user/ansible` directory to perform the following tasks on all of the hosts:
+Create a playbook called `playbook.yml` in the `/home/ec2-user/assignment9` directory to perform the following tasks on all of the hosts:
 
     * Update all the current software packages on the system.
     * Create a variable called `administrator_name` with a value of `corpadmin` in the play.
@@ -141,7 +151,7 @@ You should confirm that all the configuration tasks have been applied to each of
 
 Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/68c6b367013ed3711b1b1c9aa7bf8678
 
-Commit your git repository (in the `ansible` directory) to this repository.
+Commit your git repository (in the `assignment9` directory) to this repository.
 
 === Check your work
 
@@ -159,8 +169,6 @@ The last step in the assignment is to delete all the AWS services you created.
 Go to the CloudFormation dashboard, select your running stack, and choose the
 delete option. Watch as CloudFormation deletes all the resources previously
 created.
-
-CloudFormation will not remove the S3 bucket it created for the stack because the bucket contains a couple files. Remember, AWS will not allow you to delete a bucket that contains files. You will need to manually delete these files and then the bucket. The bucket name will look something like: `<stack name>-tokenbucket-284jd923jf0`.
 
 == Submitting your assignment
 I will review your published work on GitHub after the homework due date.
