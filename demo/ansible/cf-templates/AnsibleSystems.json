@@ -158,10 +158,27 @@
                     "chown ec2-user:ec2-user /home/ec2-user/.ssh/web1-key.pem.pub\n",
                     "PEMFILE=`cat /home/ec2-user/.ssh/web1-key.pem`\n",
                     "aws ssm put-parameter --name ", { "Ref" : "web1pem" }, " --type String --value \"${PEMFILE}\" --overwrite --region ", { "Ref" : "AWS::Region" },"\n",
-                    "cat /home/ec2-user/.ssh/web1-key.pem.pub >> /home/ec2-user/.ssh/authorized_keys\n"
+                    "cat /home/ec2-user/.ssh/web1-key.pem.pub >> /home/ec2-user/.ssh/authorized_keys\n",
+                    "# Signal the status from cfn-init\n",
+                    "/opt/aws/bin/cfn-signal -e $? ",
+                    "         --stack ",
+                    {
+                        "Ref": "AWS::StackName"
+                    },
+                    "         --resource web1 ",
+                    "         --region ",
+                    {
+                        "Ref": "AWS::Region"
+                    },
+                    "\n"
                   ]
                 ]
               }
+            }
+        },
+        "CreationPolicy": {
+            "ResourceSignal": {
+                "Timeout": "PT5M"
             }
         }
     },
@@ -210,10 +227,27 @@
                     "chown ec2-user:ec2-user /home/ec2-user/.ssh/database1-key.pem.pub\n",
                     "PEMFILE=`cat /home/ec2-user/.ssh/database1-key.pem`\n",
                     "aws ssm put-parameter --name ", { "Ref" : "database1pem" }, " --type String --value \"${PEMFILE}\" --overwrite --region ", { "Ref" : "AWS::Region" },"\n",
-                    "cat /home/ec2-user/.ssh/database1-key.pem.pub >> /home/ec2-user/.ssh/authorized_keys\n"
+                    "cat /home/ec2-user/.ssh/database1-key.pem.pub >> /home/ec2-user/.ssh/authorized_keys\n",
+                    "# Signal the status from cfn-init\n",
+                    "/opt/aws/bin/cfn-signal -e $? ",
+                    "         --stack ",
+                    {
+                        "Ref": "AWS::StackName"
+                    },
+                    "         --resource database1 ",
+                    "         --region ",
+                    {
+                        "Ref": "AWS::Region"
+                    },
+                    "\n"
                   ]
                 ]
               }
+            }
+        },
+        "CreationPolicy": {
+            "ResourceSignal": {
+                "Timeout": "PT5M"
             }
         }
     },

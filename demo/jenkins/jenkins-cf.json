@@ -93,6 +93,19 @@
         ]
       }
     },
+    "JenkinsSGIngressTCP50000": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Metadata": {
+        "Comment": "Jenkins agent ingress security rule"
+      },
+      "Properties" : {
+        "IpProtocol": "tcp",
+        "FromPort": "50000",
+        "ToPort": "50000",
+        "SourceSecurityGroupId": { "Ref": "JenkinsSecurityGroup" },
+        "GroupId": { "Fn::GetAtt": ["JenkinsSecurityGroup", "GroupId"]}
+      }
+    },
     "InternetGateway": {
         "Type": "AWS::EC2::InternetGateway",
         "Properties": {}
@@ -170,7 +183,7 @@
       "Properties" : {
         "IamInstanceProfile": { "Ref": "JenkinsInstanceProfile"},
         "InstanceType": "t2.medium",
-        "ImageId": "ami-e2071999",
+        "ImageId": "ami-e014999a",
         "SubnetId": { "Ref": "PublicSubnet1" },
         "KeyName": { "Ref": "KeyName" },
         "SecurityGroupIds": [
@@ -184,7 +197,19 @@
                 "docker swarm init\n",
                 "echo \"",{"Ref": "JenkinsUsername"},"\" | docker secret create jenkins-user -\n",
                 "echo \"",{"Ref": "JenkinsPassword"},"\" | docker secret create jenkins-pass -\n",
-                "docker service create --name jenkins -d -p 8080:8080 -e JAVA_OPTS=-Djenkins.install.runSetupWizard=false  --mount type=volume,source=jenkins-vol,destination=/var/jenkins_home --secret jenkins-user --secret jenkins-pass jenkins:seis"
+                "docker service create --name jenkins -d -p 8080:8080 -p 50000:50000 -e JAVA_OPTS=-Djenkins.install.runSetupWizard=false  --mount type=volume,source=jenkins-vol,destination=/var/jenkins_home --secret jenkins-user --secret jenkins-pass jenkins:seis\n",
+                "# Signal the status from cfn-init\n",
+                "/usr/local/bin/cfn-signal -e $? ",
+                "         --stack ",
+                {
+                    "Ref": "AWS::StackName"
+                },
+                "         --resource JenkinsServer ",
+                "         --region ",
+                {
+                    "Ref": "AWS::Region"
+                },
+                "\n"
               ]
             ]
           }
@@ -192,6 +217,53 @@
         "Tags" : [
           { "Key": "Name",
             "Value": "JenkinsServer"
+          }
+        ]
+      },
+      "CreationPolicy": {
+          "ResourceSignal": {
+              "Timeout": "PT15M"
+          }
+      }
+    },
+    "JenkinsSlave": {
+      "Type": "AWS::EC2::Instance",
+      "DependsOn" : ["JenkinsServer"],
+      "Properties" : {
+        "IamInstanceProfile": { "Ref": "JenkinsInstanceProfile"},
+        "InstanceType": "t2.medium",
+        "ImageId": "ami-e014999a",
+        "SubnetId": { "Ref": "PublicSubnet1" },
+        "KeyName": { "Ref": "KeyName" },
+        "SecurityGroupIds": [
+          { "Ref": "JenkinsSecurityGroup"}
+        ],
+        "UserData" : {
+          "Fn::Base64" : {
+            "Fn::Join" : [
+              "", [
+                "#!/bin/bash -xe\n",
+                "docker swarm init\n",
+                "echo \"",{"Ref": "JenkinsUsername"},"\" | docker secret create jenkins-user -\n",
+                "echo \"",{"Ref": "JenkinsPassword"},"\" | docker secret create jenkins-pass -\n",
+                "docker service create --name jenkinsagent -d ",
+                "-e USER_NAME_SECRET=\"/run/secrets/jenkins-user\" ",
+                "-e PASSWORD_SECRET=\"/run/secrets/jenkins-pass\" ",
+                "-e COMMAND_OPTIONS=\"-master http://",
+                {"Fn::GetAtt": ["JenkinsServer", "PrivateIp"]},
+                ":8080 -labels 'linux' -disableClientsUniqueId -executors 2\" ",
+                "--mount type=bind,src=/workspace,dst=/workspace ",
+                "--mount type=bind,src=//var/run/docker.sock,dst=/var/run/docker.sock ",
+                "--secret jenkins-user ",
+                "--secret jenkins-pass ",
+                "jenkinsagent:seis"
+              ]
+            ]
+          }
+        },
+        "Tags" : [
+          { "Key": "Name",
+            "Value": "JenkinsSlave"
           }
         ]
       }

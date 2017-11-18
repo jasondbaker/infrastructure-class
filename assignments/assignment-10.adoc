@@ -5,7 +5,7 @@
 
 = SEIS 665 Assignment 10: Code pipeline
 Jason Baker <bake2352@stthomas.edu>
-1.1, 10/11/2017
+1.2, 11/18/2017
 
 == Overview
 A DevOps code pipeline helps to automate continuous delivery processes for software development organizations. Developers, testers, and operations staff depend on functioning pipelines to transform code changes into deployable software releases. While software developers are the primary users of a pipeline, IT operations professionals oftentimes have to maintain it.
@@ -53,7 +53,7 @@ https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?
 
 On the stack *Specify Details* page, enter the following:
 
-1. In *Stack name*, type a name for the stack. Choose something short and simple for easy reference.
+1. In *Stack name*, use `jenkins` as the name for the stack.
 2. In *JenkinsPassword*, provide an administrative password for this system (choose a hard password).
 3. In *JenkinsUsername*, you can leave this set to `admin` or choose a different admin username.
 4. In *Key Name*, choose the name of your Amazon EC2 key pair.
@@ -124,7 +124,10 @@ The project pipeline should include the following named stages (highlighted in b
   * **Deploy**
     - Jenkins will copy the build output jar file into your Jenkins S3 bucket (look at the Cloudformation S3BucketName stack output for this unique bucket name).
     - The name of the output jar file will look something like `rectangle-2.jar`, where the number represents the current Jenkins build number.
-    - You can use the AWS CLI to copy files from Jenkins to the S3 bucket. Don't worry about access credentials because the Jenkins server has a proper role attached which allows it to access the S3 bucket.
+    - You can use the AWS CLI to copy files from Jenkins to the S3 bucket. Don't worry about access credentials for this step because the Jenkins server has a proper role attached which allows it to access the S3 bucket.
+  * **Report**
+    - Jenkins will generate a report of the CloudFormation stack resources created in your environment using the command: `aws cloudformation describe-stack-resources --region us-east-1 --stack-name jenkins`
+    - Note: you will need to setup proper IAM and Jenkins access credentials to run this command.
 
 === Hints
 
@@ -138,14 +141,15 @@ It will likely take a handful of iterations and updates before you complete the 
 
 Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/874ccbb14cf1edafbdf104af22f7812f
 
-Copy the Jenkinsfile you created for this assignment into this new repository and commit the code.
+Copy the Jenkinsfile you created for this assignment into this new repository and commit the code. Also, copy the console output from a successful build job into a file called `console.txt`
 
 === Check your work
 
 Here is what the contents of your git repository should look like before final submission:
 
 ====
-&#x2523; Jenkinsfile
+&#x2523; Jenkinsfile +
+&#x2517; console.txt
 ====
 
 === Terminate application environment
