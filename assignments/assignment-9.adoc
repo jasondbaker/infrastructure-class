@@ -48,7 +48,7 @@ format (x.x.x.x/32).
 
 In past assignments, AWS security groups were configured to allow SSH access
 from anywhere. This is a poor security practice (even for development) and in real world deployments you should configure
-security groups to minimize ssh access to your cloud resources. You can access the website https://checkip.amazonaws.com in a browser to quickly determine the IP address of your workstation. Remember that if you move your workstation from one
+security groups to minimize ssh access to your cloud resources. You can access the website http://checkip.amazonaws.com in a browser to quickly determine the IP address of your workstation. Remember that if you move your workstation from one
 network to another (like from home to work) you will need to update this workstation IP address in the CloudFormation stack
 by performing an update on the stack.
 
