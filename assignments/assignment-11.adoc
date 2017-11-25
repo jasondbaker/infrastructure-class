@@ -71,6 +71,7 @@ You should see this container running on the system. Check the docker process li
 Look at the ports in the output that have been assigned to the web1 container.  You should see a a port mapping that looks similar to this: `0.0.0.0:32768->80/tcp`.  The nginx container image exposes port 80 in its dockerfile.  When you launched the container using the `-P` flag, docker assigned a random port number (32768), and mapped it to the exposed port 80 on the container.
 
 Now, you should be able to retrieve the nginx test page using `curl`
+
   $ curl localhost:<PORT_NUMBER>
 
 You should see the html of the nginx test page displayed.
