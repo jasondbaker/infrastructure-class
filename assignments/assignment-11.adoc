@@ -32,7 +32,7 @@ Launch the template to create a new stack. Shell into the new EC2 instance and r
 
 The system should respond with the docker client version. Something like:
 
-  Docker version 1.12.6, build 7392c3b/1.12.6
+  Docker version 17.06.2-ce, build 3dfb8343b139d6342acfd9975d7f1068b5b1c3d3
 
 === Working with containers
 
@@ -62,11 +62,19 @@ Next, let's launch a container that runs in the background. Type in the command:
 
   $ docker run -d -P --name web1 nginx
 
-This will download and build a container running the popular `nginx` webserver. When you create a container, docker assigns it a long ID. It's not very easy to remember long ID strings, so using the --name parameter to assign a memorable name to containers is helpful.
+This will download and build a container running the popular `nginx` webserver. When you create a container, docker assigns it a long ID. It's not very easy to remember long ID strings, so using the `--name` parameter to assign a memorable name to containers is helpful.
 
 You should see this container running on the system. Check the docker process list to confirm:
 
   $ docker ps
+
+Look at the ports in the output that have been assigned to the web1 container.  You should see a a port mapping that looks similar to this: `0.0.0.0:32768->80/tcp`.  The nginx container image exposes port 80 in its dockerfile.  When you launched the container using the `-P` flag, docker assigned a random port number (32768), and mapped it to the exposed port 80 on the container.
+
+Now, you should be able to retrieve the nginx test page using `curl`
+
+  $ curl localhost:<PORT_NUMBER>
+
+You should see the html of the nginx test page displayed.
 
 === Repository
 
