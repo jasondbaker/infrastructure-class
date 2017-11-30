@@ -59,7 +59,7 @@ The engineering manager would like users to be able to provide two *input parame
 Also, she would like you to create an output called *URL* that displays the load balancer dns name
 after the stack is launched.
 
-The stack template should create the following resources:
+The stack template should create the following logical resources:
 
   * A new VPC called: *EngineeringVPC*
     ** CIDR block should be: 10.0.0.0/16
@@ -67,12 +67,12 @@ The stack template should create the following resources:
     ** The VPC should have one subnet called: *PublicSubnet*
         *** Subnet has a CIDR block of 10.0.0.0/24
     ** The subnet should be able to route data out to the Internet.
-  * Two EC2 instances named (tagged) *web1* and *web2* in the PublicSubnet.
+  * Two EC2 instances with logical resource names and tags of *web1* and *web2* in the PublicSubnet.
     ** Instance type: <use input parameter>
     ** Use this public AMI image: *ami-3ea13f29*
     ** Server key-pair: <use input parameter>
 
-  * A security group named *WebserversSG* in the VPC.
+  * A security group with a logical name and group name of *WebserversSG* in the VPC.
     ** Allow incoming requests on port 22 from 0.0.0.0/0
     ** Allow incoming requests on port 80 from 0.0.0.0/0
   * A load balancer (classic v1) named *EngineeringLB*
