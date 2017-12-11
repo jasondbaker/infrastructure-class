@@ -1,0 +1,51 @@
+---
+driver:
+  name: ec2
+  aws_ssh_key_id: <%= ENV['AWS_KEYPAIR_NAME'] %>
+  iam_profile_name: <%= ENV['AWS_IAM_PROFILE'] %>
+  region: <%= ENV['AWS_REGION'] || 'us-east-1' %>
+  subnet_id: <%= ENV['AWS_SUBNET_ID'] %>
+  availability_zone: <%= ENV['AWS_AVAILABILITY_ZONE'] %>
+  instance_type: <%= ENV['AWS_FLAVOR_ID'] || 't2.micro' %>
+  associate_public_ip: true
+
+transport:
+  ssh_key: <%= ENV['EC2_SSH_KEY_PATH'] %>
+  connection_timeout: 10
+  connection_retries: 5
+
+provisioner:
+  name: chef_zero
+  data_path: test/shared
+
+platforms:
+  - name: ubuntu-14.04-ec2
+    driver:
+      image_id: <%= ENV['AWS_UBUNTU_1404_AMI'] %>
+    transport:
+      username: ubuntu
+    run_list:
+      - recipe[apt]
+  - name: amzn-linux
+    driver:
+      image_id: <%= ENV['AWS_AMAZON_AMI'] %>
+    transport:
+      username: ec2-user
+
+suites:
+  - name: default
+    run_list:
+      - recipe[cloudcli::default]
+    attributes:
+      cloudcli:
+        aws:
+          version: 1.9.18
+  - name: profile_test_get
+    run_list:
+      - recipe[test_get::profile]
+      - recipe[node_dump::default]
+    attributes:
+      test_get:
+        bucket: <%= ENV['TEST_BUCKET'] %>
+        key: <%= ENV['TEST_KEY'] %>
+        checksum: <%= ENV['TEST_CHECKSUM'] %>

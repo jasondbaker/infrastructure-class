@@ -342,15 +342,6 @@
                     "Fn::Join" : [
                       "", [
                         "#!/bin/bash -xe\n",
-                        "DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::=\"--force-confdef\" -o Dpkg::Options::=\"--force-confold\" upgrade\n",
-                        "apt-get install apt-transport-https ca-certificates curl software-properties-common\n",
-                        "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -\n",
-                        "add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"\n",
-                        "apt-get update\n",
-                        "apt-get install python3-pip -y\n",
-                        "pip3 install --upgrade awscli\n",
-                        "apt-get install jq -y\n",
-                        "apt-get install docker-ce=17.03.1~ce-0~ubuntu-xenial -y\n",
                         "docker swarm init --advertise-addr $(curl http://169.254.169.254/latest/meta-data/local-ipv4)\n",
                         "TOKEN=$(docker swarm join-token worker -q)\n",
                         "aws ssm put-parameter --name ", { "Ref" : "workerToken" }, " --type String --value \"${TOKEN}\" --overwrite --region ", { "Ref" : "AWS::Region" },"\n",
@@ -401,15 +392,6 @@
                     "Fn::Join" : [
                       "", [
                         "#!/bin/bash -xe\n",
-                        "DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::=\"--force-confdef\" -o Dpkg::Options::=\"--force-confold\" upgrade\n",
-                        "apt-get install apt-transport-https ca-certificates curl software-properties-common\n",
-                        "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -\n",
-                        "add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"\n",
-                        "apt-get update\n",
-                        "apt-get install python3-pip -y\n",
-                        "pip3 install --upgrade awscli\n",
-                        "apt-get install jq -y\n",
-                        "apt-get install docker-ce=17.03.1~ce-0~ubuntu-xenial -y\n",
                         "MGRTOKEN=$(aws ssm get-parameters --name \"", { "Ref" : "managerToken" }, "\" --region ", { "Ref" : "AWS::Region" }, " | jq '.Parameters[0].Value' --raw-output)\n",
                         "INITIP=$(aws ssm get-parameters --name \"", { "Ref" : "initiatorIp" }, "\" --region ", { "Ref" : "AWS::Region" }, " | jq '.Parameters[0].Value' --raw-output)\n",
                         "docker swarm join --token $MGRTOKEN ${INITIP}:2377\n",
@@ -478,15 +460,6 @@
                     "Fn::Join" : [
                       "", [
                         "#!/bin/bash -xe\n",
-                        "DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::=\"--force-confdef\" -o Dpkg::Options::=\"--force-confold\" upgrade\n",
-                        "apt-get install apt-transport-https ca-certificates curl software-properties-common\n",
-                        "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -\n",
-                        "add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"\n",
-                        "apt-get update\n",
-                        "apt-get install python3-pip -y\n",
-                        "pip3 install --upgrade awscli\n",
-                        "apt-get install jq -y\n",
-                        "apt-get install docker-ce=17.03.1~ce-0~ubuntu-xenial -y\n",
                         "TOKEN=$(aws ssm get-parameters --name \"", { "Ref" : "workerToken" }, "\" --region ", { "Ref" : "AWS::Region" }, " | jq '.Parameters[0].Value' --raw-output)\n",
                         "INITIP=$(aws ssm get-parameters --name \"", { "Ref" : "initiatorIp" }, "\" --region ", { "Ref" : "AWS::Region" }, " | jq '.Parameters[0].Value' --raw-output)\n",
                         "docker swarm join --token $TOKEN ${INITIP}:2377\n"
@@ -785,16 +758,7 @@
     "Mappings" : {
       "RegionMap" : {
         "us-east-1" : {
-            "AMI" : "ami-80861296"
-        },
-        "us-east-2" : {
-            "AMI" : "ami-618fab04"
-        },
-        "us-west-1" : {
-            "AMI" : "ami-2afbde4a"
-        },
-        "us-west-2" : {
-            "AMI" : "ami-efd0428f"
+            "AMI" : "ami-54234e2e"
         }
       }
     },

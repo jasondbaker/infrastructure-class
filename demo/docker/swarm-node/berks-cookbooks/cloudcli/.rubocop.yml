@@ -1,0 +1,30 @@
+AllCops:
+  Exclude:
+    - vendor/**/*
+    - tmp/**/*
+    - cookbooks/**/*
+    - bin/**/*
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*
+
+AlignParameters:
+  Enabled: false
+Encoding:
+  Enabled: false
+HashSyntax:
+  Enabled: false
+LineLength:
+  Enabled: false
+StringLiterals:
+  Enabled: false
+NumericLiterals:
+  MinDigits: 12
+MethodLength:
+  Max: 30
+Metrics/AbcSize:
+  Max: 32
+Style/FrozenStringLiteralComment:
+  Enabled: false
+Style/NumericLiteralPrefix:
+  EnforcedOctalStyle: zero_only
