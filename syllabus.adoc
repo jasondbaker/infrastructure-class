@@ -185,7 +185,7 @@ without the written permission of the instructor. (See Class Session Recording
 
 [cols="10,10,40,40",options="header"]
 |=========================================================
-|Week | Date | Topic | Assignment Due
+|Week | Date | Topic | Assignments Due
 
 |1 | 1/29 | Course Introduction +
 Source control +
@@ -197,7 +197,8 @@ Shell scripting
  |
 Assignment 1 +
 Read _Git Hands On Guide_ +
-Read _Linux Hands On Guide_
+Read _Linux Hands On Guide_ +
+Watch Lecture 2 video recordings
 
 |3 | 2/12 | Infrastructure fundamentals +
 Virtualization +
@@ -205,12 +206,14 @@ Distributed infrastructure design and operations +
  |
 Assignment 2 +
 Read _Infrastructure as Code_ Chapters 1 & 2 +
+Watch Lecture 3 video recordings
 
 |4 | 2/19 | Cloud computing +
 AWS +
 IAM, EC2, S3 |
 Assignment 3 +
 Read _Overview of Amazon Web Services_ (White paper April 2017) +
+Watch Lecture 4 video recordings +
 * Optional * +
 Read AWS Certified Solutions Architect Official Study Guide Chapters 1, 2, 3 & 6
 
@@ -219,6 +222,7 @@ AWS +
 VPC, RDS, ELB |
 Assignment 4 +
 Read _Architecting for the Cloud: AWS Best Practices_ (White paper February 2016) +
+Watch Lecture 5 video recordings +
 * Optional * +
 Read AWS Certified Solutions Architect Official Study Guide Chapters 4, 5, & 7
 
@@ -228,6 +232,7 @@ Autoscaling, Cloud Watch, Route53, +
 SQS, SNS, SES |
 Assignment 5 +
 Read _Infrastructure as Code_ Chapters 3 & 4 +
+Watch Lecture 6 video recordings +
 * Optional * +
 Read AWS Certified Solutions Architect Official Study Guide Chapters 8, 9, & 10
 
@@ -239,36 +244,42 @@ Read AWS Certified Solutions Architect Official Study Guide Chapters 8, 9, & 10
 Continuous integration & delivery +
  |
 Assignment 6 +
-Read _Infrastructure as Code_ Chapters 10 & 11
+Read _Infrastructure as Code_ Chapters 10 & 11 +
+Watch Lecture 8 video recordings 
 
 
 |9 | 4/9 | Infrastructure as code +
 CloudFormation +
  |
 Assignment 7 +
-Read _Infrastructure as Code_ Chapters 5 & 6
+Read _Infrastructure as Code_ Chapters 5 & 6 +
+Watch Lecture 9 video recordings
 
 |10 | 4/16 | Configuration Management +
  |
 Assignment 8 +
-Read _Infrastructure as Code_ Chapters 7 & 8
+Read _Infrastructure as Code_ Chapters 7 & 8 +
+Watch Lecture 10 video recordings
 
 |11 | 4/23 | CI/CD Pipelines +
 Jenkins +
  |
 Assignment 9 +
-Read _Infrastructure as Code_ Chapters 12 & 13
+Read _Infrastructure as Code_ Chapters 12 & 13 +
+Watch Lecture 11 video recordings
 
 |12 | 4/30 | Containers +
 Docker |
 Assignment 10 +
-Read _Infrastructure as Code_ Chapters 9 & 14
+Read _Infrastructure as Code_ Chapters 9 & 14 +
+Watch Lecture 12 video recordings
 
 |13 | 5/7 | Service Discovery +
 Container Orchestration +
  |
 Assignment 11 +
 Read _Infrastructure as Code_ Chapter 15 +
+Watch Lecture 13 video recordings
 
 
 |14 | 5/14 | Final Challenge |
