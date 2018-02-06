@@ -672,7 +672,7 @@ Now type in the `git status` command again. Notice how all the files
 are now being tracked and are ready to be committed. These files are in the
 git staging area. We'll commit them to the repository next. Type:
 
-  $ git commit -m 'assignment1 files'
+  $ git commit -m 'assignment 2 files'
 
 Next, take a look at the commit log. Type:
 
