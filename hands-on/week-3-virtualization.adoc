@@ -42,8 +42,8 @@ Your goal in this project is to modify the Vagrantfile to create a virtual machi
   * The default Vagrantfile configuration sets up a VM with a limited network connection between the guest OS and host OS. We want to setup a web server on the VM and be able to access that server from a web browser on our host. Setup network port forwarding to forward port 80 running in the guest OS to port 8081 running on the host OS. You can find documentation on how to setup this network forwarding in the Vagrantfile here:
     ** https://www.vagrantup.com/docs/networking/basic_usage.html
   * The base Alpine Linux box does not come with Nginx software installed, so you should modify the Vagrantfile to install it. One of the easiest ways to do that is to add a shell provisioner (https://www.vagrantup.com/docs/provisioning/shell.html).
-    ** Alpine Linux uses the `apk` package management tool which is similar to `yum`. A couple of the other commands on Alpine are also slightly different than those on Amazon Linux. Here are the shell commands the Vagrantfile will need to run on the VM to install nginx software:
-    *** sudo apk add --upgrade apk-tools@edge
+    ** Alpine Linux uses the `apk` package management tool which is similar to `yum`. A couple of the other commands on Alpine are also slightly different than those on Amazon Linux. Here are the shell commands that Vagrant will need to run on the VM to install and start an Nginx server:
+    *** apk add --upgrade apk-tools@edge
     *** apk update
     *** apk add nginx
     *** rc-service nginx start
