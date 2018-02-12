@@ -14,12 +14,18 @@ Setup a virtualization environment on your local workstation and build a basic w
 
   * Install VirtualBox software on your workstation:
     - https://www.virtualbox.org/
+    - Note: If you already have VirtualBox on your system, make sure it is up to date.
   * Install Vagrant software on your workstation:
     - https://www.vagrantup.com/
 
 [WARNING]
 ====
 VirtualBox will not run on a UST lab workstation. It must be installed on a personal PC or Mac system. If you do not have a personal laptop, partner with someone else in the class who does.
+====
+
+[NOTE]
+====
+If you are using a Windows workstation, you may need to run Powershell as the Administrator while exercising Vagrant commands.
 ====
 
 == The project
