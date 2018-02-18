@@ -28,6 +28,11 @@ VirtualBox will not run on a UST lab workstation. It must be installed on a pers
 If you are using a Windows workstation, you may need to run Powershell as the Administrator while exercising Vagrant commands.
 ====
 
+[NOTE]
+====
+Some laptops (typically Windows machines) have virtualization extensions disabled in their BIOS which prevents VirtualBox from running properly. You will see an error message like `VT-x is not available` when trying to launch a VM. The solution is to access your laptop's BIOS settings and enable virtualization support.
+====
+
 == The project
 
 Let's get started!
