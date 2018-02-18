@@ -473,7 +473,7 @@ browser. Let's launch a load balancer next.
 === Launch an Elastic Load Balancer
 
 Select the *Load Balancers* link on the EC2 dashboard and click the button to
-*create a classic load balancer*. The load balancer will have the following properties:
+*create an application load balancer*. The load balancer will have the following properties:
 
   * Name: `nextgen-lb`
   * Create it inside your VPC
@@ -485,22 +485,20 @@ Select the *Load Balancers* link on the EC2 dashboard and click the button to
     for a load balancer. You would create a separate health check web page.
     However, for this assignment just leave the path as the default.
     ** Set the Health Check Interval to 10 seconds
-  * Add the `webserver1` and `webserver2` instances to the load balancer
-  * Create a tag:
+  * Create a target group called `webservers` for the load balancer and add the
+  `webserver1` and `webserver2` instances to the group.
+  * Create a tag for the load balancer:
     ** Key: `Project`
     ** Value: `Assignment 5`
 
-After you click the *create* button, click the *Load Balancers* menu link
-on the EC2 dashboard. Then select the load balancer you just launched and
-look at the set of *instances* associated with the load balancer. You will
-notice that the status of the instances is _OutOfService_. This status means
+After you click the *create* button, click the *Target Groups* menu link
+on the EC2 dashboard. Then select the target group you created and
+look at the set of *instances* associated with the group. You will
+notice that the status of the instances is _Initial_. This status means
 that the web servers haven't passed the load balancer's health check yet.
 
-image:../images/assignment5/loadbalancer-instances.png["600","600"]
-
-
 Refresh the browser display after a minute or two and you should see the
-status of the web server instances change to _InService_.
+status of the web server instances change to _Healthy_.
 
 Once both instances are in service, click on the *Description* panel of the
 selected load balancer to see its *DNS Name*. This name is the end point for
@@ -537,8 +535,8 @@ that one of Amazon's data centers experiences a complete power outage and
 takes down the `nextgen-public-2` subnet. Go to the EC2 dashboard,
 select the `webserver2` instance and stop it.
 
-Next, go back to the *Load Balancers*
-listing and select your load balancer. Take a look at the state of the instances
+Next, go back to the *Target Groups*
+listing and select your target group. Take a look at the state of the instances
 connected to the load balancer. You should notice that `webserver2` is in an
 out of service state. Wait 30 seconds and refresh the page if it hasn't changed
 to this status yet.
