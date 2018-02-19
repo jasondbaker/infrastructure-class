@@ -25,6 +25,8 @@ You need to have a personal AWS account and GitHub account for this assignment.
 
 Get ready to build your virtual private cloud!
 
+image:../images/assignment5/Assignment-5-diagram.png["800","800"]
+
 === Create a Virtual Private Cloud and subnets
 
 The first step in this assignment is to create a new Virtual Private Cloud (VPC).
@@ -45,7 +47,7 @@ to go through this process twice, once for each subnet.
 The subnets should have the following parameters:
 
   * Subnet #1
-    ** Name: nextgen-public
+    ** Name: nextgen-public-1
     ** VPC: nextgen-vpc
     ** AZ: us-east-1a
     ** CIDR: 10.0.1.0/24
@@ -114,7 +116,7 @@ image:../images/assignment5/route-table.png["600","600"]
 
 Your new route table isn't associated with any subnets so it isn't actually doing
 anything yet. Click on the *subnet associations* for the new route table and edit
-the current properties by adding the `nextgen-public` subnet to the
+the current properties by adding the `nextgen-public-1` subnet to the
 routing table. Save your work.
 
 Now if you launch an instance into the VPC's public subnet it should be able to
@@ -136,11 +138,11 @@ instance should have the following properties:
   * Located in Northern Virginia (us-east)
   * t2.micro instance type
   * Network is `nextgen-vpc`
-  * Subnet is `nextgen-public`
+  * Subnet is `nextgen-public-1`
   * Auto-assign Public IP is enabled
   * Root volume size set to 10 GiB
   * Create a tag with a key of `Name` and a value of `webserver1`
-  * Create a new security group for the instance called `webservers` with the following policies:
+  * Create a new security group for the instance called `webservers-sg` with the following policies:
     ** SSH from anywhere 0.0.0.0/0
     ** HTTP from anywhere 0.0.0.0/0
     ** HTTPS from anywhere 0.0.0.0/0
@@ -158,14 +160,14 @@ private subnet. The second instance should have the following properties:
 * Auto-assign Public IP is disabled
 * Root volume size set to 10 GiB
 * Create a tag with a key of `Name` and a value of `backend1`
-* Create a new security group for the instance called `backends` with the following policies:
+* Create a new security group for the instance called `backends-sg` with the following policies:
   ** SSH from sg-<webservers ID>  (where webservers ID is your webservers security group identifier, example: sg-f0321d88)
   ** HTTP from sg-<webservers ID>
   ** HTTPS from sg-<webservers ID>
 * Review your configuration settings and launch the new instance.
 
-The rules you created for the `backends` security group restrict incoming ssh, http,
-and https requests to only those instances located in the `webservers` security group.
+The rules you created for the `backends-sg` security group restrict incoming ssh, http,
+and https requests to only those instances located in the `webservers-sg` security group.
 You can see how it's possible to use security groups to identify source networks
 when creating rules in other security groups. This is a helpful abstraction because
 you don't have to think about the actual networks that instances live in. You
@@ -478,7 +480,8 @@ Select the *Load Balancers* link on the EC2 dashboard and click the button to
   * Name: `nextgen-lb`
   * Create it inside your VPC
   * Select the two public subnets
-  * Assign the existing `webservers` security group
+  * Create a new `nextgen-lb-sg` security group with the following rules:
+    ** Allow traffic on port 80 from the Internet.
   * The load balancer should only have an http listener (port 80) configured.
   * Health Check
     ** Normally you probably wouldn't use `/index.html` as the health check path
