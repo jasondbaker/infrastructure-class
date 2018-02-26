@@ -40,24 +40,42 @@ It's time to launch some services using a Platform-as-a-Service (PaaS).
 
 === Launch management instance
 
-We're going to take a different approach to creating AWS resources in this assignment. Until this point in the course, you have been working primarily with the AWS web console to create resources. In the real world we try to use web consoles as little as possible. Our preference is to define infrastructure as code rather than using point-and-click interfaces.
+We're going to take a different approach to creating AWS resources in this assignment. Until this 
+point in the course, you have been working primarily with the AWS web console to create resources. 
+In the real world we try to use web consoles as little as possible. Our preference is to define 
+infrastructure as code rather than using point-and-click interfaces.
 
-Why is this the case? The Elastic Beanstalk (EB) service provides a great example of why infrastructure as code is a preferred practice. AWS constantly updates and changes the web interface for the EB service. If you documented the web-based process for deploying an application on EB, you would have to update your documentation a couple times a year. Additionally, some EB users will see updates to the EB web console before other users. Good luck trying to keep all your team members happy.
+Why is this the case? The Elastic Beanstalk (EB) service provides a great example of why 
+infrastructure as code is a preferred practice. AWS constantly updates and changes the web 
+interface for the EB service. If you documented the web-based process for deploying an 
+application on EB, you would have to update your documentation a couple times a year. 
+Additionally, some EB users will see updates to the EB web console before other users. Good luck 
+trying to keep all your team members happy.
 
-The bottom line is that a code-based approach is easier to document, automate, and run. It is a much more scalable and reliable approach to building infrastructure. Let's start practicing what we preach.
+The bottom line is that a code-based approach is easier to document, automate, and run. It is a much 
+more scalable and reliable approach to building infrastructure. Let's start practicing what we 
+preach.
 
-Go ahead and create a new t2.micro linux instance called `mgmt1` in a default VPC in the us-east-1 (N. Virginia) region. Yes, you can use the AWS console for this task (but this is the last time!).
+Go ahead and create a new t2.micro linux instance called `mgmt1` in a default VPC in the 
+us-east-1 (N. Virginia) region. Yes, you can use the AWS console for this task (but this is the 
+last time!).
 
 [NOTE]
-If you accidentally deleted the default VPC in the us-east-1 region you can try to use one of the other regions such as us-west-1. You will have to modify the assignment instructions accordingly. You can also contact AWS support and ask them to recreate the default VPC in us-east-1 for you.
+If you accidentally deleted the default VPC in the us-east-1 region you can try to use one of the 
+other regions such as us-west-1. You will have to modify the assignment instructions accordingly. 
+You can also contact AWS support and ask them to recreate the default VPC in us-east-1 for you.
 
 === Setup EB CLI configuration
 
-Connect to the instance via ssh once it is available and install the Elastic Beanstalk CLI. The EB CLI is a command-line tool you can use to control the AWS EB service. It's kind of like a service-specific version of the AWS CLI. Type in the following command to install the EB CLI on the instance:
+Connect to the instance via ssh once it is available and install the Elastic Beanstalk CLI. The 
+EB CLI is a command-line tool you can use to control the AWS EB service. It's kind of like a 
+service-specific version of the AWS CLI. Type in the following command to install the EB CLI on 
+the instance:
 
   pip install awsebcli --upgrade --user
 
-Next, clone the following Wordpress application git repository to the instance and change to the `seis665-wordpress` directory:
+Next, clone the following Wordpress application git repository to the instance and change to 
+the `seis665-wordpress` directory:
 
 	 git clone https://github.com/jasondbaker/seis665-wordpress.git
 
@@ -65,34 +83,45 @@ Inside the `seis665-wordpress` directory, run the `eb init` command:
 
   eb init
 
-First, the EB CLI prompts you to select a region. Type the number that corresponds to the region that you would like to use and press Enter.
+First, the EB CLI prompts you to select a region. Type the number that corresponds to the region 
+that you would like to use and press Enter.
 
 	us-east-1 (N. Virginia)
 
-Next, provide your API access key and secret key so that the EB CLI can manage resources for you. Access keys are created in the AWS Identity and Access Management management console.
+Next, provide your API access key and secret key so that the EB CLI can manage resources for you. 
+Access keys are created in the AWS Identity and Access Management management console.
 
 	(aws-access-id): (type in your aws-access-id)
 	(aws-secret-key): (type in your aws-secret-key)
 
-An application in Elastic Beanstalk is a resource that contains a set of application versions (source), environments, and saved configurations that are associated with a single web application. Each time you deploy your source code to Elastic Beanstalk using the EB CLI, a new application version is created.
+An application in Elastic Beanstalk is a resource that contains a set of application versions 
+(source), environments, and saved configurations that are associated with a single web application. 
+Each time you deploy your source code to Elastic Beanstalk using the EB CLI, a new application 
+version is created.
 
-The default application name is the name of the folder in which you ran `eb init`. Let’s set this to `wordpress`:
+The default application name is the name of the folder in which you ran `eb init`. Let’s set this 
+to `wordpress`:
 
 	Application name: wordpress
 
-Next, the EB CLI should automatically detect that our application is using `PHP`. It will ask us what version of PHP our application needs. The PHP platform version we want is `5.6`.
+Next, the EB CLI should automatically detect that our application is using `PHP`. It will ask us 
+what version of PHP our application needs. The PHP platform version we want is `5.6`.
 
 We don’t need to use CodeCommit for this project, choose `no` when prompted.
 
 We also don’t need to connect to the instances created by EB, so choose `no` when asked to setup SSH.
 
-Notice how the EB CLI setup a hidden subdirectory called `.elasticbeanstalk` within the current directory. The settings you just entered are stored in a YAML file within this subdirectory. Check it out:
+Notice how the EB CLI setup a hidden subdirectory called `.elasticbeanstalk` within the current 
+directory. The settings you just entered are stored in a YAML file within this subdirectory. Check 
+it out:
 
 	cat .elasticbeanstalk/config.yml
 
 === Launch Wordpress environment
 
-Now we need to create a new environment which will support our application. An environment consists of all the AWS resources needed to power the app -- EC2 instances, ELB, RDS database, auto-scaling group, security groups, etc. Launch the environment by running the command:
+Now we need to create a new environment which will support our application. An environment consists 
+of all the AWS resources needed to power the app -- EC2 instances, ELB, RDS database, auto-scaling 
+group, security groups, etc. Launch the environment by running the command:
 
 	eb create wordpress-dev --database --scale 2 --timeout 30
 
@@ -102,12 +131,18 @@ This command will ask a series of questions before launching the environment:
 	RDS DB name: wordpressdb
 	RDS DB master password: (choose one)
 
-The EB CLI will automatically upload the Wordpress application to EB as a deployment package. Now watch as the EB service builds the infrastructure environment for your application. This process may take about 20 minutes.
+The EB CLI will automatically upload the Wordpress application to EB as a deployment package. Now 
+watch as the EB service builds the infrastructure environment for your application. This process 
+may take about 20 minutes.
 
 [NOTE]
-Elastic Beanstalk uses the access permissions associated with your IAM account to create resources such as EC2 instances and security groups. If the creation process fails, your IAM account may not have the proper permissions in place to create all the necessary resources. You should go into the IAM console and add the AdministratorAccess policy to your account.
+Elastic Beanstalk uses the access permissions associated with your IAM account to create resources 
+such as EC2 instances and security groups. If the creation process fails, your IAM account may not 
+have the proper permissions in place to create all the necessary resources. You should go into the 
+IAM console and add the AdministratorAccess policy to your account.
 
-After the launch process completes, check out the status of your EB environment by using the following command:
+After the launch process completes, check out the status of your EB environment by using the 
+following command:
 
 	eb status
 
@@ -125,13 +160,17 @@ You should see something like:
 	Status: Ready
 	Health: Green
 
-If the Status attribute is `Ready` and the Health is `Green` then you should be able to open up the Wordpress application in a browser using the CNAME address in the output above. For example:
+If the Status attribute is `Ready` and the Health is `Green` then you should be able to open up the 
+Wordpress application in a browser using the CNAME address in the output above. For example:
 
 	http://jbaker-wordpress-dev.us-east-1.elasticbeanstalk.com
 
-Go ahead and configure the Wordpress application like the previous assignment. Feel free to log into the Wordpress application and play around with the interface a little bit. For example, try to create a new blog post.
+Go ahead and configure the Wordpress application like the previous assignment. Feel free to log 
+into the Wordpress application and play around with the interface a little bit. For example, try to 
+create a new blog post.
 
-You just launched a highly-available Wordpress environment! What do you think? Was it easier to build the environment using the EB CLI and code versus using the AWS web console?
+You just launched a highly-available Wordpress environment! What do you think? Was it easier to 
+build the environment using the EB CLI and code versus using the AWS web console?
 
 === Modify the environment configuration
 
@@ -139,17 +178,23 @@ Go back to your terminal and check out the health of your deployed Wordpress env
 
 	eb health
 
-You should see two healthy instances. When we executed the `eb create` command we specified that the environment should launch with 2 instances (`--scale 2`). Let’s change the number of running instances in the environment to 1.
+You should see two healthy instances. When we executed the `eb create` command we specified that 
+the environment should launch with 2 instances (`--scale 2`). Let’s change the number of running 
+instances in the environment to 1.
 
 You can modify the EB application environment by typing in the following command:
 
 	eb config
 
-This will open up a text editor containing the current application environment configuration. Look for the `aws:autoscaling:asg:` configuration section and change the MinSize attribute to `1`.
+This will open up a text editor containing the current application environment configuration. Look 
+for the `aws:autoscaling:asg:` configuration section and change the MinSize attribute to `1`.
 
-Save your file changes and exit the text editor. Notice how EB immediately begins to modify the deployed application environment. Wait for the update to complete.
+Save your file changes and exit the text editor. Notice how EB immediately begins to modify the 
+deployed application environment. Wait for the update to complete.
 
-Now, try checking the health of the EB environment again. The health command output might still show two running instances. If so, wait a few more minutes and check again. EB will eventually terminate one of the running instances.
+Now, try checking the health of the EB environment again. The health command output might still 
+show two running instances. If so, wait a few more minutes and check again. EB will eventually 
+terminate one of the running instances.
 
 Terminate the deployed application by running the command:
 
@@ -163,9 +208,11 @@ Watch as EB deletes all the infrastructure resources that were created to run yo
 Make a sub-directory in your home directory called `assignment7`. Change to that directory and
 create a git repository.
 
-Next, configure the AWS CLI with your access key, secret key, and the current region. Review the previous assignment if you don't recall how to configure the CLI.
+Next, configure the AWS CLI with your access key, secret key, and the current region. Review the 
+previous assignment if you don't recall how to configure the CLI.
 
-Run the following command to retrieve the Elastic Beanstalk events and store the events in a JSON file:
+Run the following command to retrieve the Elastic Beanstalk events and store the events in a JSON 
+file:
 
   $ aws elasticbeanstalk describe-events --application-name wordpress > eb-events.json
 
@@ -184,11 +231,13 @@ Add the `eb-events.json` files to the Git staging area and commit the files to t
 
 Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/7b133d3aa0bc7920c4c6c116206e70e6
 
-Configure your local Git repository to connect to this new GitHub repository. Push your work to GitHub and verify that the assignment files are located in the GitHub repository.
+Configure your local Git repository to connect to this new GitHub repository. Push your work to 
+GitHub and verify that the assignment files are located in the GitHub repository.
 
 === Terminate application environment
 
-The last step in the assignment is to delete all the AWS resources you created. In this case, the only AWS resource still remaining is the `mgmt1` EC2 instance.
+The last step in the assignment is to delete all the AWS resources you created. In this case, the 
+only AWS resource still remaining is the `mgmt1` EC2 instance.
 
 == Submitting your assignment
 I will review your published work on GitHub after the homework due date.

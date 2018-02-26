@@ -46,9 +46,7 @@ software packages.
 Launch a new stack using the `AnsibleSystems.json` template into the us-east-1 region. Remember to specify your server keypair name when launching the stack. You will also need to provide the current IP address of your workstation in CIDR
 format (x.x.x.x/32).
 
-In past assignments, AWS security groups were configured to allow SSH access
-from anywhere. This is a poor security practice (even for development) and in real world deployments you should configure
-security groups to minimize ssh access to your cloud resources. You can access the website http://checkip.amazonaws.com in a browser to quickly determine the IP address of your workstation. Remember that if you move your workstation from one
+You can access the website http://checkip.amazonaws.com in a browser to quickly determine the IP address of your workstation. Remember that if you move your workstation from one
 network to another (like from home to work) you will need to update this workstation IP address in the CloudFormation stack
 by performing an update on the stack.
 

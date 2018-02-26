@@ -79,7 +79,7 @@ first security group:
     ** Description: production web servers
     ** VPC: productionVPC
     ** Inbound:
-      *** SSH allowed from the Internet
+      *** SSH allowed from your workstation
       *** HTTP allowed from the Internet
 
 The second security group will allow only the web servers to communicate with

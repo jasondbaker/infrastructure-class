@@ -130,6 +130,14 @@ software we needed. However, in the previous assignment we built out a Linux
 server and created an AMI. Now we can use that AMI to launch a new instance,
 saving us the time and effort required to get a new webserver up and running.
 
+In past assignments, AWS security groups were configured to allow SSH access from anywhere. 
+This is a poor security practice (even for development) and in real world deployments you should 
+configure security groups to minimize ssh access to your cloud resources. You can access the 
+website http://checkip.amazonaws.com in a browser to quickly determine the current IP address of your 
+workstation. Then, you can use this IP address to limit SSH access on the server to your workstation. 
+Remember that if you move your workstation from one network to another (like from home 
+to work) you will need to update this workstation IP address in the security group configuration.
+
 Go to the EC2 dashboard in the AWS web console and launch a new instance. The
 instance should have the following properties:
 
@@ -143,7 +151,7 @@ instance should have the following properties:
   * Root volume size set to 10 GiB
   * Create a tag with a key of `Name` and a value of `webserver1`
   * Create a new security group for the instance called `webservers-sg` with the following policies:
-    ** SSH from anywhere 0.0.0.0/0
+    ** SSH from your workstation (example, 53.128.44.16/32)
     ** HTTP from anywhere 0.0.0.0/0
     ** HTTPS from anywhere 0.0.0.0/0
   * Review your configuration settings and launch the new instance.

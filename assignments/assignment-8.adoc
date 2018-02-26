@@ -73,7 +73,7 @@ The stack template should create the following logical resources:
     ** Server key-pair: <use input parameter>
 
   * A security group with a logical name and group name of *WebserversSG* in the VPC.
-    ** Allow incoming requests on port 22 from 0.0.0.0/0
+    ** Allow incoming requests on port 22 from your workstation
     ** Allow incoming requests on port 80 from 0.0.0.0/0
   * An application load balancer named *EngineeringLB* and target group named *engineering-webservers*
     ** Load balance incoming requests on port 80 and send to instance port 80 using the http protocol.
