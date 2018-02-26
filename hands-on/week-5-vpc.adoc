@@ -51,7 +51,8 @@ Create three EC2 instances with the following properties:
 * The three instances should launch into public subnets in separate AZs (two instances are in the same AZ).
 * The instances are associated with a security group called `ecoweb-sg`. This security group should allow:
   - Incoming traffic on port 80 (http) from the Internet.
-  - Incoming traffic on port 22 (ssh) from the Internet.
+  - Incoming traffic on port 22 (ssh) from your workstation (use http://checkip.amazonaws.com to determine your
+  IP address).
 
 === Create ELB
 

@@ -108,7 +108,7 @@ autoscaling group should use a launch configuration with the following propertie
 * The three instances should launch into public subnets in separate AZs.
 * The instances are associated with a security group called `ecoweb-sg`. This security group should allow:
   - Incoming traffic on port 80 (http) from the `eco-elb-sg`.
-  - Incoming traffic on port 22 (ssh) from the Internet.
+  - Incoming traffic on port 22 (ssh) from your workstation (remember to use http://checkip.amazonaws.com).
 
 * Enable load balancing and associate the Autoscaling group with the `ecotech-webservers` target group.
 
