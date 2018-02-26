@@ -57,6 +57,17 @@ groups. You will need to use these security groups when launching services
 later in the assignment. It's always a good idea to plan out the security
 requirements for your services in advance.
 
+Create a security group called `production-elb`. This security group will
+accept traffic from the Internet and distribute it to web servers. The
+requirements for the security group include:
+
+  * production-elb
+    ** Name tag: production-elb
+    ** Description: production load balancer
+    ** VPC: productionVPC
+    ** Inbound:
+      *** HTTP allowed from the Internet
+
 Create two security groups called `production-web` and `production-db`. The
 first security group will allow all external devices to communicate with
 the web server instances via SSH and HTTP. Here are the requirements for the
@@ -68,8 +79,8 @@ first security group:
     ** Description: production web servers
     ** VPC: productionVPC
     ** Inbound:
-      *** SSH from source 0.0.0.0/0
-      *** HTTP from source 0.0.0.0/0
+      *** SSH allowed from the Internet
+      *** HTTP allowed from the Internet
 
 The second security group will allow only the web servers to communicate with
 the MySQL database instance using port 3306. Here are the requirements for the
@@ -81,7 +92,7 @@ second security group:
     ** Description: production database servers
     ** VPC: productionVPC
     ** Inbound:
-      *** MySQL (3306) from source production-web security group
+      *** MySQL (3306) allowed from the web servers
 
 
 === Create RDS database
@@ -124,14 +135,14 @@ like this:
 You will need to know this database endpoint address when setting up the WordPress web
 application.
 
-=== Create a load balancer
+=== Create an application load balancer
 
 The auto scaling group will deploy multiple WordPress servers into your VPC.
-You will need a load balancer to distribute requests to the web servers
+You will need an aplication load balancer to distribute requests to the web servers
 to ensure that the service is highly available.
 
 Go to the EC2 dashboard and select the `Load Balancers` menu item. Create a
-new *classic* load balancer called `wordpress-lb` that will distribute HTTP (port 80) requests across
+new application load balancer called `wordpress-lb` that will distribute HTTP (port 80) requests across
 web servers located in both us-west subnets. The load
 balancer should use `/wordpress/readme.html` as the health check ping path. You won't
 be able to associate any EC2 instances with the load balancer yet. That's not
@@ -140,6 +151,9 @@ a problem since you can associate an instance with the load balancer later.
 Note, make sure you select the correct VPC, subnets, and security group
 settings for the load balancer. Review previous assignments if you are unsure
 how to set these properties. Also, don't forget to tag the load balancer.
+
+Create a load balancer target group called `production-webservers`. Remember to associate the
+proper subnets with this target group. The target group will remain empty for now.
 
 === Create WordPress instance and AMI
 
@@ -427,7 +441,7 @@ The auto scaling group should have the following properties:
   * Network: productionVpc
   * Subnets: production-public-1 & production-public-2
   * Receive traffic from Elastic Load Balancers: Enabled
-    ** Select the `wordpress-lb` load balancer
+    ** Select the `production-webservers` target group
     ** Health check type: ELB
   * Scaling policy: Keep this group at its initial size
   * Tag:
