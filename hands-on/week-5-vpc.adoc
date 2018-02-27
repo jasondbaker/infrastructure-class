@@ -51,6 +51,7 @@ Create three EC2 instances with the following properties:
 * 10GB root volume storage size
 * Instances are named `ecoweb1`, `ecoweb2`, and `ecoweb3`
 * The three instances should launch into public subnets in separate AZs (two instances are in the same AZ).
+* The instances should have public IP addresses.
 * The instances are associated with a security group called `ecoweb-sg`. This security group should allow:
   - Incoming traffic on port 80 (http) from the Internet.
   - Incoming traffic on port 22 (ssh) from your workstation (use http://checkip.amazonaws.com to determine your
