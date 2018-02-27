@@ -61,7 +61,7 @@ Create three EC2 instances with the following properties:
 Create an Application Elastic Load Balancer with the following properties:
 
 * Listen on port 80 (http)
-* Perform a health check on port 80 to the URL endpoint: `/input.php`
+* Perform a health check on port 80 to the URL endpoint: `/index.php`
 * ELB is associated with the `ecoweb-sg` security group.
 * Setup a target group called `ecotech--webservers` and associate webserver instances with the group.
 
