@@ -33,6 +33,8 @@ The VPC (`ecotech-vpc`) exists in the us-east-1 region, uses a network CIDR bloc
 * ecotech-private1 (10.25.3.0/24)
 * ecotech-private2 (10.25.4.0/24)
 
+When creating the VPC, you need to turn on DNS resolution by selecting the VPC, clicking the `Actions` drop down and enabling DNS hostnames.
+
 Each availability zone contains a public subnet and a private subnet. The exact AZs don't make a 
 difference, as long as the AZs are different.
 
@@ -47,7 +49,7 @@ Do you remember which subnets route through the Internet Gateway and which subne
 Create three EC2 instances with the following properties:
 
 * t2.micro instance size
-* AMI: ami-3ea13f29 (public community image)
+* AMI: ami-598b6124 (public community image)
 * 10GB root volume storage size
 * Instances are named `ecoweb1`, `ecoweb2`, and `ecoweb3`
 * The three instances should launch into public subnets in separate AZs (two instances are in the same AZ).
