@@ -23,7 +23,7 @@ pkgs.each do |pkg, version|
   end
 end
 
-# Enable Docker at startup
+# Enable http at startup
 service 'httpd' do
   action :enable
 end

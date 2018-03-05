@@ -51,7 +51,7 @@ It will take a few minutes for CloudFormation to create the AWS resources for yo
 the console. When the stack has been created, you will see a CREATE_COMPLETE message in the *Status* column of the console and on the 
 *Overview* tab.
 
-Take a look at the resources created by the template by going to the VPC web console and the EC2 web console. When you are finished reviewing
+Review the stack outputs by looking at the resources in the `Outputs` tab. Take a look at the resources created by the template by going to the VPC web console and the EC2 web console. When you are finished reviewing
 the resources go ahead and delete the stack.
 
 === Autoscaling architecture

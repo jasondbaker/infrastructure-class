@@ -33,8 +33,6 @@ The VPC (`ecotech-vpc`) exists in the us-east-1 region, uses a network CIDR bloc
 * ecotech-private1 (10.25.3.0/24)
 * ecotech-private2 (10.25.4.0/24)
 
-When creating the VPC, you need to turn on DNS resolution by selecting the VPC, clicking the `Actions` drop down and enabling DNS hostnames.
-
 Each availability zone contains a public subnet and a private subnet. The exact AZs don't make a 
 difference, as long as the AZs are different.
 
