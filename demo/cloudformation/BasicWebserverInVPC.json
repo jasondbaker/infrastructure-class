@@ -210,7 +210,7 @@
           "Ref": "InstanceType"
         },
         "ImageId": "ami-3ea13f29",
-        "KeyName": "seis665",
+        "KeyName": {"Ref" : "KeyName"},
         "NetworkInterfaces": [
           {
             "GroupSet": [
