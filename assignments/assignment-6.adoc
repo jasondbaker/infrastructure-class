@@ -138,7 +138,7 @@ application.
 === Create an application load balancer
 
 The auto scaling group will deploy multiple WordPress servers into your VPC.
-You will need an aplication load balancer to distribute requests to the web servers
+You will need an application load balancer to distribute requests to the web servers
 to ensure that the service is highly available.
 
 Go to the EC2 dashboard and select the `Load Balancers` menu item. Create a
@@ -342,7 +342,7 @@ files. The script should execute the following set of commands:
   usermod -a -G www apache
   chown -R apache:www /var/www
   chmod 2775 /var/www
-  find /var/www -type d -exex chmod 2775 {} \;
+  find /var/www -type d -exec chmod 2775 {} \;
   find /var/www -type f -exec chmod 0664 {} \;
 
 {blank}
@@ -503,7 +503,7 @@ way to solve this issue for new implementations.
 
 === Collecting session data
 
-Connect to your original web server instances using a terminal program. In assignment
+Connect to your original web server instance using a terminal program. In assignment
 4, you used the AWS command line interface to interact with S3. Let's use the
 same CLI to pull some event information from the EC2 auto scaling service.
 
