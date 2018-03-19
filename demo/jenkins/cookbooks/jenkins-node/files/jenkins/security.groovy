@@ -1,7 +1,9 @@
 #!groovy
 
 import jenkins.model.*
+import jenkins.model.Jenkins
 import hudson.security.*
+import hudson.security.csrf.DefaultCrumbIssuer
 import jenkins.security.s2m.AdminWhitelistRule
 
 def instance = Jenkins.getInstance()
@@ -16,6 +18,7 @@ instance.setSecurityRealm(hudsonRealm)
 def strategy = new FullControlOnceLoggedInAuthorizationStrategy()
 strategy.setAllowAnonymousRead(false)
 instance.setAuthorizationStrategy(strategy)
+instance.setCrumbIssuer(new DefaultCrumbIssuer(true))
 instance.save()
 
 Jenkins.instance.getInjector().getInstance(AdminWhitelistRule.class).setMasterKillSwitch(false)

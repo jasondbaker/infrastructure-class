@@ -27,7 +27,7 @@ package 'awscli' do
   action :remove
 end
 
-node.default['cloudcli']['aws']['version'] = '1.11.102'
+node.default['cloudcli']['aws']['version'] = '1.14.58'
 include_recipe 'cloudcli::awscli'
 
 # Make sure Python 2.7 is the default
@@ -54,7 +54,7 @@ bash 'install-docker-repo' do
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
     add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
     apt-get update
-    apt-get install -y docker-ce=17.06.0~ce-0~ubuntu
+    apt-get install -y docker-ce=17.12.0~ce-0~ubuntu
   EOH
 end
 

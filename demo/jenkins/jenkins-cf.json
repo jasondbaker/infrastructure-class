@@ -33,18 +33,47 @@
                    "s3:GetObject",
                    "s3:PutObject"
                  ],
-                 "Resource": [
-                   {"Fn::Join" : [ "",
-                     [ {"Fn::GetAtt": ["S3Bucket", "Arn"]}, "/*" ]
-                    ]
-                    }
-                  ]
+                 "Resource": "*"
                 }
                ]
           },
           "Roles": [ { "Ref": "JenkinsAccessRole" }]
        }
     },
+    "ECAccessPolicy": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+         "PolicyName": "ec2Access",
+         "PolicyDocument": {
+            "Version" : "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "ec2:DescribeInstances",
+                  "ec2:AttachVolume",
+                  "ec2:DescribeSubnets",
+                  "ec2:DescribeImages",
+                  "ec2:DescribeKeyPairs",
+                  "ec2:DescribeSecurityGroups",
+                  "ec2:DescribeAvailabilityZones",
+                  "ec2:RunInstances",
+                  "ec2:StopInstances",
+                  "ec2:StartInstances",
+                  "ec2:CreateSubnet",
+                  "ec2:TerminateInstances",
+                  "ec2:AttachVolume",
+                  "ec2:DetachVolume",
+                  "ec2:CreateVolume",
+                  "ec2:CreateTags"
+                ],
+                "Resource": "*"
+               }
+              ]
+         },
+         "Roles": [ { "Ref": "JenkinsAccessRole" }]
+      }
+   },
     "JenkinsInstanceProfile": {
        "Type": "AWS::IAM::InstanceProfile",
        "Properties": {
@@ -183,7 +212,7 @@
       "Properties" : {
         "IamInstanceProfile": { "Ref": "JenkinsInstanceProfile"},
         "InstanceType": "t2.medium",
-        "ImageId": "ami-e014999a",
+        "ImageId": "ami-6735fd1a",
         "SubnetId": { "Ref": "PublicSubnet1" },
         "KeyName": { "Ref": "KeyName" },
         "SecurityGroupIds": [
@@ -197,8 +226,22 @@
                 "docker swarm init\n",
                 "echo \"",{"Ref": "JenkinsUsername"},"\" | docker secret create jenkins-user -\n",
                 "echo \"",{"Ref": "JenkinsPassword"},"\" | docker secret create jenkins-pass -\n",
-                "docker service create --name jenkins -d -p 8080:8080 -p 50000:50000 -e JAVA_OPTS=-Djenkins.install.runSetupWizard=false  --mount type=volume,source=jenkins-vol,destination=/var/jenkins_home --secret jenkins-user --secret jenkins-pass jenkins:seis\n",
+                "docker service create --name jenkins -d -p 8080:8080 -p 50000:50000 -e JAVA_OPTS=-Djenkins.install.runSetupWizard=false --env JENKINS_SLAVE_AGENT_PORT=50000 --mount type=volume,source=jenkins-vol,destination=/var/jenkins_home --secret jenkins-user --secret jenkins-pass jenkins:seis\n",
+                "sleep 120\n",
                 "# Signal the status from cfn-init\n",
+                "/usr/local/bin/cfn-signal -e $? ",
+                "         --stack ",
+                {
+                    "Ref": "AWS::StackName"
+                },
+                "         --resource JenkinsServer ",
+                "         --region ",
+                {
+                    "Ref": "AWS::Region"
+                },
+                "\n",
+                "# Signal again because sometimes the first attempt fails.\n",
+                "sleep 60\n",
                 "/usr/local/bin/cfn-signal -e $? ",
                 "         --stack ",
                 {
@@ -232,7 +275,7 @@
       "Properties" : {
         "IamInstanceProfile": { "Ref": "JenkinsInstanceProfile"},
         "InstanceType": "t2.medium",
-        "ImageId": "ami-e014999a",
+        "ImageId": "ami-6735fd1a",
         "SubnetId": { "Ref": "PublicSubnet1" },
         "KeyName": { "Ref": "KeyName" },
         "SecurityGroupIds": [
@@ -267,11 +310,6 @@
           }
         ]
       }
-    },
-    "S3Bucket": {
-      "Type" : "AWS::S3::Bucket",
-      "DeletionPolicy" : "Retain"
-
     }
   },
   "Parameters": {
@@ -300,9 +338,9 @@
       "Value": {"Fn::GetAtt": ["JenkinsServer", "PublicIp"]},
       "Description": "Jenkins server public IP address"
     },
-    "S3BucketName" : {
-      "Value": {"Fn::GetAtt": ["S3Bucket", "DomainName"]},
-      "Description": "Jenkins S3 bucket name"
+    "JenkinsSlaveIp" : {
+      "Value": {"Fn::GetAtt": ["JenkinsSlave", "PublicIp"]},
+      "Description": "Jenkins slave node public IP address"
     }
   }
 }
