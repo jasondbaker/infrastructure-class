@@ -1,7 +1,7 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
   "Resources": {
-    "class-vpc": {
+    "classVpc": {
       "Type": "AWS::EC2::VPC",
       "Properties": {
         "EnableDnsSupport": "true",
@@ -15,20 +15,20 @@
         ]
       }
     },
-    "public-subnet": {
+    "publicSubnet": {
       "Type": "AWS::EC2::Subnet",
       "Properties": {
         "VpcId": {
-          "Ref": "class-vpc"
+          "Ref": "classVpc"
         },
         "CidrBlock": "10.0.0.0/24"
       }
     },
-    "webserver-sg": {
+    "webserverSG": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
         "VpcId": {
-          "Ref": "class-vpc"
+          "Ref": "classVpc"
         },
         "GroupDescription": "Allow access from HTTP and SSH traffic",
         "SecurityGroupIngress": [
@@ -47,52 +47,52 @@
         ]
       }
     },
-    "internet-gw": {
+    "internetGW": {
       "Type": "AWS::EC2::InternetGateway",
       "Properties": {}
     },
-    "vpc-gw-attachment": {
+    "vpcGwAttachment": {
       "Type": "AWS::EC2::VPCGatewayAttachment",
       "Properties": {
         "InternetGatewayId": {
-          "Ref": "internet-gw"
+          "Ref": "internetGW"
         },
         "VpcId": {
-          "Ref": "class-vpc"
+          "Ref": "classVpc"
         }
       }
     },
-    "public-rt": {
+    "publicRT": {
       "Type": "AWS::EC2::RouteTable",
       "Properties": {
         "VpcId": {
-          "Ref": "class-vpc"
+          "Ref": "classVpc"
         }
       }
     },
-    "public-route": {
+    "publicRoute": {
       "Type": "AWS::EC2::Route",
       "Properties": {
         "DestinationCidrBlock": "0.0.0.0/0",
         "RouteTableId": {
-          "Ref": "public-rt"
+          "Ref": "publicRT"
         },
         "GatewayId": {
-          "Ref": "internet-gw"
+          "Ref": "internetGW"
         }
       },
       "DependsOn": [
-        "internet-gw"
+        "internetGW"
       ]
     },
-    "public-subnet-rt-assoc": {
+    "publicSubnetRTassoc": {
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
       "Properties": {
         "RouteTableId": {
-          "Ref": "public-rt"
+          "Ref": "publicRT"
         },
         "SubnetId": {
-          "Ref": "public-subnet"
+          "Ref": "publicSubnet"
         }
       }
     }

@@ -15,7 +15,7 @@
         ]
       }
     },
-    "PublicSubnet": {
+    "publicSubnet": {
       "Type": "AWS::EC2::Subnet",
       "Properties": {
         "VpcId": {
@@ -31,7 +31,6 @@
           "Ref": "InstanceType"
         },
         "ImageId": "ami-3ea13f29",
-        "KeyName": {"Ref" : "KeyName"},
         "NetworkInterfaces": [
           {
             "GroupSet": [

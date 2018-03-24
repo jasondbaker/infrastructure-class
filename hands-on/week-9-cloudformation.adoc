@@ -55,9 +55,9 @@ The template will create a stack containing a basic VPC environment:
 image:../images/week-9-cf-project.png["800","800"]
 
 You will need to add two t2.micro webservers named *web1* and *web2* to this template. The webservers should use the
-*ami-3ea13f29* AMI and be associated with the *webserver-sg* security group. 
+*ami-3ea13f29* AMI and be associated with the *webserverSG* security group. 
 
-You will also need to add an application load balancer called *website-lb* and a target group called *webservers*.
+You will also need to add an application load balancer called *websiteLB* and a target group called *webservers*.
 
 The first step is to figure out which resources you need to add to the template. Create a list of AWS resources you need to
 add and review the CloudFormation documentation to understand the associated resource types. Each resource has a set of 
