@@ -134,12 +134,6 @@ literally wait until a specified process completes. In this case, you want the p
 the EC2 instance is running. Hint, check out the `aws ec2 wait` command.
 
 
-=== Looking for more? (optional)
-
-You can really impress me by using Inspec (https://www.inspec.io/) to verify that the new instance
-is running in your account. Inspec is available at the command line on build nodes using the `inspec` 
-command.
-
 === Show me your work
 
 Please show me your pipeline code.

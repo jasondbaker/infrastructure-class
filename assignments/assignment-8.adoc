@@ -15,15 +15,26 @@ These template files create resource stacks in AWS.
 
 In this week's assignment, you will use AWS CloudFormation to create a
 basic stack. Your stack will expand the stack design that was created during
-the hands-on portion of the class. The easiest way to start creating your stack is by using
-the CloudFormation Designer tool, although you will need to use a code editor as well.
+the hands-on portion of the class. You will learn how code can simplify and ensure the repeatability of infrastructure
+deployments. 
 
-You will learn how code can simplify and ensure the repeatability of infrastructure
-deployments. Some students note that it takes more effort to create infrastructure using code versus manually creating infrastructure using a web console. That's probably true initially, especially when you are less familiar with infrastructure as code techniques. However, remember the ultimate goal is to automate the building of infrastructure. Once you spend the time writing code to build out an infrastructure environment, you can generate copies of that environment using your code within minutes. That's the power of code and automation!
+Some students feel that it takes more effort to create infrastructure using code versus manually 
+creating infrastructure using a web console. That's probably true initially, especially when you are less familiar 
+with infrastructure as code techniques. However, once you become experience with building infrastructure using code you
+will find that it's faster and more reliable than a manual process.
+
+When you build infrastructure manually you have to spend time documenting the infrastructure that you built, and this 
+documentation needs to be maintained over time. Infrastructure as code is self-documenting and doesn't require this 
+extra step. Once you spend the time writing code to build out an infrastructure environment, you can share it with others 
+and generate copies of the environment within minutes. That's the power of infrastructure as code!
 
 == Requirements
 
-You need to have a personal AWS account and GitHub account for this assignment.
+You need to have the following resources to complete this assignment:
+
+  * Personal AWS account
+  * GitHub account
+  * Code editor
 
 == The assignment
 
@@ -31,13 +42,19 @@ Your first stack awaits! Let's go.
 
 === Download CloudFormation template
 
-This week's assignment isn't as prescriptive as some of the previous assignments.
-You will likely need to experiment with the CloudFormation Designer and template
-code a bit to build the required solution. You can review the class powerpoint
-presentation, AWS CloudFormation documentation, and YouTube resources if you
-need help to figure out how to configure a resource.
+This week's assignment isn't as prescriptive as some of the previous assignments and you will need to 
+experiment with CloudFormation template code to build the required solution. Modifying template code requires a code
+editor. Here is a list of some popular free editors:
 
-You may use the following template as a starting point for the assignment:
+  * Atom (https://atom.io/)
+  * Visual Studio Code (https://code.visualstudio.com/)
+  * Notepad++ (https://notepad-plus-plus.org/)
+
+You can review the class powerpoint
+presentation, AWS CloudFormation documentation, and YouTube resources if you
+need help to figure out how to configure a resource. You may use the template below as a starting point for the assignment. 
+Note that some of the existing resources in this template will need to be modified to meet the assignment requirements.
+If you prefer, you can also build the template from scratch.
 
 ====
 https://s3.amazonaws.com/seis665/BasicWebserverInVPC.json
@@ -45,51 +62,53 @@ https://s3.amazonaws.com/seis665/BasicWebserverInVPC.json
 
 Here's the background story for this assignment: The engineering manager at your office came to you and asked
 if you could build a new CloudFormation stack template called `corpweb.json` for the development team. The stack must have
-two Amazon Linux EC2 instances located behind an Elastic Load Balancer. The
+two Amazon Linux EC2 instances located behind an Application ELB. The
 load balancer must handle incoming requests on port 80 and send those to the
 EC2 instances on port 80. Additionally, the two instances need to be members of a security group which
-allows incoming traffic on ports 22 and 80.
+allows incoming traffic on ports 22 and 80. 
 
-The engineering manager would like users to be able to provide two *input parameters* when launching the stack:
+The engineering manager would like users to be able to provide three *input parameters* when launching the stack:
 
   * A parameter called *InstanceType* that defines the instance type for the instances.
       ** The allowable type must be one of the following: t2.micro or t2.small
   * A parameter called *KeyPair* that specifies the server key-pair name for the EC2 instances.
+  * A parameter called YourIp that specifies your public IP address in CIDR notation.
 
-Also, she would like you to create an output called *URL* that displays the load balancer dns name
+Also, she would like you to create an output called *weburl* that displays the load balancer dns name
 after the stack is launched.
 
 The stack template should create the following logical resources:
 
-  * A new VPC called: *EngineeringVPC*
-    ** CIDR block should be: 10.0.0.0/16
-    ** The VPC should enable DNS hostnames.
-    ** The VPC should have one subnet called: *PublicSubnet*
+  * A VPC called: *engineering-vpc*
+    ** The VPC CIDR block should be: 10.0.0.0/18
+    ** The VPC should have one subnet called: *public-subnet*
         *** Subnet has a CIDR block of 10.0.0.0/24
     ** The subnet should be able to route data out to the Internet.
-  * Two EC2 instances with logical resource names and tags of *web1* and *web2* in the PublicSubnet.
-    ** Instance type: <use input parameter>
-    ** Use this public AMI image: *ami-3ea13f29*
-    ** Server key-pair: <use input parameter>
-
-  * A security group with a logical name and group name of *WebserversSG* in the VPC.
-    ** Allow incoming requests on port 22 from your workstation
+  * Two EC2 instances with logical resource names of *web1* and *web2* with associated *Name* tags.
+    ** Both instances are located in the public-subnet.
+    ** Each instance type is based on the InstanceType input parameter.
+    ** The instance AMIs should use this public image: *ami-3ea13f29*
+    ** The instance key-pairs are based on the KeyPair parameter.
+  * A security group with a logical name and group name of *webservers-sg* in the VPC.
+    ** Allow incoming requests on port 22 from your workstation (based on the YourIp parameter)
     ** Allow incoming requests on port 80 from 0.0.0.0/0
-  * An application load balancer named *EngineeringLB* and target group named *engineering-webservers*
+  * An application load balancer named *engineering-lb* and target group named *engineering-webservers*
     ** Load balance incoming requests on port 80 and send to instance port 80 using the http protocol.
     ** Load balancer health check via http on port 80 to the "/" url location.
 
 [NOTE]
 ====
-The names of the resources you configure in your stack template must *exactly* match the values above. The names are case-sensitive, so a resource with the name of "Web1" is not the same as "web1". You will lose points on this assignment if your resource names do not match the expected names. You should always double-check your work.
+The names of the resources you configure in your stack template must *exactly* match the values above. The names 
+are case-sensitive, so a resource with the name of "Web1" is not the same as "web1". You will lose points on this 
+assignment if your resource names do not match the expected names. You should always double-check your work.
 ====
 
 === Launch the stack
 
 Once you have created and validated your template, save it to your local file
-system. Next launch your new stack, called *WebserversDev*, in us-east-1 and provide the proper input parameters. Watch as AWS CloudFormation goes through the
-build process and creates the resources defined in the template. It will take a few minutes for CloudFormation to build the stack
-resources.
+system. Next launch your new stack, called *WebserversDev*, in us-east-1 and provide the proper input parameters. 
+Watch as AWS CloudFormation goes through the build process and creates the resources defined in the template. It will 
+take a few minutes for CloudFormation to build the stack resources.
 
 It's likely that your stack launch will fail to complete the first time you try
 to launch the stack. Take a look at the events associated with the stack to try
@@ -122,7 +141,11 @@ latter method is probably a little quicker for this assignment.
 
 [WARNING]
 ====
-You are responsible for ensuring that the corpweb.json template file you commit to your repository actually works on AWS CloudFormation. In the past, some students have used text editors which made small changes to the template when it was saved to disk and committed to the git repository. The result is that the template no longer worked properly on CloudFormation and the students' grades were negatively impacted. *You should strongly consider testing the template after you commit it to the git repository to ensure that it still works.*
+You are responsible for ensuring that the corpweb.json template file you commit to your repository actually works on AWS 
+CloudFormation. In the past, some students have used text editors which made small changes to the template when it was 
+saved to disk and committed to the git repository. The result is that the template no longer worked properly on 
+CloudFormation and the students' assignment scores were significantly impacted. *You should strongly consider testing 
+the template after you commit it to the git repository to ensure that it still works.* 
 ====
 
 === Terminate application environment
