@@ -38,12 +38,17 @@ image:../images/assignment6/diagram.png["600","600"]
 
 Start the assignment by creating a VPC named `productionVpc` in the `us-west-2 (Oregon)`
 region with a CIDR block of `10.0.0.0/16`. Note, we're using a different region than
-previous assignments! The VPC needs to have two subnets, each located in *separate* availability zones (your choice):
+previous assignments! The VPC needs to have four subnets, each set of public and private subnets are located 
+in *separate* availability zones (your choice):
 
-  * `production-public-1` subnet
-  will use the `10.0.1.0/25` network.
-  * `production-public-2` subnet
-  will use the `10.0.1.128/25` network.
+* The `production-public-1` subnet
+will use the `10.0.1.0/25` network.
+* The `production-public-2` subnet
+will use the `10.0.1.128/25` network.
+* The `production-private-1` subnet
+will use the `10.0.2.0/25` network.
+* The `production-private-2` subnet
+will use the `10.0.2.128/25` network.
 
 All instances on the two production subnets will need to be able to communicate with
 the Internet. You will need to configure the subnets and routing tables in the VPC to
@@ -103,8 +108,8 @@ We will use a MySQL database managed by the RDS service to support this
 database requirement.
 
 Go to the RDS dashboard on AWS and launch a new MySQL database instance. The
-launch wizard may ask you if you plan to use the instance for production or
-development purposes. In this case, select the development option. In a real
+launch wizard may ask you if you plan to use the instance for production (multi-instance) or
+development purposes. In this case, select the development option (single-instance). In a real
 production scenario you would want to use a database tier that supports
 multi-AZ deployments. A single lower-cost database instance is fine for this
 assignment.
@@ -119,7 +124,7 @@ The MySQL instance should have the following properties:
   * Master Username: wpdbadmin
   * Master Password: (choose a suitable password)
   * VPC: productionVPC
-  * Subnet Group: Create new DB Subnet Group
+  * Subnet Group: Create a new DB Subnet Group which is associated with the two private subnets.
   * Publicly Accessible: No
   * Availability Zone: No Preference
   * VPC Security Group: production-db
@@ -133,7 +138,8 @@ like this:
    wordpressdb.c4mwrq8d4std.us-east-1.rds.amazonaws.com
 
 You will need to know this database endpoint address when setting up the WordPress web
-application.
+application. Note that RDS will create the instance in one of the two private subnets. 
+It doesn't matter which private subnet is used. 
 
 === Create an application load balancer
 
