@@ -1,0 +1,149 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Resources": {
+      "packerVpc": {
+        "Type": "AWS::EC2::VPC",
+        "Properties": {
+          "EnableDnsSupport": "true",
+          "EnableDnsHostnames": "true",
+          "CidrBlock": "10.0.0.0/16",
+          "Tags": [
+            {
+              "Key": "Environment",
+              "Value": "Packer"
+            }
+          ]
+        }
+      },
+      "publicSubnet": {
+        "Type": "AWS::EC2::Subnet",
+        "Properties": {
+          "VpcId": {
+            "Ref": "packerVpc"
+          },
+          "CidrBlock": "10.0.0.0/24"
+        }
+      },
+      "packerServer": {
+        "Type": "AWS::EC2::Instance",
+        "Properties": {
+          "InstanceType": "t2.small",
+          "ImageId": "ami-4e21f333",
+          "KeyName": { "Ref": "KeyName" },
+          "NetworkInterfaces": [
+            {
+              "GroupSet": [
+                {
+                  "Ref": "packerSG"
+                }
+              ],
+              "AssociatePublicIpAddress": "true",
+              "DeviceIndex": "0",
+              "DeleteOnTermination": "true",
+              "SubnetId": {
+                "Ref": "publicSubnet"
+              }
+            }
+          ],
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "packer"
+            }
+          ]
+        },
+        "DependsOn": [
+          "publicRoute"
+        ]
+      },
+      "packerSG": {
+        "Type": "AWS::EC2::SecurityGroup",
+        "Properties": {
+          "VpcId": {
+            "Ref": "packerVpc"
+          },
+          "GroupDescription": "Allow access from SSH traffic",
+          "SecurityGroupIngress": [
+            {
+              "IpProtocol": "tcp",
+              "FromPort": "22",
+              "ToPort": "22",
+              "CidrIp": "0.0.0.0/0"
+            }
+          ]
+        }
+      },
+      "internetGW": {
+        "Type": "AWS::EC2::InternetGateway",
+        "Properties": {}
+      },
+      "EC2VPCG509RW": {
+        "Type": "AWS::EC2::VPCGatewayAttachment",
+        "Properties": {
+          "InternetGatewayId": {
+            "Ref": "internetGW"
+          },
+          "VpcId": {
+            "Ref": "packerVpc"
+          }
+        }
+      },
+      "publicRT": {
+        "Type": "AWS::EC2::RouteTable",
+        "Properties": {
+          "VpcId": {
+            "Ref": "packerVpc"
+          }
+        }
+      },
+      "publicRoute": {
+        "Type": "AWS::EC2::Route",
+        "Properties": {
+          "DestinationCidrBlock": "0.0.0.0/0",
+          "RouteTableId": {
+            "Ref": "publicRT"
+          },
+          "GatewayId": {
+            "Ref": "internetGW"
+          }
+        },
+        "DependsOn": [
+          "internetGW"
+        ]
+      },
+      "EC2SRTA56MZL": {
+        "Type": "AWS::EC2::SubnetRouteTableAssociation",
+        "Properties": {
+          "RouteTableId": {
+            "Ref": "publicRT"
+          },
+          "SubnetId": {
+            "Ref": "publicSubnet"
+          }
+        }
+      }
+    },
+    "Parameters": {
+      "YourIp": {
+        "Description": "The current CIDR IP address of your workstation (x.x.x.x/32).",
+        "Type": "String"
+      },
+      "KeyName": {
+        "Description": "Name of your EC2 KeyPair to enable SSH access to the instances.",
+        "Type": "AWS::EC2::KeyPair::KeyName",
+        "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
+      }
+    },
+    "Outputs": {
+      "packerUrl": {
+        "Value": {
+            "Fn::GetAtt": [
+              "packerServer",
+              "PublicIp"
+            ]
+          },
+        "Description": "Packer server URL"
+      }
+    }
+  }
+  

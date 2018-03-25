@@ -126,7 +126,7 @@
   },
   "Parameters": {
     "InstanceType": {
-      "Description": "Webserver instance type",
+      "Description": "Server instance type",
       "Type": "String",
       "Default": "t2.micro",
       "AllowedValues": [
