@@ -4,3 +4,4 @@
 /exams
 .vagrant
 demo/jenkins/Jenkinsfile
+aws-manifest.json
