@@ -108,7 +108,7 @@ Here's some pipeline code to get you started:
 node ("linux") {
     stage ("GetInstances") {
         
-        sh "aws ec2 describe-instances --region us-east-1 | jq ."
+        sh "aws ec2 describe-instances --region us-east-1"
     }
     
     stage ("CreateInstance") {

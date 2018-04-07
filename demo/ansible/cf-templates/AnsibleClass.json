@@ -129,7 +129,7 @@
                         "IpProtocol": "tcp",
                         "FromPort": "22",
                         "ToPort": "22",
-                        "CidrIp": "0.0.0.0/0"
+                        "CidrIp": {"Ref": "YourIp"}
                     }
                 ]
             }
@@ -189,7 +189,11 @@
             "Description": "Name of your EC2 KeyPair to enable SSH access to the instances.",
             "Type": "AWS::EC2::KeyPair::KeyName",
             "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
-        }
+        },
+        "YourIp": {
+            "Description": "The current CIDR IP address of your workstation (x.x.x.x/32).",
+            "Type": "String"
+          }
     },
     "Outputs": {
         "web1PublicIp": {
