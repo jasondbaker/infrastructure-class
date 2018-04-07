@@ -5,7 +5,7 @@
 
 = SEIS 665 Assignment 11: Docker
 Jason Baker <bake2352@stthomas.edu>
-1.0, 8/17/2016
+1.2, 4/7/2018
 
 == Overview
 Containers are revolutionizing the way we package and deploy applications. Traditionally, we would install applications on bare metal hardware or virtual machines in our computing environment. We would have to carefully place applications on infrastructure to minimize conflicting requirements such as different versions of shared libraries. Containers let us partition applications and related dependencies on a shared computing platform.
@@ -105,15 +105,60 @@ The Dockerfile is a handy way to encapsulate all the configuration commands requ
   * The container should have an environment variable mapping the key `NGINX_PORT` to the value `80`.
 
 
-After you create the Dockerfile, you need to create a small shell script called `launch.sh` in the `docker` directory which performs the following tasks:
+=== Build Image Pipeline
 
-* Builds a Docker image called `corp-nginx` based on the instructions in the `Dockerfile`.
-* Launches a *detached* Docker container named `corpweb` using the `corp-nginx` image.
-* The running container should map port 80 in the container to port 8080 on the host.
+It is a common practice to automate the building of Docker images using a CI/CD pipeline. Let's do that here as well.
+Launch a Jenkins stack in the us-east-1 region using the following template:
 
-After running the `launch.sh` script, you should be able to access the webpage you created by going to the instance address on port 8080 in your web browser. If you can't access the instance, make sure that port 8080 is open on the security group associated with your instance. Alternatively, you can just use the `curl` command to view the website via the command line:
+  https://s3.amazonaws.com/seis665/jenkins-cf.json
 
-    $ curl localhost:8080
+Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/eeea11fb5604fd931c30393c935aba6b
+
+Create a new Jenkins pipeline job called `docker-pipeline` and configure it to use a Jenkinsfile located in your
+Classroom repository. Note that since you are using a private repository for this assignment, you will need to enter
+GitHub credentials for the git configuration in the pipeline job. Also, you will need to
+reference these credentials in the git command used by your Jenkinsfile. This is pretty easy to
+setup.
+
+Please follow these steps to setup your GitHub access credentials in the pipeline job:
+
+    * Create a GitHub personal access token (or use an existing token) in your personal GitHub account by going
+    to the Settings->Developer Settings->Personal access tokens section on the GitHub site. Store this token 
+    somewhere safe because you will need to enter it into the Jenkins configuration shortly. The token you create 
+    should have the following scopes enabled:
+        ** repo
+        ** admin:repo_hook
+    * When you are configuring the git settings for your pipeline job, click on the `Add` button by 
+the credentials and select the `Jenkins` credential provider. 
+    * Create a new `Username with password` credential, typing in your GitHub username and using the 
+    personal access token as the password. 
+    * Enter an identifiable value into the description field like `github account`. 
+    * Click the `Add` button to add your GitHub credential.
+    * Select your newly created credential in the `Credentials` drop-down field. If your credential works 
+    properly for your private repo, you should not see a Jenkins login error message.
+    * Note, you do not need to setup a pipeline build trigger or GitHub webhook for this assignment.
+
+The pipeline job will use these credentials to access your private GitHub repository and retrieve a
+Jenkinsfile. One of the first things the Jenkinsfile should do is tell Jenkins to clone the repository
+using the `git` command. Let's use the `Pipeline Syntax` link at the bottom of the pipeline configuration
+page to generate the proper syntax for this command.
+
+    * Click on the `Pipeline Syntax` link at the bottom of the pipeline configuration page and select 
+    the `git: Git` sample step. 
+    * Type in your git repository URL (ending with `.git`).
+    * Select the credentials you created earlier from the credentials drop-down field. If you select the 
+    correct credentials, you should not see a Jenkins login error message.
+    * Click the `Generate Pipeline Script` button. 
+    * Copy-and-paste the generated code into your Jenkinsfile.
+
+.Example:
+----
+git credentialsId: 'c868a19a-3de9-4ae1-9538-b832fd1c8b12', url: 'https://github.com/seis665/assignment-11-jasondbaker.git'
+----
+
+Your Jenkinsfile should have a single `Build` stage which uses the Dockerfile you created earlier in this assignment 
+to build a new Docker image. Once you have the pipeline working properly, copy the console output from the last 
+successful build into a file called `console.txt` and check it into the GitHub repository.
 
 === Check your work
 
@@ -121,19 +166,15 @@ Here is what the contents of your git repository should look like before final s
 
 ====
 &#x2523; Dockerfile +
-&#x2517; launch.sh
+&#x2523; Jenkinsfile +
+&#x2517; console.txt +
 
 ====
 
-=== Save your work
-
-Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/eeea11fb5604fd931c30393c935aba6b
-
-Then, push the local git repository to Github.
 
 === Terminate application environment
 
-The last step in the assignment is to terminate your CloudFormation stack on AWS.
+The last step in the assignment is to terminate your CloudFormation stacks on AWS.
 
 == Submitting your assignment
 I will review your published work on GitHub after the homework due date.

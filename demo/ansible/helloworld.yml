@@ -3,4 +3,5 @@
   tasks:
     - name: Run shell command
       shell: echo “hello world”
-
+    - name: System uptime
+      shell: uptime
