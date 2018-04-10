@@ -15,15 +15,28 @@
         ]
       }
     },
-    "publicSubnet": {
+    "publicSubnet1": {
       "Type": "AWS::EC2::Subnet",
       "Properties": {
         "VpcId": {
           "Ref": "classVpc"
         },
-        "CidrBlock": "10.0.0.0/24"
+        "CidrBlock": "10.0.0.0/24",
+        "AvailabilityZone" : "us-east-1a"
       }
     },
+
+    "publicSubnet2": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "classVpc"
+        },
+        "CidrBlock": "10.0.1.0/24",
+        "AvailabilityZone" : "us-east-1b"
+      }
+    },
+
     "webserverSG": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
@@ -85,17 +98,28 @@
         "internetGW"
       ]
     },
-    "publicSubnetRTassoc": {
+    "publicSubnet1RTassoc": {
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
       "Properties": {
         "RouteTableId": {
           "Ref": "publicRT"
         },
         "SubnetId": {
-          "Ref": "publicSubnet"
+          "Ref": "publicSubnet1"
         }
       }
-    }
+    },
+    "publicSubnet2RTassoc": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "publicRT"
+        },
+        "SubnetId": {
+          "Ref": "publicSubnet2"
+        }
+      }
+    }  
   },
   "Parameters": {
     "KeyName": {

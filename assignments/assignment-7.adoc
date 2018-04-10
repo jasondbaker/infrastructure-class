@@ -14,13 +14,9 @@ group. You probably figured out pretty quickly that this manual creation
 process involves many different components and it's easy to make a mistake
 during the configuration process.
 
-This week's assignment has two parts. You will use the Elastic Beanstalk service
-in the first part of the assignment to deploy another scalable web application.
+You will use the Elastic Beanstalk service to deploy another scalable web application.
 You will learn how Platform as a Service can greatly simplify certain types of
 application deployments.
-
-The second part of the assignment will focus on JSON and YAML. You will complete
-a short set of exercises using each of these data formats. JSON is commonly used as a data exchange format for machine-to-machine communications (i.e., one application talking to another application). YAML is oftentimes used to store configuration values for applications.
 
 Elastic Beanstalk can greatly simplify an application deployment on AWS because
 it takes care of much of the underlying infrastructure configuration. While the
