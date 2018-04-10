@@ -15,13 +15,24 @@
         ]
       }
     },
-    "publicSubnet": {
+    "publicSubnet1": {
       "Type": "AWS::EC2::Subnet",
       "Properties": {
         "VpcId": {
           "Ref": "classVpc"
         },
-        "CidrBlock": "10.0.0.0/25"
+        "CidrBlock": "10.0.0.0/25",
+        "AvailabilityZone" : "us-east-1a"
+      }
+    },
+    "publicSubnet2": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "classVpc"
+        },
+        "CidrBlock": "10.0.1.0/25",
+        "AvailabilityZone" : "us-east-1b"
       }
     },
     "WebServer": {
@@ -42,7 +53,7 @@
             "DeviceIndex": "0",
             "DeleteOnTermination": "true",
             "SubnetId": {
-              "Ref": "publicSubnet"
+              "Ref": "publicSubnet1"
             }
           }
         ],
@@ -112,14 +123,25 @@
         "InternetGateway"
       ]
     },
-    "EC2SRTA56MZL": {
+    "publicSubnet1RTassoc": {
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
       "Properties": {
         "RouteTableId": {
           "Ref": "PublicRouteTable"
         },
         "SubnetId": {
-          "Ref": "publicSubnet"
+          "Ref": "publicSubnet1"
+        }
+      }
+    },
+    "publicSubnet2RTassoc": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "PublicRouteTable"
+        },
+        "SubnetId": {
+          "Ref": "publicSubnet2"
         }
       }
     }
