@@ -28,7 +28,7 @@
             "Type": "AWS::EC2::Instance",
             "Properties": {
                 "InstanceType": "t2.micro",
-                "ImageId": "ami-54234e2e",
+                "ImageId": "ami-f92ff686",
                 "KeyName": {
                     "Ref": "KeyName"
                 },
@@ -50,22 +50,9 @@
                 "Tags": [
                     {
                         "Key": "Name",
-                        "Value": "manager1"
+                        "Value": "docker1"
                     }
-                ],
-                "UserData" : {
-                  "Fn::Base64" : {
-                    "Fn::Join" : [
-                      "", [
-                        "#!/bin/bash -xe\n",
-                        "yum update -y\n",
-                        "yum install -y docker\n",
-                        "service docker start\n",
-                        "usermod -a -G docker ec2-user\n"
-                      ]
-                    ]
-                  }
-                }
+                ]
             },
             "DependsOn": [
                 "PublicRoute"
@@ -89,7 +76,7 @@
                         "IpProtocol": "tcp",
                         "FromPort": "22",
                         "ToPort": "22",
-                        "CidrIp": "0.0.0.0/0"
+                        "CidrIp": {"Ref": "YourIp"}
                     }
                 ]
             }
@@ -149,6 +136,10 @@
           "Description": "Name of your EC2 KeyPair to enable SSH access to the instances.",
           "Type": "AWS::EC2::KeyPair::KeyName",
           "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
+      },
+      "YourIp": {
+        "Description": "The current CIDR IP address of your workstation (x.x.x.x/32).",
+        "Type": "String"
       }
     },
     "Outputs": {
