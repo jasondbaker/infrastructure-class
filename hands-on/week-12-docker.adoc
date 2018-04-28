@@ -1,0 +1,136 @@
+:doctype: article
+:blank: pass:[ +]
+
+:sectnums!:
+
+= SEIS 665 Week 12 Project: Docker
+Jason Baker <bake2352@stthomas.edu>
+1.0, 4/28/2018
+
+== Overview
+Create a Docker image using a Dockerfile.
+
+== Requirements
+
+  * AWS account.
+  * SSH terminal application.
+
+
+== The project
+
+Let's get started!
+
+=== Build a Docker server
+
+The first step in the project is to build a Docker server running on EC2 using the following CloudFormation template:
+
+  https://s3.amazonaws.com/seis665/docker-single-server.json
+
+Launch the template to create a new stack. Shell into the new EC2 instance and run the following command:
+
+  $ docker --version
+
+The system should respond with the docker client version. Something like:
+
+  Docker version 17.06.2-ce, build 3dfb8343b139d6342acfd9975d7f1068b5b1c3d3
+
+=== Working with containers
+
+Let's start by getting comfortable with the Docker command line. How about a Hello World application? Type in the following command:
+
+  $ docker run busybox echo hello world
+
+The system should respond back with the output `hello world`. What is happening here? Docker created a small container using the `busybox` image, executed single small process, and echoed the text `hello world`.
+
+The process isn't running anymore. You can confirm that by running the command `docker ps`. You just ran an interactive process. Once the process completed, it stopped running. This might seem a little strange at first. Remember, containers are more like supercharged processes than like virtual machines.
+
+Let's do something a little more sophisticated. Type in the following command:
+
+  $ docker run -it ubuntu bash
+
+This tells docker to load the `ubuntu` image and run the `bash` command. Additionally, docker was told to setup a virtual terminal connection to the container (-it). You should see the docker client download the ubuntu image and launch the container. It may take a minute or two the first time you run this command.
+
+Now that you are in the container terminal, look around a little bit. Type in `ls /` to view the root directory. Containers have their own filesystem that overlays the filesystem on the host. Exit out of the container terminal by typing `exit`.
+
+Notice that the container you just launched is now stopped (`docker ps`). This was an interactive container just like the first container you created. Try to run the container again, type:
+
+  $ docker run -it ubuntu bash
+
+Did you notice how much faster the container launched this time? That's because Docker is pretty smart about caching the different build layers of the container. It knew how to build the container this time because it cached all the layers from the previous container.
+
+Next, let's launch a container that runs in the background. Type in the command:
+
+  $ docker run -d -P --name web1 nginx
+
+This will download and build a container running the popular `nginx` webserver. When you create a container, docker assigns it a long ID. It's not very easy to remember long ID strings, so using the `--name` parameter to assign a memorable name to containers is helpful.
+
+You should see this container running on the system. Check the docker process list to confirm:
+
+  $ docker ps
+
+Look at the ports in the output that have been assigned to the web1 container.  You should see a a port mapping that looks similar to this: `0.0.0.0:32768->80/tcp`.  The nginx container image exposes port 80 in its dockerfile.  When you launched the container using the `-P` flag, docker assigned a random port number (32768), and mapped it to the exposed port 80 on the container.
+
+Now, you should be able to retrieve the nginx test page using `curl`
+
+  $ curl localhost:<PORT_NUMBER>
+
+You should see the html of the nginx test page displayed. Go ahead and stop this container (`docker stop <container ID>`) before proceeding.
+
+=== Create a web page
+
+Create a sub-directory in the ec2-user's home directory called `docker`. Create another sub-directory within the `docker` directory called `html`. Create a small text file called `index.html` inside the `html` directory with the following content:
+
+    <html>
+    <body>
+      <h1>My webserver</h1>
+    </body>
+    </html>
+
+The directory structure and location of the `index.html` file should look something like this:
+
+====
+&#x2523;docker +
+&#x2503;&#160;&#160;&#x2517; html +
+&#x2503;&#160;&#160;&#160;&#160;&#x2517; index.html +
+====
+
+=== The Dockerfile
+
+The Dockerfile is a handy way to encapsulate all the configuration commands required to build a single container. The remaining part of your project this week is to build a simple nginx webserver container using a Dockerfile. Create the `Dockerfile` in the `docker` directory. Here are the configuration requirements for the Docker image:
+
+  * The new image must be based off the `nginx` image.
+  * Set the maintainer of the image to your name and email address.
+  * The image should expose port 80.
+  * Copy the files from the `html` directory you created earlier in the assignment to the /usr/share/nginx/html directory in the container.
+
+Create a new Docker image called `classweb` with a tag of `1.0` using the Dockerfile. 
+
+=== The Container
+
+Now that you have a Docker image you can launch a container using that image. Launch a new container with the following configuration settings:
+
+  * The name of the container should be `classweb1`.
+  * The container should run in a detached (daemon) mode.
+  * The container should map port 80 within the container to port 80 on the host server.
+  * The container should have an environment variable mapping the key `NGINX_PORT` to the value `80`.
+
+Once the container is running you should be able to see the basic web page you added to the Docker image by using the curl command.
+
+  $ curl localhost
+
+=== Ninja Rockstar task (optional)
+
+Typically in a production environment we don't launch individual Docker containers manually. We use Docker Compose or a container orchestration platform to run containers (which we will talk about next week).
+
+Create a basic Docker compose file to launch the `classweb1` container. You can find documentation for Docker Compose at the following website:
+
+    https://docs.docker.com/compose/
+
+=== Show me your work
+
+Please show me your pipeline code.
+
+=== Terminate AWS resources
+
+Remember to terminate all the resources created in this project, including the EC2 instance created by your
+pipeline.
