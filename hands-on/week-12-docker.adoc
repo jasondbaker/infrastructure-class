@@ -26,7 +26,7 @@ The first step in the project is to build a Docker server running on EC2 using t
 
   https://s3.amazonaws.com/seis665/docker-single-server.json
 
-Launch the template to create a new stack. Shell into the new EC2 instance and run the following command:
+Launch the template to create a new stack. Shell into the new EC2 instance, logging in as the `ubuntu` user, and run the following command:
 
   $ docker --version
 
