@@ -126,6 +126,8 @@ Create a basic Docker compose file to launch the `classweb1` container. You can 
 
     https://docs.docker.com/compose/
 
+Hint: The `docker-compose` command isn't installed on the install by default. You can install it using the Python `pip` utility: `pip install docker-compose`
+
 === Show me your work
 
 Please show me your pipeline code.
