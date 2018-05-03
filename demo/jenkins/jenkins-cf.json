@@ -212,7 +212,7 @@
       "Properties" : {
         "IamInstanceProfile": { "Ref": "JenkinsInstanceProfile"},
         "InstanceType": "t2.medium",
-        "ImageId": "ami-6735fd1a",
+        "ImageId": "ami-d9e65ea6",
         "SubnetId": { "Ref": "PublicSubnet1" },
         "KeyName": { "Ref": "KeyName" },
         "SecurityGroupIds": [
@@ -275,7 +275,7 @@
       "Properties" : {
         "IamInstanceProfile": { "Ref": "JenkinsInstanceProfile"},
         "InstanceType": "t2.medium",
-        "ImageId": "ami-6735fd1a",
+        "ImageId": "ami-d9e65ea6",
         "SubnetId": { "Ref": "PublicSubnet1" },
         "KeyName": { "Ref": "KeyName" },
         "SecurityGroupIds": [

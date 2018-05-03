@@ -113,18 +113,18 @@ Setup a build trigger for this project using the `GitHub hook trigger for GITScm
 The project pipeline should include the following named stages (highlighted in bold):
 
   * **Unit Tests**
-    - Jenkins will initiate unit tests using `ant` and create a junit report.
+    - The pipeline will initiate unit tests using `ant` and create a junit report.
     - The shell command to run ant tests is `ant -f test.xml -v`
     - The junit report source data is located in `reports/result.xml`
   *  **Build**
-    - Jenkins will compile the Java application using `ant`.
+    - The pipeline will compile the Java application using `ant`.
     - The shell command to compile the application is `ant -f build.xml -v`
   * **Deploy**
-    - Jenkins will copy the build output jar file into an S3 bucket (use an existing S3 bucket or create a new one for this assignment).
+    - The pipeline will copy the build output jar file into an S3 bucket (use an existing S3 bucket or create a new one for this assignment).
     - The name of the output jar file will look something like `rectangle-2.jar`, where the number represents the current Jenkins build number.
     - You can use the AWS CLI to copy files from Jenkins to the S3 bucket. Don't worry about access credentials for this step because the Jenkins server has a proper role attached which allows it to access the S3 bucket.
   * **Report**
-    - Jenkins will generate a report of the CloudFormation stack resources created in your environment using the command: `aws cloudformation describe-stack-resources --region us-east-1 --stack-name jenkins`
+    - The pipeline will generate a report of the CloudFormation stack resources created in your environment using the command: `aws cloudformation describe-stack-resources --region us-east-1 --stack-name jenkins`
     - Note: you will need to setup proper IAM and Jenkins access credentials to run this command.
 
 === Hints

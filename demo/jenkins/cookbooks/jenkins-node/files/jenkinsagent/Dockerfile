@@ -31,6 +31,8 @@ RUN adduser -G root -D jenkins && \
     wget -q https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/${SWARM_CLIENT_VERSION}/swarm-client-${SWARM_CLIENT_VERSION}.jar -P /home/jenkins/ && \
     pip install docker-compose && pip install awscli && \
     apk add --update build-base libxml2-dev libffi-dev && \
+    apk add --update curl curl-dev && \
+    apk add --update httpie && \
     apk add --update ruby && \
     apk add --update ruby-dev && \
     gem install --no-document --source https://rubygems.org --version 2.1.0 inspec

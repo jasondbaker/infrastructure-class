@@ -103,7 +103,7 @@ Create a playbook called `playbook.yml` in the `/home/ec2-user/assignment9` dire
     * Create a variable called `administrator_name` with a value of `corpadmin` in the play.
     * Create a user with the value of the `administrator_name` variable on each system with a password of your choosing.
 
-Perform the following tasks on the `web1` server:
+The playbook will perform the following tasks on the `web1` server:
 
     * Install the Nginx server package.
     * Copy the following `default.conf.j2` template to the system directory `/etc/nginx/conf.d/default.conf` substituting the text `example.com` with the fully-qualified domain name (fqdn) of the webserver (using a fact variable). Note, the fqdn of the server isn't `web1`. AWS automatically generates a domain address based on the private IP address of the instance.
@@ -121,7 +121,7 @@ Perform the following tasks on the `web1` server:
 
     * Ensure the nginx service is running and will automatically start during the system boot.
 
-Perform the following tasks on the `database1` server:
+The playbook will perform the following tasks on the `database1` server:
 
     * Install the mysql server package.
     * Configure the system to ensure mysql is running and will automatically start during the system boot.

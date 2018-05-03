@@ -104,9 +104,9 @@ The `Test` stage will validate that the Docker image was created properly. The p
   * The container should map port 80 within the container to port 80 on the host server.
   * The container should have an environment variable mapping the key `NGINX_PORT` to the value `80`.
 
-After launching the container, the pipeline should test the container using the curl command:
+After launching the container, the pipeline should test the container using the curl command. The container is running on the Jenkins slave node, so you should make an HTTP request to the private IP address of that node.
 
-  curl localhost
+  curl -s <private IP address>
 
 Finally, once the test completes the pipeline should stop and delete the container.
 

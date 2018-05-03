@@ -20,5 +20,5 @@ issues_url 'https://github.com/jasondbaker/infrastructure-class/issues' if respo
 # if respond_to?(:source_url)
 source_url 'https://github.com/jasondbaker/infrastructure-class' if respond_to?(:source_url)
 
-depends 'cloudcli', '~> 1.2.0'
+depends 'poise-python', '~> 1.7.0'
 depends 'docker', '~> 2.15.15'
