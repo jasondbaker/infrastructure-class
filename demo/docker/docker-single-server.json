@@ -81,6 +81,16 @@
                 ]
             }
         },
+        "DockerSecurityGroupIngress": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties" : {
+              "IpProtocol": "-1",
+              "FromPort": "-1",
+              "ToPort": "-1",
+              "SourceSecurityGroupId": { "Ref": "DockerSecurityGroup" },
+              "GroupId": { "Fn::GetAtt": ["DockerSecurityGroup", "GroupId"]}
+            }
+        },
         "InternetGateway": {
             "Type": "AWS::EC2::InternetGateway",
             "Properties": {}
