@@ -193,7 +193,7 @@ Docker client commands. We use a specially-crafted Docker
 compose file to launch a Swarm stack (not to be 
 confused with a CloudFormation stack).
 
-Your mission is to write a Docker compose file called `pet-compose.json` which 
+Your mission is to write a Docker compose file called `pet-compose.yml` which 
 defines the overlay network and the two application services. 
 The compose file must use the version 3 Docker compose file format. Here are a couple
 references you an use to help you build the compose file:
