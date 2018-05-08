@@ -41,7 +41,7 @@ local files from your desktop and browse to the location of the
 your JSON file and display it in the editor file explorer tree in the left 
 window pane.
 
-Now modify the `docker-single-server.json` template code in the Cloud9 editor to create three
+Now modify the `docker-single-server.json` template code in the Cloud9 editor to create three Ubuntu linux 
 EC2 instances running Docker. This should be a pretty trivial change for you at this point.
 Save your file changes. Now we need to store the file in a location that CloudFormation can access. How about an S3 bucket?
 
@@ -61,7 +61,7 @@ Launch a new CloudFormation stack using the template you uploaded to
 your S3 bucket. If the stack launches properly 
 you can delete your Cloud9 environment. Otherwirse you should make the necessary code changes to fix the template and copy it again to the S3 bucket.
 
-Once the stack is running, log into one of the EC2 instances and run the following command:
+Once the stack is running, log into one of the Ubuntu EC2 instances and run the following command:
 
     docker swarm init --advertise-addr <private IP address>
 
