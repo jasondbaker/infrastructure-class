@@ -4,27 +4,25 @@ DevOps & Cloud Infrastructure (SEIS 665) Curriculum
 Overview
 --------
 
-In late 2015, the faculty and administration at the [University of St. Thomas Graduate Programs in Software](http://www.stthomas.edu/gradsoftware/) asked me to review their current IT graduate curriculum to determine how well it aligned with current IT practices. While much of the curriculum was still relevant, it was clear that the program didn't address some of the dramatic changes reshaping  IT organizations. The idea for a new graduate IT course was born from that review process and subsequent discussions with other practitioners in the IT field.
+In late 2015, the faculty and administration at the [University of St. Thomas Graduate Programs in Software](http://www.stthomas.edu/gradsoftware/) asked me to review their current IT graduate curriculum to determine how well it aligned with current IT practices. While much of the curriculum was still relevant, it was clear that the program didn't address some of the dramatic changes reshaping IT organizations. The idea for a new graduate IT course was born from that review process and subsequent discussions with other practitioners in the IT field such as Charlie Betz, Dr. Nicole Forsgren, and John Willis.
 
-DevOps is rapidly gaining adoption at IT organizations across the world. It represents an IT cultural transformation combining ideas from Lean, Agile, and software development. Cloud infrastructure is a key enabler of DevOps practices, and is a foundational component of modern Internet services.
+DevOps is rapidly gaining adoption at IT organizations across the world. It represents an IT cultural transformation combining ideas from Lean, Agile, and software development. Cloud infrastructure is a key enabler of DevOps practices, and is a foundational component of modern Internet software platforms.
 
 Students that understand how to wield DevOps practices and create infrastructure as code are empowered to deliver IT services at nearly any scale. These students represent the future of our IT organizations.
 
 Audience
 --------
 
-The curriculum was designed for graduate students at a large private university located near a major metropolitan area. The students represent a mixture of age groups, cultural backgrounds, and technical experience levels. Most students tend to be working professionals with 5-15 years of corporate experience. Approximately 40% of the students are International students coming from a wide variety of educational systems.
+The curriculum was designed for graduate students at a large private American university located in the Minneapolis-St. Paul area. The students represent a mixture of age groups, cultural backgrounds, and technical experience levels. Most students tend to be working professionals with 5-15 years of corporate experience. Approximately 40% of the students are International students coming from a wide variety of educational systems.
 
-Students taking this course may have 10+ years of IT experience or no experience at all. Some of the students are transitioning into IT as a new career. One of the challenges I faced while creating this curriculum was figuring out how to calibrate the technical depth of the content. In most instances, I opted to make the content more rigorous to challenge experienced students while at least giving less experienced students exposure to new ideas.
+Students taking this course may have 10+ years of IT experience or no experience at all. Some of the students are transitioning into IT as a new career. One of the challenges I faced while creating this curriculum was figuring out how to calibrate the technical depth of the content. In most instances, I opted to make the content more rigorous to engage experienced students while giving less experienced students exposure to new ideas.
 
 Curriculum Approach
 -------------------
 
-I've never developed educational curriculum before and I didn't follow any particular methodology when creating this course. I created the kind of class that I'd like to take.
+I didn't follow any particular methodology when creating this course. Over 100 graduate students have taken this course since 2015 and the curriculum is iteratively improved each semester based on student feedback and market trends. I practice what I preach. Ultimately I created the kind of class that I'd like to take.
 
 The curriculum is based around a process of exploration and hands-on learning. Students are presented with a few theories and best practices, and then we dive straight into real-world implementation. We learn by doing. My hope is that an appreciation for DevOps practices will emerge as students progress through the course.
-
-I'm treating this curriculum as a grand experiment and hope to receive fast feedback from students. I expect to make meaningful changes in future months based on student and peer critiques.
 
 The course is focused on helping students develop skills related to DevOps and cloud infrastructure. Students learn how to walk before they run. Each lesson builds on the learnings from the previous lesson.
 
@@ -96,11 +94,6 @@ platform.
 The `generate-syllabus.sh` script in the `/build` directory will create an HTML
 version of the course syllabus.
 
-TO DO
------
-
-* I need to improve the skill connection between assignments. I originally designed each lecture as a separate module. Assignments should leverage skills attained in previous learnings.
-* The hands-on portion of lectures isn't very interactive at this point. I need to improve that element of the course based on student feedback.
 
 License
 -------
@@ -109,7 +102,9 @@ All material, except those images not owned by me and used for educational purpo
 
 <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
 
-Thanks
-------
+Thank you
+---------
+
+None of the ideas I present in this curriculum are original and I take credit for nothing other than being a collector of ideas. I stand on the shoulders of giants such as Jez Humble, Gene Kim, Martin Fowler, Dr. Nicole Forsgren, John Willis, John Allspaw, Kief Morris, and others. All of you have transformed my understanding of my life's work.
 
 Special thanks go out to Charlie Betz for his collaboration and encouragement. I also would like to thank Dr. Bhabani Misra and Dr. Brad Rubin for their support and mentorship. Finally, thank you to my wife for letting me attempt this.
