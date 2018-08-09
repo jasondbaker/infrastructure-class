@@ -113,6 +113,12 @@
             "FromPort": "8080",
             "ToPort": "8080",
             "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "80",
+            "ToPort": "80",
+            "CidrIp": "0.0.0.0/0"
           }
         ],
         "Tags" : [
@@ -269,46 +275,58 @@
           }
       }
     },
-    "JenkinsSlave": {
-      "Type": "AWS::EC2::Instance",
-      "DependsOn" : ["JenkinsServer"],
-      "Properties" : {
-        "IamInstanceProfile": { "Ref": "JenkinsInstanceProfile"},
-        "InstanceType": "t2.medium",
-        "ImageId": "ami-0f830c70",
-        "SubnetId": { "Ref": "PublicSubnet1" },
-        "KeyName": { "Ref": "KeyName" },
-        "SecurityGroupIds": [
-          { "Ref": "JenkinsSecurityGroup"}
-        ],
-        "UserData" : {
-          "Fn::Base64" : {
-            "Fn::Join" : [
-              "", [
-                "#!/bin/bash -xe\n",
-                "docker swarm init\n",
-                "echo \"",{"Ref": "JenkinsUsername"},"\" | docker secret create jenkins-user -\n",
-                "echo \"",{"Ref": "JenkinsPassword"},"\" | docker secret create jenkins-pass -\n",
-                "docker service create --name jenkinsagent -d ",
-                "-e USER_NAME_SECRET=\"/run/secrets/jenkins-user\" ",
-                "-e PASSWORD_SECRET=\"/run/secrets/jenkins-pass\" ",
-                "-e COMMAND_OPTIONS=\"-master http://",
-                {"Fn::GetAtt": ["JenkinsServer", "PrivateIp"]},
-                ":8080 -labels 'linux' -disableClientsUniqueId -executors 2\" ",
-                "--mount type=bind,src=/workspace,dst=/workspace ",
-                "--mount type=bind,src=//var/run/docker.sock,dst=/var/run/docker.sock ",
-                "--secret jenkins-user ",
-                "--secret jenkins-pass ",
-                "jenkinsagent:seis"
-              ]
-            ]
-          }
-        },
-        "Tags" : [
-          { "Key": "Name",
-            "Value": "JenkinsSlave"
+    "JenkinsSlaveGroup": {
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "DependsOn": ["JenkinsServer"],
+      "Properties": {
+        "LaunchConfigurationName": {"Ref": "JenkinsSlaveLaunchConf"},
+        "VPCZoneIdentifier": [{ "Ref": "PublicSubnet1" }],
+        "MinSize": { "Ref": "JenkinsSlaveNum" },
+        "MaxSize": { "Ref": "JenkinsSlaveNum" },
+        "DesiredCapacity": { "Ref": "JenkinsSlaveNum" },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "jenkins slave",
+            "PropagateAtLaunch": "true"
           }
         ]
+      }
+    },
+    "JenkinsSlaveLaunchConf": {
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+      "DependsOn" : ["VPCGatewayAttachment"],
+      "Properties": {
+          "InstanceType": "t2.medium",
+          "IamInstanceProfile": { "Ref": "JenkinsInstanceProfile"},
+          "ImageId": "ami-0f830c70",
+          "KeyName": { "Ref": "KeyName" },
+          "SecurityGroups": [
+            { "Ref": "JenkinsSecurityGroup"}
+          ],
+          "UserData" : {
+            "Fn::Base64" : {
+              "Fn::Join" : [
+                "", [
+                  "#!/bin/bash -xe\n",
+                  "docker swarm init\n",
+                  "echo \"",{"Ref": "JenkinsUsername"},"\" | docker secret create jenkins-user -\n",
+                  "echo \"",{"Ref": "JenkinsPassword"},"\" | docker secret create jenkins-pass -\n",
+                  "docker service create --name jenkinsagent -d ",
+                  "-e USER_NAME_SECRET=\"/run/secrets/jenkins-user\" ",
+                  "-e PASSWORD_SECRET=\"/run/secrets/jenkins-pass\" ",
+                  "-e COMMAND_OPTIONS=\"-master http://",
+                  {"Fn::GetAtt": ["JenkinsServer", "PrivateIp"]},
+                  ":8080 -labels 'linux' -disableClientsUniqueId -executors 2\" ",
+                  "--mount type=bind,src=/workspace,dst=/workspace ",
+                  "--mount type=bind,src=//var/run/docker.sock,dst=/var/run/docker.sock ",
+                  "--secret jenkins-user ",
+                  "--secret jenkins-pass ",
+                  "jenkinsagent:seis"
+                ]
+              ]
+            }
+          }
       }
     }
   },
@@ -322,6 +340,13 @@
         "Description": "Jenkins administrative password.",
         "Type": "String",
         "NoEcho": "true"
+    },
+    "JenkinsSlaveNum": {
+      "Description": "Number of Jenkins build slave nodes.",
+      "Type": "Number",
+      "MinValue": "1",
+      "MaxValue": "5",
+      "Default": "1"
     },
     "KeyName": {
       "Description": "Name of your EC2 KeyPair to enable SSH access to the instances.",
@@ -337,10 +362,6 @@
     "JenkinsIp" : {
       "Value": {"Fn::GetAtt": ["JenkinsServer", "PublicIp"]},
       "Description": "Jenkins server public IP address"
-    },
-    "JenkinsSlaveIp" : {
-      "Value": {"Fn::GetAtt": ["JenkinsSlave", "PublicIp"]},
-      "Description": "Jenkins slave node public IP address"
     }
   }
 }

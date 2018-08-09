@@ -6,15 +6,15 @@ University of St. Thomas +
 St. Paul, MN 55105
 
 [.text-center]
-*SYLLABUS Fall 2018 SEIS 665-01* +
-Version 2018.08.08
+*SYLLABUS Spring 2018 SEIS 665* +
+Version 2017.12.18
 
 {blank}
 *[.underline]#Course Title#* +
 DevOps & Cloud Infrastructure
 
 *[.underline]#Meeting Time Place#* +
-Mondays, 5:45 - 9:00 PM, OSS 431
+Mondays, 5:45 - 9:00 PM, OSS 326
 
 *[.underline]#Credit Value#* +
 3 semester credits
@@ -166,7 +166,7 @@ system administration skills.
   * Practical exams based on weekly assignments.
   * Midterm Challenge (25%)
   * Final Challenge (30%)
-* Historical grade distribution: A=~40%, B=~38%, C=~20%, F=2%.
+* Historical grade distribution: A=~40%, B=~37%, C=~20%, F=3%.
 * Factors that may severely impact your grade:
   ** Significant disregard for assignments.
   ** Multiple class absences.
@@ -187,12 +187,12 @@ without the written permission of the instructor. (See Class Session Recording
 |=========================================================
 |Week | Date | Topic | Assignments Due
 
-|1 | 9/10 | Course Introduction +
+|1 | 1/29 | Course Introduction +
 Source control +
 Git |
 
 
-|2 | 9/17 | Linux fundamentals +
+|2 | 2/5 | Linux fundamentals +
 Shell scripting
  |
 Assignment 1 +
@@ -200,7 +200,7 @@ Read _Git Hands On Guide_ +
 Read _Linux Hands On Guide_ +
 Watch Lecture 2 video recordings
 
-|3 | 9/24 | Infrastructure fundamentals +
+|3 | 2/12 | Infrastructure fundamentals +
 Virtualization +
 Distributed infrastructure design and operations +
  |
@@ -208,7 +208,7 @@ Assignment 2 +
 Read _Infrastructure as Code_ Chapters 1 & 2 +
 Watch Lecture 3 video recordings
 
-|4 | 10/1 | Cloud computing +
+|4 | 2/19 | Cloud computing +
 AWS +
 IAM, EC2, S3 |
 Assignment 3 +
@@ -217,7 +217,7 @@ Watch Lecture 4 video recordings +
 * Optional * +
 Read AWS Certified Solutions Architect Official Study Guide Chapters 1, 2, 3 & 6
 
-|5 | 10/8 | Cloud computing +
+|5 | 2/26 | Cloud computing +
 AWS +
 VPC, RDS, ELB |
 Assignment 4 +
@@ -226,7 +226,7 @@ Watch Lecture 5 video recordings +
 * Optional * +
 Read AWS Certified Solutions Architect Official Study Guide Chapters 4, 5, & 7
 
-|6 | 10/15 | Cloud computing +
+|6 | 3/5 | Cloud computing +
 AWS +
 Autoscaling, Cloud Watch, Route53, +
 SQS, SNS, SES |
@@ -237,10 +237,10 @@ Watch Lecture 6 video recordings +
 Read AWS Certified Solutions Architect Official Study Guide Chapters 8, 9, & 10
 
 
-|7 | 10/22 | Midterm Challenge|
+|7 | 3/12 | Midterm Challenge|
 
 
-|8 | 10/29 | DevOps +
+|8 | 3/19 | DevOps +
 Continuous integration & delivery +
  |
 Assignment 6 +
@@ -248,33 +248,33 @@ Read _Infrastructure as Code_ Chapters 10 & 11 +
 Watch Lecture 8 video recordings 
 
 
-|9 | 11/5 | Infrastructure as code +
+|9 | 4/9 | Infrastructure as code +
 CloudFormation +
  |
 Assignment 7 +
 Read _Infrastructure as Code_ Chapters 5 & 6 +
 Watch Lecture 9 video recordings
 
-|10 | 11/12 | Configuration Management +
+|10 | 4/16 | Configuration Management +
  |
 Assignment 8 +
 Read _Infrastructure as Code_ Chapters 7 & 8 +
 Watch Lecture 10 video recordings
 
-|11 | 11/19 | CI/CD Pipelines +
+|11 | 4/23 | CI/CD Pipelines +
 Jenkins +
  |
 Assignment 9 +
 Read _Infrastructure as Code_ Chapters 12 & 13 +
 Watch Lecture 11 video recordings
 
-|12 | 11/26 | Containers +
+|12 | 4/30 | Containers +
 Docker |
 Assignment 10 +
 Read _Infrastructure as Code_ Chapters 9 & 14 +
 Watch Lecture 12 video recordings
 
-|13 | 12/3 | Service Discovery +
+|13 | 5/7 | Service Discovery +
 Container Orchestration +
  |
 Assignment 11 +
@@ -282,7 +282,7 @@ Read _Infrastructure as Code_ Chapter 15 +
 Watch Lecture 13 video recordings
 
 
-|14 | 12/10 | Final Challenge |
+|14 | 5/14 | Final Challenge |
 
 
 |=========================================================
@@ -290,7 +290,7 @@ Watch Lecture 13 video recordings
 {blank}
 *[.underline]#STUDENTS WITH DISABILITIES#* +
 
-Academic accommodations will be provided for qualified students with documented disabilities including but not limited to mental health diagnoses, learning disabilities, Attention Deficit Disorder, Autism, chronic medical conditions, visual, mobility, and hearing disabilities. Students are invited to contact the Disability Resources office about accommodations early in the semester. Appointments can be made by calling 651-962-6315 or in person in Murray Herrick, room 110. For further information, you can locate the Disability Resources office on the web at http://www.stthomas.edu/enhancementprog/
+I want to ensure that the classroom environment is conducive to your learning and ask that you discuss with me any concerns that are interfering with your learning as they arise. Classroom accommodations will be provided for students with documented disabilities. Students must contact the Disability Resources Office about accommodations for this course as early in the semester as possible. Appointments can be made by calling 651-962-6315 or 800-328-6819, extension 6315, or in person in Rm 110 Murray Herrick Center on the St. Paul campus. Further information is available at: http://www.stthomas.edu/enhancementprog/.
 
 {blank}
 *[.underline]#CHEATING DEFINED IN THIS COURSE#* +
