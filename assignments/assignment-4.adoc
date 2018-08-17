@@ -1,26 +1,21 @@
-:doctype: article
+:doctype:
+article
 :blank: pass:[ +]
 
 :sectnums!:
 
-= SEIS 665 Assignment 4: AWS
+= SEIS 665 Assignment 4: VPC
 Jason Baker <bake2352@stthomas.edu>
-1.0, 4/3/2016
+1.1, 1/21/2017
 
 == Overview
-This week we will get some hands-on experience with EC2 and S3. You have been
-using EC2 for a couple weeks now, but this assignment will dive deeper into
-its capabilities.
+This week we will build a VPC from scratch and work with an elastic load
+balancer to deploy a resilient website for our company, Next Gen Solutions.
 
-One of the challenges of an assignment like this is that the AWS web console
-changes all the time without warning. Therefore, the instructions can't be too
-tightly coupled to the AWS web interface. In other words, instead of telling
-you exactly which link to select or button to push on the AWS web console, you
-will need to make reasonable decisions as you work through the assignment.
-
-If you get stuck on a step, do a little research on the AWS documentation site or
-reach out to the class on Slack. Your feedback will be incorporated into future
-versions of the assignment.
+Like the previous assignment, you may have to work through some of the detailed
+steps to complete the requirements. If you get stuck on a step, do a little
+research on the AWS documentation site or reach out to the class on Slack. Your
+feedback will be incorporated into future versions of the assignment.
 
 == Requirements
 
@@ -28,77 +23,439 @@ You need to have a personal AWS account and GitHub account for this assignment.
 
 == The assignment
 
-Ready your engines. Let's rev up some instances!
+Get ready to build your virtual private cloud!
 
-=== Create a role
+image:../images/assignment4/Assignment-4-diagram.png["800","800"]
 
-The first step in the assignment is to create a new role. We talked about
-roles briefly in class. Basically, a role is a way to assign privileges to
-a resource, such as an EC2 instance. A role lets you treat an instance kind
-of like a user.
+=== Create a Virtual Private Cloud and subnets
 
-For example, you can create a role that allows access to data
-stored on S3 and then assign this role to an EC2 instance. Applications running
-on the EC2 instance can use the role to access S3 data without having to
-store an access key and secret key on the application server somewhere. This represents a superior security configuration.
+The first step in this assignment is to create a new Virtual Private Cloud (VPC).
+Go to the AWS web console and access the VPC dashboard. Make sure you are using
+the Northern Virginia (us-east) region. Select the *Your VPCs*
+menu option and click the button or link to *create a VPC*. Your new VPC should
+have the following parameters:
 
-Let's create this S3 access role now.
+  * Name: nextgen-vpc
+  * CIDR: 10.0.0.0/20
+  * Tenancy: Default
 
-  * Log into the AWS web console and select the *IAM* service.
+Once, the VPC is created go ahead and create a couple subnets. The VPC will have
+two subnets -- one public and one private. Select the *Subnets* menu item on the
+VPC dashboard and click the button or link to *create a subnet*. You will have
+to go through this process twice, once for each subnet.
 
-  * Select the menu item to manage *Roles*.
+The subnets should have the following parameters:
 
-  * Select the appropriate button or link to *create a new role*.
+  * Subnet #1
+    ** Name: nextgen-public-1
+    ** VPC: nextgen-vpc
+    ** AZ: us-east-1a
+    ** CIDR: 10.0.1.0/24
 
-  * Give the role the name: *S3-full-access*
+  * Subnet #2
+    ** Name: nextgen-private
+    ** VPC: nextgen-vpc
+    ** AZ: us-east-1b
+    ** CIDR: 10.0.2.0/24
 
-  * AWS supports several different types of roles. Your new role will be an
-  *Amazon EC2* Service Role. Select the button or link corresponding to this role.
+Note, if the us-east-1a or us-east-1b availability zones are not currently
+listed, you may select any other availability zone in the region. The two
+subnets just have to be located in different AZs.
 
-  * Each role type may have hundreds of policies associated with it. A policy is a
-  configuration document which defines specific access privileges. You are looking
-  for a policy called *AmazonS3FullAccess*. Usually you can filter the policy
-  table listing by typing `s3` into a filter text input. Once you see the correct
-  policy, check it and move on to the next step.
+=== Create an Internet Gateway
 
-  * You should now be able to *create* the role.
+The next step is to create an Internet Gateway for the new VPC. The Internet
+Gateway will allow instances with a public IP address to communicate with
+devices on the Internet.
 
-If you created the new role properly, you should see the `S3-full-access` role listed
-in the IAM roles table.
+Go to the *Internet Gateways* menu on the VPC dashboard and click the
+*create Internet Gateway* button or link. Name your Internet gateway:
+`nextgen-ig`.
 
-=== Create an S3 bucket
+Once the Internet Gateway is created, you will need to attach it to your
+new VPC by selecting the gateway and clicking the *attach to VPC* button.
 
-Next, let's create an S3 bucket in the us-east-1 region (Northern Virginia) to store some data. Go ahead and select the S3
-service on the AWS console. If you haven't created an S3 bucket before you might
-see some sort of welcome message explaining the purpose of the S3 service.
+=== Setting up routing
 
-  * Once you see the S3 dashboard, click the button or link to *create a bucket*.
+Let's recap what you have done to this point. You created a new VPC and setup
+two subnets within the VPC. You also created an Internet Gateway and attached
+it to the VPC. The VPC has a main route table that was setup for you when
+you created the VPC. The route table has a single route that basically says
+"route traffic from any instance in any subnet to any other instance".
 
-  * Name your new S3 bucket: `<AWS username>-assignment-4`, where <AWS username>
-  is your personal Amazon username (not your e-mail address). Remember,
-  S3 bucket names are universal which means that your bucket name has to be unique
-  worldwide. On the off chance that your bucket name is already in use, just
-  try a slightly different name.
+If you launched an instance with a public IP address into the public subnet
+in your new VPC, would it be able to communicate with the Internet? No. The
+reason is because there is no network route setup to route data from the
+public network to the Internet Gateway.
+
+Some of this network routing stuff may sound a little confusing, especially
+if you don't have any data networking experience. Think of it like plumbing.
+We've installed the bathtub and the sinks, but we haven't laid out the pipes
+yet. Let's work on that now.
+
+Click on the *Route Tables* link on the VPC dashboard. Notice that a route table
+already exists for your new VPC. This is the main route table for the VPC and it
+is used by all subnets that are not explicitly associated with a route table.
+Read that last sentence twice, because the concept is a little confusing.
+
+Go ahead and *create a route table* by clicking on the appropriate button. Name
+this route table: `nextgen-public-routes`. Make sure to designate the
+proper VPC when creating the route table.
+
+Select the new route table and look at its route listing. You will notice a single
+route with the network 10.0.0.0/20 and target of `local`. This route will
+route traffic from any subnet in the VPC to any other subnet. That configuration
+is fine, however we need to add a route to send all traffic to Internet destinations
+through the Internet Gateway.
+
+Edit the route table for the new subnet and add a new route to the destination
+`0.0.0.0/0` (which is a catch-all network) and a target of the Internet Gateway
+identifier. Make sure you save the updated route table when you are done.
+
+image:../images/assignment4/route-table.png["600","600"]
+
+Your new route table isn't associated with any subnets so it isn't actually doing
+anything yet. Click on the *subnet associations* for the new route table and edit
+the current properties by adding the `nextgen-public-1` subnet to the
+routing table. Save your work.
+
+Now if you launch an instance into the VPC's public subnet it should be able to
+communicate with the Internet. Let's test that assumption next.
+
+=== Launch a server
+
+We launched an instance based on the Amazon Linux AMI in previous
+assignments and then we modified the Linux instance by installing whatever
+software we needed. However, in the previous assignment we built out a Linux
+server and created an AMI. Now we can use that AMI to launch a new instance,
+saving us the time and effort required to get a new webserver up and running.
+
+In past assignments, AWS security groups were configured to allow SSH access from anywhere. 
+This is a poor security practice (even for development) and in real world deployments you should 
+configure security groups to minimize ssh access to your cloud resources. You can access the 
+website http://checkip.amazonaws.com in a browser to quickly determine the current IP address of your 
+workstation. Then, you can use this IP address to limit SSH access on the server to your workstation. 
+Remember that if you move your workstation from one network to another (like from home 
+to work) you will need to update this workstation IP address in the security group configuration.
+
+Go to the EC2 dashboard in the AWS web console and launch a new instance. The
+instance should have the following properties:
+
+  * Use the private AMI you created from the previous lesson (look in the *My AMIs* panel
+    during the AMI selection)
+  * Located in Northern Virginia (us-east)
+  * t2.micro instance type
+  * Network is `nextgen-vpc`
+  * Subnet is `nextgen-public-1`
+  * Auto-assign Public IP is enabled
+  * Root volume size set to 10 GiB
+  * Create a tag with a key of `Name` and a value of `webserver1`
+  * Create a new security group for the instance called `webservers-sg` with the following policies:
+    ** SSH from your workstation (example, 53.128.44.16/32)
+    ** HTTP from anywhere 0.0.0.0/0
+    ** HTTPS from anywhere 0.0.0.0/0
+  * Review your configuration settings and launch the new instance.
+
+While this new instance is launching, let's launch another instance in the new VPC's
+private subnet. The second instance should have the following properties:
+
+* Use the private AMI you created from the previous lesson (look in the *My AMIs* panel
+  during the AMI selection)
+* Located in Northern Virginia (us-east)
+* t2.micro instance type
+* Network is `nextgen-vpc`
+* Subnet is `nextgen-private`
+* Auto-assign Public IP is disabled
+* Root volume size set to 10 GiB
+* Create a tag with a key of `Name` and a value of `backend1`
+* Create a new security group for the instance called `backends-sg` with the following policies:
+  ** SSH from sg-<webservers ID>  (where webservers ID is your webservers security group identifier, example: sg-f0321d88)
+  ** HTTP from sg-<webservers ID>
+  ** HTTPS from sg-<webservers ID>
+* Review your configuration settings and launch the new instance.
+
+The rules you created for the `backends-sg` security group restrict incoming ssh, http,
+and https requests to only those instances located in the `webservers-sg` security group.
+You can see how it's possible to use security groups to identify source networks
+when creating rules in other security groups. This is a helpful abstraction because
+you don't have to think about the actual networks that instances live in. You
+can just focus on the security groups that instances belong to.
+
+=== Connect to the public webserver
+
+Your public webserver instance should be up and running at this point. Open up
+a web browser on your desktop and try to connect to the public IP address of
+this webserver. What do you see? You should see the website you created during
+the previous assignment. Congratulations!
+
+If you don't see this page then you
+have some troubleshooting to do. Walk through the subnet setup and route table
+configuration steps to verify your work. Did you launch `webserver1` into the
+public network on your VPC? Look at your resource configuration carefully and
+methodically. You should be able to find the configuration error.
+
+=== Connect to the private web server
+
+You were able to connect to the first web server but what about the second
+web server you launched in the private network? Well, it isn't accessible for
+two reasons. First, the second instance doesn't have a public IP address. Verify
+that by looking at the instance properties on the EC2 dashboard. Second, the
+instance is hosted within a subnet that doesn't have a route connected to
+an Internet Gateway.
+
+The `backend1` instance may not be accessible from the Internet, but you
+should be able to access it from `webserver1` using this server as a bastion host.
+Basically you need to establish an ssh connection to `webserver1` and tunnel through
+this host to `backend1`.
+
+===== Windows Proxy Configuration
+Let's cover how to configure Putty on Windows first. Go to your Windows Start Menu
+and look for your Putty application. Inside the Putty folder you should see an
+application called Pageant. Go ahead and start this application and add your
+EC2 private keyfile (the Putty version ending in the .ppk extension). If you get
+a message saying that Pageant is already running on your computer then look for the
+Putty application icon running in your Windows notification taskbar. You can right-click the
+Pageant icon and add your private key.
+
+Next, you need to configure a Putty session like usual, with the host name set to the public IP
+address of `webserver1`, the ssh private key specified, and the `ec2-user` login name
+configured. This is the basic ssh configuration you have been using throughout the class.
+
+Go to the `Connection -> SSH -> Auth`
+configuration page in Putty and check the box next to the *Allow agent forwarding*
+parameter.
+
+At this point you should be able to open a new session and connect to the `webserver1` server.
+Once you have connected to the server, use the ssh command to connect to the `backend1`
+server:
+
+  ssh ec2-user@<backend1 private IP address>
+
+===== Mac Proxy configuration
+The Mac proxy configuration is a bit easier than the Windows Putty configuration. The
+first step is to add your EC2 private key to the Mac keychain:
+
+  ssh-add -K server-key.pem
+
+Next you can ssh to `webserver1` using the ssh command:
+
+  ssh -A ec2-user@<webserver1 public IP>
+
+Note the use of the `-A` argument flag in this command. This argument tells ssh to
+look for your private server key in the keychain.
+
+Finally, once you have connected to `webserver1` you should be able to ssh into
+the `backend1` server:
+
+  ssh ec2-user@<backend1 private IP>
+
+===== Troubleshooting the SSH connection
+
+If you can't connect to the `backend1` server from `webserver1` there are several
+things you can check:
+
+* Check your Putty or Mac ssh configuration.
+* Verify that the proper security group is setup for `backend1`. It should allow incoming ssh from the webserver security group.
+
+
+=== Update the backend server
+
+Now that you have connected to the `backend1` server, we should make sure that our backend server has all the latest software updates.
+Go ahead and issue the `yum` command to update the server.
+
+Whoa, what's up with the connection timeout errors? Think about the VPC subnet
+configuration and where the `backend1` server lives. The private subnet does
+not have a route to the Internet Gateway.
+
+Maybe we should setup this Internet Gateway route on the private subnet.
+Then we would have to assign a public IP address to the `backend1` instance (an
+elastic IP address in this case). However, now the `backend1` instance would
+be potentially accessible via the Internet. That defeats the whole purpose of
+creating a private subnet.
+
+We need a way to allow the `backend1` instance, using a private IP address, to
+communicate with hosts on the Internet so that it can download software updates.
+Sounds like a NAT is what you need!
+
+=== Deploy a NAT
+
+We will deploy a NAT to allow the `backend1` instance to communicate with the
+Internet. The NAT instance needs to live in the public subnet because that
+subnet has access to the Internet via the Internet Gateway.
+
+Go to the VPC dashboard in the AWS web console. Select the *Elastic IPs* menu
+link. You need to allocate an elastic IP address because the NAT requires a
+public IP. Click on the button to *allocate a new address*.
+
+Next, select the *NAT Gateways* menu link on the VPC dashboard and click the
+button to *create a NAT gateway*. Select the public subnet you created for your
+VPN and the elastic IP address you created in the previous step.
+
+It takes a few minutes for the NAT Gateway to initialize. You can view the current
+status of the gateway in the NAT Gateway listing on the VPC dashboard. The
+gateway is simply a specialized EC2 instance managed by AWS. In fact, you can
+easily launch a NAT instance on your own using an AMI. We're just taking a bit
+of a short cut following this particular process.
+
+While the gateway is initializing, let's modify the route table for the private
+subnet so that private instances can route Internet-bound traffic through the
+NAT Gateway.
+
+Click on the *Route Tables* link in the VPC dashboard and select the route table
+associated with the private subnet. Which route table is that? Recall that a
+default route table was setup when you initially created your VPC. This route
+table is also known as the *main* route table for the VPC. Any subnet that's
+not explicitly associated with a route table uses the main route table by default.
+
+In this case, select the route table designated as the main route table for
+your VPC. Edit the routes associated with this table and add the following route:
+
+  Destination: 0.0.0.0/0
+  Target: nat-<nat ID>
 
 .Example
 ----
-jbaker-assignment-4
+0.0.0.0/0 nat-0354b30716cdaefa4
 ----
 
-  * You should be able to select a button or link to *create* the bucket at this point.
+Save your edits to the route table.
 
-=== Upload data to S3
+Okay, ready for the big test? <drumroll please> Go back to your terminal program.
+You should still be connected to the `backend1` instance. Confirm that by typing
+in:
 
-You can upload files to S3 now that your new bucket is setup. Select your new bucket
-on the S3 dashboard and look at its *properties*.
+  $ uname -a
 
-  * Select the *Tags* property and add a new tag with the key `Project` and the
-  value `Assignment 4`. It's a good idea to tag resources you create on AWS. Tags
-  can be any sort of key/value pair. Organizations use tags to track resources by
-  tagging resources with an owner name, organizational unit, or budget ID.
+You should see a 10.0.2.x IP address displayed in the command output. If not,
+you need to log into the `backend1` server again using your bastion host
+(`webserver1`).
 
-  * Next, open a text editor on your local workstation and create a new text file
-  called `index.html`. The file should contain the following text:
+Go ahead and try to update the software again on `backend1` using the `yum`
+command. Viola! The package manager should begin updating the system. The
+`backend1` instance is now communicating to hosts on the Internet using the
+NAT Gateway. Note that this communication can only be initiated in one
+direction. There is no way an Internet device can initiate a connection to
+the `backend1` server through the NAT Gateway.
+
+Note, there are times when the yum package manager has no packages to update.
+That's because the Amazon Linux image is a rolling AMI. Amazon periodically
+applies updates to the instance. If you happen to launch the AMI at the right
+time you will find that all of the Linux packages are up-to-date.
+
+=== Create a Git repo
+
+While you are on the `backend1` server, create a directory called `assignment-4-vpc-<username>` (where <username> is your GitHub account name). Change to this directory and initialize a Git
+repository. Because you are creating a Git repository on a private network, Git
+might complain about your identity when you try to commit files. You can set
+your local Git identity by running these commands:
+
+  $ git config --global user.email "your@email.com"
+  $ git config --global user.name "your GitHub username"
+
+When you create a Git repository and start working with files, the master branch of the repository is checked out by default. Go ahead and create a file in the directory called `README.md` and add the following contents:
+
+  *Assignment 5 Files*
+
+Commit the file to the repository.
+
+You just committed the file to the master branch of the repository. We generally try to avoid working directly on the master branch in our professional life. Go ahead and create a new branch in the Git repository called `develop` and check it out. This branch will have the README.md file in it because you just branched from the most recent commit in master.
+
+=== Create a shell script
+
+The next step is to create a shell script called `metadata.sh` inside the assignment directory. The shell script should meet the following requirements:
+
+* If the user runs the script with the `-c` or `--create` arguments, the script will perform the following operations:
+** Create a file called `backend1-identity.json` in the present working directory containing
+the data returned by accessing the URL:
+
+  http://169.254.169.254/latest/dynamic/instance-identity/document/
+
+** Create a file called `backend1-message.txt` in the present working directory containing the data returned by accessing the following URL. Note, you will need to pass the `-vs` flag (verbose/silent) to the `curl` command to output this data properly. Also, you will need to redirect the output
+in a special way based on the way the `curl` command works (using the `tee` command).
+
+  https://s3.amazonaws.com/seis665/message.json
+
+    Example:
+    $ curl -vs https://s3.amazonaws.com/seis665/message.json 2>&1 | tee backend1-message.txt
+
+
+** Copy the file `/var/log/nginx/access.log` into the present working directory.
+
+* If the user starts the script with a `-v` or `--version` argument, the script will return the value `0.5.0`
+
+* If the user starts the script with a `-h` or `--help` argument, the script will provide useful help information.
+
+* If the user doesn't provide any arguments the script will provide basic usage information.
+
+* You should encapsulate all of the features of the script in functions.
+
+Once you have completed the shell script, make sure you run the script properly to create the two required files. Commit all the files in the assignment directory to the develop branch in the repository. Next, you will need to push your local
+repository up to GitHub:
+
+* Create a new repository on GiHub Classroom by clicking this link: https://classroom.github.com/assignment-invitations/a76427f483ecfc98a401a1fef07473d4
+* Merge your `develop` branch back into the `master` branch on your local Git repository.
+* Push your local master branch up to the GitHub repository.
+
+Confirm that the four files are now in your new GitHub repository:
+
+* metadata.sh
+* backend1-identity.json
+* backend1-message.txt
+* access.log
+
+=== Remove NAT and backend server
+
+Now that you have successfully established this NAT connection, we are going
+to remove it. The NAT Gateway is no longer needed in this exercise. Go back
+to the VPC dashboard on the AWS web console and click the *NAT Gateway* menu
+link. Select your NAT Gateway and click on the appropriate button to
+*delete the NAT Gateway*.
+
+We should also deallocate the elastic IP address we created because we will
+get charged for it if we don't use it. Click on the *Elastic IP* link
+on the VPC dashboard. Select the elastic IP you created earlier and click on
+the action to *Release the addresses*.
+
+Finally, we no longer need to use the `backend1` instance in this lesson, so
+go to the EC2 dashboard and terminate this instance. Leave the `webserver1`
+instance running though because we will continue to use that instance.
+
+=== Launch another web server
+
+During the last part of the assignment you will launch a second web server and
+setup a load balancer to distribute traffic between the two servers. We could
+launch another web server into the same subnet as the existing web server.
+However, that wouldn't take advantage of the multiple availability zones located
+in the us-east region. Preferably, we would like to launch the second web server
+into a different availability zone so that if the data center supporting an
+ availability zone fails, the load balancer will redirect all traffic to
+the web server in the other availability zone.
+
+Go to the VPC dashboard and create a third subnet in your VPC:
+
+* Subnet #3
+  ** Name: nextgen-public-2
+  ** VPC: nextgen-vpc
+  ** AZ: us-east-1c
+  ** CIDR: 10.0.3.0/24
+
+Modify the appropriate routing table so that instances within this new subnet
+can communicate with the Internet (hint: look at the subnet associations).
+
+Go back to the EC2 dashboard and launch a new web server named `webserver2`. The new server should
+have the same characteristics as the first web server with the exception that
+it should be launched into the new `nextgen-public-2` subnet. This way
+each web server is located in a separate subnet.
+
+Can the two web servers communicate with one another? Let's think about that
+question. Each web server is in a separate subnet, but the subnets use a routing
+table that routes traffic between any instance in the same VPC. Both web servers
+are in the same VPC. Also, both web servers share the same security group.
+Therefore, yes the two web servers can communicate.
+
+Before you launch a load balancer, open a terminal connection to `webserver1`.
+Change to the directory `/usr/share/nginx/html/` and edit the existing `index.html`
+file so that it looks like the following:
 
 ----
 <!doctype html>
@@ -106,352 +463,155 @@ on the S3 dashboard and look at its *properties*.
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Infrastructure Assignment 4</title>
+  <title>Next Gen Solutions</title>
 </head>
 
 <body>
-  <h1>My 4th Infrastructure Assignment</h1>
+  <h1>Next Gen Solutions</h1>
+  Webserver 1!
 </body>
 </html>
 ----
 
-  * Select the appropriate button or link on the S3 console to *upload* a file
-  to your new bucket. Either drag your `index.html` file into the browser window or
-  click the link to *add* the file to the bucket.
+Make sure you save the file when you are finished editing it. Open a terminal connection to `webserver2` and modify the index.html file using the same code above, except enter "Webserver 2!" in the body of the html file.
 
-You should now see the `index.html` file in the bucket file listing. Did
-you notice that you can also create folders inside S3 buckets? Folders are a
-useful way to organize your data within buckets.
+The
+websites hosted on `webserver1` and `webserver2` are now slightly different so
+that you can visually see which server is providing the content to your web
+browser. Let's launch a load balancer next.
 
-=== Encrypt S3 data
+=== Launch an Elastic Load Balancer
 
-You can easily encrypt data that's stored on S3. When you uploaded your file to
-the S3 bucket, the data transfer occurred over an SSL/TLS-secured communications
-channel. S3 encryption allows you to encrypt your data-at-rest. This prevents
-someone from retrieving your data from the physical hard drive or SSD it's stored on.
+Select the *Load Balancers* link on the EC2 dashboard and click the button to
+*create an application load balancer*. The load balancer will have the following properties:
 
-  * Select your `index.html` file in the S3 console and look at its properties.
-  To view the file's properties, you may need to select an *actions* button or
-  link and then select a *properties* option.
+  * Name: `nextgen-lb`
+  * Create it inside your VPC
+  * Select the two public subnets
+  * Create a new `nextgen-lb-sg` security group with the following rules:
+    ** Allow traffic on port 80 from the Internet.
+  * The load balancer should only have an http listener (port 80) configured.
+  * Health Check
+    ** Normally you probably wouldn't use `/index.html` as the health check path
+    for a load balancer. You would create a separate health check web page.
+    However, for this assignment just leave the path as the default.
+    ** Set the Health Check Interval to 10 seconds
+  * Create a target group called `webservers` for the load balancer and add the
+  `webserver1` and `webserver2` instances to the group.
+  * Create a tag for the load balancer:
+    ** Key: `Project`
+    ** Value: `Assignment 5`
 
-  * Look at the file property *details*.
+After you click the *create* button, click the *Target Groups* menu link
+on the EC2 dashboard. Then select the target group you created and
+look at the set of *instances* associated with the group. You will
+notice that the status of the instances is _Initial_. This status means
+that the web servers haven't passed the load balancer's health check yet.
 
-  * You should see a properties setting for *Server Side Encryption*. Set this
-  property to *AES-256* and *save* the change.
+Refresh the browser display after a minute or two and you should see the
+status of the web server instances change to _Healthy_.
 
-AES-256 is the standard encryption algorithm used by Amazon to secure data in
-many of its services.
+Once both instances are in service, click on the *Description* panel of the
+selected load balancer to see its *DNS Name*. This name is the end point for
+the load balanced service. You could open up a browser on your desktop and
+type in the public IP address for either one of the web servers to see the
+website. However, what you really want to do is use the address of the
+load balancer.
 
-=== Launch Linux server
+The load balancer doesn't use a public IP address -- at least not one that's
+visible to you. The load balancer's public IP address will change depending
+on the status of the instances associated with it.
 
-The next step is to launch a Linux instance using EC2.
-In previous assignments, you accepted all of the server launch defaults when launching a
-Linux instance. This time you will customize some of the launch settings by
-*configuring the instance details*. In particular,
-you will associate the S3-full-access role you created previously with the new instance. You
-can only associate an instance with a role when it's being launched for the first time. The role cannot
-be added to the instance configuration later.
-
-The server should have the following characteristics:
-
-  * Amazon Linux AMI 64-bit (usually the first option listed)
-  * Located in Northern Virginia region (us-east-1)
-  * t2.micro instance type
-  * Auto-assign Public IP is enabled
-  * IAM Role is set to `S3-full-access`
-  * Root volume size set to 10 GiB
-  * Create a tag with a key of `Name` and a value of `webserver1`
-  * Create a new security group for the instance called `webservers` with the following policies:
-    ** SSH from anywhere 0.0.0.0/0
-    ** HTTP from anywhere 0.0.0.0/0
-    ** HTTPS from anywhere 0.0.0.0/0
-  * Review your configuration settings and launch the new instance.
-
-Your instance settings should look similar to the settings in the image below.
-Your configuration may be slightly different based on the availability of a
-newer Amazon Linux AMI.
-
-image:../images/assignment4/server-launch-1.png["600","600"]
-
-Note that when you are launching the server, you can elect to use the same
-key pair you used last week or you can create a new key pair for this
-server. Either option is fine. From a practical standpoint, it might make
-sense to reuse the same key pair each time so that you don't have to
-keep track of which key pair you used to launch a particular server.
-
-=== Log into server
-The next step is to log into the Linux server using a terminal program with
-secure shell (SSH) support. You will need to have the server key and the
-public IP address before attempting to log into the server. Remember, it will
-take a few minutes for the server to initialize before you can connect to it.
-
-=== Update server software
-Once you log into the server, perform an update on all the Linux packages. Refer back
-to previous lessons if you can't recall the command to do this. Also, install
-the Git client on the server.
-
-Next, let's install the Nginx webserver on the new Linux instance. Nginx is a
-fast and lightweight web server platform that is widely used by many of the
-largest websites in the world. Type in:
-
-  $ sudo yum install nginx -y
-
-You've installed Nginx, but the web service isn't actually running yet. You can
-confirm this by checking the running processes on the system and searching for
-the term `nginx`:
-
-  $ ps ax | grep nginx | grep -v grep
-
-Remember learning about the pipe operator (vertical bar)? In this command we are piping the output from the list processes command (ps) into a text search command (grep). Putting it all together, this command tells the system to list out all running process and look for one named nginx.
-
-Go ahead and start up the Nginx webserver:
-
-  $ sudo service nginx start
-
-Try to run the `ps` command sequence again to see if the webserver is running. Just
-hit the up arrow twice to replay the command or type it in again. You should
-see something like:
-
-   2766 nginx: master process /usr/sbin/nginx -c /etc/nginx/nginx.conf
-
-Now for the real test. Open up a web browser on your workstation and type in
-the public ip address of your Linux instance as the URL. Do you see the
-welcome page? If so, congratulations! You've built a web server -- the first of
-many in this course.
-
-image:../images/assignment4/welcome-page.png["600","600"]
-
-Don't panic if the welcome page doesn't appear in your browser. Part of the _joy_
-of working in IT is learning how to troubleshoot problems. Here are some things
-you can check:
-
-  * Is the nginx server running on your instance?
-  * Did you type in the correct public IP address in the browser?
-  * Is your instance associated with a security group that allows incoming
-  port 80 (HTTP) requests from anywhere (0.0.0.0/0)?
-
-Make sure you can successfully test the Nginx web server before continuing with
-this assignment.
-
-=== Configure web server
-
-Nginx is installed on the Linux instance and is currently running. However, if you
-reboot the instance Nginx will not automatically restart. Let's fix that:
-
-  $ sudo chkconfig nginx on
-
-The Nginx web document root is located in the `/usr/share/nginx/html` directory.
-The web document root is the default location that the Nginx webserver will
-use to serve files. Change to this directory now.
-
-If you list the contents of this directory, you will notice several files. The
-most important one is called `index.html`. The web server will send the `index.html`
-file to a web browser when it receives a request from the browser that does not
-specify a file name. In other words, it's the default file the web server will
-send.
-
-You're going to update the `index.html` file with the one you stored on
-Amazon S3. But how are you going to copy the file from the S3 bucket onto your
-instance? You will take care of that next.
-
-=== Copy index.html from S3
-
-Let's copy the `index.html` file from your S3 bucket into the web server
-document root directory. Your instance already has access to the S3 bucket
-because you created a role called `S3-full-access` and associated it with the
-instance when you launched it earlier. The role assigned full S3 access
-privileges to the instance.
-
-AWS features may be accessed via the web-based console or an API. So far we've
-just been using the web console when working with AWS. For example, you used
-the web console to upload a file into your S3 bucket. However, everything you
-can do via the web console can also be done via the API. That's the real
-power of a platform like AWS. Everything is programmable and scriptable.
-
-Amazon created a command line interface (CLI) that you can use to work with
-AWS infrastructure. The CLI is automatically installed on Amazon Linux instances.
-Try it out now by typing:
-
-  $ aws help
-
-Pretty cool, huh? You can do pretty much anything with this CLI. Let's use it
-now:
-
-  $ sudo aws s3 cp s3://<your S3 bucket name>/index.html html/index.html
+Open up a web browser on your desktop and type in the load balancer's DNS Name
+as the URL.
 
 .Example
 ----
-$ sudo aws s3 cp s3://jbaker-assignment-4/index.html /usr/share/nginx/html/index.html
+nextgen-lb-1175121939.us-east-1.elb.amazonaws.com
 ----
 
-Go back to your web browser and reload the web page. You should see your
-new page loaded.
+You should see the website you created in the previous assignment. Hit the
+refresh button on your browser a few times. Do you notice the web page content
+changes depending on which web server is handling the request? The load
+balancer is redirecting the request to the least utilized server.
 
-image:../images/assignment4/new-page.png["400","400"]
+=== Simulate a failure
 
-The page isn't very fancy yet. Perhaps we'll expand on it future assignments.
+Now you are going to simulate a service failure by stopping one of the
+web servers. In the real world a server could fail for a number of reasons -
+software bug, human error, or even a complete data center failure.
 
-=== Instance meta-data
+Let's say
+that one of Amazon's data centers experiences a complete power outage and
+takes down the `nextgen-public-2` subnet. Go to the EC2 dashboard,
+select the `webserver2` instance and stop it.
 
-One of the challenges IT professionals face when working with cloud-based
-infrastructure like EC2 instances is understanding how to programmatically
-access information about the underlying infrastructure. For example, how does
-one programmatically determine what security group an instance is in? It's
-easy to look at the web console to answer this question. But if you need to
-write a shell script that requires this information, the solution isn't
-very clear.
+Next, go back to the *Target Groups*
+listing and select your target group. Take a look at the state of the instances
+connected to the load balancer. You should notice that `webserver2` is in an
+out of service state. Wait 30 seconds and refresh the page if it hasn't changed
+to this status yet.
 
-Fortunately AWS provides an ingenious solution called *instance meta-data*.
-Basically, AWS provides a virtual web server that any instance can access to
-discover information about itself. Sounds kind of strange doesn't it? Try it
-out:
+The `webserver2` instance failed the load balancer health check and was taken
+out of service. The load balancer will direct all future website requests to
+`webserver1`. Go back to the web browser on your desktop and refresh the page
+a few times. Notice how the webpage content stays the same.
 
-  $ curl http://169.254.169.254/latest/meta-data/
+Congratulations! You just deployed a highly resilient website and simulated a
+partial service failure. Load balancers aren't just used for increasing
+service resiliency, they can also increase performance by spreading website
+requests across a group of web servers.
 
-You should receive a list of meta-data categories in the response. The `curl`
-command is a simple text-based web browser. The curl browser accessed
-a virtual website located at a special private ip address, `169.254.129.254`.
-All of the meta-data associated with the instance can be accessed by
-constructing appropriate URL paths. For example, if you want to retrieve the
-instance type for the current instance, enter:
+=== Save your work
 
-  $ curl http://169.254.169.254/latest/meta-data/instance-type
+Let's commit some more data to the Git repository you created earlier in the
+assignment. Open a terminal connection to the `webserver1` instance (you might
+  still have a terminal connection to this instance open).
 
-You should see `t2.micro` in the response. Understanding how to access
-instance meta-data is important when programmatically working with
-EC2 instances.
+Change to your home directory and clone the git repository you created earlier:
 
-=== Create a couple scripts
+  $ git clone https://github.com/seis665/assignment-4-vpc-<username>.git
 
-Let's create a couple scripts for this week's assignment submission. The first script will automate many of the tasks you performed earlier in this assignment. Remember, automation is the key to producing reliable and repeatable results. The second script will take our new found knowledge of instance meta-data and put it to work.
+.Example
+----
+https://github.com/seis665/assignment-4-vpc-jasondbaker.git
+----
 
-Start by creating a directory in your home directory called `scripts`. Then change directory to the new `scripts` directory and initialize a new git repository.
+If you recall, the Git clone operation makes a copy of the public GitHub repository in
+your current directory. Next, change to the `assignment-4-vpc-<username>` directory.
 
-Create the first shell script and name it `provision.sh`. A user can run the `provision.sh` script to automatically update the software packages on the instance, install Nginx, and copy files into the website document root directory. This script should support the following requirements:
+Copy the `/var/log/nginx/access.log` file on the server to a new file named `access2.log` in
+the current directory.
 
-* When executed without any arguments, the script will perform the following steps:
-** Update all system packages
-** Install the Nginx software package
-** Configure nginx to automatically start at system boot up.
-** Copy the website documents to the web document root directory.
-** Start the Nginx service.
-* If the user starts the script with a `-r` or `--remove` argument, the script will perform the following steps:
-** Stop the Nginx service.
-** Delete the files in the website document root directory (/usr/share/nginx/html).
-** Uninstall the Nginx software package.
-* If the user starts the script with a `-v` or `--version` argument, the script will return the value `1.0.0`
-* If the user starts the script with a `-h` or `--help` argument, the script will provide useful help information.
-* You should encapsulate all of the features of the script in functions.
+It's likely that you will need to set the Git identity settings before committing.
+Enter these commands, substituting the values as necessary:
 
-The second script will retrieve some data from the Instance Metadata service. Inside the `scripts` directory you need to create a new shell script called `instancedata.sh`
-which does the following:
+  $ git config --global user.email "your@email.com"
+  $ git config --global user.name "your GitHub username"
 
-* Creates a file called `metadata.txt` in the current directory
-* Retrieves and stores the following meta-data in the `metadata.txt` file:
-** The instance *hostname*.
-** The *iam info* associated with the instance.
-** The *security groups* associated with the instance.
-
-The contents of the `metadata.txt` file should look similar to this after
-  executing the script:
-
-  ip-172-31-51-146.ec2.internal
-  {
-    "Code" : "Success",
-    "LastUpdated" : "2016-04-05T16:45:21Z",
-    "InstanceProfileArn" : "arn:aws:iam::234149541132:instance-profile/S3-full-access",
-    "InstanceProfileId" : "AIPAIKSVFD6G6V26PMAGO"
-  }
-  webservers
-
-Here are a couple hints for writing this script:
-
-  * You can write this script in as little as 4 lines of code. You do not need to handle any input arguments or create a function.
-  * Remember that you can take the output from a command like curl and redirect
-  it into a file using the right angle-bracket character (`>`). If you want
-  to append data to a file then use double brackets (`>>`).
-  * Notice how the different pieces of meta-data in the `metadata.txt` file are
-  written on separate lines. The `curl` command can automatically add a
-  linefeed character to it's output by using a flag: `curl -w "\n" <url>`,
-  where `<url>` is the website address being accessed.
+Create a new `develop` Git branch and check it out. Now add the `access2.log` file to the repository and commit your changes to the develop branch. Merge the `develop` branch into the `master` branch. Push the master branch back up to GitHub. Verify that the new `access2.log` file exists on
+your GitHub repository.
 
 === Check your work
 Here is what the contents of your git repository should look like before final submission:
 
 ====
-&#x2523; provision.sh +
-&#x2523; instancedata.sh +
-&#x2517; metadata.txt +
+&#x2523; README.md +
+&#x2523; access.log +
+&#x2523; access2.log +
+&#x2523; backend1-identity.json +
+&#x2523; backend1-message.txt +
+&#x2517; metadata.sh
 ====
 
-Note, the shell script files should be executable.
-
-=== Commit the work
-
-Once your scripts are working properly, commit the files in the scripts directory to you local Git repository.
-
-In the previous assignment, we created a new assignment repository on GitHub and then
-pushed an existing local repository up to GitHub. We are going to follow the
-same process in this assignment. Refer back to the previous assignment if you
-need to recall the specific commands.
-
-  * Create the assignment repository on GiHub Classroom: https://classroom.github.com/assignment-invitations/5ee41c34f8397fc833df21d8fdc485fa
-  * Modify the origin remote on your local Git repository to point to the
-  address of this new GitHub repository, something like: https://github.com/seis665/assignment-4-aws-<username>.git
-
-  * Push your local master branch up to the GitHub repository
-
-Congratulations! Your work is now saved.
-
-=== Take a snapshot
-
-Before we conclude this assignment, let's take a snapshot of our new instance.
-A snapshot can be used to backup the data on our instance or to create new
-instances.
-
-Go to the EC2 dashboard on the AWS web console. Select your instance and then
-stop it by selecting the *Actions* button and choosing the instance state
-*stop* option.
-
-Stopping your instance before taking a snapshot is a recommended practice
-because it allows the data on the server to _quiesce_. This basically means
-that data is written to disk and the system data is no longer in a state of
-flux.
-
-Click on the *Volumes* menu item on the EC2 dashboard and select the volume
-associated with your instance. Next, select the *Actions* button and the
-*Create Snapshot* option. Name your new snapshot `webserver1-snapshot` and
-feel free to give it a description.
-
-It will take a few minutes to create a snapshot of your instance volume. The
-process takes longer the first time because it has to completely backup
-the current volume. If you take another snapshot of this volume in the future,
-the snapshot will finish much faster because it only stores the data that
-changed since the previous snapshot.
-
-You can watch the progress of the snapshot by selecting the *Snapshots* menu
-link in the EC2 dashboard.
-
-=== Create an AMI
-
-Once the snapshot is completed, you can use the snapshot to create a personal
-Amazon Machine Image (AMI). Select the new snapshot in the *Snapshots* page
-lising. Select the *Actions* button and the *Create Image* option.
-
-Name your image `webserver-class` and give it a description of `class
-server`. Set the virtualization type to `Hardware-assisted virtualization`.
-
-Click on the *AMIs* menu link on the EC2 dashboard. You should see your new
-AMI listed. Notice how the AMI has an owner (your AWS account ID) and the
-visibility is private.
-
-image:../images/assignment4/ami-class.png["600","600"]
+Note, the shell script file should be executable. Also, I'll never ask you to submit an
+empty file, so I recommend that you check the content of all your files before submission.
 
 === Terminate server
 
-The last step in the assignment is to terminate your Linux instance. AWS will bill you for every
-hour the instance is running. The cost is nominal, but there's no need to rack
-up unnecessary charges and we won't use this instance in the next lesson.
+The last step in the assignment is to terminate the EC2 instances, delete
+the load balancer, and delete the VPC. I'll leave this as an exercise for you to
+figure out how to complete. Remember, you will get billed for each hour the EC2 instances and ELB are running (or at least consume your credits).
 
 == Submitting your assignment
 I will review your published work on GitHub after the homework due date.

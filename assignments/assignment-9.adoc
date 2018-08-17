@@ -3,19 +3,15 @@
 
 :sectnums!:
 
-= SEIS 665 Assignment 9: Configuration Management
+= SEIS 665 Assignment 9: Code pipeline
 Jason Baker <bake2352@stthomas.edu>
-1.1, 4/8/2017
+1.2, 11/18/2017
 
 == Overview
+A DevOps code pipeline helps to automate continuous delivery processes for software development organizations. Developers, testers, and operations staff depend on functioning pipelines to transform code changes into deployable software releases. While software developers are the primary users of a pipeline, IT operations professionals oftentimes have to maintain it.
 
-Configuration management is an important methodology we use in IT to build and
-maintain systems in our organizations. It helps us manage change more effectively
-by leveraging key infrastructure as code principles. Instead of managing systems
-with a complex graphical program storing data hidden away in a proprietary database,
-we can use simple code scripts that are easy to read and place under version control.
-In this assignment you will work with Ansible, one of the leading configuration
-management tools in the marketplace.
+In this week's assignment, you will build a code deployment pipeline using Jenkins, a continuous integration tool. The pipeline will test, build, and deploy a very simple Java application.
+
 
 == Requirements
 
@@ -23,147 +19,141 @@ You need to have a personal AWS account and GitHub account for this assignment.
 
 == The assignment
 
-Let's start managing configuration!
+Let's get that code pipeline flowing!
 
-== Launch three instances
+=== Fork the Java application
 
-You will need to launch three EC2 instances for this assignment. We will configure the
-first instance as a management server with the Ansible tool installed. The second
-instance will become a webserver, and the third instance will become a MySQL database server.
+The first step in the assignment is to fork a GitHub repository containing a Java application. Forking the repository will setup a copy of the repository in your personal GitHub account. You can then make changes to the application files in the repository without affecting the original (parent) repository.
 
-Fortunately you can use a CloudFormation template to rapidly create the infrastructure
-resources needed for this assignment. The template is available in this S3 bucket location:
+Go to GitHub and fork the following repository by clicking on the *Fork* button:
 
-  https://s3.amazonaws.com/seis665/AnsibleSystems.json
+  https://github.com/seis665/java-project
 
-Take a quick look at the template in a text editor. Notice how the UserData property for
-the `mgmt1` instance is configured. When CloudFormation launches this stack, it will
-automatically install and configure Ansible software on the management server. It's very
-common to use a small amount of scripting code to bootstrap configuration management software
-onto a new system. Once Ansible is installed it can be used to install and configure other
-software packages.
+After a short period of time you should see a forked copy of this repository in your personal GitHub account.
 
-Launch a new stack using the `AnsibleSystems.json` template into the us-east-1 region. Remember to specify your server keypair name when launching the stack. You will also need to provide the current IP address of your workstation in CIDR
-format (x.x.x.x/32).
+If you already forked this repository during the class lecture, I recommend deleting this repository in GitHub and forking it again to get a clean copy.
 
-You can access the website http://checkip.amazonaws.com in a browser to quickly determine the IP address of your workstation. Remember that if you move your workstation from one
-network to another (like from home to work) you will need to update this workstation IP address in the CloudFormation stack
-by performing an update on the stack.
+=== Launch the Jenkins stack
 
-You can give the stack any name you like. When you create the stack, you will need to click a checkbox acknowledging the creation of IAM resources.
+You will use a CloudFormation template to launch a stack containing a Jenkins server. The stack will create the
+following AWS resources:
 
-You will use the Ansible software installed on `mgmt1` to configure the `web1` and
-`database1` systems. Ansible communicates with remote hosts using the SSH protocol
-which means that the proper access credentials need to be in place on `mgmt1` in
-order to establish shell connections with the two other servers. Fortunately, the CloudFormation stack automates the setup of ssh credentials on all of the hosts.
+* An AWS Virtual Private Cloud (VPC), including all the necessary routing tables and routes, an Internet gateway, and security groups for EC2 instances to be launched into.
 
+* An Amazon EC2 instance that hosts a Jenkins server, installed and configured for you with all the necessary
+plugins.
 
-== Test Ansible
+* An IAM instance role which allows the Jenkins server to access the S3 bucket.
 
-Log into the `mgmt1` instance and create a new directory in your home directory called `assignment9`. Initialize a new Git repository in this directory.
+Launch the stack by clicking on the following URL and then clicking the *Next* link:
 
-Ansible uses an inventory file to track managed hosts. The inventory file specifies
-how Ansible should connect to a remote host. It usually contains the IP address or
-fully-qualified domain name of a host, as well as the username and key required to
-access a host. The `hosts` file was dynamically created by an EC2 userdata script, so it already
-contains the IP addresses of the `web1` and `database1` instances. Take a look at the hosts file located at `/etc/ansible/hosts`.
+https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=jenkins-stack&templateURL=https://s3.amazonaws.com/seis665/jenkins-cf.json[Launch stack]
 
-You can verify that Ansible can successfully access the managed hosts by typing the
-following commands:
+On the stack *Specify Details* page, enter the following:
 
-    $ ansible all -m ping
+1. In *Stack name*, use `jenkins` as the name for the stack.
+2. In *JenkinsPassword*, provide an administrative password for this system (choose a hard password).
+3. In *JenkinsUsername*, you can leave this set to `admin` or choose a different admin username.
+4. In *Key Name*, choose the name of your Amazon EC2 key pair.
+5. In *YourIP*, type the public IP address (appending /32) of the computer system which you will access the resources created by this template. If you do not know your current public IP address, you can open up a new web browser window and go to the URL: http://checkip.amazonaws.com/
 
-You should see a response from Ansible that looks like this:
+Click the *Next* button.
 
-  web1 | SUCCESS => {
-      "changed": false,
-      "ping": "pong"
-  }
-  database1 | SUCCESS => {
-      "changed": false,
-      "ping": "pong"
-  }
+On the *Options* page you can tag the resources created by the template. Feel free to create whatever tag you would like and click *Next*.
 
-If Ansible returns a successful `pong` for each host then you are ready to move on!
+On the *Review* page, select the *I acknowledge that this template might cause AWS CloudFormation to create IAM resources check box*. (It will.) Review the other settings, and then choose *Create*.
 
-== Configure servers
+It will take several minutes for CloudFormation to create the resources on your behalf. You can watch the progress messages on the *Events* tab in the console. When the stack has been created, you will see a CREATE_COMPLETE message in the *Status* column of the console and on the *Overview* tab.
 
-You will create an Ansible playbook to configure the two remote hosts. Before beginning the playbook, take a look at the facts that Ansible can
-collect from a remote host:
+You will find the IP address of the Jenkins server in the stack
+outputs (select the stack name and look at the outputs tab). Access
+the Jenkins server with a web browser on port 8080:
 
-    $ ansible web1 -m setup
+  http://<Jenkins IP address>:8080
 
-You will need to use a fact in your playbook, so take note of the fact variables that are returned by the setup module.
+Log into Jenkins using the username and password you provided
+during the stack creation process. Note that it might take a couple minutes for the Jenkins service to start up and display a login page.
 
-You can create a playbook file on the `mgmt1` server using a local text editor like nano or vi. Alternatively, you can use your favorite source code editor on your local workstation and copy (scp) the file from your local workstation to the `assignment9` directory on `mgmt1`. Use whichever method is easiest for you.
+Congratulations! You've created the infrastructure required to build a code pipeline.
 
-Create a playbook called `playbook.yml` in the `/home/ec2-user/assignment9` directory to perform the following tasks on all of the hosts:
+=== Setup GitHub integration
 
-    * Update all the current software packages on the system.
-    * Create a variable called `administrator_name` with a value of `corpadmin` in the play.
-    * Create a user with the value of the `administrator_name` variable on each system with a password of your choosing.
+Before you start working on a build pipeline, you should configure Jenkins to integrate with your GitHub account. This will allow Jenkins to automatically pull source code from your forked Java repository when the build pipeline runs.
 
-The playbook will perform the following tasks on the `web1` server:
+Here is a summary of the steps required to setup this integration. You can review the class lecture notes or online how-to guides to complete this setup.
 
-    * Install the Nginx server package.
-    * Copy the following `default.conf.j2` template to the system directory `/etc/nginx/conf.d/default.conf` substituting the text `example.com` with the fully-qualified domain name (fqdn) of the webserver (using a fact variable). Note, the fqdn of the server isn't `web1`. AWS automatically generates a domain address based on the private IP address of the instance.
+  * Create a new personal access token in your GitHub account. The token should have `admin:repo_hook`, `repo`, and `repo:status` permissions.
 
+  * Add a new GitHub server in the Jenkins system configuration settings.
 
-    server {
-        listen       80;
-        server_name  example.com;
+  * Add credentials for the GitHub server configuration.
+    ** Kind: Secret Text
+    ** Copy personal GitHub token into secret value field.
 
-        location / {
-            root   /var/www/example.com/public_html/;
-             index  index.html index.htm;
-        }
-    }
+  * Remember to select the GitHub token credential in the GitHub server settings after adding it!
 
-    * Ensure the nginx service is running and will automatically start during the system boot.
+  * Click the Test connection button to verify that the credentials work and save the Jenkins system configuration.
 
-The playbook will perform the following tasks on the `database1` server:
+Now Jenkins is setup to communicate with GitHub, but committing changes to your forked repository won't automatically trigger Jenkins builds. Let's fix that.
 
-    * Install the mysql server package.
-    * Configure the system to ensure mysql is running and will automatically start during the system boot.
-    * Use a loop to create 5 directories called:
-        ** /var/data/client1
-        ** /var/data/client2
-        ** /var/data/client3
-        ** /var/data/client4
-        ** /var/data/client5
+Go to your Github forked java-project repository and click on the repository settings link. Next, select the *Integrations & services* settings. Add a new integration service called *Jenkins (Github Plugin)*. You will need to configure a Jenkins hook URL for this service. The URL is:
 
-[WARNING]
-Your playbook should only contain one software update task and one task to create a user called `corpadmin`. The play should apply each one of these tasks to multiple systems.
+  http://<your Jenkins server IP>:8080/github-webhook/
 
-The `ec2-user` user doesn't have the necessary permissions to install new services on the instance. Ansible will need to become a super-user on these systems in order to install new packages.
+Okay, now your Jenkins-GitHub integration should be complete. You will be able to verify this integration in the next section when you start to push changes to your java-project repository.
 
-Execute the playbook to configure the two hosts. If you encounter any error messages, review the playbook script and correct any mistakes.
+=== Create a Pipeline
 
-This set of configuration tasks doesn't setup a real web application since there is no application code deployed. You can manually verify that the nginx and mysql services are running on each instance by using the `service` command. For example:
+You will create a new build pipeline using the Jenkins Pipeline DSL. Jenkins supports two different types of Pipeline DSL formats: declarative and scripted. We will use the declarative format for this assignment because it's a little easier to work with.
 
-  $ sudo service nginx status
+Begin by creating a new pipeline project in Jenkins called *java-pipeline*. Configure the project to reference the Java GitHub repository you forked earlier in the assignment.
 
-You should confirm that all the configuration tasks have been applied to each of the servers before submitting your work.
+Setup a build trigger for this project using the `GitHub hook trigger for GITScm polling` configuration setting. The project should create a pipeline (`Pipeline script from SCM`) based on a file called *Jenkinsfile* located at the root (top) directory of the Java project.
+
+The project pipeline should include the following named stages (highlighted in bold):
+
+  * **Unit Tests**
+    - The pipeline will initiate unit tests using `ant` and create a junit report.
+    - The shell command to run ant tests is `ant -f test.xml -v`
+    - The junit report source data is located in `reports/result.xml`
+  *  **Build**
+    - The pipeline will compile the Java application using `ant`.
+    - The shell command to compile the application is `ant -f build.xml -v`
+  * **Deploy**
+    - The pipeline will copy the build output jar file into an S3 bucket (use an existing S3 bucket or create a new one for this assignment).
+    - The name of the output jar file will look something like `rectangle-2.jar`, where the number represents the current Jenkins build number.
+    - You can use the AWS CLI to copy files from Jenkins to the S3 bucket. Don't worry about access credentials for this step because the Jenkins server has a proper role attached which allows it to access the S3 bucket.
+  * **Report**
+    - The pipeline will generate a report of the CloudFormation stack resources created in your environment using the command: `aws cloudformation describe-stack-resources --region us-east-1 --stack-name jenkins`
+    - Note: you will need to setup proper IAM and Jenkins access credentials to run this command.
+
+=== Hints
+
+I recommend starting the pipeline by first creating a very basic Jenkinsfile and committing it to your forked repository. Then verify that the pipeline project automatically triggers and tries to create a build. Don't worry if the build initially fails.
+
+Next, begin adding build stages to the Jenkinsfile, committing changes to the GitHub repository as you add each new stage. You should monitor each build in Jenkins by reviewing the console output for each job. Once you are confident that a stage is working, move on to the next stage.
+
+It will likely take a handful of iterations and updates before you complete the pipeline. This is how we build and test pipelines in practice.
 
 === Save your work
 
-Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/68c6b367013ed3711b1b1c9aa7bf8678
+Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/874ccbb14cf1edafbdf104af22f7812f
 
-Commit your git repository (in the `assignment9` directory) to this repository.
+Copy the Jenkinsfile you created for this assignment into this new repository and commit the code. Also, copy the console output from a successful build job into a file called `console.txt`
 
 === Check your work
 
 Here is what the contents of your git repository should look like before final submission:
 
 ====
-&#x2523; default.conf.j2 +
-&#x2517; playbook.yml +
-
+&#x2523; Jenkinsfile +
+&#x2517; console.txt
 ====
 
 === Terminate application environment
 
-The last step in the assignment is to delete all the AWS services you created.
+The last step in the assignment is to delete all the AWS resources created by the stack. You don't want to keep this stack running for a long time because the costs will accumulate.
+
 Go to the CloudFormation dashboard, select your running stack, and choose the
 delete option. Watch as CloudFormation deletes all the resources previously
 created.

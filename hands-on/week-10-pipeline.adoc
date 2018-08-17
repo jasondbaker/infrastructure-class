@@ -1,0 +1,142 @@
+:doctype: article
+:blank: pass:[ +]
+
+:sectnums!:
+
+= SEIS 665 Week 10 Project: Infrastructure Pipeline Part II
+Jason Baker <bake2352@stthomas.edu>
+1.0, 4/5/2018
+
+== Overview
+Create an automated infrastructure pipeline using a Jenkinsfile.
+
+== Requirements
+
+  * AWS account.
+  * SSH terminal application.
+
+
+== The project
+
+Let's get started!
+
+=== Launch Jenkins.
+
+Open up the CloudFormation web console and create a new Jenkins stack by specifying the following S3 URL:
+
+  https://s3.amazonaws.com/seis665/jenkins-cf.json
+
+Recall these input parameters from a previous project:
+
+1. In *JenkinsUsername*, leave the value set to `admin`.
+2. In *JenkinsPassword*, set the value to your desired password.
+
+Look at the stack `Outputs` tab to get the IP address of the Jenkins server. You can log into the server using
+the following web address (Jenkins runs on port 8080:
+
+    http://<jenkins server IP>:8080
+
+
+=== Infrastructure Pipeline Setup
+
+A month ago we setup a basic infrastructure pipeline in Jenkins by creating a new pipeline project and
+manually entering Groovy code into the project configuration. This week you will create the same sort of 
+pipeline but using a Jenkinsfile to store the pipeline definition code. Additionally, you will store this 
+Jenkinsfile in a GitHub repository and setup Jenkins to automatically run the pipeline anytime a commit is 
+made to the repository. GitHub can trigger Jenkins using a webhook. 
+
+I recommend breaking this project down into the following steps:
+
+1. Create a new public GitHub repository in your personal account called `infrastructure-pipeline`.
+
+2. Create a new Jenkins pipeline job called `infrastructure-pipeline`. Configure the new pipeline 
+job to use a pipeline script called `Jenkinsfile` located in the GitHub repository you 
+created (see lecture presentation p39). You won't need to provide access credentials for Jenkins to 
+access this repository because it's public. 
+
+3. Add a file called `Jenkinsfile` to your repository. How should you do this? You could clone the 
+repository to your laptop, add the Jenkinsfile, and push the commit back up to GitHub. Another quick 
+way to add the file to your repository is to use GitHub's web file editor (https://help.github.com/articles/editing-files-in-your-repository/)
+Here's an example Jenkinsfile you can start with. Note, you will
+need to update the `git url` setting in the Jenkinsfile with your GitHub repository address.
+
+    properties([pipelineTriggers([githubPush()])])
+
+    node('linux') {
+        git url: 'https://github.com/jasondbaker/infrastructure-pipeline.git', branch: 'master'
+        stage('Test') {    
+            sh "env"
+            
+        }   
+    }
+
+3. Configure the Jenkins pipeline job to trigger builds based on a GitHub webhook (see lecture presentation p27).
+
+4. Configure the GitHub repository with a webhook pointing to your Jenkins server (see lecture 
+presentation p26).
+
+5. Manually run the build once. The job should automatically clone your repository and execute the pipeline 
+steps defined in the Jenkinsfile. From this point on, anytime you commit new changes to the repository the 
+job should automatically build. 
+
+6. Create or modify a README.md file in your GitHub repository. Commit the file and verify that Jenkins 
+automatically builds the infrastructure-pipeline job.
+
+Okay, you're all set to begin building the pipeline!
+
+=== Create A Pipeline
+
+Create a pipeline with two stages called `GetInstances` and `CreateInstance`. The GetInstances stage will 
+retrieve a list of instances in the us-east-1 region.  The CreateInstance stage will launch a new EC2 
+instance in your account. The EC2 instance should have the
+following characteristics:
+
+    * Use the latest Amazon Linux AMI 
+    * t2.micro instance type
+    * Your EC2 key pair name
+    * A valid security group ID associated with your default VPC
+    * A valid subnet ID associated with your default VPC
+
+An example `aws` CLI command to launch a new EC2 instance looks like:
+
+    aws ec2 run-instances --image-id ami-287dnf7 --count 1 --instance-type t2.micro --key-name seis665 --security-group-ids sg-7edf3108 --subnet-id subnet-0bbd366e --region us-east-1
+
+Note, this example won't work in your pipeline and you will need to modify it for your environment.
+
+Here's some pipeline code to get you started:
+
+....
+stage ("GetInstances") {
+    
+    sh "aws ec2 describe-instances --region us-east-1"
+}
+
+stage ("CreateInstance") {
+    // TODO
+    
+}
+....
+
+=== Super-sized task (optional)
+
+Add a third stage to your pipeline which automatically terminates the instance after it is running. 
+
+You will need two things to complete this task. The EC2 instance ID created by the AWS `run-instances` command. The sh command can return an output value 
+which is assigned to a variable. The AWS CLI is returning output using JSON. The `jq` command (https://stedolan.github.io/jq/) is available on 
+the build node to parse the JSON output. Here's an example of how to assign a shell command output to a variable:
+
+    def output = sh returnStdout: true, script: 'aws ec2 describe-instances | jq .'
+
+Once the pipeline launches the instance, you need to add a waiter. The purpose of a waiter is to 
+literally wait until a specified process completes. In this case, you want the pipeline to wait until
+the EC2 instance is running. Hint, check out the `aws ec2 wait` command.
+
+
+=== Show me your work
+
+Please show me your pipeline code.
+
+=== Terminate AWS resources
+
+Remember to terminate all the resources created in this project, including the EC2 instance created by your
+pipeline.

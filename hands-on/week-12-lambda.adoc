@@ -1,0 +1,36 @@
+:doctype: article
+:blank: pass:[ +]
+
+:sectnums!:
+
+= SEIS 665 Week 12 Project: Serverless
+Jason Baker <bake2352@stthomas.edu>
+1.0, 8/15/2018
+
+== Overview
+Create a lambda function.
+
+== Requirements
+
+  * AWS account.
+  * SSH terminal application.
+
+
+== The project
+
+Let's get started!
+
+=== Build a lambda function
+
+
+
+=== Serverless Guru task (optional)
+
+
+
+=== Show me your work
+
+Please show me your lambda code.
+
+=== Terminate AWS resources
+

@@ -3,15 +3,14 @@
 
 :sectnums!:
 
-= SEIS 665 Assignment 10: Code pipeline
+= SEIS 665 Assignment 10: Docker
 Jason Baker <bake2352@stthomas.edu>
-1.2, 11/18/2017
+1.3, 4/24/2018
 
 == Overview
-A DevOps code pipeline helps to automate continuous delivery processes for software development organizations. Developers, testers, and operations staff depend on functioning pipelines to transform code changes into deployable software releases. While software developers are the primary users of a pipeline, IT operations professionals oftentimes have to maintain it.
+Containers are revolutionizing the way we package and deploy applications. Traditionally, we would install applications on bare metal hardware or virtual machines in our computing environment. We would have to carefully place applications on infrastructure to minimize conflicting requirements such as different versions of shared libraries. Containers let us partition applications and related dependencies on a shared computing platform.
 
-In this week's assignment, you will build a code deployment pipeline using Jenkins, a continuous integration tool. The pipeline will test, build, and deploy a very simple Java application.
-
+In this week's assignment, you will build a Docker container using a Dockerfile and a CI/CD infrastructure pipeline.
 
 == Requirements
 
@@ -19,144 +18,118 @@ You need to have a personal AWS account and GitHub account for this assignment.
 
 == The assignment
 
-Let's get that code pipeline flowing!
+Let's start shipping those containers!
 
-=== Fork the Java application
+=== Build Image Pipeline
 
-The first step in the assignment is to fork a GitHub repository containing a Java application. Forking the repository will setup a copy of the repository in your personal GitHub account. You can then make changes to the application files in the repository without affecting the original (parent) repository.
+It is a common practice to automate the building of Docker images using a CI/CD pipeline. 
+Launch a Jenkins stack in the us-east-1 region using the following template:
 
-Go to GitHub and fork the following repository by clicking on the *Fork* button:
+  https://s3.amazonaws.com/seis665/jenkins-cf.json
 
-  https://github.com/seis665/java-project
+Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/eeea11fb5604fd931c30393c935aba6b
 
-After a short period of time you should see a forked copy of this repository in your personal GitHub account.
+Create a new Jenkins pipeline job called `docker-pipeline` and configure it to use a Jenkinsfile located in your
+Classroom repository. Note that since you are using a private repository for this assignment, you will need to enter
+GitHub credentials for the git configuration in the pipeline job. Also, you will need to
+reference these credentials in the git command used by your Jenkinsfile. This is pretty easy to
+setup.
 
-If you already forked this repository during the class lecture, I recommend deleting this repository in GitHub and forking it again to get a clean copy.
+Please follow these steps to setup your GitHub access credentials in the pipeline job:
 
-=== Launch the Jenkins stack
+    * Create a GitHub personal access token (or use an existing token) in your personal GitHub account by going
+    to the Settings->Developer Settings->Personal access tokens section on the GitHub site. Store this token 
+    somewhere safe because you will need to enter it into the Jenkins configuration shortly. The token you create 
+    should have the following scopes enabled:
+        ** repo
+        ** admin:repo_hook
+    * When you are configuring the git settings for your pipeline job, click on the `Add` button by 
+the credentials and select the `Jenkins` credential provider. 
+    * Create a new `Username with password` credential, typing in your GitHub username and using the 
+    personal access token as the password. 
+    * Enter an identifiable value into the description field like `github account`. 
+    * Click the `Add` button to add your GitHub credential.
+    * Select your newly created credential in the `Credentials` drop-down field. If your credential works 
+    properly for your private repo, you should not see a Jenkins login error message.
+    * Note, you do not need to setup a pipeline build trigger or GitHub webhook for this assignment.
 
-You will use a CloudFormation template to launch a stack containing a Jenkins server. The stack will create the
-following AWS resources:
+The pipeline job will use these credentials to access your private GitHub repository and retrieve a
+Jenkinsfile. One of the first things the Jenkinsfile should do is tell Jenkins to clone the repository
+using the `git` command. Let's use the `Pipeline Syntax` link at the bottom of the pipeline configuration
+page to generate the proper syntax for this command.
 
-* An AWS Virtual Private Cloud (VPC), including all the necessary routing tables and routes, an Internet gateway, and security groups for EC2 instances to be launched into.
+    * Click on the `Pipeline Syntax` link at the bottom of the pipeline configuration page and select 
+    the `git: Git` sample step. 
+    * Type in your git repository URL (ending with `.git`).
+    * Select the credentials you created earlier from the credentials drop-down field. If you select the 
+    correct credentials, you should not see a Jenkins login error message.
+    * Click the `Generate Pipeline Script` button. 
+    * Copy-and-paste the generated code into your Jenkinsfile.
 
-* An Amazon EC2 instance that hosts a Jenkins server, installed and configured for you with all the necessary
-plugins.
+.Example:
+----
+git credentialsId: 'c868a19a-3de9-4ae1-9538-b832fd1c8b12', url: 'https://github.com/seis665/assignment-10-jasondbaker.git'
+----
 
-* An IAM instance role which allows the Jenkins server to access the S3 bucket.
+Your Jenkinsfile will have three stages: `Setup`, `Build` and `Test`. The `Setup` stage will clone a copy of the assignment GitHub repository (using the git code snippet above). It will also copy a webpage file from an S3 bucket into the project workspace. The `Build` stage will use a Dockerfile to build a new Docker image. Finally, the `Test` stage will create a new Docker container using the Docker image and test it to see if it is working properly.
 
-Launch the stack by clicking on the following URL and then clicking the *Next* link:
+Let's look at the requirements for each of these stages.
 
-https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=jenkins-stack&templateURL=https://s3.amazonaws.com/seis665/jenkins-cf.json[Launch stack]
+=== The Setup stage
 
-On the stack *Specify Details* page, enter the following:
+Create an HTML file called `classweb.html` with the following contents:
 
-1. In *Stack name*, use `jenkins` as the name for the stack.
-2. In *JenkinsPassword*, provide an administrative password for this system (choose a hard password).
-3. In *JenkinsUsername*, you can leave this set to `admin` or choose a different admin username.
-4. In *Key Name*, choose the name of your Amazon EC2 key pair.
-5. In *YourIP*, type the public IP address (appending /32) of the computer system which you will access the resources created by this template. If you do not know your current public IP address, you can open up a new web browser window and go to the URL: http://checkip.amazonaws.com/
+    <html>
+    <body>
+      <h1>My class webserver</h1>
+    </body>
+    </html>
 
-Click the *Next* button.
+Store this file in an S3 bucket in the us-east-1 region. The `Setup` stage of the pipeline will copy the `classweb.html` file from the S3 bucket into a file called `index.html` in the workspace.
 
-On the *Options* page you can tag the resources created by the template. Feel free to create whatever tag you would like and click *Next*.
+=== The Build Stage
 
-On the *Review* page, select the *I acknowledge that this template might cause AWS CloudFormation to create IAM resources check box*. (It will.) Review the other settings, and then choose *Create*.
+The `Build` stage will use a Dockerfile to create a new container image called `classweb` with a tag of `1.0`. Here are the configuration requirements for the Docker image:
 
-It will take several minutes for CloudFormation to create the resources on your behalf. You can watch the progress messages on the *Events* tab in the console. When the stack has been created, you will see a CREATE_COMPLETE message in the *Status* column of the console and on the *Overview* tab.
+  * The new image must be based off the `nginx` image.
+  * Set the maintainer of the image to your name and email address.
+  * The image should expose port 80.
+  * Copy the `index.html` which was downloaded from S3 to the /usr/share/nginx/html directory in the container.
 
-You will find the IP address of the Jenkins server in the stack
-outputs (select the stack name and look at the outputs tab). Access
-the Jenkins server with a web browser on port 8080:
+=== The Test Stage
 
-  http://<Jenkins IP address>:8080
+The `Test` stage will validate that the Docker image was created properly. The pipeline should create a new container called `classweb1` using the image built in the previous stage. The container should have the following configuration settings:
 
-Log into Jenkins using the username and password you provided
-during the stack creation process. Note that it might take a couple minutes for the Jenkins service to start up and display a login page.
+  * The container should run in a detached (daemon) mode.
+  * The container should map port 80 within the container to port 80 on the host server.
+  * The container should have an environment variable mapping the key `NGINX_PORT` to the value `80`.
 
-Congratulations! You've created the infrastructure required to build a code pipeline.
+After launching the container, the pipeline should test the container using the curl command. The container is running on the Jenkins slave node, so you should make an HTTP request to the private IP address of that node.
 
-=== Setup GitHub integration
+  curl -s <private IP address>
 
-Before you start working on a build pipeline, you should configure Jenkins to integrate with your GitHub account. This will allow Jenkins to automatically pull source code from your forked Java repository when the build pipeline runs.
+Finally, once the test completes the pipeline should stop and delete the container.
 
-Here is a summary of the steps required to setup this integration. You can review the class lecture notes or online how-to guides to complete this setup.
+=== Console Output
 
-  * Create a new personal access token in your GitHub account. The token should have `admin:repo_hook`, `repo`, and `repo:status` permissions.
-
-  * Add a new GitHub server in the Jenkins system configuration settings.
-
-  * Add credentials for the GitHub server configuration.
-    ** Kind: Secret Text
-    ** Copy personal GitHub token into secret value field.
-
-  * Remember to select the GitHub token credential in the GitHub server settings after adding it!
-
-  * Click the Test connection button to verify that the credentials work and save the Jenkins system configuration.
-
-Now Jenkins is setup to communicate with GitHub, but committing changes to your forked repository won't automatically trigger Jenkins builds. Let's fix that.
-
-Go to your Github forked java-project repository and click on the repository settings link. Next, select the *Integrations & services* settings. Add a new integration service called *Jenkins (Github Plugin)*. You will need to configure a Jenkins hook URL for this service. The URL is:
-
-  http://<your Jenkins server IP>:8080/github-webhook/
-
-Okay, now your Jenkins-GitHub integration should be complete. You will be able to verify this integration in the next section when you start to push changes to your java-project repository.
-
-=== Create a Pipeline
-
-You will create a new build pipeline using the Jenkins Pipeline DSL. Jenkins supports two different types of Pipeline DSL formats: declarative and scripted. We will use the declarative format for this assignment because it's a little easier to work with.
-
-Begin by creating a new pipeline project in Jenkins called *java-pipeline*. Configure the project to reference the Java GitHub repository you forked earlier in the assignment.
-
-Setup a build trigger for this project using the `GitHub hook trigger for GITScm polling` configuration setting. The project should create a pipeline (`Pipeline script from SCM`) based on a file called *Jenkinsfile* located at the root (top) directory of the Java project.
-
-The project pipeline should include the following named stages (highlighted in bold):
-
-  * **Unit Tests**
-    - The pipeline will initiate unit tests using `ant` and create a junit report.
-    - The shell command to run ant tests is `ant -f test.xml -v`
-    - The junit report source data is located in `reports/result.xml`
-  *  **Build**
-    - The pipeline will compile the Java application using `ant`.
-    - The shell command to compile the application is `ant -f build.xml -v`
-  * **Deploy**
-    - The pipeline will copy the build output jar file into an S3 bucket (use an existing S3 bucket or create a new one for this assignment).
-    - The name of the output jar file will look something like `rectangle-2.jar`, where the number represents the current Jenkins build number.
-    - You can use the AWS CLI to copy files from Jenkins to the S3 bucket. Don't worry about access credentials for this step because the Jenkins server has a proper role attached which allows it to access the S3 bucket.
-  * **Report**
-    - The pipeline will generate a report of the CloudFormation stack resources created in your environment using the command: `aws cloudformation describe-stack-resources --region us-east-1 --stack-name jenkins`
-    - Note: you will need to setup proper IAM and Jenkins access credentials to run this command.
-
-=== Hints
-
-I recommend starting the pipeline by first creating a very basic Jenkinsfile and committing it to your forked repository. Then verify that the pipeline project automatically triggers and tries to create a build. Don't worry if the build initially fails.
-
-Next, begin adding build stages to the Jenkinsfile, committing changes to the GitHub repository as you add each new stage. You should monitor each build in Jenkins by reviewing the console output for each job. Once you are confident that a stage is working, move on to the next stage.
-
-It will likely take a handful of iterations and updates before you complete the pipeline. This is how we build and test pipelines in practice.
-
-=== Save your work
-
-Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/874ccbb14cf1edafbdf104af22f7812f
-
-Copy the Jenkinsfile you created for this assignment into this new repository and commit the code. Also, copy the console output from a successful build job into a file called `console.txt`
+Once you have the pipeline working properly, copy the console output from the last 
+successful build into a file called `console.txt` and check it into the GitHub repository.
 
 === Check your work
 
 Here is what the contents of your git repository should look like before final submission:
 
 ====
+&#x2523; Dockerfile +
 &#x2523; Jenkinsfile +
-&#x2517; console.txt
+&#x2517; console.txt +
+
 ====
+
 
 === Terminate application environment
 
-The last step in the assignment is to delete all the AWS resources created by the stack. You don't want to keep this stack running for a long time because the costs will accumulate.
-
-Go to the CloudFormation dashboard, select your running stack, and choose the
-delete option. Watch as CloudFormation deletes all the resources previously
-created.
+The last step in the assignment is to terminate your CloudFormation stack on AWS.
 
 == Submitting your assignment
 I will review your published work on GitHub after the homework due date.

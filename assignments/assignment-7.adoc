@@ -3,237 +3,159 @@
 
 :sectnums!:
 
-= SEIS 665 Assignment 7: Elastic Beanstalk
+= SEIS 665 Assignment 7: CloudFormation
 Jason Baker <bake2352@stthomas.edu>
-1.1, 3/31/2017
+1.2, 4/1/2017
 
 == Overview
-During the last assignment, you built a highly available web application
-deployment by manually configuring a VPC, RDS database, and an EC2 auto scaling
-group. You probably figured out pretty quickly that this manual creation
-process involves many different components and it's easy to make a mistake
-during the configuration process.
+In our class we discussed how IT professionals now design and provision infrastructure using
+code -- a concept known as Infrastructure as Code. The AWS CloudFormation
+service allows you to define cloud infrastructure using JSON template files.
+These template files create resource stacks in AWS.
 
-You will use the Elastic Beanstalk service to deploy another scalable web application.
-You will learn how Platform as a Service can greatly simplify certain types of
-application deployments.
+In this week's assignment, you will use AWS CloudFormation to create a
+basic stack. Your stack will expand the stack design that was created during
+the hands-on portion of the class. You will learn how code can simplify and ensure the repeatability of infrastructure
+deployments. 
 
-Elastic Beanstalk can greatly simplify an application deployment on AWS because
-it takes care of much of the underlying infrastructure configuration. While the
-service was originally designed for application developers with limited AWS
-knowledge, it's really a valuable service for any AWS user. As IT professionals,
-our goal is to build scalable, secure, and reliable IT services. A service
-architecture built around a Platform as a Service allows us to achieve these
-goals with greater repeatability and consistency.
+Some students feel that it takes more effort to create infrastructure using code versus manually 
+creating infrastructure using a web console. That's probably true initially, especially when you are less familiar 
+with infrastructure as code techniques. However, once you become experience with building infrastructure using code you
+will find that it's faster and more reliable than a manual process.
+
+When you build infrastructure manually you have to spend time documenting the infrastructure that you built, and this 
+documentation needs to be maintained over time. Infrastructure as code is self-documenting and doesn't require this 
+extra step. Once you spend the time writing code to build out an infrastructure environment, you can share it with others 
+and generate copies of the environment within minutes. That's the power of infrastructure as code!
 
 == Requirements
 
-You need to have a personal AWS account and GitHub account for this assignment.
+You need to have the following resources to complete this assignment:
+
+  * Personal AWS account
+  * GitHub account
+  * Code editor
 
 == The assignment
 
-It's time to launch some services using a Platform-as-a-Service (PaaS).
+Your first stack awaits! Let's go.
 
-=== Launch management instance
+=== Download CloudFormation template
 
-We're going to take a different approach to creating AWS resources in this assignment. Until this 
-point in the course, you have been working primarily with the AWS web console to create resources. 
-In the real world we try to use web consoles as little as possible. Our preference is to define 
-infrastructure as code rather than using point-and-click interfaces.
+This week's assignment isn't as prescriptive as some of the previous assignments and you will need to 
+experiment with CloudFormation template code to build the required solution. Modifying template code requires a code
+editor. Here is a list of some popular free editors:
 
-Why is this the case? The Elastic Beanstalk (EB) service provides a great example of why 
-infrastructure as code is a preferred practice. AWS constantly updates and changes the web 
-interface for the EB service. If you documented the web-based process for deploying an 
-application on EB, you would have to update your documentation a couple times a year. 
-Additionally, some EB users will see updates to the EB web console before other users. Good luck 
-trying to keep all your team members happy.
+  * Atom (https://atom.io/)
+  * Visual Studio Code (https://code.visualstudio.com/)
+  * Notepad++ (https://notepad-plus-plus.org/)
 
-The bottom line is that a code-based approach is easier to document, automate, and run. It is a much 
-more scalable and reliable approach to building infrastructure. Let's start practicing what we 
-preach.
+You can review the class powerpoint
+presentation, AWS CloudFormation documentation, and YouTube resources if you
+need help to figure out how to configure a resource. You may use the template below as a starting point for the assignment. 
+Note that some of the existing resources in this template will need to be modified to meet the assignment requirements.
+If you prefer, you can also build the template from scratch.
 
-Go ahead and create a new t2.micro linux instance called `mgmt1` in a default VPC in the 
-us-east-1 (N. Virginia) region. Yes, you can use the AWS console for this task (but this is the 
-last time!).
+====
+https://s3.amazonaws.com/seis665/BasicWebserverInVPC.json
+====
 
-[NOTE]
-If you accidentally deleted the default VPC in the us-east-1 region you can try to use one of the 
-other regions such as us-west-1. You will have to modify the assignment instructions accordingly. 
-You can also contact AWS support and ask them to recreate the default VPC in us-east-1 for you.
+Here's the background story for this assignment: The engineering manager at your office came to you and asked
+if you could build a new CloudFormation stack template called `corpweb.json` for the development team. The stack must have
+two Amazon Linux EC2 instances located behind an Application ELB. The
+load balancer must handle incoming requests on port 80 and send those to the
+EC2 instances on port 80. Additionally, the two instances need to be members of a security group which
+allows incoming traffic on ports 22 and 80. 
 
-=== Setup EB CLI configuration
+The engineering manager would like users to be able to provide three *input parameters* when launching the stack:
 
-Connect to the instance via ssh once it is available and install the Elastic Beanstalk CLI. The 
-EB CLI is a command-line tool you can use to control the AWS EB service. It's kind of like a 
-service-specific version of the AWS CLI. Type in the following command to install the EB CLI on 
-the instance:
+  * A parameter called *InstanceType* that defines the instance type for the instances.
+      ** The allowable type must be one of the following: t2.micro or t2.small
+  * A parameter called *KeyPair* that specifies the server key-pair name for the EC2 instances.
+  * A parameter called YourIp that specifies your public IP address in CIDR notation.
 
-  pip install awsebcli --upgrade --user
+Also, she would like you to create an output called *weburl* that displays the load balancer dns name
+after the stack is launched.
 
-Next, clone the following Wordpress application git repository to the instance and change to 
-the `seis665-wordpress` directory:
+The stack template should create the following logical resources:
 
-	 git clone https://github.com/jasondbaker/seis665-wordpress.git
-
-Inside the `seis665-wordpress` directory, run the `eb init` command:
-
-  eb init
-
-First, the EB CLI prompts you to select a region. Type the number that corresponds to the region 
-that you would like to use and press Enter.
-
-	us-east-1 (N. Virginia)
-
-Next, provide your API access key and secret key so that the EB CLI can manage resources for you. 
-Access keys are created in the AWS Identity and Access Management management console.
-
-	(aws-access-id): (type in your aws-access-id)
-	(aws-secret-key): (type in your aws-secret-key)
-
-An application in Elastic Beanstalk is a resource that contains a set of application versions 
-(source), environments, and saved configurations that are associated with a single web application. 
-Each time you deploy your source code to Elastic Beanstalk using the EB CLI, a new application 
-version is created.
-
-The default application name is the name of the folder in which you ran `eb init`. Let’s set this 
-to `wordpress`:
-
-	Application name: wordpress
-
-Next, the EB CLI should automatically detect that our application is using `PHP`. It will ask us 
-what version of PHP our application needs. The PHP platform version we want is `5.6`.
-
-We don’t need to use CodeCommit for this project, choose `no` when prompted.
-
-We also don’t need to connect to the instances created by EB, so choose `no` when asked to setup SSH.
-
-Notice how the EB CLI setup a hidden subdirectory called `.elasticbeanstalk` within the current 
-directory. The settings you just entered are stored in a YAML file within this subdirectory. Check 
-it out:
-
-	cat .elasticbeanstalk/config.yml
-
-=== Launch Wordpress environment
-
-Now we need to create a new environment which will support our application. An environment consists 
-of all the AWS resources needed to power the app -- EC2 instances, ELB, RDS database, auto-scaling 
-group, security groups, etc. Launch the environment by running the command:
-
-	eb create wordpress-dev --database --scale 2 --timeout 30
-
-This command will ask a series of questions before launching the environment:
-
-	Load balancer type: classic
-	RDS DB name: wordpressdb
-	RDS DB master password: (choose one)
-
-The EB CLI will automatically upload the Wordpress application to EB as a deployment package. Now 
-watch as the EB service builds the infrastructure environment for your application. This process 
-may take about 20 minutes.
+  * A VPC called: *engineeringVpc*
+    ** The VPC CIDR block should be: 10.0.0.0/18
+    ** The VPC should have two subnets called: *publicSubnet1* and *publicSubnet2*.
+        *** publicSubnet1 has a CIDR block of 10.0.0.0/24
+        *** publicSubnet2 has a CIDR block of 10.0.1.0/24
+    ** The subnets should be able to route data out to the Internet.
+  * Two EC2 instances with logical resource names of *web1* and *web2* with associated *Name* tags.
+    ** web1 is located in the publicSubnet1 subnet.
+    ** web2 is located in the publicSubnet2 subnet.
+    ** Each instance type is based on the InstanceType input parameter.
+    ** The instance AMIs should use this public image: *ami-3ea13f29*
+    ** The instance key-pairs are based on the KeyPair parameter.
+  * A security group with a logical name and group name of *webserversSG* in the VPC.
+    ** Allow incoming requests on port 22 from your workstation (based on the YourIp parameter)
+    ** Allow incoming requests on port 80 from 0.0.0.0/0
+  * An application load balancer named *engineeringLB* and target group named *engineeringWebservers*
+    ** Load balance incoming requests on port 80 and send to instance port 80 using the http protocol.
+    ** Load balancer health check via http on port 80 to the "/" url location.
 
 [NOTE]
-Elastic Beanstalk uses the access permissions associated with your IAM account to create resources 
-such as EC2 instances and security groups. If the creation process fails, your IAM account may not 
-have the proper permissions in place to create all the necessary resources. You should go into the 
-IAM console and add the AdministratorAccess policy to your account.
+====
+The names of the resources you configure in your stack template must *exactly* match the values above. The names 
+are case-sensitive, so a resource with the name of "Web1" is not the same as "web1". You will lose points on this 
+assignment if your resource names do not match the expected names. You should always double-check your work.
+====
 
-After the launch process completes, check out the status of your EB environment by using the 
-following command:
+=== Launch the stack
 
-	eb status
+Once you have created and validated your template, save it to your local file
+system. Next launch your new stack, called *WebserversDev*, in us-east-1 and provide the proper input parameters. 
+Watch as AWS CloudFormation goes through the build process and creates the resources defined in the template. It will 
+take a few minutes for CloudFormation to build the stack resources.
 
-You should see something like:
+It's likely that your stack launch will fail to complete the first time you try
+to launch the stack. Take a look at the events associated with the stack to try
+to determine which resource CloudFormation failed to create properly. You will
+see an error message describing why the resource failed. Oftentimes a resource
+will not get built because the one of the resource properties is missing or is
+incorrect. Try to fix the error in the template and launch the stack again.
 
-	Environment details for: wordpress-dev
-	Application name: wordpress
-	Region: us-east-1
-	Deployed Version: app-309e-170325_215522
-	Environment ID: e-2jxqcjvjkh
-	Platform: arn:aws:elasticbeanstalk:us-east-1::platform/PHP 5.6 running on 64bit Amazon Linux/2.3.2
-	Tier: WebServer-Standard
-	CNAME: jbaker-wordpress-dev.us-east-1.elasticbeanstalk.com
-	Updated: 2017-03-25 22:13:34.241000+00:00
-	Status: Ready
-	Health: Green
-
-If the Status attribute is `Ready` and the Health is `Green` then you should be able to open up the 
-Wordpress application in a browser using the CNAME address in the output above. For example:
-
-	http://jbaker-wordpress-dev.us-east-1.elasticbeanstalk.com
-
-Go ahead and configure the Wordpress application like the previous assignment. Feel free to log 
-into the Wordpress application and play around with the interface a little bit. For example, try to 
-create a new blog post.
-
-You just launched a highly-available Wordpress environment! What do you think? Was it easier to 
-build the environment using the EB CLI and code versus using the AWS web console?
-
-=== Modify the environment configuration
-
-Go back to your terminal and check out the health of your deployed Wordpress environment:
-
-	eb health
-
-You should see two healthy instances. When we executed the `eb create` command we specified that 
-the environment should launch with 2 instances (`--scale 2`). Let’s change the number of running 
-instances in the environment to 1.
-
-You can modify the EB application environment by typing in the following command:
-
-	eb config
-
-This will open up a text editor containing the current application environment configuration. Look 
-for the `aws:autoscaling:asg:` configuration section and change the MinSize attribute to `1`.
-
-Save your file changes and exit the text editor. Notice how EB immediately begins to modify the 
-deployed application environment. Wait for the update to complete.
-
-Now, try checking the health of the EB environment again. The health command output might still 
-show two running instances. If so, wait a few more minutes and check again. EB will eventually 
-terminate one of the running instances.
-
-Terminate the deployed application by running the command:
-
-	eb terminate --timeout 30
-
-Watch as EB deletes all the infrastructure resources that were created to run your application.
-
-
-=== Collect session data
-
-Make a sub-directory in your home directory called `assignment7`. Change to that directory and
-create a git repository.
-
-Next, configure the AWS CLI with your access key, secret key, and the current region. Review the 
-previous assignment if you don't recall how to configure the CLI.
-
-Run the following command to retrieve the Elastic Beanstalk events and store the events in a JSON 
-file:
-
-  $ aws elasticbeanstalk describe-events --application-name wordpress > eb-events.json
-
+When you see that the stack launch completed and the EC2 instances are running, go ahead and terminal into
+one of the instances to confirm that you can access the server. Next, look at
+the output value from the CloudFormation stack to determine the DNS address
+for the load balancer that was created. Enter this DNS address into your
+web browser to confirm that it is distributing requests across the instances
+properly.
 
 === Check your work
 
 Here is what the contents of your git repository should look like before final submission:
 
 ====
-&#x2523; eb-events.json +
+&#x2523; corpweb.json +
 ====
 
 === Save your work
 
-Add the `eb-events.json` files to the Git staging area and commit the files to the repository.
+Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/4bb37342c50150f66bef6b83443c44fc
 
-Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/7b133d3aa0bc7920c4c6c116206e70e6
+Commit your `corpweb.json` stack template file to this repository. You could create a new Git repository on your local machine, commit the template file to it, and then push the local repository up to GitHub. Or, you could use the GitHub web console to create a new repository and upload your template file to it. The
+latter method is probably a little quicker for this assignment.
 
-Configure your local Git repository to connect to this new GitHub repository. Push your work to 
-GitHub and verify that the assignment files are located in the GitHub repository.
+[WARNING]
+====
+You are responsible for ensuring that the corpweb.json template file you commit to your repository actually works on AWS 
+CloudFormation. In the past, some students have used text editors which made small changes to the template when it was 
+saved to disk and committed to the git repository. The result is that the template no longer worked properly on 
+CloudFormation and the students' assignment scores were significantly impacted. *You should strongly consider testing 
+the template after you commit it to the git repository to ensure that it still works.* 
+====
 
 === Terminate application environment
 
-The last step in the assignment is to delete all the AWS resources you created. In this case, the 
-only AWS resource still remaining is the `mgmt1` EC2 instance.
+The last step in the assignment is to delete all the AWS services you created.
+Go to the CloudFormation dashboard, select your running stack, and choose the
+delete option. Watch as CloudFormation deletes all the resources previously
+created.
 
 == Submitting your assignment
 I will review your published work on GitHub after the homework due date.

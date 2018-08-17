@@ -86,3 +86,8 @@ The _Try Git_ online class provides a quick introduction to Git where you can
 play with some of the basic commands. Students that have not used Git before
 are *strongly encouraged* to take this 15-minute class. The class is located at
 https://try.github.io
+
+You can also learn how to use the GitHub website using free online training at:
+https://lab.github.com/
+
+In previous semesters Git training was offered as part of this course. However, the use of Git is so common now in industry that students are expected to either have prior experience or the ability to learn it quickly. Your familiarity and comfort level with Git will have a significant impact on your performance in this course. Please plan to invest additional learning time at the beginning of the course if you do not have experiencing working with Git or source control systems.
