@@ -50,8 +50,9 @@ on their own will have difficulty taking the exams.
 
 We will use Amazon Web Services extensively throughout the course to learn how
 to work with cloud-based infrastructure. You are required to setup an AWS account
-to complete many of the assignments. You may use an existing (non-corporate) AWS
-account for the class. *You must provide a valid credit card when signing up for an AWS account*.
+to complete many of the assignments. You may use an existing school AWS
+account for the class as long as it is associated with your UST email account. 
+*You must provide a valid credit card when signing up for an AWS account*.
 
 Amazon offers a _free_ tier of service for users with new accounts. This free tier
 lasts for one year after the account is registered. Additionally, since the
@@ -61,8 +62,8 @@ for up to $100 in AWS annual credits.
 This course makes every effort to stay within the free tier of service at AWS.
 However, there are times when your account will likely incur hourly charges. The
 free tier of service combined with educational credits should cover almost all of your
-expenses. However, you are responsible for covering any additional expenses not covered by
-these credits.
+expenses. *You are responsible for covering any additional expenses not covered by
+these credits.*
 
 Go to http://aws.amazon.com/ and click on the `Sign In` link to sign up for a
 new AWS account. You should use your @stthomas.edu email address when signing
@@ -71,10 +72,7 @@ up for the account. Also, you need to provide Amazon with a valid credit card du
 *Note, do not select the AWS Educate Starter Account option when signing up for an account.* If you select this option, you *will not* be able to apply for educational credit. Also, make sure you type in the name of your educational institution (University of St. Thomas) on the application form.
 
 Once your AWS account is setup, make note of your AWS Account ID (found in your
-  account profile on the AWS console). Then, apply for educational credit by filling out an
-  application at: https://www.awseducate.com/Application. It may take a little
-  time for AWS to process your application so submit it as
-soon as you can.
+account profile on the AWS console). Then, apply for educational credit by filling out an application at: https://www.awseducate.com/Application. It may take a little time for AWS to process your application so submit it as soon as you can.
 
 If AWS accepts your application, you will receive an e-mail containing a special credit code. You need to enter this credit code into your account profile (look in the Billing/Credit Codes section of your AWS account). *AWS will charge your credit card for all service fees if you do not enter the educational credit code into your account.*
 
