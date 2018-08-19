@@ -261,14 +261,13 @@ Watch Lecture 11 video recordings
 |12 | 11/26 | Serverless Applications +
 Lambda, API Gateway |
 Assignment 10 +
-Read _Infrastructure as Code_ Chapters 9 & 14 +
+Read _Infrastructure as Code_ Chapter 15 +
 Watch Lecture 12 video recordings
 
 |13 | 12/3 | Service Discovery +
 Container Orchestration +
  |
 Assignment 11 +
-Read _Infrastructure as Code_ Chapter 15 +
 Watch Lecture 13 video recordings
 
 
