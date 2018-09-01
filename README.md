@@ -65,20 +65,20 @@ Lecture Schedule
 
 | Week | Topic                                                                  |
 |------|------------------------------------------------------------------------|
-| 1    | Course Introduction, Source control, Git                               |
+| 1    | Course Introduction, Distributed Infrastructure Patterns               |
 | 2    | Linux fundamentals, Package management, Shell scripting                |
-| 3    | Infrastructure fundamentals, Virtualization, Distributed infrastructure|
-| 4    | Cloud computing, AWS, IAM, EC2, S3                                     |
-| 5    | Cloud computing, AWS, VPC, RDS, ELB                                    |
-| 6    | Cloud computing, AWS, Autoscaling, Cloud Watch, Route53, SQS, SNS, SES |
-| 7    | Midterm                                                                |
-| 8    | Devops Practices, Continuous integration & delivery  |
-| 9    | Infrastructure as Code, CloudFormation                                 |
-| 10   | Configuration Management                                               |
-| 11   | Jenkins & CI/CD Pipelines                              |
-| 12   | Containers, Docker                                                     |
-| 13   | Service discovery, Container orchestration                                              |
-| 14   | Final exam                                                             |
+| 3    | Virtualization, Cloud computing, AWS Fundamentals (IAM/ EC2/ S3)       |
+| 4    | AWS Advanced Concetps (VPC/ RDS/ ELB)                                  |
+| 5    | AWS Extras (Autoscaling/ Cloud Watch/ SQS/ SNS/ SES/ Route53)          |
+| 6    | DevOps Practices, Continuous integration & delivery                    |
+| 7    | Midterm Challenge                                                      |
+| 8    | Infrastructure as Code, AWS CloudFormation                             |
+| 9    | Configuration Management, Ansible                                      |
+| 10   | Jenkins, CI/CD Pipelines                                               |
+| 11   | Containers, Docker                                                     |
+| 12   | Serverless Applications, AWS Lambda                                    |
+| 13   | Service discovery, Container orchestration                             |
+| 14   | Final Challenge                                                        |
 
 Build
 -----

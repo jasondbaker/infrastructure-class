@@ -188,8 +188,7 @@ without the written permission of the instructor. (See Class Session Recording
 |Week | Date | Topic | Assignments Due
 
 |1 | 9/10 | Course Introduction +
-Distributed Infrastructure Patterns +
-Git |
+Distributed Infrastructure Patterns |
 
 
 |2 | 9/17 | Linux fundamentals +
