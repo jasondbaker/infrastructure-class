@@ -94,7 +94,7 @@ Create an EC2 autoscaling group configuration called `ecotech-asg` which runs 3 
 autoscaling group should use a launch configuration with the following properties:
 
 * t2.micro instance size
-* Latest version of Amazon Linux AMI 
+* Latest version of Amazon Linux 2 AMI 
 * 10GB root volume storage size
 * Instances are named `ecoweb`
 * The instances will run in the ecotech-vpc

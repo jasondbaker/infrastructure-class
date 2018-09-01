@@ -57,13 +57,13 @@ to the assignment notes if you need to review the launch process.
 
 The server should have the following characteristics:
 
-  * Amazon Linux AMI 64-bit (usually the first option listed)
+  * Amazon Linux 2 AMI 64-bit (usually the first option listed)
   * Located in a U.S. region (us-east-1 or us-west-1)
   * t2.micro instance type
   * All default instance settings (storage, vpm, security group, etc.)
 
 Note that when you are launching the server, you can elect to use the same
-key pair you used last week or you can create a new key pair for this
+key pair you used in the class project or you can create a new key pair for this
 server. Either option is fine. From a practical standpoint, it might make
 sense to reuse the same key pair each time so that you don't have to
 keep track of which key pair you used to launch a particular server.

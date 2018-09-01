@@ -91,7 +91,7 @@ retrieve a list of instances in the us-east-1 region.  The CreateInstance stage 
 instance in your account. The EC2 instance should have the
 following characteristics:
 
-    * Use the latest Amazon Linux AMI 
+    * Use the latest Amazon Linux 2 AMI 
     * t2.micro instance type
     * Your EC2 key pair name
     * A valid security group ID associated with your default VPC

@@ -56,12 +56,14 @@ empty. We will put some content in there soon!
 The second step in the project is to launch a Linux server using AWS EC2. The
 server should have the following characteristics:
 
-  * Amazon Linux AMI 64-bit (usually the first option listed)
+  * Amazon Linux 2 AMI 64-bit (usually the first option listed)
   * Located in a U.S. region (us-east-1)
   * t2.micro instance type
   * All default instance settings (storage, vpm, security group, etc.)
 
-I've created a video showing you how to launch this EC2 instance. The video is
+We will use the Amazon Linux operating system extensively in this class. AWS provides two versions of this OS -- Amazon Linux 2 and Amazon Linux. In some of the class videos you may see me click on the Amazon Linux AMI instead of the Amazon Linux 2 AMI. That's because the Amazon Linux 2 AMI was introduced after the videos were recorded. From a technical standpoint either Amazon Linux version will likely work fine, although I will expect you to consistently use Amazon Linux 2.
+
+I've created a video showing you how to launch a linux EC2 instance. The video is
 available at:
 
 * https://youtu.be/aN6XXz192kQ
@@ -69,16 +71,17 @@ available at:
 Once you launch the new server, it may take a few minutes to provision.
 
 === Log into server
-The next step is to log into the Linux server using a terminal program with secure shell (SSH) support. I like using http://www.iterm2.com[iTerm2] on a Mac and http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html[PuTTY] on a PC.
+
+The next step is to log into the Linux server using a terminal program with secure shell (SSH) support. I like using http://www.iterm2.com[iTerm2] on a Mac. If you are a Windows user I recommend downloading and installing https://gitforwindows.org/[Git for Windows] which includes a BASH terminal application and an SSH program. The classroom computers should already have this software installed. 
 
 You will need to have the private server key and the
 public IP address before attempting to log into the server. The server key
 is basically your password. If you lose it, you will need to terminate the existing
-instance and launch a new server. I recommend reusing the same key when launching new servers throughout the class. Note, I make this recommendation to make the learning process easier and not because it is a common security practice.
+instance and launch a new server. I recommend reusing the same key when launching new servers throughout the class. Note, I make this recommendation for learning purposes and not because it is a preferred security practice.
 
 I've created a couple videos showing you how to use a terminal application to log into the instance using a Windows desktop and a MacOS desktop. Your personal computer or lab computer may be running a different OS version, but the process is still very similar.
 
-* Accessing EC2 instance from a Windows PC: https://youtu.be/HOlo7L9fWlc
+* Accessing EC2 instance from a Windows PC: https://youtu.be/o-ogpzXdXqU
 * Accessing EC2 instance from a Mac: https://youtu.be/ZFh-qA5DT6w
 
 === Working with Linux
@@ -92,7 +95,7 @@ You should be looking at a login screen that looks something like this:
   Last login: Mon Mar 21 21:17:54 2016 from 174-20-199-194.mpls.qwest.net
 
        __|  __|_  )
-       _|  (     /   Amazon Linux AMI
+       _|  (     /   Amazon Linux 2 AMI
       ___|\___|___|
 
   https://aws.amazon.com/amazon-linux-ami/2015.09-release-notes/
@@ -689,6 +692,15 @@ there? Congratulations, you completed the exercise!
 ----
 Your repository link should be something like https://github.com/seis665/project-2-linux-git-jasondbaker
 ----
+
+=== Extra Super Fly task (optional)
+
+Write a shell script which outputs the public IP address of the EC2 instance by using the `aws` command-line application. This python-based helper application is installed on all Amazon Linux instances and can be used to access the AWS API. You will need to provide the `aws` command with a set of AWS credentials (see: https://docs.aws.amazon.com/cli/latest/userguide/cli-config-files.html). 
+
+Hint: Check out the `aws ec2 describe-instances` command. 
+
+Bonus points for outputing the IP address using jq (`yum install jq`).
+
 
 === Terminate server
 

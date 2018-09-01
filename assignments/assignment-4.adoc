@@ -124,7 +124,7 @@ communicate with the Internet. Let's test that assumption next.
 
 === Launch a server
 
-We launched an instance based on the Amazon Linux AMI in previous
+We launched an instance based on the Amazon Linux 2 AMI in previous
 assignments and then we modified the Linux instance by installing whatever
 software we needed. However, in the previous assignment we built out a Linux
 server and created an AMI. Now we can use that AMI to launch a new instance,

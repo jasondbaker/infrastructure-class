@@ -90,7 +90,7 @@ When we build infrastructure pipelines, we create each stage of the pipeline one
 additional pipeline stage which launches a new EC2 instance in your account. The EC2 instance should have the
 following characteristics:
 
-    * Use the latest Amazon Linux AMI 
+    * Use the latest Amazon Linux 2 AMI 
     * t2.micro instance type
     * Your EC2 key pair name
     * A valid security group ID associated with your default VPC

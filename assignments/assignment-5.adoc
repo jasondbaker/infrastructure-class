@@ -170,7 +170,7 @@ launch configuration.
 
 Launch an EC2 instance with the following properties:
 
-  * Amazon Linux AMI 64-bit
+  * Amazon Linux AMI 2 64-bit
   * t2.micro
   * Network: productionVpc
   * Subnet: production-public-1

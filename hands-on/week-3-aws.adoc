@@ -22,7 +22,7 @@ Let's get started!
 
 === Create S3 bucket
 
-Create an S3 bucket in the us-east-1 region and upload an image into it. You can select any sort of image you would like. Configure S3 to store the image on Reduced Redundancy storage and in an encrypted format.
+Create an S3 bucket in the us-east-1 region, create a prefix (folder) in the bucket called `images` and upload an image into it. You can select any sort of image you would like. Configure S3 to store the image on Reduced Redundancy storage and in an encrypted (AES-256) format.
 
 
 === Create an EC2 instance
@@ -30,19 +30,20 @@ Create an S3 bucket in the us-east-1 region and upload an image into it. You can
 Create an EC2 instance with the following properties:
 
 * t2.medium instance size
-* AWS Linux AMI
+* AWS Linux 2 AMI
 * us-east-1 region
 * 10GB root volume storage size
+* Allow access from the Internet to SSH (port 22) and HTTP (port 80)
 
-SSH into the new EC2 instance and update all the system packages. Install the Nginx webserver software on the instance.
-
-=== Extra super funtastic task (optional)
-
-Write a shell script called `server-properties.sh` located in your user home directory which queries the instance meta-data endpoint to retrieve the public IP address and security group of the instance. Write these values to a file called `server-data.txt` in the home directory.
+SSH into the new EC2 instance and update all the system packages. Install the Nginx webserver software on the instance. Access the public IP address of the instance from a web browser to verify that the Nginx webserver is running properly.
 
 === Create an AMI
 
 Create an AMI based off the new EC2 instance you created above. Once the AMI is built, launch a new EC2 instance using your new AMI. The properties of the EC2 instance can be similar to the ones above.
+
+=== Extra super funtastic task (optional)
+
+Write a shell script called `server-properties.sh` located in your user home directory which queries the instance meta-data endpoint to retrieve the public IP address and security group of the instance. Write these values to a file called `server-data.txt` in the home directory.
 
 
 === Show me your work
@@ -51,4 +52,4 @@ Please show me your new instance built off the custom AMI and your S3 bucket.
 
 === Terminate server
 
-Remember to terminate your EC2 instances and remove your S3 bucket once you have completed the project.
+Remember to terminate your EC2 instances and remove your S3 bucket once you have completed the project. You cannot delete S3 buckets that contain objects. You must delete all the bucket objects or empty the bucket first.

@@ -28,7 +28,7 @@ You need to have a personal AWS account and GitHub account for this assignment.
 
 == The assignment
 
-Ready your engines. Let's rev up some instances!
+One thing that's important to note about this assignment is that one of the output artifacts you will create is an AMI that will be used on the next assignment. In other words, you must complete this assignment in order to work on next week's assignment. Ready your engines. Let's rev up some instances!
 
 === Create a role
 
@@ -154,7 +154,7 @@ be added to the instance configuration later.
 
 The server should have the following characteristics:
 
-  * Amazon Linux AMI 64-bit (usually the first option listed)
+  * Amazon Linux 2 AMI 64-bit (usually the first option listed)
   * Located in Northern Virginia region (us-east-1)
   * t2.micro instance type
   * Auto-assign Public IP is enabled
@@ -169,7 +169,7 @@ The server should have the following characteristics:
 
 Your instance settings should look similar to the settings in the image below.
 Your configuration may be slightly different based on the availability of a
-newer Amazon Linux AMI.
+newer Amazon Linux 2 AMI.
 
 image:../images/assignment3/server-launch-1.png["600","600"]
 
@@ -451,7 +451,7 @@ image:../images/assignment3/ami-class.png["600","600"]
 
 The last step in the assignment is to terminate your Linux instance. AWS will bill you for every
 hour the instance is running. The cost is nominal, but there's no need to rack
-up unnecessary charges and we won't use this instance in the next lesson.
+up unnecessary charges and we won't use this instance in the next lesson. Don't delete the AMI created during this assignment because you will need to use it again next week.
 
 == Submitting your assignment
 I will review your published work on GitHub after the homework due date.
