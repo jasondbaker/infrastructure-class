@@ -80,21 +80,6 @@ Lecture Schedule
 | 13   | Service discovery, Container orchestration                             |
 | 14   | Final Challenge                                                        |
 
-Build
------
-
-This repository requires the [Asciidoctor](http://asciidoctor.org/) toolchain
-to convert AsciiDoc files into PDF files.
-
-The `generate-pdfs.sh` script in the `/build` directory will create PDF
-versions of all AsciiDoc files located in the root directory.
-The script can utilize Docker if it's available on the build
-platform.
-
-The `generate-syllabus.sh` script in the `/build` directory will create an HTML
-version of the course syllabus.
-
-
 License
 -------
 
