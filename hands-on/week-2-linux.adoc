@@ -475,10 +475,10 @@ our first shell script.
 Use the `nano` editor to create a file named `myscript`. When the file is open
 in the editor, type in the following lines of code:
 
-  ----
+  
   #!/bin/bash
   echo Hello $1
-  ----
+
 
 Now quit the editor and save your file. We can run our script by typing:
 
