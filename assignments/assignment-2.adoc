@@ -121,8 +121,7 @@ week's assignment files. Let's call it `project1`. Go ahead and create this
 directory now, and change to the new directory.
 
 Okay, you should be currently in the new directory. Let's create a new Git
-repository in this directory. Look back at previous notes if you don't
-remember how to initialize a new Git repository.
+repository in this directory using the `git init` command.
 
 List the directory contents to verify that a `.git` directory exists. Remember,
 the `.git` directory contains the actual Git repository. The directory starts
