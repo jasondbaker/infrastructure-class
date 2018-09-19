@@ -16,7 +16,7 @@ begin working on these tasks!
 * Sign up for a free Slack account and optionally install software on your desktop and/or
 mobile device.
 * Sign up for an Amazon Web Services account.
-* (Optional) Take the _Try Git_ online class.
+* (Optional) Take a Git training online class.
 
 :sectnums:
 ==  GitHub.com account
@@ -78,14 +78,15 @@ If AWS accepts your application, you will receive an e-mail containing a special
 
 In the past, some students have reported that they received a $40 credit instead of the full $100 credit. Students from non-member institutions receive a $40 credit. The University of St. Thomas is an AWS Educate Institution and our students should receive a $100 credit. If you do not receive the full credit amount, you will need to contact AWS support to inform them that you are a student at an AWS Educate Institution.
 
-== _Try Git_ (optional)
+== Git training (optional)
 
-The _Try Git_ online class provides a quick introduction to Git where you can
+Online Git training provides a quick introduction to Git where you can
 play with some of the basic commands. Students that have not used Git before
-are *strongly encouraged* to take this 15-minute class. The class is located at
-https://try.github.io
+are *strongly encouraged* to take this training:
+https://www.katacoda.com/courses/git
 
-You can also learn how to use the GitHub website using free online training at:
+You can also learn how to use the GitHub website using free online training at these sites:
+https://services.github.com/on-demand/
 https://lab.github.com/
 
 In previous semesters Git training was offered as part of this course. However, the use of Git is so common now in industry that students are expected to either have prior experience or the ability to learn it quickly. Your familiarity and comfort level with Git will have a significant impact on your performance in this course. Please plan to invest additional learning time at the beginning of the course if you do not have experiencing working with Git or source control systems.
