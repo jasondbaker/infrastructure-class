@@ -93,7 +93,7 @@ You can upload files to S3 now that your new bucket is setup. Select your new bu
 on the S3 dashboard and look at its *properties*.
 
   * Select the *Tags* property and add a new tag with the key `Project` and the
-  value `Assignment 4`. It's a good idea to tag resources you create on AWS. Tags
+  value `Assignment 3`. It's a good idea to tag resources you create on AWS. Tags
   can be any sort of key/value pair. Organizations use tags to track resources by
   tagging resources with an owner name, organizational unit, or budget ID.
 
@@ -106,11 +106,11 @@ on the S3 dashboard and look at its *properties*.
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Infrastructure Assignment 4</title>
+  <title>Infrastructure Assignment 3</title>
 </head>
 
 <body>
-  <h1>My 4th Infrastructure Assignment</h1>
+  <h1>My 3rd Infrastructure Assignment</h1>
 </body>
 </html>
 ----
