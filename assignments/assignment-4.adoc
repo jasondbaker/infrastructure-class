@@ -354,7 +354,7 @@ your local Git identity by running these commands:
 
 When you create a Git repository and start working with files, the master branch of the repository is checked out by default. Go ahead and create a file in the directory called `README.md` and add the following contents:
 
-  *Assignment 5 Files*
+  *Assignment 4 Files*
 
 Commit the file to the repository.
 
@@ -500,7 +500,7 @@ Select the *Load Balancers* link on the EC2 dashboard and click the button to
   `webserver1` and `webserver2` instances to the group.
   * Create a tag for the load balancer:
     ** Key: `Project`
-    ** Value: `Assignment 5`
+    ** Value: `Assignment 4`
 
 After you click the *create* button, click the *Target Groups* menu link
 on the EC2 dashboard. Then select the target group you created and
