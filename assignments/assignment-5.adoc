@@ -179,8 +179,8 @@ Launch an EC2 instance with the following properties:
 
   #!/bin/bash
   yum update -y
-  yum install -y git httpd24 php56 php56-mysqlnd
-  service httpd start
+  yum install -y git httpd php php-mysqlnd
+  systemctl start httpd.service
   chkconfig httpd on
 
 
@@ -356,7 +356,7 @@ files. The script should execute the following set of commands:
 *Step 8)* Finally, the script should restart the Apache web server so that it picks up the new server
 configuration changes:
 
-  service httpd restart
+  systemctl restart httpd.service
 
 Note, when restarting the Apache web server the script might generate a warning message
 like: `httpd: apr_sockaddr_info_get() failed for ip-10-0-1-4`. You can safely ignore

@@ -5,7 +5,7 @@
 
 = SEIS 665 Week 3 Project: AWS
 Jason Baker <bake2352@stthomas.edu>
-1.0, 8/15/2018
+1.0, 9/25/2018
 
 == Overview
 Setup AWS S3 and EC2 resources.
@@ -33,9 +33,11 @@ Create an EC2 instance called `webtemplate` with the following properties:
 * AWS Linux 2 AMI
 * us-east-1 region
 * 10GB root volume storage size
-* MyWebserver security group with the following rules:
+* A `MyWebserver` security group with the following rules:
 
 ** Allow access to the instance from the Internet via SSH (port 22) and HTTP (port 80)
+
+You might notice after creating your security group that AWS adds an additional source to your rules with a funny looking syntax: `::/0`. This is the IPv6 (Internet Protocol version 6) representation of all the network addresses on the Internet. There's no need to remove or change this source.
 
 SSH into the new EC2 instance and update all the system packages (review previous lecture if you don't remember how to do this). Install the Nginx webserver software on the instance. Access the public IP address of the instance from a web browser to verify that the Nginx webserver is running properly.
 
@@ -50,7 +52,7 @@ Create a second EC2 instance called `apiserver` using the new AMI with the follo
 * t2.micro instance size
 * AWS Linux 2 AMI
 * us-east-1 region
-* 8GB root volume storage size
+* 10GB root volume storage size
 * MyAPIService security group with the following rules:
 
 ** Allow access to the instance from MyWebserver security group via SSH (port 22), HTTP (port 80), and HTTPS (443).

@@ -103,7 +103,7 @@ autoscaling group should use a launch configuration with the following propertie
   #!/bin/bash
   yum update -y
   yum install nginx -y
-  service nginx start
+  systemctl start nginx.service
 
 * The three instances should launch into public subnets in separate AZs.
 * The instances are associated with a security group called `ecoweb-sg`. This security group should allow:

@@ -194,7 +194,7 @@ Next, let's install the Nginx webserver on the new Linux instance. Nginx is a
 fast and lightweight web server platform that is widely used by many of the
 largest websites in the world. Type in:
 
-  $ sudo yum install nginx -y
+  $ sudo amazon-linux-extras install nginx1.12 -y
 
 You've installed Nginx, but the web service isn't actually running yet. You can
 confirm this by checking the running processes on the system and searching for
@@ -206,13 +206,14 @@ Remember learning about the pipe operator (vertical bar)? In this command we are
 
 Go ahead and start up the Nginx webserver:
 
-  $ sudo service nginx start
+  $ sudo systemctl start nginx.service
 
 Try to run the `ps` command sequence again to see if the webserver is running. Just
 hit the up arrow twice to replay the command or type it in again. You should
 see something like:
 
-   2766 nginx: master process /usr/sbin/nginx -c /etc/nginx/nginx.conf
+  14689 ?        Ss     0:00 nginx: master process /usr/sbin/nginx
+  14691 ?        S      0:00 nginx: worker process
 
 Now for the real test. Open up a web browser on your workstation and type in
 the public ip address of your Linux instance as the URL. Do you see the
@@ -238,7 +239,7 @@ this assignment.
 Nginx is installed on the Linux instance and is currently running. However, if you
 reboot the instance Nginx will not automatically restart. Let's fix that:
 
-  $ sudo chkconfig nginx on
+  $ sudo systemctl enable nginx.service
 
 The Nginx web document root is located in the `/usr/share/nginx/html` directory.
 The web document root is the default location that the Nginx webserver will

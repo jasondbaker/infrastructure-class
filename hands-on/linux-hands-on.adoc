@@ -809,11 +809,11 @@ configuring, and maintaining different services. A service is an application
 that runs on the system and supports requests from users and programs. For example,
 a webserver is a service that responds to requests from web browsers.
 
-You can start and stop services on the Linux system using the `service` command.
+You can start and stop services on the Linux system using the `systemctl` command.
 
 .Example:
 ----
-$ sudo service start httpd
+$ sudo systemctl start httpd.service
 ----
 
 This command starts the Apache2 webserver on the system. Stopping the service is
@@ -821,22 +821,21 @@ just as easy.
 
 .Example:
 ----
-$ sudo service stop httpd
+$ sudo systemctl stop httpd.service
 ----
 
-A service can be configured to automatically start when a system boots using
-the `chkconfig <service> on` command.
+A service can be configured to automatically start when a system boots using the `systemctl enable` command.
 
 .Example:
 ----
-$ sudo chkconfig httpd on
+$ sudo systemctl enable httpd.service
 ----
 
 Similarly, you can configure a service to not start when a system boots up.
 
 .Example:
 ----
-$ sudo chkconfig httpd off
+$ sudo systemctl disable httpd.service
 ----
 
 Each service runs as a process, or set of processes, on the system. You can
