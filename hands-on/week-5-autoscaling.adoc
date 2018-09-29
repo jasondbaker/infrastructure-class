@@ -141,6 +141,10 @@ redis by running the following command on one of the EC2 instances:
 
 where you substitute the actual elasticache endpoint address in the command string.
 
+=== Harder Faster Stronger task (optional)
+
+Create a Python script (or Ruby/ Node/ Go) on one of the webservers which uses the redis-py client (https://redis-py.readthedocs.io/en/latest/) to create a key called `count` in the redis cluster, and increment the key each time the script is executed.
+
 === Show me your work
 
 Please show me your autoscaling group and redis configuration.

@@ -70,7 +70,7 @@ Verify that you can access the webservers by going to the ELB endpoint address i
 
 === Fail over instances
 
-Simulate a failure of one of the instances by stopping the instance. Verify that status of the instance in the ELB target group. Access the ELB endpoint in the browser to verify that the ELB is no longer distributing requests to the failed instance.
+Simulate a failure of one of the instances by stopping the instance. Verify the status of the instance in the ELB target group. Access the ELB endpoint in the browser to verify that the ELB is no longer distributing requests to the failed instance.
 
 === Extra super-duper really fun task (optional)
 
