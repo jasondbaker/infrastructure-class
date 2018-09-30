@@ -58,7 +58,7 @@ the resources go ahead and delete the stack.
 
 Create a VPC with the following resources and architecture:
 
-image:../images/assignment6/autoscaling-class-project.png["800","800"]
+image:../images/assignment5/autoscaling-class-project.png["800","800"]
 
 The VPC (`ecotech-vpc`) exists in the us-east-1 region, uses a network CIDR block of 10.25.0.0/16 and is partitioned into 
 6 subnets (3 public and 3 private):
