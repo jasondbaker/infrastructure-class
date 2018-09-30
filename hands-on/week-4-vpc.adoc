@@ -24,7 +24,7 @@ Let's get started!
 
 Create a VPC with the following resources and architecture:
 
-image:../images/assignment5/VPC-Class-Project.png["800","800"]
+image:../images/assignment4/VPC-Class-Project.png["800","800"]
 
 The VPC (`ecotech-vpc`) exists in the us-east-1 region, uses a network CIDR block of 10.25.0.0/16 and is partitioned into 4 subnets:
 
