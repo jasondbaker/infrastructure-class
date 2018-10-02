@@ -209,27 +209,25 @@ Basically you need to establish an ssh connection to `webserver1` and tunnel thr
 this host to `backend1`.
 
 ===== Windows Proxy Configuration
-Let's cover how to configure Putty on Windows first. Go to your Windows Start Menu
-and look for your Putty application. Inside the Putty folder you should see an
-application called Pageant. Go ahead and start this application and add your
-EC2 private keyfile (the Putty version ending in the .ppk extension). If you get
-a message saying that Pageant is already running on your computer then look for the
-Putty application icon running in your Windows notification taskbar. You can right-click the
-Pageant icon and add your private key.
+Thefirst step is to make sure the ssh-agent is running on your workstation. This is a small helper application which caches your ssh credentials for the ssh client in Git for Windows. Open up a Git bash shell and type in the command:
 
-Next, you need to configure a Putty session like usual, with the host name set to the public IP
-address of `webserver1`, the ssh private key specified, and the `ec2-user` login name
-configured. This is the basic ssh configuration you have been using throughout the class.
+  ssh-agent -s
 
-Go to the `Connection -> SSH -> Auth`
-configuration page in Putty and check the box next to the *Allow agent forwarding*
-parameter.
+Next add your EC2 private key to the Mac keychain:
 
-At this point you should be able to open a new session and connect to the `webserver1` server.
-Once you have connected to the server, use the ssh command to connect to the `backend1`
-server:
+  ssh-add server-key.pem
 
-  ssh ec2-user@<backend1 private IP address>
+Next you can ssh to `webserver1` using the ssh command:
+
+  ssh -A ec2-user@<webserver1 public IP>
+
+Note the use of the `-A` argument flag in this command. This argument tells ssh to
+look for your private server key in the keychain.
+
+Finally, once you have connected to `webserver1` you should be able to ssh into
+the `backend1` server:
+
+  ssh ec2-user@<backend1 private IP>
 
 ===== Mac Proxy configuration
 The Mac proxy configuration is a bit easier than the Windows Putty configuration. The
