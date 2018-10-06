@@ -161,7 +161,7 @@ The server should have the following characteristics:
   * IAM Role is set to `S3-full-access`
   * Root volume size set to 10 GiB
   * Create a tag with a key of `Name` and a value of `webserver1`
-  * Create a new security group for the instance called `webservers` with the following policies:
+  * Create a new security group for the instance called `webservers-sg` with the following policies:
     ** SSH from anywhere 0.0.0.0/0
     ** HTTP from anywhere 0.0.0.0/0
     ** HTTPS from anywhere 0.0.0.0/0
