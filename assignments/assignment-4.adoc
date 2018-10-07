@@ -321,7 +321,8 @@ your VPC. Edit the routes associated with this table and add the following route
 0.0.0.0/0 nat-0354b30716cdaefa4
 ----
 
-Save your edits to the route table.
+Save your edits to the route table. Go back and check to make sure the NAT Gateway
+status is now available. This means that the gateway is ready to route data.
 
 Okay, ready for the big test? <drumroll please> Go back to your terminal program.
 You should still be connected to the `backend1` instance. Confirm that by typing
