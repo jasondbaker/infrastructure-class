@@ -257,7 +257,7 @@ the `backend1` server:
 If you can't connect to the `backend1` server from `webserver1` there are several
 things you can check:
 
-* Check your Putty or Mac ssh configuration.
+* Check your Git for Windows or Mac ssh configuration.
 * Verify that the proper security group is setup for `backend1`. It should allow incoming ssh from the webserver security group.
 
 
