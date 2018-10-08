@@ -215,9 +215,9 @@ this host to `backend1`.
 ===== Windows Proxy Configuration
 The first step is to make sure the ssh-agent is running on your workstation. This is a small helper application which caches your ssh credentials for the ssh client in Git for Windows. Open up a Git bash shell and type in the command:
 
-  ssh-agent -s
+  eval $(ssh-agent -s)
 
-Next add your EC2 private key to the Mac keychain:
+Next add your EC2 private key to the Mac keychain, replacing `server-key.pem` with your key name:
 
   ssh-add server-key.pem
 
@@ -234,8 +234,7 @@ the `backend1` server:
   ssh ec2-user@<backend1 private IP>
 
 ===== Mac Proxy configuration
-The Mac proxy configuration is a bit easier than the Windows Putty configuration. The
-first step is to add your EC2 private key to the Mac keychain:
+The first step is to add your EC2 private key to the Mac keychain:
 
   eval "$(ssh-agent -s)"
   ssh-add -K server-key.pem
