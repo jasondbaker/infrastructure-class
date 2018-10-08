@@ -40,6 +40,7 @@ before:
 
 1. In *JenkinsUsername*, leave the value set to `admin`.
 2. In *JenkinsPassword*, set the value to your desired password.
+3. In *YourIp*, type in the value of your workstation's IP address in CIDR notation (use checkip.amazonaws.com to verify).
 
 It will take a few minutes for CloudFormation to create the AWS resources for you. You can watch the progress messages on the *Events* tab in 
 the console. When the stack has been created, you will see a CREATE_COMPLETE message in the *Status* column of the console and on the 
