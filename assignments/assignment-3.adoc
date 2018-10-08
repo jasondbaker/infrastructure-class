@@ -292,6 +292,50 @@ image:../images/assignment3/new-page.png["400","400"]
 
 The page isn't very fancy yet. Perhaps we'll expand on it future assignments.
 
+=== Take a snapshot
+
+Before we continue working on this assignment, let's take a snapshot of our new instance.
+A snapshot can be used to backup the data on our instance or to create new
+instances.
+
+Go to the EC2 dashboard on the AWS web console. Select your instance and then
+stop it by selecting the *Actions* button and choosing the instance state
+*stop* option.
+
+Stopping your instance before taking a snapshot is a recommended practice
+because it allows the data on the server to _quiesce_. This basically means
+that data is written to disk and the system data is no longer in a state of
+flux.
+
+Click on the *Volumes* menu item on the EC2 dashboard and select the volume
+associated with your instance. Next, select the *Actions* button and the
+*Create Snapshot* option. Name your new snapshot `webserver1-snapshot` and
+feel free to give it a description.
+
+It will take a few minutes to create a snapshot of your instance volume. The
+process takes longer the first time because it has to completely backup
+the current volume. If you take another snapshot of this volume in the future,
+the snapshot will finish much faster because it only stores the data that
+changed since the previous snapshot.
+
+You can watch the progress of the snapshot by selecting the *Snapshots* menu
+link in the EC2 dashboard.
+
+=== Create an AMI
+
+Once the snapshot is completed, you can use the snapshot to create a personal
+Amazon Machine Image (AMI). Select the new snapshot in the *Snapshots* page
+lising. Select the *Actions* button and the *Create Image* option.
+
+Name your image `webserver-class` and give it a description of `class
+server`. Set the virtualization type to `Hardware-assisted virtualization`.
+
+Click on the *AMIs* menu link on the EC2 dashboard. You should see your new
+AMI listed. Notice how the AMI has an owner (your AWS account ID) and the
+visibility is private.
+
+image:../images/assignment3/ami-class.png["600","600"]
+
 === Instance meta-data
 
 One of the challenges IT professionals face when working with cloud-based
@@ -403,50 +447,6 @@ need to recall the specific commands.
   * Push your local master branch up to the GitHub repository
 
 Congratulations! Your work is now saved.
-
-=== Take a snapshot
-
-Before we conclude this assignment, let's take a snapshot of our new instance.
-A snapshot can be used to backup the data on our instance or to create new
-instances.
-
-Go to the EC2 dashboard on the AWS web console. Select your instance and then
-stop it by selecting the *Actions* button and choosing the instance state
-*stop* option.
-
-Stopping your instance before taking a snapshot is a recommended practice
-because it allows the data on the server to _quiesce_. This basically means
-that data is written to disk and the system data is no longer in a state of
-flux.
-
-Click on the *Volumes* menu item on the EC2 dashboard and select the volume
-associated with your instance. Next, select the *Actions* button and the
-*Create Snapshot* option. Name your new snapshot `webserver1-snapshot` and
-feel free to give it a description.
-
-It will take a few minutes to create a snapshot of your instance volume. The
-process takes longer the first time because it has to completely backup
-the current volume. If you take another snapshot of this volume in the future,
-the snapshot will finish much faster because it only stores the data that
-changed since the previous snapshot.
-
-You can watch the progress of the snapshot by selecting the *Snapshots* menu
-link in the EC2 dashboard.
-
-=== Create an AMI
-
-Once the snapshot is completed, you can use the snapshot to create a personal
-Amazon Machine Image (AMI). Select the new snapshot in the *Snapshots* page
-lising. Select the *Actions* button and the *Create Image* option.
-
-Name your image `webserver-class` and give it a description of `class
-server`. Set the virtualization type to `Hardware-assisted virtualization`.
-
-Click on the *AMIs* menu link on the EC2 dashboard. You should see your new
-AMI listed. Notice how the AMI has an owner (your AWS account ID) and the
-visibility is private.
-
-image:../images/assignment3/ami-class.png["600","600"]
 
 === Terminate server
 
