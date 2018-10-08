@@ -102,7 +102,7 @@ autoscaling group should use a launch configuration with the following propertie
 
   #!/bin/bash
   yum update -y
-  yum install nginx -y
+  amazon-linux-extras install nginx1.12 -y
   systemctl start nginx.service
 
 * The three instances should launch into public subnets in separate AZs.
