@@ -87,14 +87,20 @@ Create an Application Elastic Load Balancer with the following properties:
 * Setup a target group called `ecotech-webservers`, but don't associate any EC2 instances
 with the target group.
 
-
 === Create Autoscaling Group
 
-Create an EC2 autoscaling group configuration called `ecotech-asg` which runs 3 EC2 instances at all times. The
-autoscaling group should use a launch configuration with the following properties:
+Create an EC2 autoscaling group configuration called `ecotech-asg` which runs 3 EC2 instances at all times. I recommend
+creating the security group for the autoscaled instances first. Create a security group called `ecoweb-sg` with the
+following incoming traffic rules:
+
+* Incoming traffic on port 80 (http) from the `eco-elb-sg`.
+* Incoming traffic on port 22 (ssh) from your workstation (remember to use http://checkip.amazonaws.com).
+ 
+The autoscaling group should use a launch configuration with the following properties:
 
 * t2.micro instance size
 * Latest version of Amazon Linux 2 AMI 
+* IP Address Type: `Assign a public IP address to every instance.`
 * 10GB root volume storage size
 * Instances are named `ecoweb`
 * The instances will run in the ecotech-vpc
@@ -106,11 +112,8 @@ autoscaling group should use a launch configuration with the following propertie
   systemctl start nginx.service
 
 * The three instances should launch into public subnets in separate AZs.
-* The instances are associated with a security group called `ecoweb-sg`. This security group should allow:
-  - Incoming traffic on port 80 (http) from the `eco-elb-sg`.
-  - Incoming traffic on port 22 (ssh) from your workstation (remember to use http://checkip.amazonaws.com).
-
-* Enable load balancing and associate the Autoscaling group with the `ecotech-webservers` target group.
+* The instances are associated with the existing `ecoweb-sg` security group called `ecoweb-sg`.
+* Enable load balancing on the group by associate the Autoscaling group with the `ecotech-webservers` target group.
 
 Once you have created the autoscaling group, go to the EC2 console and watch AWS
 launch each of your webservers. Verify that the webservers are passing the ELB
@@ -139,7 +142,8 @@ redis by running the following command on one of the EC2 instances:
 
   nc -vz <redis service endpoint> 6379
 
-where you substitute the actual elasticache endpoint address in the command string.
+where you substitute the actual elasticache endpoint address in the command string. If the `nc` program isn't
+found then install it using `yum`. 
 
 === Harder Faster Stronger task (optional)
 
