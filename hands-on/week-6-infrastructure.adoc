@@ -33,7 +33,7 @@ The template will create a stack containing a Jenkins server environment:
 
 * A Jenkins server.
 
-* A Jenkins slave node.
+* Two Jenkins worker nodes.
 
 On the stack *Specify Details* page, take note of the following input parameters which you haven't encountered
 before:
