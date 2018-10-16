@@ -74,6 +74,8 @@ node ("linux") {
 }
 ....
 
+The script describes the steps the pipeline will run when it is built. A pipeline is partitioned into multiple stages, denoted by the `stage` object, and each stage can contain multiple steps. For example, the pipeline above has a single stage called `GetInstances`. Inside this stage you will find a single step where Jenkins executes a shell command using the `sh` module. Jenkins runs this command on a worker node. 
+
 Enter this script and click the `Save` button. Next, click the `Build Now` link to build your project. Note that
 we use the term _build_ loosely in this context. Typically a build involves some type of code linking and compilation.
 Here a build means some sort of process which potentially produces an output artifact.
@@ -87,9 +89,7 @@ acting as a master scheduler coordinating the running of projects like your pipe
 
 === Extend pipeline
 
-When we build infrastructure pipelines, we create each stage of the pipeline one step at a time. Create an
-additional pipeline stage which launches a new EC2 instance in your account. The EC2 instance should have the
-following characteristics:
+When we build infrastructure pipelines, we create each stage of the pipeline one step at a time. Let's modify the previous pipeline you created to add another stage. Add an additional pipeline stage which launches an EC2 instance into your account. The EC2 instance should have the following characteristics:
 
     * Use the latest Amazon Linux 2 AMI 
     * t2.micro instance type
@@ -101,9 +101,9 @@ An example `aws` CLI command to launch a new EC2 instance looks like:
 
     aws ec2 run-instances --image-id ami-287dnf7 --count 1 --instance-type t2.micro --key-name seis665 --security-group-ids sg-7edf3108 --subnet-id subnet-0bbd366e --region us-east-1
 
-Note, this example won't work in your pipeline and you will need to modify it for your environment.
+Note, this example won't work in your pipeline and you will need to modify it for your environment. For example, several of the parameter values like the security group will need to be changed.
 
-Here's some pipeline code to get you started:
+Here's an example of how you might begin to extend the existing pipeline:
 
 ....
 node ("linux") {
@@ -122,17 +122,19 @@ node ("linux") {
 
 === Extra superfabulous task (optional)
 
-Add a third stage to your pipeline which verifies that the EC2 instance created by the second stage is running.
+Let's add two more steps to the second stage of your pipeline to: 1) verify that the EC2 instance created in the second stage is running and 2) terminate the new EC2 instance. This is a pretty common step in an infrastructure pipeline. Oftentimes we will create a resource, wait for the resource to be created, and then test it.
 
-You will need two things to complete this task. The EC2 instance ID created by the AWS `run-instances` command. The sh command can return an output value 
-which is assigned to a variable. The AWS CLI is returning output using JSON. The `jq` command (https://stedolan.github.io/jq/) is available on 
-the build node to parse the JSON output. Here's an example of how to assign a shell command output to a variable:
+You will need two things to complete this task. The EC2 instance ID created by the AWS `run-instances` command. The sh command can be modified to return an output value which is assigned to a variable. For example:
 
-    def output = sh returnStdout: true, script: 'aws ec2 describe-instances | jq .'
+    def output = sh returnStdout: true, script: 'a command you want to run'
 
-Once the pipeline launches the instance, you need to add a waiter. The purpose of a waiter is to 
-literally wait until a specified process completes. In this case, you want the pipeline to wait until
-the EC2 instance is running. Hint, check out the `aws ec2 wait` command.
+Many AWS CLI commands respond with some sort of output in the JSON data format. The `jq` command (https://stedolan.github.io/jq/) is available on the build node to parse this JSON output. For example:
+
+    def output = sh returnStdout: true, script: 'cat foo.json | jq .'
+    
+You will have to figure out how to setup the `jq` command properly to get the instance ID for the new EC2 instance that was created. Once the pipeline launches the instance, you need to add a waiter. The purpose of a waiter is to literally wait until a specified process completes. In this case, you want the pipeline to wait until the EC2 instance is running. Hint, check out the `aws ec2 wait` command. The pipeline is working correctly if the waiter completes without generating an error.
+
+Finally, add a step to terminate the new EC2 instance. 
 
 
 === Show me your work
