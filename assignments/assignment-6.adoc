@@ -65,7 +65,13 @@ You can also contact AWS support and ask them to recreate the default VPC in us-
 
 Connect to the instance via ssh once it is available and install the Elastic Beanstalk CLI. The 
 EB CLI is a command-line tool you can use to control the AWS EB service. It's kind of like a 
-service-specific version of the AWS CLI. Type in the following command to install the EB CLI on 
+service-specific version of the AWS CLI. 
+
+First we need to install a Python package manager:
+
+  sudo yum install python-pip
+
+Type in the following command to install the EB CLI on 
 the instance:
 
   pip install awsebcli --upgrade --user
@@ -123,7 +129,6 @@ group, security groups, etc. Launch the environment by running the command:
 
 This command will ask a series of questions before launching the environment:
 
-	Load balancer type: classic
 	RDS DB name: wordpressdb
 	RDS DB master password: (choose one)
 
