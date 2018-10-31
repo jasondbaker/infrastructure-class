@@ -81,10 +81,10 @@ The stack template should create the following logical resources:
 
   * A VPC called: *engineeringVpc*
     ** The VPC CIDR block should be: 10.0.0.0/18
-    ** The VPC should have two subnets called: *publicSubnet1* and *publicSubnet2*.
+    ** The VPC should have two public subnets called: *publicSubnet1* and *publicSubnet2*.
         *** publicSubnet1 has a CIDR block of 10.0.0.0/24
         *** publicSubnet2 has a CIDR block of 10.0.1.0/24
-    ** The subnets should be able to route data out to the Internet.
+    ** The subnets should be highly available.
   * Two EC2 instances with logical resource names of *web1* and *web2* with associated *Name* tags.
     ** web1 is located in the publicSubnet1 subnet.
     ** web2 is located in the publicSubnet2 subnet.
