@@ -70,16 +70,15 @@ allows incoming traffic on ports 22 and 80.
 The engineering manager would like users to be able to provide three *input parameters* when launching the stack:
 
   * A parameter called *InstanceType* that defines the instance type for the instances.
-      ** The allowable type must be one of the following: t2.micro or t2.medium
-  * A parameter called *KeyPair* that specifies the server key-pair name for the EC2 instances (note there is a special parameter type for keypairs).
+      ** The allowable type must be one of the following: t2.micro or t2.small
+  * A parameter called *KeyPair* that specifies the server key-pair name for the EC2 instances.
   * A parameter called YourIp that specifies your public IP address in CIDR notation.
 
-Also, she would like you to create an output called *targetName* that displays the target group full name
+Also, she would like you to create an output called *weburl* that displays the load balancer dns name
 after the stack is launched.
 
 The stack template should create the following logical resources:
 
-<<<<<<< Updated upstream
   * A VPC called: *engineeringVpc*
     ** The VPC CIDR block should be: 10.0.0.0/18
     ** The VPC should have two public subnets called: *publicSubnet1* and *publicSubnet2*.
@@ -87,25 +86,15 @@ The stack template should create the following logical resources:
         *** publicSubnet2 has a CIDR block of 10.0.1.0/24
     ** The subnets should be highly available.
   * Two EC2 instances with logical resource names of *web1* and *web2* with associated *Name* tags.
-=======
-  * A VPC called: *corpVpc* with a network range of 10.0.0.0/20
-    ** The VPC should have two public subnets called: *publicSubnet1* and *publicSubnet2* located in separate AZs.
-        *** publicSubnet1 has a CIDR block of 10.0.0.0/24
-        *** publicSubnet2 has a CIDR block of 10.0.20.0/24
-  * A security group with a logical name and group name of *applicationsSG* in the VPC.
-    ** Allow incoming requests on port 22 from your workstation (based on the YourIp parameter)
-    ** Allow incoming requests on port 80 from the *elbSG* security group
-  * A security group with a logical name and group name of *elbSG* in the VPC.
-    ** Allow incoming requests on port 80 from the Internet.
-  * Two EC2 instances with logical resource names of *webserver1* and *webserver2* with associated *Name* tags.
->>>>>>> Stashed changes
     ** web1 is located in the publicSubnet1 subnet.
     ** web2 is located in the publicSubnet2 subnet.
     ** Each instance type is based on the InstanceType input parameter.
     ** The instance AMIs should use this public image: *ami-3ea13f29*
     ** The instance key-pairs are based on the KeyPair parameter.
-    ** The instances are associated with the applicationSG security group.
-  * An application load balancer named *webserverLB* and target group named *webserversTG*
+  * A security group with a logical name and group name of *webserversSG* in the VPC.
+    ** Allow incoming requests on port 22 from your workstation (based on the YourIp parameter)
+    ** Allow incoming requests on port 80 from 0.0.0.0/0
+  * An application load balancer named *engineeringLB* and target group named *engineeringWebservers*
     ** Load balance incoming requests on port 80 and send to instance port 80 using the http protocol.
     ** Load balancer health check via http on port 80 to the "/" url location.
 
