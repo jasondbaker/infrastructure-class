@@ -24,8 +24,8 @@
             "sleep 30",
             "sudo apt-get update -y",
             "sudo apt-get install unzip -y",
-            "wget https://releases.hashicorp.com/packer/1.2.1/packer_1.2.1_linux_amd64.zip",
-            "unzip packer_1.2.1_linux_amd64.zip -d packer",
+            "wget https://releases.hashicorp.com/packer/1.3.2/packer_1.3.2_linux_amd64.zip",
+            "unzip packer_1.3.2_linux_amd64.zip -d packer",
             "sudo mv packer /usr/local/",
             "sudo echo \"export PATH=$PATH:/usr/local/packer\" | sudo tee -a /etc/environment > /dev/null"
         ]

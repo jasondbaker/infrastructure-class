@@ -28,7 +28,7 @@
         "Type": "AWS::EC2::Instance",
         "Properties": {
           "InstanceType": "t2.small",
-          "ImageId": "ami-4e21f333",
+          "ImageId": "ami-0bc27cba9a1e227b7",
           "KeyName": { "Ref": "KeyName" },
           "NetworkInterfaces": [
             {
@@ -68,6 +68,23 @@
               "IpProtocol": "tcp",
               "FromPort": "22",
               "ToPort": "22",
+              "CidrIp": {"Ref": "YourIp"}
+            }
+          ]
+        }
+      },
+      "webserverSG": {
+        "Type": "AWS::EC2::SecurityGroup",
+        "Properties": {
+          "VpcId": {
+            "Ref": "packerVpc"
+          },
+          "GroupDescription": "Allow access from http traffic",
+          "SecurityGroupIngress": [
+            {
+              "IpProtocol": "tcp",
+              "FromPort": "80",
+              "ToPort": "80",
               "CidrIp": "0.0.0.0/0"
             }
           ]
@@ -77,7 +94,7 @@
         "Type": "AWS::EC2::InternetGateway",
         "Properties": {}
       },
-      "EC2VPCG509RW": {
+      "GatewayAttachment": {
         "Type": "AWS::EC2::VPCGatewayAttachment",
         "Properties": {
           "InternetGatewayId": {
@@ -111,7 +128,7 @@
           "internetGW"
         ]
       },
-      "EC2SRTA56MZL": {
+      "RouteTableAssociation": {
         "Type": "AWS::EC2::SubnetRouteTableAssociation",
         "Properties": {
           "RouteTableId": {
@@ -135,14 +152,14 @@
       }
     },
     "Outputs": {
-      "packerUrl": {
+      "packerIP": {
         "Value": {
             "Fn::GetAtt": [
               "packerServer",
               "PublicIp"
             ]
           },
-        "Description": "Packer server URL"
+        "Description": "Packer server public IP"
       }
     }
   }
