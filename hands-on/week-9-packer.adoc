@@ -39,7 +39,7 @@ linux instance. These instructions assume that you will use the CloudFormation t
 are welcome to try running the software on your laptop. I likely won't be able to help you troubleshoot any software 
 installation issues if you attempt to run it locally. 
 
-Here's the CloudFormation template to launch the Packer development environment in AWS: 
+Here's the CloudFormation template to launch the Packer development environment in AWS regions us-east-1 or us-east-2: 
 
     https://s3.amazonaws.com/seis665/packer-cf.json
 

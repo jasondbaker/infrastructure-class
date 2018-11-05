@@ -1,5 +1,11 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
+    "Mappings" : {
+      "RegionMap" : {
+        "us-east-1"      : { "image" : "ami-0696921b7af72bece"},
+        "us-east-2"      : { "image" : "ami-0bb15ea45fb30b186"}
+      }
+    },
     "Resources": {
       "packerVpc": {
         "Type": "AWS::EC2::VPC",
@@ -28,7 +34,7 @@
         "Type": "AWS::EC2::Instance",
         "Properties": {
           "InstanceType": "t2.small",
-          "ImageId": "ami-0bc27cba9a1e227b7",
+          "ImageId":  {"Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "image"]},
           "KeyName": { "Ref": "KeyName" },
           "NetworkInterfaces": [
             {
