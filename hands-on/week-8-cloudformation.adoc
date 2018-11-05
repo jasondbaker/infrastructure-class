@@ -54,7 +54,9 @@ The template will create a stack containing a basic VPC environment:
 
 image:../images/week-8-cf-project.png["800","800"]
 
-You will need to add two t2.micro webservers named *web1* and *web2* to this template. The webservers should use the
+Start by adding an input parameter which allows a user to specify the webserver instance type. The parameter should allow the user to select from a t2.micro or t2.medium instance type, defaulting to a t2.micro instance.
+
+You will need to add two webservers named *web1* and *web2* to this template. The webservers should use the
 *ami-3ea13f29* AMI and be associated with the *webserverSG* security group. 
 
 You will also need to add an application load balancer called *websiteLB*, an ELB listerner and a target group 
@@ -73,8 +75,9 @@ determine what is causing a template to fail, and then make the necessary code c
 
 Add the following:
 
-    * An input parameter which allows a user to specify the webserver instance type.
     * An input parameter called *ExpandServers* which allows the user to optionally (yes/no) create a third webserver instance.
+    * A private subnet
+    * A NAT gateway
 
 
 === Show me your work

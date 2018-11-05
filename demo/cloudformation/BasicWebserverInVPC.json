@@ -15,81 +15,12 @@
         ]
       }
     },
-    "publicSubnet1": {
-      "Type": "AWS::EC2::Subnet",
-      "Properties": {
-        "VpcId": {
-          "Ref": "classVpc"
-        },
-        "CidrBlock": "10.0.0.0/25",
-        "AvailabilityZone" : "us-east-1a"
-      }
-    },
-    "publicSubnet2": {
-      "Type": "AWS::EC2::Subnet",
-      "Properties": {
-        "VpcId": {
-          "Ref": "classVpc"
-        },
-        "CidrBlock": "10.0.1.0/25",
-        "AvailabilityZone" : "us-east-1b"
-      }
-    },
-    "WebServer": {
-      "Type": "AWS::EC2::Instance",
-      "Properties": {
-        "InstanceType": {
-          "Ref": "InstanceType"
-        },
-        "ImageId": "ami-3ea13f29",
-        "NetworkInterfaces": [
-          {
-            "GroupSet": [
-              {
-                "Ref": "WebServerSecurityGroup"
-              }
-            ],
-            "AssociatePublicIpAddress": "true",
-            "DeviceIndex": "0",
-            "DeleteOnTermination": "true",
-            "SubnetId": {
-              "Ref": "publicSubnet1"
-            }
-          }
-        ],
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "WebServer"
-          }
-        ]
-      },
-      "DependsOn": [
-        "PublicRoute"
-      ]
-    },
-    "WebServerSecurityGroup": {
-      "Type": "AWS::EC2::SecurityGroup",
-      "Properties": {
-        "VpcId": {
-          "Ref": "classVpc"
-        },
-        "GroupDescription": "Allow access from HTTP and SSH traffic",
-        "SecurityGroupIngress": [
-          {
-            "IpProtocol": "tcp",
-            "FromPort": "22",
-            "ToPort": "22",
-            "CidrIp": "0.0.0.0/0"
-          }
-        ]
-      }
-    },
+
     "InternetGateway": {
       "Type": "AWS::EC2::InternetGateway",
       "Properties": {}
     },
-    "EC2VPCG509RW": {
+    "VPCGatewayAttachment": {
       "Type": "AWS::EC2::VPCGatewayAttachment",
       "Properties": {
         "InternetGatewayId": {
@@ -133,17 +64,6 @@
           "Ref": "publicSubnet1"
         }
       }
-    },
-    "publicSubnet2RTassoc": {
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "PublicRouteTable"
-        },
-        "SubnetId": {
-          "Ref": "publicSubnet2"
-        }
-      }
     }
   },
   "Parameters": {
@@ -153,13 +73,9 @@
       "Default": "t2.micro",
       "AllowedValues": [
         "t2.micro",
-        "t2.small"
+        "t2.medium"
       ],
       "ConstraintDescription": "Must be a valid EC2 type."
-    },
-    "YourIp": {
-      "Description": "The current CIDR IP address of your workstation (x.x.x.x/32).",
-      "Type": "String"
     }
   },
   "Outputs": {

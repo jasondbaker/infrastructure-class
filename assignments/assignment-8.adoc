@@ -5,7 +5,7 @@
 
 = SEIS 665 Assignment 8: Configuration Management
 Jason Baker <bake2352@stthomas.edu>
-1.1, 4/8/2017
+1.2, 11/2/2018
 
 == Overview
 
@@ -23,52 +23,50 @@ You need to have a personal AWS account and GitHub account for this assignment.
 
 == The assignment
 
-Let's start managing configuration!
+Let's start managing our server configuration!
 
-== Launch three instances
+== Launch AWS resources
 
-You will need to launch three EC2 instances for this assignment. We will configure the
-first instance as a management server with the Ansible tool installed. The second
-instance will become a webserver, and the third instance will become a MySQL database server.
+In this assignment you will revisit the Wordpress application again. This time we will try to automate most of the environment configuration using Cloudformation and Ansible. You will need to launch two EC2 instances and a MySQL RDS database for this assignment. We will configure the first instance as a management server with the Ansible tool installed and the second instance will become the Wordpress webserver. We will use the RDS database as the Wordpress database server.
 
-Fortunately you can use a CloudFormation template to rapidly create the infrastructure
-resources needed for this assignment. The template is available in this S3 bucket location:
+You can use a CloudFormation template to rapidly create many of the infrastructure
+resources needed for this assignment. Unfortunately the template is incomplete and you will need to add a couple missing components. The template is available in this S3 bucket location:
 
-  https://s3.amazonaws.com/seis665/AnsibleSystems.json
+  https://s3.amazonaws.com/seis665/AnsiblePress.json
 
 Take a quick look at the template in a text editor. Notice how the UserData property for
 the `mgmt1` instance is configured. When CloudFormation launches this stack, it will
 automatically install and configure Ansible software on the management server. It's very
 common to use a small amount of scripting code to bootstrap configuration management software
 onto a new system. Once Ansible is installed it can be used to install and configure other
-software packages.
+servers in the environment.
 
-Launch a new stack using the `AnsibleSystems.json` template into the us-east-1 region. Remember to specify your server keypair name when launching the stack. You will also need to provide the current IP address of your workstation in CIDR
-format (x.x.x.x/32).
+The CloudFormation template is missing a couple resources that you need to add:
 
-You can access the website http://checkip.amazonaws.com in a browser to quickly determine the IP address of your workstation. Remember that if you move your workstation from one
-network to another (like from home to work) you will need to update this workstation IP address in the CloudFormation stack
-by performing an update on the stack.
+    * A `db.t2.micro` RDS database instance (not a cluster) running a MySQL 5.6.41 database called `wordpress` located in a private VPC subnet.
+    * A security group called `WordpressDbSecurityGroup` which allows incoming access on the standard MySQL port from the `WebServerSecurityGroup`
+    * An input parameter called `DBName` which will define the database name to create (default to `wordpress`)
+    * An input parameter called `DBUser` which will be used for the database server username.
+    * An input parameter called `DBPassword` which will be used for the database server password.
+    * A stack output called `wordpressDbEndpoint` which shows the MySQL instance endpoint address.
 
-You can give the stack any name you like. When you create the stack, you will need to click a checkbox acknowledging the creation of IAM resources.
+[WARNING]
+====
+In the workplace we would never pass in usernames and passwords (secrets) into a template using input parameters. This is way too insecure. However, I think this is okay for a learning exercise.
+====
 
-You will use the Ansible software installed on `mgmt1` to configure the `web1` and
-`database1` systems. Ansible communicates with remote hosts using the SSH protocol
-which means that the proper access credentials need to be in place on `mgmt1` in
-order to establish shell connections with the two other servers. Fortunately, the CloudFormation stack automates the setup of ssh credentials on all of the hosts.
+Launch a new stack using the modified `AnsiblePress.json` template into the us-east-1 region. You can give the stack any name you like. When you create the stack, you will need to click a checkbox acknowledging the creation of IAM resources.
+
+You will use the Ansible software installed on `mgmt1` to configure the `web1` system. Ansible communicates with remote hosts using the SSH protocol which means that the proper access credentials need to be in place on `mgmt1` in order to establish shell connections with the other servers. Fortunately, the CloudFormation stack automates the setup of ssh credentials on `web1`.
 
 
 == Test Ansible
 
 Log into the `mgmt1` instance and create a new directory in your home directory called `assignment8`. Initialize a new Git repository in this directory.
 
-Ansible uses an inventory file to track managed hosts. The inventory file specifies
-how Ansible should connect to a remote host. It usually contains the IP address or
-fully-qualified domain name of a host, as well as the username and key required to
-access a host. The `hosts` file was dynamically created by an EC2 userdata script, so it already
-contains the IP addresses of the `web1` and `database1` instances. Take a look at the hosts file located at `/etc/ansible/hosts`.
+Ansible uses an inventory file to track managed hosts. The inventory file specifies how Ansible should connect to a remote host. It usually contains the IP address or fully-qualified domain name of a host, as well as the username and key required to access a host. The `hosts` file was dynamically created by an EC2 userdata script, so it already contains the IP address of the `web1` instance. Take a look at the hosts file located at `/etc/ansible/hosts`.
 
-You can verify that Ansible can successfully access the managed hosts by typing the
+You can verify that Ansible can successfully access managed hosts by typing the
 following commands:
 
     $ ansible all -m ping
@@ -79,85 +77,68 @@ You should see a response from Ansible that looks like this:
       "changed": false,
       "ping": "pong"
   }
-  database1 | SUCCESS => {
-      "changed": false,
-      "ping": "pong"
-  }
 
-If Ansible returns a successful `pong` for each host then you are ready to move on!
+If Ansible returns a successful `pong` for the `web1` host then you are ready to move on!
 
 == Configure servers
 
-You will create an Ansible playbook to configure the two remote hosts. Before beginning the playbook, take a look at the facts that Ansible can
-collect from a remote host:
+You will create an Ansible playbook to configure the web1 instance as a Wordpress webserver. Before beginning the playbook, take a look at the facts that Ansible can collect from a remote host:
 
     $ ansible web1 -m setup
 
-You will need to use a fact in your playbook, so take note of the fact variables that are returned by the setup module.
-
 You can create a playbook file on the `mgmt1` server using a local text editor like nano or vi. Alternatively, you can use your favorite source code editor on your local workstation and copy (scp) the file from your local workstation to the `assignment8` directory on `mgmt1`. Use whichever method is easiest for you.
 
-Create a playbook called `playbook.yml` in the `/home/ec2-user/assignment8` directory to perform the following tasks on all of the hosts:
+Create a playbook called `playbook.yml` in the `/home/ec2-user/assignment8` directory. The playbook should contain two plays. The first play (named `install apache`) will install the Apache webserver and additional PHP software packages. The second play (named `install wordpress`) will install and configure the Wordpress application.
+
+Here are the tasks you should configure in the first play:
 
     * Update all the current software packages on the system.
-    * Create a variable called `administrator_name` with a value of `corpadmin` in the play.
-    * Create a user with the value of the `administrator_name` variable on each system with a password of your choosing.
-
-The playbook will perform the following tasks on the `web1` server:
-
-    * Install the Nginx server package.
-    * Copy the following `default.conf.j2` template to the system directory `/etc/nginx/conf.d/default.conf` substituting the text `example.com` with the fully-qualified domain name (fqdn) of the webserver (using a fact variable). Note, the fqdn of the server isn't `web1`. AWS automatically generates a domain address based on the private IP address of the instance.
-
-
-    server {
-        listen       80;
-        server_name  example.com;
-
-        location / {
-            root   /var/www/example.com/public_html/;
-             index  index.html index.htm;
-        }
-    }
-
-    * Ensure the nginx service is running and will automatically start during the system boot.
-
-The playbook will perform the following tasks on the `database1` server:
-
-    * Install the mysql server package.
-    * Configure the system to ensure mysql is running and will automatically start during the system boot.
-    * Use a loop to create 5 directories called:
-        ** /var/data/client1
-        ** /var/data/client2
-        ** /var/data/client3
-        ** /var/data/client4
-        ** /var/data/client5
+    * Install the `httpd`, `php`, and `php-mysqlnd` software packages
+    * Start the Apache web service and configure it to automatically start on system boot.
 
 [WARNING]
-Your playbook should only contain one software update task and one task to create a user called `corpadmin`. The play should apply each one of these tasks to multiple systems.
+====
+While Ansible can run shell commands on servers using the `shell` or `command` modules, you will not receive credit for any configuration work completed in this assignment using shell commands. In general we try to avoid using shell commands in playbooks as much as possible because shell commands tend to be less maintainable. Playbooks are not shell scripts.
+====
 
-The `ec2-user` user doesn't have the necessary permissions to install new services on the instance. Ansible will need to become a super-user on these systems in order to install new packages.
+Note that the `ec2-user` user doesn't have the necessary permissions to install new services on the instance. Ansible will need to become a super-user on these systems in order to install new packages.
 
-Execute the playbook to configure the two hosts. If you encounter any error messages, review the playbook script and correct any mistakes.
+Here are the tasks you should configure in the second play:
 
-This set of configuration tasks doesn't setup a real web application since there is no application code deployed. You can manually verify that the nginx and mysql services are running on each instance by using the `service` command. For example:
+    * Download the wordpress software from the URL `https://wordpress.org/latest.tar.gz` and save it to the file location `/var/www/wp.tar.gz`
+        ** There are a couple different Ansible modules you can use to download files from the Internet. You can choose any one you want.
+    * Unarchive the Wordpress software package to the directory `/var/www/html`
+        ** Hint: Look at using the `unarchive` module.
+    * Create the Wordpress configuration file (`/var/www/html/wordpress/wp-config.php`) on `web1` using the Jinja template called `wp-config.j2` located in the `/home/ec2-user/ansible_templates` directory on the `mgmt1` server.
 
-  $ sudo service nginx status
+The Jinja template engine allows us to take template files and automatically interpolate the value of variables in the template. The values of the interpolated variables are provided by Ansible. If the variable name in an Ansible play and the variable name in the template match, Ansible will swap out the template variable name with the value of the Ansible variable. This is really handy because it means we can convert application configuration files into templates which can be parameterized and reused.
 
-You should confirm that all the configuration tasks have been applied to each of the servers before submitting your work.
+Review the Jinja template on the `mgmt1` server and notice how it's using the following variables: database_name, database_username, database_password, database_endpoint. The values of these variables must be set in the Ansible playbook before the template is processed.
+
+Where do the values for these variables come from? You set these values in the CloudFormation stack which created the environment. Fortunately these values were also injected into the `mgmt1` instance by the USER_DATA script. Run the command `env` at the command line on `mgmt1` and notice how there are a set of environment variables beginning with `DATABASE` which contain the values from your CloudFormation stack. 
+
+Your playbook can use these environment variable values to create a set of variables that the template engine will use to generate the proper Wordpress configuration file (`wp-config.php`). For example, if you wanted to create a variable in your template called `foo` and set it to the value of an environment variable called `BAR`, you could use this syntax in the template:
+
+    vars:
+      foo:  '{{ lookup("env", "BAR") }}'
+
+Once you have written the plays in the playbook, execute the playbook to configure the `web1` host. If you encounter any error messages, review the playbook script and correct any mistakes. Configuration tools like Ansible are designed to be idempotent, meaning that you should be able to run the playbook multiple times. If for some reason the `web1` server is hopelessly misconfigured and you want to start over, you can always delete your CloudFormation stack and create a new one.
+
+You should confirm that all the configuration tasks have been applied to the `web1` server and that the wordpress application is working before submitting your work.
 
 === Save your work
 
 Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/68c6b367013ed3711b1b1c9aa7bf8678
 
-Commit your git repository (in the `assignment8` directory) to this repository.
+Commit the contents of the `assignment8` directory to this repository, including the CloudFormation template you modified earlier in the assignment.
 
 === Check your work
 
 Here is what the contents of your git repository should look like before final submission:
 
 ====
-&#x2523; default.conf.j2 +
 &#x2517; playbook.yml +
+&#x2517; AnsiblePress.json +
 
 ====
 
