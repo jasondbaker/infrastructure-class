@@ -113,7 +113,7 @@ Here are the tasks you should configure in the second play:
 
 The Jinja template engine allows us to take template files and automatically interpolate the value of variables in the template. The values of the interpolated variables are provided by Ansible. If the variable name in an Ansible play and the variable name in the template match, Ansible will swap out the template variable name with the value of the Ansible variable. This is really handy because it means we can convert application configuration files into templates which can be parameterized and reused.
 
-Review the Jinja template on the `mgmt1` server and notice how it's using the following variables: database_name, database_username, database_password, database_endpoint. The values of these variables must be set in the Ansible playbook before the template is processed.
+Review the Jinja template on the `mgmt1` server and notice how it's using the following variables: database_name, database_username, database_password, database_endpoint. The values of these variables must be set in the Ansible playbook before the template is processed. If you are struggling to understand how to use Ansible templates, check out the basic tutorial at http://www.mydailytutorials.com/ansible-template-module-examples/.
 
 Where do the values for these variables come from? You set these values in the CloudFormation stack which created the environment. Fortunately these values were also injected into the `mgmt1` instance by the USER_DATA script. Run the command `env` at the command line on `mgmt1` and notice how there are a set of environment variables beginning with `DATABASE` which contain the values from your CloudFormation stack. 
 
