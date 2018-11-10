@@ -3,9 +3,9 @@
 
 :sectnums!:
 
-= SEIS 665 Week 12 Project: Serverless
+= SEIS 665 Week 12 Project: Serverless Data Pipeline
 Jason Baker <bake2352@stthomas.edu>
-1.0, 8/15/2018
+1.0, 11/5/2018
 
 == Overview
 Create a lambda function.
@@ -20,17 +20,97 @@ Create a lambda function.
 
 Let's get started!
 
-=== Build a lambda function
+=== Create an S3 bucket
+
+Cloud computing infrastructure and serverless applications are widely used in scenarios where organizations need to ingest and process large amounts of data. During our project this week we will package and deploy a serverless application which creates a data pipeline. We will use two resources to set up a basic data pipeline: a Kinesis stream and a Lambda function.
+
+AWS uses S3 as a storage location for Lambda functions. Lambda functions are packaged inside zip files which contain the Lambda function code and any code dependencies such as third-party libraries. You should manually setup an S3 bucket in your account to store packaged Lambda functions. Give the S3 bucket a name like `serverless-datapipe-jbaker`, of course substituting your personal account name.
+
+=== Launch an EC2 instance
+
+Let's launch an EC2 instance containing some of the resources we will use to work on this project. Launch a public Amazon Linux 2 EC2 instance using the following AMI:
+
+  ami-09ef51eee3a444c89
+
+Shell into the new EC2 instance and change to a directory called `serverless-start`.
+
+=== Build a serverless template
+
+We need to build a CloudFormation SAM (serverless) template which contains Lambda function and Kinesis stream resources. The convention when building serverless templates is to use a YAML template format, so let's do that for this project. You can find a starter CloudFormation template and Lambda function inside the `serverless-start` directory on your EC2 instance.
+
+The directory contains a template called `datapipe.yml` which is incomplete, and a subdirectory called `lambda` which contains two Python scripts called `datalog.py` and `data_generator.py`. The `datalog.py` script is a Lambda function and the `data_generator.py` script is used later in the project.
+
+Modify the `datapipe.yml` file to add a Lambda function called `DatalogFunction` (I've started this for you). The function should have the following properties:
+
+  * Handler: datalog.lambda_handler
+    ** The handler specifies the function method AWS will automatically call when invoking the function.
+  * Runtime: python3.6
+  * CodeUri: lambda/datalog.py
+    ** The CodeUri references the local storage location of the Lambda function code file relative to the CloudFormation YAML template file you are editing.
+  * MemorySize: 256
+  * Timeout: 15
+  * Execution role/policy: AWSLambdaKinesisExecutionRole
+    ** The Lambda function executes with the access permissions associated with the execution role. If the function needs to access other AWS resources, like a Kinesis stream, the execution role needs to explicitly allow the function to access these resources.
+  * An event source called `StreamData` using a Kinesis event source. 
+    ** The stream should reference the `DataStream` Kinesis stream resource in the template.
+    ** StartingPosition: TRIM_HORIZON
+    ** BatchSize: 50
+
+I like to use the CloudFormation SAM specification at https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md as a documentation resource when creating SAM templates. This documentation will be especially helpful when setting up the event source for the Lambda function.
 
 
+=== Package template functions
+
+You need to package the CloudFormation SAM template after you have added the Lambda function resource to the template. The packaging process will automatically create a zipfile package for the Lambda function and upload the package to your S3 bucket. Additionally, the packaging process will modify your CloudFormation SAM template to reference the newly packaged Lambda function. 
+
+We will use the special `aws cloudformation package` command to create the Lambda package and CloudFormation SAM template. Run `aws config` and setup AWS API credentials on your EC2 instance. The credentials should be associated with an account that has at least `PowerUser` role access. 
+
+Run the following command in the same directory as the `datapipe.yml` file, substituting your S3 bucket name for the bucket in the example below:
+
+  aws cloudformation package --template-file datapipe.yml --s3-bucket serverless-datapipe-jbaker --output-template-file packaged-datapipe.yml
+
+The command will package (zip) the Lambda function and upload it to an S3 bucket. It will also generate a new template file called `packaged-datapipe.yml`. Take a look at the contents of the `packaged-datapipe.yml` file and notice that the CodeUri property in the Lambda function is now referencing the S3 bucket location. 
+
+Now you can deploy a new CloudFormation stack using the updated template and the `aws cloudformation deploy` command.
+We need to add the `--capabilities CAPABILITY_IAM` flag to the command because the stack will use IAM resources. Run the following command to create a new stack called `datapipe`:
+
+  aws cloudformation deploy --template-file packaged-datapipe.yml --capabilities CAPABILITY_IAM --stack-name datapipe
+
+You can log into the AWS CloudFormation web dashboard to watch the stack deployment. If the deployment fails, check out the stack events to determine the failure and fix your CloudFormation template. You will need to re-package and re-deploy your template again if you make any changes.
+
+=== Push data into Kinesis stream
+
+Now we've arrived at the fun part of the project. We can use Kinesis streams to ingest large amounts of data into an application platform. The source of the data could be log events from servers, data collected from physical sensors, or messages from other application services running in our cloud environment. Each message ingested by a Kinesis stream is placed on a shard where it is stored for up to 24 hours. Stream consumers can read messages that are currently stored in shards. 
+
+In this project we are using a Lambda function as a stream consumer. The Lambda function has an event source connected to the stream, meaning that the function will continuously poll the stream looking for new messages. Currently the Kinesis stream doesn't have any messages for the Lambda function to process so the function isn't doing anything.
+
+Take a quick look at the `datalog.py` Lambda function code. Kinesis messages are sent to the Lambda function in an `event` object. Each `event` contains one or more messages in a `Records` list. The Lambda function extracts the Kinesis message data (encoded in base64 format) and outputs it to stdout. Remember, anything that is output to stdout by a Lambda function is automatically written to a CloudWatch log file. Basically, this Lambda function is just taking Kinesis messages and logging the message payloads to CloudWatch logs.
+
+Let's push some messages into the Kinesis stream. You can find a message generation script in the `lambda` sub-directory called `data_generator.py`. Run the following command to push messages into your Kinesis stream:
+
+  python3 data_generator.py
+
+The script generates 1000 individual messages (small JSON objects) and pushes the messages in batches to Kinesis. We could easily push millions of messages to Kinesis if we needed to. Go to the AWS web console and look at the Kinesis stream dashboard. Check out the monitoring statistics for the `datastream` stream. 
+
+The `Get Records Iterator Age` chart is really important. It shows you the average amount of time a message waits in the stream before being read by a consumer. If this value shoots up, it likely means there's a processing problem with the stream message consumer -- in this case a Lambda function. Also, look at the `Get Records (Count)` chart. You should see a spike of activity in the chart showing the messages generated by the `data_generator.py` script.
+
+Next, go to the Lambda web console and select the DatalogFunction. Click on the monitoring panel and look at the `Invocations` and `Errors/Availability %` charts. The function was invoked repeatedly (a couple dozen times) in a matter of seconds, so the charts probably only display a small dot when the invocations took place. Click on the `View logs in CloudWatch` link and click on the log stream associated with the Lambda function. Every function logs events to a CloudWatch group, and each group will contain one more more log streams. You should see a bunch of events in the log stream which look something like this:
+
+  Decoded payload: b'{"x": "8.935657790150914", "y": "0.3959967501453543", "is_hot": "N", "id": "3358-11"}'
+
+Congratulations! You have successfully setup a data pipeline. The Lambda function isn't really that exciting because it's just writing the message payload into CloudWatch logs. In this week's assignment you will modify the CloudFormation template and add additional resources to do something more useful with the data.
 
 === Serverless Guru task (optional)
 
-
+The `datalog.py` script currently logs the entire JSON message payload (`str(payload)`). Modify the `datalog.py` script to only log the `id`, `x`, and `y` attributes from the JSON payload.
 
 === Show me your work
 
-Please show me your lambda code.
+Please show me the Lambda function logs in CloudWatch.
 
 === Terminate AWS resources
+
+I recommend terminating the CloudFormation stack when you have completed the assignment. While Lambda functions don't cost anything unless they are invoked, you have to pay for a Kinesis stream on an hourly basis ($0.36/shard/day).
+
+Note, do not delete your `datapipe.yml` CloudFormation template. You will continue to expand this template during this week's assignment. You may want to commit your current template to the assignment's repository and stop your EC2 instance.
 

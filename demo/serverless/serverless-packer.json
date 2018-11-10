@@ -1,0 +1,37 @@
+{
+
+    "builders": [{
+        "type": "amazon-ebs",
+        "region": "us-east-1",
+        "source_ami_filter": {
+            "filters": {
+              "virtualization-type": "hvm",
+              "name": "*amzn2-ami-hvm-2.0.*-x86_64-gp2",
+              "state": "available"
+            },
+            "owners": ["amazon"],
+            "most_recent": true
+        },
+        "instance_type": "t2.micro",
+        "ssh_username": "ec2-user",
+        "ami_name": "serverless-pipeline {{timestamp}}",
+        "ami_groups": ["all"]
+        }],
+
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": [
+                "sleep 30",
+                "sudo yum update -y",
+                "sudo yum install -y python3-pip python3 python3-setuptools",
+                "sudo pip3 install boto3"
+            ]
+        },
+        {
+            "type": "file",
+            "source": "serverless-start",
+            "destination": "/home/ec2-user/"
+        }
+    ]
+}

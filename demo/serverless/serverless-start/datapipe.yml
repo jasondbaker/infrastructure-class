@@ -1,0 +1,18 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Resources:
+  DatalogFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      # Need to add missing properties here
+
+
+  DataStream:
+    Type: AWS::Kinesis::Stream
+    Properties: 
+      Name: datastream
+      ShardCount: 1
+      Tags:
+        - 
+          Key: 'Project'
+          Value: 'SEIS665'
