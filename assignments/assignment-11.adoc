@@ -10,6 +10,11 @@ Jason Baker <bake2352@stthomas.edu>
 == Overview
 Serverless applications represent the continued evolution of cloud-native application architecture. We can use serverless applications to build platforms that support millions of customers and process enormous amounts of data. In our class project this week, we deployed a basic data pipeline using a CloudFormation SAM template, Lambda function, and Kinesis stream. In this week's assignment, you will expand the functionality of the CloudFormation template by creating a Lambda function to store Kinesis messages in a DynamoDB table.
 
+[NOTE]
+====
+You must understand how to write code in the Python programming language to successfully complete this assignment. The code required isn't advanced, but you will need to understand how to import modules, work with JSON, and use the boto3 library (AWS SDK). If you don't have much Python experience, I recommend using one of the many on-line training options to improve your skills. 
+====
+
 == Requirements
 
 You need to have a personal AWS account and GitHub account for this assignment.
