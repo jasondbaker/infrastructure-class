@@ -66,6 +66,12 @@ Take a look at the Lambda function metrics and logs for your new Lambda function
 
 You should be able to go to the DynamoDB web console and view a list of the items in the table after invoking the new Lambda function successfully. Do you see the records from the Kinesis stream stored in the table? If so, congratulations you're done! If not, keep working at it.
 
+Perform a scan of the DynamoDB table and store the results in a file called `tablescan.json`:
+
+    aws dynamodb scan --table-name datapipe > tablescan.json
+
+Take a look at the JSON file created by the scan. You should see all of the data items stored in the database table.
+
 === Check your work
 
 The assignment GitHub classroom link is: https://classroom.github.com/a/3RJe-1qY
@@ -74,6 +80,8 @@ Here is what the contents of your git repository should look like before final s
 
 ====
 &#x2523; datapipe.yml +
+&#x2523; packaged-datapipe.yml +
+&#x2523; tablescan.json +
 &#x2517; /lambda +
 &nbsp;&nbsp;&nbsp;&#x2523; data_generator.py +
 &nbsp;&nbsp;&nbsp;&#x2523; datalog.py +
