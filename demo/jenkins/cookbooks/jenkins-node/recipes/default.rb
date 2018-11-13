@@ -13,6 +13,8 @@ end
 # Install base packages
 pkgs = {
   'jq' => '1.5+dfsg-1',
+  'python3' => nil,
+  'python3-pip' => nil
 }
 
 pkgs.each do |pkg, version|
@@ -27,8 +29,8 @@ package 'awscli' do
   action :remove
 end
 
-# Install Python 2.x
-python_runtime '2'
+node.default['cloudcli']['aws']['version'] = '1.15.0'
+include_recipe 'cloudcli::awscli'
 
 # Make sure Python 2.7 is the default
 bash 'update-alternatives python' do
@@ -42,9 +44,8 @@ end
 # Install cloudformation helper scripts
 bash 'install-python-modules' do
   code <<-EOH
-    pip install awscli==1.14.58
-    pip install boto3==1.4.6
-    pip install docker==2.5.0
+    pip install boto3==1.6.22
+    pip install docker==3.2.0
     pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz
   EOH
 end
@@ -55,7 +56,7 @@ bash 'install-docker-repo' do
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
     add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
     apt-get update
-    apt-get install -y docker-ce=17.12.0~ce-0~ubuntu
+    apt-get install -y docker-ce
   EOH
 end
 

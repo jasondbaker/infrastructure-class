@@ -70,16 +70,16 @@ need to update the `git url` setting in the Jenkinsfile with your GitHub reposit
         }   
     }
 
-3. Configure the Jenkins pipeline job to trigger builds based on a GitHub webhook (see lecture presentation p27).
+4. Configure the Jenkins pipeline job to trigger builds based on a GitHub webhook (see lecture presentation p27).
 
-4. Configure the GitHub repository with a webhook pointing to your Jenkins server (see lecture 
-presentation p26).
+5. Configure the GitHub repository with a webhook pointing to your Jenkins server (see lecture 
+presentation p26). Make sure you have setup the Jenkins pipeline job before configuring the GitHub webhook.
 
-5. Manually run the build once. The job should automatically clone your repository and execute the pipeline 
+6. Manually run the build once. The job should automatically clone your repository and execute the pipeline 
 steps defined in the Jenkinsfile. From this point on, anytime you commit new changes to the repository the 
 job should automatically build. 
 
-6. Create or modify a README.md file in your GitHub repository. Commit the file and verify that Jenkins 
+7. Create or modify a README.md file in your GitHub repository. Commit the file and verify that Jenkins 
 automatically builds the infrastructure-pipeline job.
 
 Okay, you're all set to begin building the pipeline!
@@ -121,8 +121,9 @@ stage ("CreateInstance") {
 
 Add a third stage to your pipeline which automatically terminates the instance after it is running. 
 
-You will need two things to complete this task. The EC2 instance ID created by the AWS `run-instances` command. The sh command can return an output value 
-which is assigned to a variable. The AWS CLI is returning output using JSON. The `jq` command (https://stedolan.github.io/jq/) is available on 
+You will need two things to complete this task. The EC2 instance ID created by the AWS `run-instances` command. The `sh` command can return an output value which is assigned to a variable. What does this command look like? Take a look at the `sh` command options in the Jenkins Pipeline Syntax page. 
+
+The AWS CLI command is returning a JSON object. The `jq` command (https://stedolan.github.io/jq/) is available on 
 the build node to parse the JSON output. Here's an example of how to assign a shell command output to a variable:
 
     def output = sh returnStdout: true, script: 'aws ec2 describe-instances | jq .'
