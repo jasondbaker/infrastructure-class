@@ -47,7 +47,7 @@ plugins.
 
 Launch the stack by clicking on the following URL and then clicking the *Next* link:
 
-https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=jenkins-stack&templateURL=https://s3.amazonaws.com/seis665/jenkins-cf.json[Launch stack]
+https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=jenkins&templateURL=https://s3.amazonaws.com/seis665/jenkins-cf.json[Launch stack]
 
 On the stack *Specify Details* page, enter the following:
 
@@ -124,7 +124,7 @@ The project pipeline should include the following named stages (highlighted in b
     - The name of the output jar file will look something like `rectangle-2.jar`, where the number represents the current Jenkins build number.
     - You can use the AWS CLI to copy files from Jenkins to the S3 bucket. Don't worry about access credentials for this step because the Jenkins server has a proper role attached which allows it to access the S3 bucket.
   * **Report**
-    - The pipeline will generate a report of the CloudFormation stack resources created in your environment using the command: `aws cloudformation describe-stack-resources --region us-east-1 --stack-name jenkins`
+    - The pipeline will generate a report of the CloudFormation stack resources created in your environment using the command: `aws cloudformation describe-stack-resources --region us-east-1 --stack-name jenkins-stack`
     - Note: you will need to setup proper IAM and Jenkins access credentials to run this command.
 
 === Hints
