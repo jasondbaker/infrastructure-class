@@ -2,11 +2,15 @@
 
 import jenkins.model.*
 import jenkins.model.Jenkins
+import jenkins.model.JenkinsLocationConfiguration
 import hudson.security.*
 import hudson.security.csrf.DefaultCrumbIssuer
 import jenkins.security.s2m.AdminWhitelistRule
 
 def instance = Jenkins.getInstance()
+def location = instance.getExtensionList('jenkins.model.JenkinsLocationConfiguration')[0]
+
+location.adminAddress = 'nobody@nobody.com'
 
 def user = new File("/run/secrets/jenkins-user").text.trim()
 def pass = new File("/run/secrets/jenkins-pass").text.trim()

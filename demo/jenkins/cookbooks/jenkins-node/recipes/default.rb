@@ -12,7 +12,7 @@ end
 
 # Install base packages
 pkgs = {
-  'jq' => '1.5+dfsg-1',
+  'jq' => nil,
   'python3' => nil,
   'python3-pip' => nil
 }
