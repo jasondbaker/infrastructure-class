@@ -108,7 +108,7 @@ You will create a new build pipeline using the Jenkins Pipeline DSL. Jenkins sup
 
 Begin by creating a new pipeline project in Jenkins called *java-pipeline*. Configure the project to reference the Java GitHub repository you forked earlier in the assignment.
 
-Setup a build trigger for this project using the `GitHub hook trigger for GITScm polling` configuration setting. The project should create a pipeline (`Pipeline script from SCM`) based on a file called *Jenkinsfile* located at the root (top) directory of the Java project.
+Setup a build trigger for this project using the `GitHub hook trigger for GITScm polling` configuration setting. The project should create a pipeline (`Pipeline script from SCM`) based on a file called *Jenkinsfile* located at the root (top) directory of the Java project. Note, you will have to build the pipeline manually the first time before the automatic GitHub build trigger will begin working.
 
 The project pipeline should include the following named stages (highlighted in bold):
 
