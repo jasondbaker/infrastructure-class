@@ -72,7 +72,7 @@ The engineering manager would like users to be able to provide three *input para
   * A parameter called *InstanceType* that defines the instance type for the instances.
       ** The allowable type must be one of the following: t2.micro or t2.small
   * A parameter called *KeyPair* that specifies the server key-pair name for the EC2 instances.
-  * A parameter called YourIp that specifies your public IP address in CIDR notation.
+  * A parameter called *YourIp* that specifies your public IP address in CIDR notation.
 
 Also, she would like you to create an output called *weburl* that displays the load balancer dns name
 after the stack is launched.
