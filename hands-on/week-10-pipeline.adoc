@@ -61,18 +61,14 @@ Here's an example Jenkinsfile you can start with. Note, you will
 need to update the `git url` setting in the Jenkinsfile with your GitHub repository address.
 
     pipeline {
-    
       agent { label 'linux' }
         stages {
-        
           stage('Test') {
             steps {
               sh "env"
             }
           }
-            
         }   
-    
     }
 
 4. Configure the Jenkins pipeline job to trigger builds based on a GitHub webhook (see lecture presentation p27).
