@@ -96,11 +96,11 @@ Here is a summary of the steps required to setup this integration. You can revie
 
 Now Jenkins is setup to communicate with GitHub, but committing changes to your forked repository won't automatically trigger Jenkins builds. Let's fix that.
 
-Go to your Github forked java-project repository and click on the repository settings link. Next, select the *Integrations & services* settings. Add a new integration service called *Jenkins (Github Plugin)*. You will need to configure a Jenkins hook URL for this service. The URL is:
+Go to your Github forked java-project repository and click on the repository settings link. Next, select the *Webhook* settings. Add a new webhook with a Payload URL:
 
   http://<your Jenkins server IP>:8080/github-webhook/
 
-Okay, now your Jenkins-GitHub integration should be complete. You will be able to verify this integration in the next section when you start to push changes to your java-project repository.
+The rest of the webhook settings should use the default. Okay, now your Jenkins-GitHub integration should be complete. You will be able to verify this integration in the next section when you start to push changes to your java-project repository.
 
 === Create a Pipeline
 
