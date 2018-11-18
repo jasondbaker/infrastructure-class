@@ -28,7 +28,7 @@
             "Type": "AWS::EC2::Instance",
             "Properties": {
                 "InstanceType": "t2.micro",
-                "ImageId": "ami-f92ff686",
+                "ImageId": "ami-062972feba6a667ac",
                 "KeyName": {
                     "Ref": "KeyName"
                 },
@@ -129,7 +129,7 @@
                 "InternetGateway"
             ]
         },
-        "EC2SRTA56MZL": {
+        "SubnetAssociation": {
             "Type": "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": {
@@ -148,8 +148,10 @@
           "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
       },
       "YourIp": {
-        "Description": "The current CIDR IP address of your workstation (x.x.x.x/32).",
-        "Type": "String"
+        "Description": "The current CIDR IP address of your workstation (x.x.x.x/32). http://checkip.amazonaws.com/",
+        "Type": "String",
+        "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-9]|3[0-2]))$",
+        "ConstraintDescription": "Must be a valid IP CIDR range of the form x.x.x.x/x."
       }
     },
     "Outputs": {

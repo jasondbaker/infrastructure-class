@@ -9,7 +9,6 @@
     "ubuntu": ">= 0.0.0"
   },
   "dependencies": {
-    "cloudcli": "~> 1.2.0",
     "docker": "~> 2.15.15"
   },
   "recommendations": {
