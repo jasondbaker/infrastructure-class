@@ -5,7 +5,7 @@
 
 = SEIS 665 Assignment 10: Docker
 Jason Baker <bake2352@stthomas.edu>
-1.3, 4/24/2018
+1.4, 11/17/2018
 
 == Overview
 Containers are revolutionizing the way we package and deploy applications. Traditionally, we would install applications on bare metal hardware or virtual machines in our computing environment. We would have to carefully place applications on infrastructure to minimize conflicting requirements such as different versions of shared libraries. Containers let us partition applications and related dependencies on a shared computing platform.
@@ -31,47 +31,12 @@ Create a new GitHub Classroom repository by clicking on this link: https://class
 
 Create a new Jenkins pipeline job called `docker-pipeline` and configure it to use a Jenkinsfile located in your
 Classroom repository. Note that since you are using a private repository for this assignment, you will need to enter
-GitHub credentials for the git configuration in the pipeline job. Also, you will need to
-reference these credentials in the git command used by your Jenkinsfile. This is pretty easy to
-setup.
+GitHub credentials for the git configuration in the pipeline job. The pipeline job will use a personal access token to access your private GitHub repository and retrieve a Jenkinsfile. You can reference the lecture PowerPoint if you
+don't recall how to set this up.
 
-Please follow these steps to setup your GitHub access credentials in the pipeline job:
 
-    * Create a GitHub personal access token (or use an existing token) in your personal GitHub account by going
-    to the Settings->Developer Settings->Personal access tokens section on the GitHub site. Store this token 
-    somewhere safe because you will need to enter it into the Jenkins configuration shortly. The token you create 
-    should have the following scopes enabled:
-        ** repo
-        ** admin:repo_hook
-    * When you are configuring the git settings for your pipeline job, click on the `Add` button by 
-the credentials and select the `Jenkins` credential provider. 
-    * Create a new `Username with password` credential, typing in your GitHub username and using the 
-    personal access token as the password. 
-    * Enter an identifiable value into the description field like `github account`. 
-    * Click the `Add` button to add your GitHub credential.
-    * Select your newly created credential in the `Credentials` drop-down field. If your credential works 
-    properly for your private repo, you should not see a Jenkins login error message.
-    * Note, you do not need to setup a pipeline build trigger or GitHub webhook for this assignment.
-
-The pipeline job will use these credentials to access your private GitHub repository and retrieve a
-Jenkinsfile. One of the first things the Jenkinsfile should do is tell Jenkins to clone the repository
-using the `git` command. Let's use the `Pipeline Syntax` link at the bottom of the pipeline configuration
-page to generate the proper syntax for this command.
-
-    * Click on the `Pipeline Syntax` link at the bottom of the pipeline configuration page and select 
-    the `git: Git` sample step. 
-    * Type in your git repository URL (ending with `.git`).
-    * Select the credentials you created earlier from the credentials drop-down field. If you select the 
-    correct credentials, you should not see a Jenkins login error message.
-    * Click the `Generate Pipeline Script` button. 
-    * Copy-and-paste the generated code into your Jenkinsfile.
-
-.Example:
-----
-git credentialsId: 'c868a19a-3de9-4ae1-9538-b832fd1c8b12', url: 'https://github.com/seis665/assignment-10-jasondbaker.git'
-----
-
-Your Jenkinsfile will have three stages: `Setup`, `Build` and `Test`. The `Setup` stage will clone a copy of the assignment GitHub repository (using the git code snippet above). It will also copy a webpage file from an S3 bucket into the project workspace. The `Build` stage will use a Dockerfile to build a new Docker image. Finally, the `Test` stage will create a new Docker container using the Docker image and test it to see if it is working properly.
+Your Jenkinsfile will have four stages: `Setup`, `Build`, `Test`, and `CleanUp`. The `Setup` stage will copy a webpage file from an S3 bucket into the project workspace. The `Build` stage will use a Dockerfile to build a new Docker image. The `Test` stage will create a new Docker container using the Docker image and test it to see if it is working properly. Finally, the
+`CleanUp` stage will delete the Docker container built during the previous stage.
 
 Let's look at the requirements for each of these stages.
 
@@ -89,7 +54,7 @@ Store this file in an S3 bucket in the us-east-1 region. The `Setup` stage of th
 
 === The Build Stage
 
-The `Build` stage will use a Dockerfile to create a new container image called `classweb` with a tag of `1.0`. Here are the configuration requirements for the Docker image:
+The `Build` stage will use a Dockerfile to create a new container image called `classweb` with a tag equivalent to the job build number (remember this value is available in an environment variable). Here are the configuration requirements for the Docker image:
 
   * The new image must be based off the `nginx` image.
   * Set the maintainer of the image to your name and email address.
@@ -104,11 +69,13 @@ The `Test` stage will validate that the Docker image was created properly. The p
   * The container should map port 80 within the container to port 80 on the host server.
   * The container should have an environment variable mapping the key `NGINX_PORT` to the value `80`.
 
-After launching the container, the pipeline should test the container using the curl command. The container is running on the Jenkins slave node, so you should make an HTTP request to the private IP address of that node.
+After launching the container, the pipeline should test the container using the curl command. The container is running on the Jenkins slave node, so you should make an HTTP request to the local host.
 
-  curl -s <private IP address>
+  curl -s localhost
 
-Finally, once the test completes the pipeline should stop and delete the container.
+=== The `CleanUp` Stage
+
+Finally, once the test stage completes the pipeline should stop and delete the container.
 
 === Console Output
 

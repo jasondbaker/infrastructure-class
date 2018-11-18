@@ -21,17 +21,15 @@ You need to have a personal AWS account and GitHub account for this assignment.
 
 Let's get that code pipeline flowing!
 
-=== Fork the Java application
+=== Setup the Java application
 
-The first step in the assignment is to fork a GitHub repository containing a Java application. Forking the repository will setup a copy of the repository in your personal GitHub account. You can then make changes to the application files in the repository without affecting the original (parent) repository.
+The first step in the assignment is to create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/874ccbb14cf1edafbdf104af22f7812f
 
-Go to GitHub and fork the following repository by clicking on the *Fork* button:
+Next, copy the files and directories from the following repository into your new classroom private repository:
 
   https://github.com/seis665/java-project
 
-After a short period of time you should see a forked copy of this repository in your personal GitHub account.
-
-If you already forked this repository during the class lecture, I recommend deleting this repository in GitHub and forking it again to get a clean copy.
+How should you do this? One possible method is to clone the `java-project` repository and the classroom repository to your system, copy the java-project repository contents to your classroom repository directory, and push the classroom repository directory files back to GitHub. 
 
 === Launch the Jenkins stack
 
@@ -78,9 +76,9 @@ Congratulations! You've created the infrastructure required to build a code pipe
 
 === Setup GitHub access
 
-Before you start working on a build pipeline, you should configure Jenkins to integrate with your GitHub account. This will allow Jenkins to automatically pull source code from your forked Java repository when the build pipeline runs. Create a new personal access token in your GitHub account. The token should have `admin:repo_hook`, `repo`, and `repo:status` permissions.
+Before you start working on a build pipeline, you should configure Jenkins to integrate with your GitHub account. This will allow Jenkins to automatically pull source code from your forked Java repository when the build pipeline runs. Create a new personal access token in your GitHub account. The token should have `admin:repo_hook` and `repo` permissions.
 
-Go to your Github forked java-project repository and click on the repository settings link. Next, select the *Webhook* settings. Add a new webhook with a Payload URL:
+Go to your private classroom repository and click on the repository settings link. Next, select the *Webhook* settings. Add a new webhook with a Payload URL:
 
   http://<your Jenkins server IP>:8080/github-webhook/
 
@@ -90,7 +88,7 @@ The rest of the webhook settings should use the default. Okay, now your Jenkins-
 
 You will create a new build pipeline using the Jenkins Pipeline DSL. Jenkins supports two different types of Pipeline DSL formats: declarative and scripted. We will use the declarative format for this assignment because it's a little easier to work with.
 
-Begin by creating a new pipeline project in Jenkins called *java-pipeline*. Configure the project to reference the Java GitHub repository you forked earlier in the assignment.
+Begin by creating a new pipeline project in Jenkins called *java-pipeline*. Configure the pipeline GitHub project setting to reference the Java GitHub repository you created earlier in the assignment.
 
 Setup a build trigger for this project using the `GitHub hook trigger for GITScm polling` configuration setting. The project should create a pipeline (`Pipeline script from SCM`) based on a file called *Jenkinsfile* located at the root (top) directory of the Java project. 
 
@@ -122,8 +120,6 @@ Next, begin adding build stages to the Jenkinsfile, committing changes to the Gi
 It will likely take a handful of iterations and updates before you complete the pipeline. This is how we build and test pipelines in practice.
 
 === Save your work
-
-Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/874ccbb14cf1edafbdf104af22f7812f
 
 Copy the Jenkinsfile you created for this assignment into this new repository and commit the code. Also, copy the console output from a successful build job into a file called `console.txt`
 
