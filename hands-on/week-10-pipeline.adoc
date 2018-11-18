@@ -57,8 +57,7 @@ access this repository because it's public.
 3. Add a file called `Jenkinsfile` to your repository. How should you do this? You could clone the 
 repository to your laptop, add the Jenkinsfile, and push the commit back up to GitHub. Another quick 
 way to add the file to your repository is to use GitHub's web file editor (https://help.github.com/articles/editing-files-in-your-repository/)
-Here's an example Jenkinsfile you can start with. Note, you will
-need to update the `git url` setting in the Jenkinsfile with your GitHub repository address.
+Here's an example Jenkinsfile you can start with. 
 
     pipeline {
       agent { label 'linux' }
