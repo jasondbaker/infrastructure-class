@@ -76,25 +76,9 @@ during the stack creation process. Note that it might take a couple minutes for 
 
 Congratulations! You've created the infrastructure required to build a code pipeline.
 
-=== Setup GitHub integration
+=== Setup GitHub access
 
-Before you start working on a build pipeline, you should configure Jenkins to integrate with your GitHub account. This will allow Jenkins to automatically pull source code from your forked Java repository when the build pipeline runs.
-
-Here is a summary of the steps required to setup this integration. You can review the class lecture notes or online how-to guides to complete this setup.
-
-  * Create a new personal access token in your GitHub account. The token should have `admin:repo_hook`, `repo`, and `repo:status` permissions.
-
-  * Add a new GitHub server in the Jenkins system configuration settings.
-
-  * Add credentials for the GitHub server configuration.
-    ** Kind: Secret Text
-    ** Copy personal GitHub token into secret value field.
-
-  * Remember to select the GitHub token credential in the GitHub server settings after adding it!
-
-  * Click the Test connection button to verify that the credentials work and save the Jenkins system configuration.
-
-Now Jenkins is setup to communicate with GitHub, but committing changes to your forked repository won't automatically trigger Jenkins builds. Let's fix that.
+Before you start working on a build pipeline, you should configure Jenkins to integrate with your GitHub account. This will allow Jenkins to automatically pull source code from your forked Java repository when the build pipeline runs. Create a new personal access token in your GitHub account. The token should have `admin:repo_hook`, `repo`, and `repo:status` permissions.
 
 Go to your Github forked java-project repository and click on the repository settings link. Next, select the *Webhook* settings. Add a new webhook with a Payload URL:
 
@@ -108,7 +92,9 @@ You will create a new build pipeline using the Jenkins Pipeline DSL. Jenkins sup
 
 Begin by creating a new pipeline project in Jenkins called *java-pipeline*. Configure the project to reference the Java GitHub repository you forked earlier in the assignment.
 
-Setup a build trigger for this project using the `GitHub hook trigger for GITScm polling` configuration setting. The project should create a pipeline (`Pipeline script from SCM`) based on a file called *Jenkinsfile* located at the root (top) directory of the Java project. Note, you will have to build the pipeline manually the first time before the automatic GitHub build trigger will begin working.
+Setup a build trigger for this project using the `GitHub hook trigger for GITScm polling` configuration setting. The project should create a pipeline (`Pipeline script from SCM`) based on a file called *Jenkinsfile* located at the root (top) directory of the Java project. 
+
+You will need to setup the proper credentials in your pipeline Git repository configuration to allow the pipeline to properly pull the Jenkinsfile from your private GitHub repository. Once these credentials are setup, you will have to build the pipeline manually the first time before the automatic GitHub build trigger will begin working.
 
 The project pipeline should include the following named stages (highlighted in bold):
 
