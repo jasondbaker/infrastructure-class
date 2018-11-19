@@ -29,7 +29,7 @@ ENV SWARM_CLIENT_VERSION="3.10" \
 RUN adduser -G root -D jenkins && \
     apk --update --no-cache add openjdk8 apache-ant jq python py-pip git openssh ca-certificates openssl && \
     wget -q https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/${SWARM_CLIENT_VERSION}/swarm-client-${SWARM_CLIENT_VERSION}.jar -P /home/jenkins/ && \
-    pip install docker-compose && pip install awscli && \
+    pip install docker-compose && pip install awscli && pip install flake8 &&\
     apk add --update build-base libxml2-dev libffi-dev && \
     apk add --update curl curl-dev && \
     apk add --update httpie && \

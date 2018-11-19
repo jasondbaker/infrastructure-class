@@ -34,44 +34,64 @@ Classroom repository. Note that since you are using a private repository for thi
 GitHub credentials for the git configuration in the pipeline job. The pipeline job will use a personal access token to access your private GitHub repository and retrieve a Jenkinsfile. You can reference the lecture PowerPoint if you
 don't recall how to set this up.
 
+=== Python web application
 
-Your Jenkinsfile will have four stages: `Setup`, `Build`, `Test`, and `CleanUp`. The `Setup` stage will copy a webpage file from an S3 bucket into the project workspace. The `Build` stage will use a Dockerfile to build a new Docker image. The `Test` stage will create a new Docker container using the Docker image and test it to see if it is working properly. Finally, the
-`CleanUp` stage will delete the Docker container built during the previous stage.
+Let's start by creating a Python web application file in our GitHub repository. It's common to store our application source files and build pipeline files in the same repo. Create a Python web application file called `site.py` located in a sub-directory called `app` with the following contents (note: the spacing is importantq for linting purposes!):
+
+----
+from flask import Flask
+app = Flask(__name__)
+
+
+@app.route('/')
+def root_page():
+    return '<html><body><b>Working with containers is super fun!</b></body></html>'
+
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=8080)
+----
+
+Create a Python requirements file called `requirements.txt` in the same directory as the `site.py` file with the following contents:
+
+  Flask==1.0.2
+
+=== Application Pipeline
+
+Your Jenkinsfile will have four stages: `Linting`, `Build`, `Test`, and `CleanUp`. The `Linting` stage will perform a linting static test on the Python application code. The `Build` stage will use a Dockerfile to build a new Docker image. The `Test` stage will create a new Docker container using the Docker image and test it to see if it is working properly. Finally, the `CleanUp` stage will delete the Docker container built during the previous stage.
 
 Let's look at the requirements for each of these stages.
 
-=== The Setup stage
+=== The Linting stage
 
-Create an HTML file called `classweb.html` with the following contents:
+Lint the Python script files in your repository using the flake8 application. For example:
 
-    <html>
-    <body>
-      <h1>My class webserver</h1>
-    </body>
-    </html>
+  flake8 <list of files>
 
-Store this file in an S3 bucket in the us-east-1 region. The `Setup` stage of the pipeline will copy the `classweb.html` file from the S3 bucket into a file called `index.html` in the workspace.
+If you encounter a linting error, fix the error in the `site.py` script file and attempt to run the pipeline again. Don't build the other stages until the Python script cleanly lints.
 
 === The Build Stage
 
 The `Build` stage will use a Dockerfile to create a new container image called `classweb` with a tag equivalent to the job build number (remember this value is available in an environment variable). Here are the configuration requirements for the Docker image:
 
-  * The new image must be based off the `nginx` image.
+  * The new image must be based off the `ubuntu` image using the `xenial` version.
   * Set the maintainer of the image to your name and email address.
-  * The image should expose port 80.
-  * Copy the `index.html` which was downloaded from S3 to the /usr/share/nginx/html directory in the container.
+  * The image should expose port 8080.
+  * Install the following software packages inside the container: `python-pip` and `python-dev` (remember this is an Ubuntu image so we use `apt-get` to install packages, not `yum`)
+  * Copy the `site.py` and `requirements.txt` files into the `/app` directory in the container.
+  * From the `/app` directory in the container, run the following pip command: `pip install -r requirements.txt`
+  * Docker *must* run the command `python` anytime a container is created using this image. Additionally, the container will pass in `site.py` as a default optional argument to the `python` command.
 
 === The Test Stage
 
 The `Test` stage will validate that the Docker image was created properly. The pipeline should create a new container called `classweb1` using the image built in the previous stage. The container should have the following configuration settings:
 
   * The container should run in a detached (daemon) mode.
-  * The container should map port 80 within the container to port 80 on the host server.
-  * The container should have an environment variable mapping the key `NGINX_PORT` to the value `80`.
+  * The container should map port 8080 within the container to port 80 on the host server.
 
 After launching the container, the pipeline should test the container using the curl command. The container is running on the Jenkins slave node, so you should make an HTTP request to the local host.
 
-  curl -s localhost
+  curl -s localhost | grep "super"
 
 === The `CleanUp` Stage
 
@@ -89,7 +109,10 @@ Here is what the contents of your git repository should look like before final s
 ====
 &#x2523; Dockerfile +
 &#x2523; Jenkinsfile +
-&#x2517; console.txt +
+&#x2523; console.txt +
+&#x2517; /app +
+&nbsp;&nbsp;&nbsp;&#x2523; site.py +
+&nbsp;&nbsp;&nbsp;&#x2523; requirements.txt +
 
 ====
 
