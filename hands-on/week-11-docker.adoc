@@ -122,7 +122,7 @@ Once the container is running you should be able to see the basic web page you a
 
 Typically in a production environment we don't launch individual Docker containers manually. We use Docker Compose or a container orchestration platform to run containers (which we will talk about soon). Docker Compose uses a special YAML file to describe the runtime configuration settings for one or more containers. You can use the `docker-compose` command to create all of the container services defined in the configuration file:
 
-    docker-compose up
+    docker-compose up -d
 
 Create a basic Docker compose file called `docker-compose.yaml` to launch the `dynaweb1` container. You can find documentation for Docker Compose at the following website:
 
