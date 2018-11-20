@@ -58,7 +58,7 @@ Create a Python requirements file called `requirements.txt` in the same director
 
 === Application Pipeline
 
-Your Jenkinsfile will have four stages: `Linting`, `Build`, `Test`, and `CleanUp`. The `Linting` stage will perform a linting static test on the Python application code. The `Build` stage will use a Dockerfile to build a new Docker image. The `Test` stage will create a new Docker container using the Docker image and test it to see if it is working properly. Finally, the `CleanUp` stage will delete the Docker container built during the previous stage.
+Your Jenkinsfile will have three stages: `Linting`, `Build`, `Test`. The `Linting` stage will perform a linting static test on the Python application code. The `Build` stage will use a Dockerfile to build a new Docker image. The `Test` stage will create a new Docker container using the Docker image and test it to see if it is working properly. Finally, we will add a special `post` stage (it's not technically part of the `stages` block) which will delete the Docker container built during the pipeline run.
 
 Let's look at the requirements for each of these stages.
 
@@ -77,10 +77,11 @@ The `Build` stage will use a Dockerfile to create a new container image called `
   * The new image must be based off the `ubuntu` image using the `xenial` version.
   * Set the maintainer of the image to your name and email address.
   * The image should expose port 8080.
+  * Update the package repositories using `apt-get update`
   * Install the following software packages inside the container: `python-pip` and `python-dev` (remember this is an Ubuntu image so we use `apt-get` to install packages, not `yum`)
   * Copy the `site.py` and `requirements.txt` files into the `/app` directory in the container.
   * From the `/app` directory in the container, run the following pip command: `pip install -r requirements.txt`
-  * Docker *must* run the command `python` anytime a container is created using this image. Additionally, the container will pass in `site.py` as a default optional argument to the `python` command.
+  * When a container is created, Docker *must always* run the command `python`. Additionally, the container will use `site.py` as a default optional argument to the `python` command.
 
 === The Test Stage
 
@@ -91,11 +92,38 @@ The `Test` stage will validate that the Docker image was created properly. The p
 
 After launching the container, the pipeline should test the container using the curl command. The container is running on the Jenkins slave node, so you should make an HTTP request to the local host.
 
-  curl -s localhost | grep "super"
+  curl $(curl 169.254.169.254/latest/meta-data/local-ipv4) | grep "super"
 
-=== The `CleanUp` Stage
+This command might look a little strange (notice the two curl commands). We're querying the EC2 instance
+meta-data to find the private IP address of the build node, and then making a curl request to this IP.
 
-Finally, once the test stage completes the pipeline should stop and delete the container.
+=== The `post` Stage
+
+Oftentimes it's helpful to add a stage to the pipeline which always runs after all of the other stages have 
+completed -- even if one of those stages has failed. We can use this configuration to clean up any
+build artifacts remaining after the pipeline executes. For example, this pipeline creates a container
+called `classweb1`. If the pipeline doesn't remove this container after execution, subsequent builds
+will fail because the pipeline will try to create a container which already exists (maybe you already
+discovered this during your testing).
+
+The `post` stage appears in its own block after the `stages` block in the pipeline:
+
+----
+pipeline {
+
+  stages {
+  
+  }
+  
+  post {
+    always {
+      echo "code which should always run goes here"
+    }
+  }
+}
+----
+
+Add code to the `post` stage which will stop and remove the container created in the `Test` stage.
 
 === Console Output
 
