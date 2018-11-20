@@ -123,7 +123,8 @@ pipeline {
 }
 ----
 
-Add code to the `post` stage which will stop and remove the container created in the `Test` stage.
+Add code to the `post` stage which will stop and remove the container created in the `Test` stage. Hint: The code should only 
+try to remove the container if it exists, otherwise this stage will generate an error. 
 
 === Console Output
 
