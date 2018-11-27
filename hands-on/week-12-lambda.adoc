@@ -36,7 +36,7 @@ Shell into the new EC2 instance and change to a directory called `serverless-sta
 
 === Build a serverless template
 
-We need to build a CloudFormation SAM (serverless) template which contains Lambda function and Kinesis stream resources. The convention when building serverless templates is to use a YAML template format, so let's do that for this project. You can find a starter CloudFormation template and Lambda function inside the `serverless-start` directory on your EC2 instance.
+We need to build a CloudFormation SAM (serverless) template which contains a Lambda function and a Kinesis stream resource. The convention when building serverless templates is to use a YAML template format, so let's do that for this project. You can find a starter CloudFormation template and Lambda function inside the `serverless-start` directory on your EC2 instance.
 
 The directory contains a template called `datapipe.yml` which is incomplete, and a subdirectory called `lambda` which contains two Python scripts called `datalog.py` and `data_generator.py`. The `datalog.py` script is a Lambda function and the `data_generator.py` script is used later in the project.
 
@@ -49,15 +49,21 @@ Modify the `datapipe.yml` file to add a Lambda function called `DatalogFunction`
     ** The CodeUri references the local storage location of the Lambda function code file relative to the CloudFormation YAML template file you are editing.
   * MemorySize: 256
   * Timeout: 15
-  * Execution role/policy: AWSLambdaKinesisExecutionRole
+  * Execution policy: AWSLambdaKinesisExecutionRole
     ** The Lambda function executes with the access permissions associated with the execution role. If the function needs to access other AWS resources, like a Kinesis stream, the execution role needs to explicitly allow the function to access these resources.
-  * An event source called `StreamData` using a Kinesis event source. 
-    ** The stream should reference the `DataStream` Kinesis stream resource in the template.
+  * An event source called `StreamData` using a Kinesis type event source. 
+    ** The stream should reference the `DataStream` Kinesis stream resource Arn in the template. (Hint: look at GetAtt function)
     ** StartingPosition: TRIM_HORIZON
     ** BatchSize: 50
 
-I like to use the CloudFormation SAM specification at https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md as a documentation resource when creating SAM templates. This documentation will be especially helpful when setting up the event source for the Lambda function.
+The Lambda function event source needs a little more explanation because some students get confused about the difference between the Kinesis resource and the Lambda function event source. The Kinesis stream resource is an AWS service just like other service we have used this semester such as EC2 and RDS. The Kinesis event source is part of the Lambda function configuration. The event source describes how the Lambda function will be triggered -- in this case by messages coming from a Kinesis stream. 
 
+I like to use the CloudFormation SAM specification at https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md as a documentation resource when creating SAM templates. This documentation will be especially helpful when creating the Lambda function and the event source configuration for the Lambda function.
+
+Additionally, it might be helpful to look at the folowing documentation links:
+
+ * https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getatt.html
+ * https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesis-stream.html
 
 === Package template functions
 
