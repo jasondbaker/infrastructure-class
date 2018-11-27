@@ -28,7 +28,7 @@ AWS uses S3 as a storage location for Lambda functions. Lambda functions are pac
 
 === Launch an EC2 instance
 
-Let's launch an EC2 instance containing some of the resources we will use to work on this project. Launch a public Amazon Linux 2 EC2 instance using the following AMI:
+Let's launch an EC2 instance containing some of the resources we will use to work on this project. Launch a public Amazon Linux 2 EC2 instance in us-east-1 using the following AMI:
 
   ami-09ef51eee3a444c89
 
