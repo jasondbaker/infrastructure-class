@@ -51,7 +51,23 @@ The code you create in the Lambda function will need to know the name of the Dyn
 
 Writing the `datastore.py` Lambda function script is probably the most challenging part of the assignment. However, keep in mind that this function can be written in less than 20 lines of code. Don't overthink it.
 
-The function will receive events from the Kinesis stream consisting of a list of message records. Each message is a binary JSON object. The Lambda function should put each message from the Kinesis stream into the DynamoDB table.
+The function will receive events from the Kinesis stream consisting of a list of message records. Each message is a binary JSON object. The Lambda function should put each message from the Kinesis stream into the DynamoDB table. Each item in the table should look
+something like this:
+
+       {
+            "y": {
+                "S": "3.5100361252370282"
+            },
+            "id": {
+                "S": "1476-563"
+            },
+            "is_hot": {
+                "S": "Y"
+            },
+            "x": {
+                "S": "7.730065880848981"
+            }
+        }
 
 Here are a couple hints:
 
@@ -62,6 +78,8 @@ Here are a couple hints:
 * Remember that environment variable you setup earlier? The Lambda function can access environment variables using the `os` module and the `os.environ['VARIABLE_NAME']` method.
 
 * The decoded Kinesis message payload uses a binary JSON format. DynamoDB is expecting the Lambda function to push in a dictionary object, so you will have to find a way to convert the message payload into a dictionary. 
+
+* The `id` attribute in the stream message is used as the partition key value in the DynamoDB table.
 
 === Test serverless application
 
