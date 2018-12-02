@@ -68,7 +68,7 @@ Lint the Python script files in your repository using the flake8 application. Fo
 
   flake8 <list of files>
 
-If you encounter a linting error, fix the error in the `site.py` script file and attempt to run the pipeline again. Don't build the other stages until the Python script cleanly lints.
+If you encounter a linting error, fix the error in the `site.py` script file and attempt to run the pipeline again. Don't build the other stages until the Python script cleanly lints. Be careful: the `flake8` command will fail silently if you give it a file or directory which doesn't exist. In other words, the pipeline won't necessarily fail at this stage if you configure this command incorrectly. 
 
 === The Build Stage
 
