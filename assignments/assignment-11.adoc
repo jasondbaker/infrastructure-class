@@ -81,6 +81,8 @@ Here are a couple hints:
 
 * The `id` attribute in the stream message is used as the partition key value in the DynamoDB table.
 
+* Try to avoid adding records to the DynamoDB table one-at-a-time. This sort of solution would likely not be acceptable in real-world applications because of the added expense and poor performance.
+
 === Test serverless application
 
 Once you have written the `datastore.py` script, you should run the `data_generator.py` Python3 script to test the new environment. The generator script will push 1000 messages into the Kinesis stream, and the stream events will trigger both Lambda functions in the CloudFormation stack. 
