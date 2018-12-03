@@ -33,10 +33,10 @@ end
 # Install cloudformation helper scripts
 bash 'install-python-modules' do
   code <<-EOH
-    pip install awscli
     pip install boto3==1.7.4
     pip install docker==3.2.0
     pip install docker-compose==1.23.1
+    pip install awscli
     pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz
   EOH
 end
