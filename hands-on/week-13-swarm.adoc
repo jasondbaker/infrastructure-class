@@ -226,6 +226,10 @@ across the worker nodes in the cluster. Go to the ELB endpoint
 address in a web browser to verify that the Pets-as-a-Service 
 application is running. 
 
+=== Cluster Champion task (optional)
+
+You have launched a Wordpress application stack few different times this semester using a variety of methods. Create a `wordpress-compose.yml` file which launches a Wordpress application stack into the Swarm cluster (note: you should remove the `pets` swarm stack first). Use the `wordpress` and `mysql` Docker images in your stack. Create a new overlay network called `wordpress-net` with a private CIDR network of your choice.
+
 === Show me your work
 
 Please show me your Swarm stack compose file code.

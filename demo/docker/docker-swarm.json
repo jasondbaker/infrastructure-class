@@ -758,7 +758,7 @@
     "Mappings" : {
       "RegionMap" : {
         "us-east-1" : {
-            "AMI" : "ami-f92ff686"
+            "AMI" : "ami-043218c94b0cb8d43"
         }
       }
     },
@@ -821,7 +821,7 @@
           "Type": "Number",
           "MinValue": "1",
           "MaxValue": "5",
-          "Default": "2"
+          "Default": "3"
       },
       "VPCCIDR": {
           "Description": "VPC CIDR network address.",
