@@ -33,7 +33,7 @@ The template will create a stack containing a Jenkins server environment:
 
 * A Jenkins server.
 
-* Two Jenkins worker nodes.
+* A Jenkins worker/slave node.
 
 On the stack *Specify Details* page, take note of the following input parameters which you haven't encountered
 before:
@@ -65,11 +65,18 @@ the `script` textbox.
 Here is an example script you can enter into the script field:
 
 ....
-node ("linux") {
-    stage ("GetInstances") {
-        
+
+pipeline {
+
+  agent { label 'linux' }
+
+  stages {
+    stage ('GetInstances'){
+      steps {
         sh "aws ec2 describe-instances --region us-east-1"
+      }
     }
+  }
     
 }
 ....
@@ -106,16 +113,23 @@ Note, this example won't work in your pipeline and you will need to modify it fo
 Here's an example of how you might begin to extend the existing pipeline:
 
 ....
-node ("linux") {
-    stage ("GetInstances") {
-        
+pipeline {
+
+  agent { label 'linux' }
+
+  stages {
+    stage ('GetInstances'){
+      steps {
         sh "aws ec2 describe-instances --region us-east-1"
+      }
     }
-    
+
     stage ("CreateInstance") {
+      steps {
         // TODO
-        
+      }
     }
+  }
     
 }
 ....
@@ -124,13 +138,19 @@ node ("linux") {
 
 Let's add two more steps to the second stage of your pipeline to: 1) verify that the EC2 instance created in the second stage is running and 2) terminate the new EC2 instance. This is a pretty common step in an infrastructure pipeline. Oftentimes we will create a resource, wait for the resource to be created, and then test it.
 
-You will need two things to complete this task. The EC2 instance ID created by the AWS `run-instances` command. The sh command can be modified to return an output value which is assigned to a variable. For example:
+You will need two things to complete this task. The EC2 instance ID created by the AWS `run-instances` command. The sh command can be modified to return an output value which is assigned to a variable. The syntax for this command is based on the Groovy programming language (Jenkins is written in Java). For example:
 
-    def output = sh returnStdout: true, script: 'a command you want to run'
+    script {
+      output = sh returnStdout: true, script: 'a command you want to run'
+    }
+
+Notice that the variable assignment occurs within a special `script{ }` block. You will learn later in this course that Jenkins supports two different types of pipelines -- scripted and declarative. Since we use the declarative pipeline format in this course if we want to run Groovy script commands we have to wrap those commands in a script block.
 
 Many AWS CLI commands respond with some sort of output in the JSON data format. The `jq` command (https://stedolan.github.io/jq/) is available on the build node to parse this JSON output. For example:
 
-    def output = sh returnStdout: true, script: 'cat foo.json | jq .'
+    script {
+      def output = sh returnStdout: true, script: 'cat foo.json | jq .'
+    }
     
 You will have to figure out how to setup the `jq` command properly to get the instance ID for the new EC2 instance that was created. Once the pipeline launches the instance, you need to add a waiter. The purpose of a waiter is to literally wait until a specified process completes. In this case, you want the pipeline to wait until the EC2 instance is running. Hint, check out the `aws ec2 wait` command. The pipeline is working correctly if the waiter completes without generating an error.
 
