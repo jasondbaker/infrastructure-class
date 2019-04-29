@@ -6,21 +6,20 @@ University of St. Thomas +
 St. Paul, MN 55105
 
 [.text-center]
-*SYLLABUS Fall 2019 SEIS 665-01* +
-Version 2019.04.29
+*SYLLABUS Fall 2018 SEIS 665-01* +
+Version 2018.08.08
 
 {blank}
 *[.underline]#Course Title#* +
 DevOps & Cloud Infrastructure
 
 *[.underline]#Meeting Time Place#* +
-Mondays, 5:45 - 9:00 PM, OSS 326
+Mondays, 5:45 - 9:00 PM, OSS 431
 
 *[.underline]#Credit Value#* +
 3 semester credits
 
 *[.underline]#Prerequisites#* +
-SEIS 601 or 603 +
 SEIS 610
 
 *[.underline]#Instructor#* +
@@ -63,23 +62,23 @@ patterns used to enhance scalability and reliability within these systems.
   management, package management, and configuration management.
 
 {blank}
-*[.underline]#Optional Texts#* +
-
-No textbooks are required for this course. However, students in the past have benefited from the following reading materials:
-
-_The DevOps Handbook: How to Create World-Class Agility, Reliability, and Security in Technology Organizations_ by Kim, Debois, Willis, Humble, and Allspaw (ISBN: 978-1942788003)
+*[.underline]#Required Texts#* +
 
 _Infrastructure as Code_ by Kief Morris, 1st Edition. (ISBN: 9781491924358) +
+Additional writings (whitepapers, blogs, etc) as assigned by the instructor.
 
-
+*[.underline]#Optional Texts#* +
 _AWS Certified Solutions Architect Official Study Guide_ +
-(ISBN: 9781119138556) +
+ISBN: 9781119138556 +
 
 {blank}
 *[.underline]#Attendance Policy and Studying#*
 
-* The Instructor will record attendance in Canvas weekly.
-* 2-3 hours work for each hour of in class instruction is the academic standard, so plan on spending 6-9 hours a week outside the classroom watching course videos and working on assignments. This course is very technical, and you may need to budget more time than a typical graduate course if you don't have much hands-on technical experience.
+* Instructor will enter attendance into Canvas weekly
+* 2-3 hours work for each hour of in class instruction is the academic standard,
+so plan on spending 6-9 hours a week out of class on readings and assignments.
+If you don't currently have much experience working with GitHub and Linux, plan on
+budgeting significantly more time.
 
 {blank}
 *[.underline]#Amazon Web Services#* +
@@ -121,6 +120,12 @@ of chat channels while working on projects.
 *[.underline]#Computers#* +
 A computer is an essential tool for this class since most of the lectures will include
 opportunities for hands-on learning. A personal computer is strongly encouraged.
+
+A computer is a powerful learning tool, but it can also be a distraction in a
+classroom setting. The
+course will move at a quick pace and will cover a wide breadth of technical material.
+Try to minimize web surfing and personal communications during lectures so that
+you do not miss out on key insights and important learnings.
 ￼￼￼￼￼￼￼￼￼￼
 
 {blank}
@@ -131,7 +136,7 @@ with Linux while others have none. We will spend a little time at the beginning 
 the course covering essential Linux skills so that everyone has an opportunity
 to successfully complete assignments.
 
-It's not possible to teach Linux in a handful of videos. If you
+It's not possible to teach Linux in a few hours during the class lectures. If you
 have never used Linux before, you will need to invest extra time in the early
 weeks of this course getting comfortable with the operating system. There are
 plenty of free Linux training videos on the Internet and I strongly encourage you
@@ -152,14 +157,14 @@ system administration skills.
   ** Up to two excused lecture absences are acceptable.
   ** 25% attendance score reduction for each additional absence.
   ** Four or more absences will result in a grade reduction.
-* Homework assignments (30%)
+* Homework assignments (35%)
   ** 10 graded assignments.
   ** Assignments due by beginning of Monday class period.
   ** No credit for late submissions.
   ** Extra credit points may be given for helping others troubleshoot technical issues through Slack.
-* Exams (60%)
+* Exams (55%)
   * Practical exams based on weekly assignments.
-  * Midterm Challenge (30%)
+  * Midterm Challenge (25%)
   * Final Challenge (30%)
 * Historical grade distribution: A=~40%, B=~38%, C=~20%, F=2%.
 * Factors that may severely impact your grade:
@@ -182,11 +187,11 @@ without the written permission of the instructor. (See Class Session Recording
 |=========================================================
 |Week | Date | Topic | Assignments Due
 
-|1 | 9/19 | Course Introduction +
+|1 | 9/10 | Course Introduction +
 Distributed Infrastructure Patterns |
 
 
-|2 | 9/16 | Linux fundamentals +
+|2 | 9/17 | Linux fundamentals +
 Shell scripting
  |
 Assignment 1 +
@@ -194,69 +199,78 @@ Read _Git Hands On Guide_ +
 Read _Linux Hands On Guide_ +
 Watch Lecture 2 video recordings
 
-|3 | 9/23 | Virtualization & Cloud Computing +
+|3 | 9/24 | Virtualization & Cloud Computing +
 AWS +
 IAM, EC2, S3 |
 Assignment 2 +
+Read _Infrastructure as Code_ Chapters 1 & 2 +
 Watch Lecture 3 video recordings 
 
-|4 | 9/30 | AWS +
+|4 | 10/1 | AWS +
 VPC, RDS, ELB |
 Assignment 3 +
+Read _Architecting for the Cloud: AWS Best Practices_ (White paper February 2016) +
 Watch Lecture 4 video recordings 
 
-|5 | 10/7 | AWS +
+|5 | 10/8 | AWS +
 Autoscaling, Cloud Watch, Route53, +
 SQS, SNS, SES |
 Assignment 4 +
+Read _Infrastructure as Code_ Chapters 3 & 4 +
 Watch Lecture 5 video recordings
 
-|6 | 10/14 | DevOps +
+|6 | 10/15 | DevOps +
 Continuous integration & delivery +
  |
 Assignment 5 +
+Read _Infrastructure as Code_ Chapters 10 & 11 +
 Watch Lecture 6 video recordings 
 
 
-|7 | 10/21 | Midterm Challenge|
+|7 | 10/22 | Midterm Challenge|
 
 
-|8 | 10/28 | Infrastructure as code +
+|8 | 10/29 | Infrastructure as code +
 CloudFormation +
  |
 Assignment 6 +
+Read _Infrastructure as Code_ Chapters 5 & 6 +
 Watch Lecture 8 video recordings
 
 
-|9 | 11/4 | Configuration Management +
+|9 | 11/5 | Configuration Management +
  |
 Assignment 7 +
+Read _Infrastructure as Code_ Chapters 7 & 8 +
 Watch Lecture 9 video recordings
 
-|10 | 11/11 | CI/CD Pipelines +
+|10 | 11/12 | CI/CD Pipelines +
 Jenkins +
  |
 Assignment 8 +
+Read _Infrastructure as Code_ Chapters 12 & 13 +
 Watch Lecture 10 video recordings
 
-|11 | 11/18 | Containers +
+|11 | 11/19 | Containers +
 Docker |
 Assignment 9 +
+Read _Infrastructure as Code_ Chapters 9 & 14 +
 Watch Lecture 11 video recordings
 
-|12 | 11/25 | Serverless Applications +
+|12 | 11/26 | Serverless Applications +
 Lambda, API Gateway |
 Assignment 10 +
+Read _Infrastructure as Code_ Chapter 15 +
 Watch Lecture 12 video recordings
 
-|13 | 12/2 | Service Discovery +
+|13 | 12/3 | Service Discovery +
 Container Orchestration +
-Fargate, EKS |
+ |
 Assignment 11 +
 Watch Lecture 13 video recordings
 
 
-|14 | 12/9 | Final Challenge |
+|14 | 12/10 | Final Challenge |
 
 
 |=========================================================
@@ -271,7 +285,7 @@ Academic accommodations will be provided for qualified students with documented 
 
 * Copying, sharing, or providing code to others which is used in weekly assignments is considered cheating. Assignments are to be worked on individually. There are no group assignments in this course.
 
-* If you have to copy the work created by others to complete weekly assignments, you will really struggle during the exams.
+* If you have to copy the work created by others to complete weekly assignments, you will suffer greatly in the exams.
 
 * I won't know if you are struggling in this course if the work you submit is not your own.
 
