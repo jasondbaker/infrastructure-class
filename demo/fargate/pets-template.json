@@ -1,0 +1,500 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Resources": {
+        "Vpc": {
+            "Type": "AWS::EC2::VPC",
+            "Properties": {
+              "EnableDnsSupport": "true",
+              "EnableDnsHostnames": "true",
+              "CidrBlock": "10.0.0.0/16",
+              "Tags": [
+                {
+                  "Key": "Environment",
+                  "Value": "Test"
+                }
+              ]
+            }
+        },
+        "PublicSubnet1": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "Vpc"
+                },
+                "CidrBlock": "10.0.0.0/24",
+                "AvailabilityZone" : "us-east-1a"
+            }
+        },
+    
+        "PublicSubnet2": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "Vpc"
+                },
+                "CidrBlock": "10.0.1.0/24",
+                "AvailabilityZone" : "us-east-1b"
+            }
+        },
+
+        "ElbSG": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "Vpc"
+                    },
+                "GroupDescription": "Allow http access from everywhere",
+                "SecurityGroupIngress": [
+                        {
+                            "IpProtocol": "tcp",
+                            "FromPort": "80",
+                            "ToPort": "80",
+                            "CidrIp": "0.0.0.0/0"
+                        }
+                    ]
+            }
+        },
+
+        "ElbSGEgress5000": {
+            "Type": "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+                "Description": "Allow connection to web app on port 5000",
+                "IpProtocol": "tcp",
+                "DestinationSecurityGroupId": {"Ref": "WebserverSG"},
+                "FromPort": 5000,
+                "ToPort": 5000,
+                "GroupId": {
+                    "Fn::GetAtt": ["ElbSG", "GroupId"]
+                }
+            }
+        },
+
+        "WebserverSG": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "Vpc"
+                    },
+                "GroupDescription": "Allow port 5000 from ELB",
+                "SecurityGroupEgress": [
+                    {
+                        "IpProtocol": "udp",
+                        "FromPort": "53",
+                        "ToPort": "53",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "443",
+                        "ToPort": "443",
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "SecurityGroupIngress": [
+                        {
+                            "IpProtocol": "tcp",
+                            "FromPort": "5000",
+                            "ToPort": "5000",
+                            "SourceSecurityGroupId": {"Ref": "ElbSG"}
+                        }
+                    ]
+            }
+        },
+
+        "WebserverSGEgress8500": {
+            "Type": "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+                "Description": "Allow connection to consul on port 8500",
+                "IpProtocol": "tcp",
+                "DestinationSecurityGroupId": {"Ref": "DatabaseSG"},
+                "FromPort": 8500,
+                "ToPort": 8500,
+                "GroupId": {
+                    "Fn::GetAtt": ["WebserverSG", "GroupId"]
+                }
+            }
+        },
+
+        "DatabaseSG": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "Vpc"
+                    },
+                "GroupDescription": "Allow access from webservers",
+                "SecurityGroupEgress": [
+                    {
+                        "IpProtocol": "udp",
+                        "FromPort": "53",
+                        "ToPort": "53",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "443",
+                        "ToPort": "443",
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "SecurityGroupIngress": [
+                        {
+                            "IpProtocol": "tcp",
+                            "FromPort": "8500",
+                            "ToPort": "8500",
+                            "SourceSecurityGroupId": {"Ref": "WebserverSG"}
+                        }
+                    ]
+            }
+        },
+
+        "DatabaseSGEgress8500": {
+            "Type": "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+                "Description": "Block all egress traffic from db",
+                "IpProtocol": "-1",
+                "CidrIp": "127.0.0.1/32",
+                "GroupId": {
+                    "Fn::GetAtt": ["DatabaseSG", "GroupId"]
+                }
+            }
+        },
+
+        "InternetGW": {
+            "Type": "AWS::EC2::InternetGateway",
+            "Properties": {}
+        },
+        "VpcGwAttachment": {
+            "Type": "AWS::EC2::VPCGatewayAttachment",
+            "Properties": {
+                "InternetGatewayId": {
+                    "Ref": "InternetGW"
+                },
+                "VpcId": {
+                    "Ref": "Vpc"
+                }
+            }
+        },
+        "PublicRT": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": {
+                "Ref": "Vpc"
+                }
+            }
+        },
+        "PublicRoute": {
+            "Type": "AWS::EC2::Route",
+            "Properties": {
+                    "DestinationCidrBlock": "0.0.0.0/0",
+                    "RouteTableId": {
+                    "Ref": "PublicRT"
+                },
+                "GatewayId": {
+                    "Ref": "InternetGW"
+                }
+            },
+            "DependsOn": [
+                "InternetGW"
+            ]
+        },
+        "PublicSubnet1RTassoc": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PublicRT"
+                },
+                "SubnetId": {
+                    "Ref": "PublicSubnet1"
+                }
+            }
+        },
+        "PublicSubnet2RTassoc": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PublicRT"
+                },
+                "SubnetId": {
+                    "Ref": "PublicSubnet2"
+                }
+            }
+        }, 
+
+        "PetsCluster": {
+            "Type": "AWS::ECS::Cluster"
+        },
+
+        "WebService": {
+            "Type": "AWS::ECS::Service",
+            "DependsOn": ["ELBListener"],
+            "Properties": {
+                "Cluster": {"Ref": "PetsCluster"},
+                "DesiredCount": "2",
+                "LaunchType": "FARGATE",
+                "TaskDefinition": { "Ref": "WebDefinition" },
+                "NetworkConfiguration": {
+                    "AwsvpcConfiguration": {
+                        "AssignPublicIp": "ENABLED",
+                        "SecurityGroups": [{"Ref": "WebserverSG" }],
+                        "Subnets": [
+                            { "Ref": "PublicSubnet1"},
+                            { "Ref": "PublicSubnet2"}
+                        ]
+                    }
+                },
+                "LoadBalancers": [
+                    {
+                        "ContainerName": "petsweb",
+                        "ContainerPort": "5000",
+                        "TargetGroupArn": {"Ref": "ELBTargetGroup"}
+                    }
+                ]
+
+            }
+        },
+
+        "WebDefinition": {
+            "Type": "AWS::ECS::TaskDefinition",
+            "Properties": {
+                "Cpu": "256",
+                "Memory": "512",
+                "NetworkMode": "awsvpc",
+                "RequiresCompatibilities": ["FARGATE"],
+                "TaskRoleArn": { "Ref": "ECSTaskRole" },
+                "ExecutionRoleArn": {"Ref": "ECSExecRole"},
+                "ContainerDefinitions": [
+                    {
+                        "Name": "petsweb",
+                        "Image": "jasondbaker/docker-pets:1.0",
+                        "Essential": "true",
+                        "PortMappings": [
+                            { "ContainerPort": 5000 }
+                        ],
+                        "LogConfiguration": {
+                            "LogDriver": "awslogs",
+                            "Options": {
+                                "awslogs-group": "fargate-petsweb",
+                                "awslogs-create-group": "true",
+                                "awslogs-region": { "Ref": "AWS::Region" },
+                                "awslogs-stream-prefix": "ecs"
+                            }
+                        },
+                        "Environment": [
+                            {
+                                "Name": "DB",
+                                "Value": "db.service.pets"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+
+        "DBService": {
+            "Type": "AWS::ECS::Service",
+            "Properties": {
+                "Cluster": {"Ref": "PetsCluster"},
+                "DesiredCount": "1",
+                "LaunchType": "FARGATE",
+                "ServiceRegistries": [
+                    {
+                        "RegistryArn": {"Fn::GetAtt": ["DBServiceDiscovery", "Arn"]}
+                    }
+                ],
+                "TaskDefinition": { "Ref": "DBDefinition" },
+                "NetworkConfiguration": {
+                    "AwsvpcConfiguration": {
+                        "AssignPublicIp": "ENABLED",
+                        "SecurityGroups": [{"Ref": "DatabaseSG" }],
+                        "Subnets": [
+                            { "Ref": "PublicSubnet1"},
+                            { "Ref": "PublicSubnet2"}
+                        ]
+                    }
+                }
+            }
+        },
+
+        "DBDefinition": {
+            "Type": "AWS::ECS::TaskDefinition",
+            "Properties": {
+                "Cpu": "256",
+                "Memory": "512",
+                "NetworkMode": "awsvpc",
+                "RequiresCompatibilities": ["FARGATE"],
+                "TaskRoleArn": { "Ref": "ECSTaskRole" },
+                "ExecutionRoleArn": {"Ref": "ECSExecRole"},
+                "ContainerDefinitions": [
+                    {
+                        "Name": "petsdb",
+                        "Image": "consul:1.5",
+                        "Essential": "true",
+                        "PortMappings": [
+                            { "ContainerPort": 8500 }
+                        ],
+                        "LogConfiguration": {
+                            "LogDriver": "awslogs",
+                            "Options": {
+                                "awslogs-group": "fargate-petsdb",
+                                "awslogs-create-group": "true",
+                                "awslogs-region": { "Ref": "AWS::Region" },
+                                "awslogs-stream-prefix": "ecs"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+
+        "ECSTaskRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "ManagedPolicyArns": [
+                    "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+                ],
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": [ "sts:AssumeRole" ],
+                            "Principal": { "Service": "ecs-tasks.amazonaws.com" }
+                        }
+                    ]
+                }
+            }
+        },
+
+        "ECSExecRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": [ "sts:AssumeRole" ],
+                            "Principal": { "Service": "ecs-tasks.amazonaws.com" }
+                        }
+                    ]
+                },
+                "Policies": [
+                    {
+                        "PolicyName": "AmazonECSExecutionRolePolicy",
+                        "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "logs:CreateLogStream",
+                                        "logs:CreateLogGroup",
+                                        "logs:DescribeLogGroups",
+                                        "logs:PutLogEvents"
+                                    ],
+                                    "Resource": "*"
+                                }
+                            ]
+                        }
+                    }
+
+                ]
+            }
+        },
+
+        "ELB": {
+            "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+            "Properties": {
+                "LoadBalancerAttributes": [
+                    {
+                        "Key": "idle_timeout.timeout_seconds",
+                        "Value": "30"
+                    }
+                ],
+                "Name": { "Fn::Join": [ "", [{"Ref": "AWS::StackName"},"-alb"] ] },
+                "Scheme": "internet-facing",
+                "SecurityGroups": [ {"Ref": "ElbSG"} ],
+                "Subnets": [
+                    { "Ref": "PublicSubnet1"},
+                    { "Ref": "PublicSubnet2"}
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": { "Fn::Join": [ "", [{"Ref": "AWS::StackName"},"-","-alb"] ] }
+                    }
+                ]
+            }
+        },
+
+        "ELBListener": {
+            "Type": "AWS::ElasticLoadBalancingV2::Listener",
+            "Properties": {
+                "DefaultActions": [
+                    {
+                        "TargetGroupArn": { "Ref": "ELBTargetGroup" },
+                        "Type": "forward"
+                    }
+                ],
+                "LoadBalancerArn": {"Ref": "ELB"},
+                "Port": "80",
+                "Protocol": "HTTP"
+            }
+        },
+
+        "ELBTargetGroup": {
+            "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+            "Properties": {
+                "HealthCheckPath": "/health",
+                "HealthCheckProtocol": "HTTP",
+                "HealthCheckIntervalSeconds": 10,
+                "HealthCheckTimeoutSeconds": 5,
+                "HealthyThresholdCount": 2,
+                "UnhealthyThresholdCount": 2,
+                "TargetType": "ip",
+                "Port": 5000,
+                "Protocol": "HTTP",
+                "TargetGroupAttributes": [
+                    {
+                      "Key": "deregistration_delay.timeout_seconds",
+                      "Value": "30"
+                    }
+                ],
+                "VpcId": {"Ref": "Vpc"}
+            }
+        },
+
+        "ServiceDiscoveryNamespace": {
+            "Type": "AWS::ServiceDiscovery::PrivateDnsNamespace",
+            "Properties": {
+                "Name": "service.pets",
+                "Vpc": {"Ref": "Vpc"}
+            }
+        },
+
+        "DBServiceDiscovery": {
+            "Type": "AWS::ServiceDiscovery::Service",
+            "Properties": {
+                "Name": "db",
+                "DnsConfig": {
+                    "DnsRecords": [
+                        {
+                            "Type": "A",
+                            "TTL": "10"
+                        }
+                    ],
+                    "NamespaceId": {"Ref": "ServiceDiscoveryNamespace"}
+                },
+                "HealthCheckCustomConfig": {
+                    "FailureThreshold": 1
+                }
+            }
+        }
+    },
+    "Outputs": {
+        "ELBEndpoint": {
+            "Description": "ELB DNS endpoint address",
+            "Value": {"Fn::GetAtt": ["ELB", "DNSName"]}
+        }
+    }
+}
