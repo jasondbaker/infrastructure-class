@@ -1,0 +1,59 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Parameters": {
+        "token": {
+            "Description": "GitHub access token.",
+            "Type": "String",
+            "NoEcho": "true"
+        }
+    },
+    "Resources": {
+
+        "ArtifactBucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+                "BucketEncryption": {
+                    "ServerSideEncryptionConfiguration": [
+                        {
+                            "ServerSideEncryptionByDefault": {
+                                "SSEAlgorithm": "AES256"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+
+        "JavaPipeline": {
+            "Type": "AWS::CodePipeline::Pipeline",
+            "Properties": {
+                "ArtifactStore": {
+                    "Location": {"Ref": "ArtifactBucket"},
+                    "Type": "S3"
+                },
+                "RoleArn": ""
+            }
+        },
+
+        "Webhook": {
+            "Type": "AWS::CodePipeline::Webhook",
+            "Properties": {
+                "Authentication": "GITHUB_HMAC",
+                "AuthenticationConfiguration": {
+                    "SecretToken": {"Ref": "token"}
+                },
+                "Filters": [ 
+                    { 
+                      "JsonPath": "$.ref", 
+                      "MatchEquals": "refs/heads/{Branch}" 
+                    } 
+                ], 
+                "TargetPipeline": {"Ref": "JavaPipeline"},
+                "TargetAction": "Source",
+                "TargetPipelineVersion": { "Fn::GetAtt" : [ "JavaPipeline", "Version" ] },
+                "RegisterWithThirdParty": "true"
+            }
+        }
+
+    }
+}
