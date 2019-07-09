@@ -1,10 +1,9 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
     "Parameters": {
-        "token": {
-            "Description": "GitHub access token.",
-            "Type": "String",
-            "NoEcho": "true"
+        "projectUrl": {
+            "Description": "Git project URL. (https://github.com/<your-name>/java-project.git)",
+            "Type": "String"
         }
     },
     "Resources": {
@@ -81,7 +80,7 @@
                 },
                 "ServiceRole": { "Fn::GetAtt": [ "JavaBuildRole", "Arn" ] },
                 "Source": {
-                    "Location": "https://github.com/jasondbaker/java-project.git",
+                    "Location": {"Ref": "projectUrl"},
                     "Type": "GITHUB",
                     "ReportBuildStatus": "true"
                 },
@@ -112,26 +111,91 @@
                       "Version": "2012-10-17",
                       "Statement": [
                         {
-                          "Action": [
-                            "logs:*",
-                            "ec2:CreateNetworkInterface",
-                            "ec2:DescribeNetworkInterfaces",
-                            "ec2:DeleteNetworkInterface",
-                            "ec2:DescribeSubnets",
-                            "ec2:DescribeSecurityGroups",
-                            "ec2:DescribeDhcpOptions",
-                            "ec2:DescribeVpcs",
-                            "ec2:CreateNetworkInterfacePermission"
-                          ],
-                          "Effect": "Allow",
-                          "Resource": "*"
+                            "Effect": "Allow",
+                            "Resource": [
+                                {"Fn::Sub": "arn:aws:s3:::codepipeline-${AWS::Region}-*"}
+                            ],
+                            "Action": [
+                                "s3:PutObject",
+                                "s3:GetObject",
+                                "s3:GetObjectVersion",
+                                "s3:GetBucketAcl",
+                                "s3:GetBucketLocation"
+                            ]
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Resource": [
+                                {
+                                    "Fn::GetAtt": [
+                                        "ArtifactBucket",
+                                        "Arn"
+                                    ]
+                                },
+                                {"Fn::Join": [
+                                    "",
+                                    [
+                                        {
+                                            "Fn::GetAtt": [
+                                                "ArtifactBucket",
+                                                "Arn"
+                                            ]
+                                        },
+                                        "/*"
+                                    ]
+                                ]}
+                            ],
+                            "Action": [
+                                "s3:PutObject",
+                                "s3:GetBucketAcl",
+                                "s3:GetBucketLocation"
+                            ]
                         }
                       ]
                     }
                   }
               ]
            }
-          }
+          },
+
+          "BuildLogPolicy": {
+            "Type": "AWS::IAM::Policy",
+            "Properties": {
+               "PolicyName": "BuildLogAccess",
+               "PolicyDocument": {
+                  "Version" : "2012-10-17",
+                  "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Resource": [
+                            {"Fn::Sub": [
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/${project}",
+                                {"project": {
+                                    "Ref": "JavaBuildProject"
+                                    }
+                                }
+                                ]
+                            },
+                            {"Fn::Sub": [
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/${project}:*",
+                                {"project": {
+                                    "Ref": "JavaBuildProject"
+                                    }
+                                }
+                                ]
+                            }
+                        ],
+                        "Action": [
+                            "logs:CreateLogGroup",
+                            "logs:CreateLogStream",
+                            "logs:PutLogEvents"
+                        ]
+                    }
+                    ]
+               },
+               "Roles": [ { "Ref": "JavaBuildRole" }]
+            }
+         }
 
     }
 }
