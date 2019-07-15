@@ -69,7 +69,8 @@
                     "Location": {"Ref": "ArtifactBucket"},
                     "Type": "S3",
                     "OverrideArtifactName": "true",
-                    "Name": "/"
+                    "Name": "/",
+                    "Packaging": "ZIP"
                 },
                 "Description": "app build project",
                 "Environment": {

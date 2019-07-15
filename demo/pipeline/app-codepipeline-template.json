@@ -453,10 +453,7 @@
             "Type": "AWS::CodeBuild::Project",
             "Properties": {
                 "Artifacts": {
-                    "Location": {"Ref": "ArtifactBucket"},
-                    "Type": "S3",
-                    "OverrideArtifactName": "true",
-                    "Name": "/"
+                    "Type": "CODEPIPELINE"
                 },
                 "Description": "app build project",
                 "Environment": {
@@ -467,12 +464,7 @@
                 },
                 "ServiceRole": { "Fn::GetAtt": [ "AppBuildRole", "Arn" ] },
                 "Source": {
-                    "Location": {"Ref": "projectUrl"},
-                    "Type": "GITHUB",
-                    "ReportBuildStatus": "true"
-                },
-                "Triggers": {
-                    "Webhook": "true"
+                    "Type": "CODEPIPELINE"
                 }
             }
         },
