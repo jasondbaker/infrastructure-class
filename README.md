@@ -68,16 +68,16 @@ Lecture Schedule
 | 1    | Course Introduction, Distributed Infrastructure Patterns               |
 | 2    | Linux fundamentals, Package management, Shell scripting                |
 | 3    | Virtualization, Cloud computing, AWS Fundamentals (IAM/ EC2/ S3)       |
-| 4    | AWS Advanced Concepts (VPC/ RDS/ ELB)                                  |
-| 5    | AWS Extras (Autoscaling/ Cloud Watch/ SQS/ SNS/ SES/ Route53)          |
-| 6    | DevOps Practices, Continuous integration & delivery                    |
+| 4    | AWS Networking                                                         |
+| 5    | AWS Integration, Management & Security                                 |
+| 6    | DevOps Practices, Continuous Integration & Delivery                    |
 | 7    | Midterm Challenge                                                      |
 | 8    | Infrastructure as Code, AWS CloudFormation                             |
 | 9    | Configuration Management, Ansible                                      |
-| 10   | Jenkins, CI/CD Pipelines                                               |
+| 10   | Software Delivery Pipelines                                            |
 | 11   | Containers, Docker                                                     |
 | 12   | Serverless Applications, AWS Lambda                                    |
-| 13   | Service discovery, Container orchestration                             |
+| 13   | Service discovery, Service orchestration                               |
 | 14   | Final Challenge                                                        |
 
 License

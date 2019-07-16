@@ -233,8 +233,8 @@ Watch Lecture 8 video recordings
 Assignment 7 +
 Watch Lecture 9 video recordings
 
-|10 | 11/11 | CI/CD Pipelines +
-Jenkins +
+|10 | 11/11 | Software Delivery Pipelines +
+CodePipeline, CodeCommit, CodeDeploy +
  |
 Assignment 8 +
 Watch Lecture 10 video recordings
@@ -245,13 +245,13 @@ Assignment 9 +
 Watch Lecture 11 video recordings
 
 |12 | 11/25 | Serverless Applications +
-Lambda, API Gateway |
+Lambda, Kinesis, DynamoDB |
 Assignment 10 +
 Watch Lecture 12 video recordings
 
 |13 | 12/2 | Service Discovery +
-Container Orchestration +
-Fargate, EKS |
+Service Orchestration +
+ECS, Fargate |
 Assignment 11 +
 Watch Lecture 13 video recordings
 
