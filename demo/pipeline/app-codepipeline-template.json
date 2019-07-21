@@ -289,7 +289,7 @@
         "ELBTargetGroup": {
             "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
             "Properties": {
-                "HealthCheckPath": "/",
+                "HealthCheckPath": "/health",
                 "HealthCheckProtocol": "HTTP",
                 "HealthCheckIntervalSeconds": 10,
                 "HealthCheckTimeoutSeconds": 5,
@@ -655,7 +655,8 @@
                                     "Owner": {"Ref": "GitHubUsername"},
                                     "Repo": {"Ref": "GitHubRepositoryName"},
                                     "Branch": {"Ref": "GitHubBranchName"},
-                                    "OAuthToken": {"Ref": "GitHubAccessToken"}
+                                    "OAuthToken": {"Ref": "GitHubAccessToken"},
+                                    "PollForSourceChanges": "false"
                                 },
                                 "OutputArtifacts": [
                                     {
