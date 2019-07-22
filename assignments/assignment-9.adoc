@@ -33,7 +33,7 @@ How should you do this? One possible method is to clone the `python-project` rep
 
 === Create a CloudFormation stack
 
-You will use a CloudFormation template to launch a stack containing the software delivery pipeline and the infrastructure resources which will host a Python web application. You don't have to create this template from scratch. We launched a pipeline template during the hands-on portion of this week's lecture which built and deployed the Python application. You can use this template as a starting point:
+You will use a CloudFormation template to launch a stack containing the software delivery pipeline and the infrastructure resources which will host a Python web application. You don't have to create this template from scratch. We launched a pipeline template during the hands-on portion of this week's lecture which built and deployed a Python application. You can use this template as a starting point:
 
   https://seis665.s3.amazonaws.com/app-codepipeline-template.json
 
@@ -45,26 +45,43 @@ As a quick reminder, the template will create the following resources:
 
 * CodeBuild and CodePipeline resources required to build out a software delivery pipeline for the python-project repository you cloned above.
 
-Your goal in this assignment is to enhance the pipeline currently defined in the template. 
+* CodePipeline will use the CodeDeploy service to deploy the python software artifacts to the EC2 instances.
 
--- The current pipeline has a stage called `Build` in which CodeDeploy performs unit testing and a build step to generate the Cascading Style Sheet (CSS) code. Let's separate these two steps into completely separate CodePipeline stages called `UnitTest` and `Build`. The `UnitTest` stage will use CodeDeploy to perform a unit test and the `Build` stage will build the application code (in this case the CSS part of the web application). Note that unit testing requires a Python environment and building requires a Nodejs environment.
+Your goal in this assignment is to enhance the existing pipeline defined in the CloudFormation template. Specifically, you will need to make three changes:
 
--- It's common to lint our code before running unit tests. Linting is a form of static code analysis and it can catch many simple types of errors. Add a linting step to the `UnitTest` stage and run it before the unit test. You can lint the python application by running the command:
+1. Separate the current build stage into separate unit test and build stages.
+2. Add linting to the unit test stage.
+3. Modify the pipeline so that it is automatically triggered when the code repository is updated using a webhook.
+
+=== Create a new unit test stage
+
+CodePipeline uses multiple stages to define a software delivery process. The first stage retrieves the software code from GitHub. The second stage performs unit testing and a build on this software code. The third and final stage deploys the software code artifact to a set of EC2 instances.
+
+The current pipeline has a stage called `Build` which uses CodeBuild to perform unit testing and an application build. Let's separate the unit test and build steps in this stage into completely separate CodePipeline stages called `UnitTest` and `Build`. The `UnitTest` stage will use CodeBuild to perform a unit test, and the `Build` stage will use CodeBuild to build the application code (in this case the CSS part of the web application). Note that unit testing requires a Python environment and building requires a Nodejs environment, so you should only specify the appropriate environments for their related tasks.
+
+Here are some helpful documentation links that you might use for this part of the assignment:
+
+  https://docs.aws.amazon.com/codepipeline/index.html
+  https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-pipeline.html
+  https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html
+
+=== Add linting to the unit test stage
+
+Now that we have a new unit test stage we can expand it with some linting. Linting is a form of static code analysis and it can catch many simple types of errors. It's common to run code linting before running unit tests. Add a linting step to the `UnitTest` stage and run it before the unit test. You can lint the python application by running the command:
 
   flake8 app.py
 
-If you encounter a linting error when triggering the pipeline, correct the code issue in the `app.py` script and try to trigger the pipeline again.
+It's possible that the python application code will trigger a linting error. If you encounter a linting error when running the pipeline, review the linting error message and correct the python code issue in the `app.py` script. Try to trigger the pipeline again to see if the linting issue was fixed.
 
--- The current pipeline is not automatically triggered when your `python-project` repository is updated. Test this out by trying to update the `README.md` file in the repository. How come the pipeline isn't automatically triggering? We need to create a webhook resource in order for that to happen. Add an `AWS::CodePipeline::Webhook` resource to your CloudFormation template with the proper configuration to automate the pipeline trigger on repository code updates.
+=== Automatically trigger the pipeline during code changes.
 
+In this week's lecture video you saw how a CodeBuild process could automatically be triggered by code changes in the GitHub repository. This is a really common pattern in software delivery pipelines and an essential part of continuous integration. Every change a developer commits to a repository results in a build and potential application deployment. In this case we are simulating a deployment to a test environment. 
 
+A pipeline managed by CodePipeline can also be triggered by changes to a GitHub repository using a webhook. This is setup a little differently than CodeBuild, but the results are the same. Check out the AWS::CodePipeline::Webhook CloudFormation resource documentation at:
 
+  https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-webhook.html
 
-Congratulations! You've created the infrastructure required to build a code pipeline.
-
-
-line should include the following named stages (highlighted in bold):
-
+Create a new webhook resource in the template and update your stack. Test it out by trying to update the `README.md` file in the repository. Is your pipeline automatically triggering? If so, congratulations you have completed the assignment!
 
 
 === Save your work
@@ -76,13 +93,15 @@ Copy the CloudFormation template you modified for this assignment into this new 
 Here is what the contents of your git repository should look like before final submission:
 
 ====
-&#x2523; Jenkinsfile +
-&#x2517; console.txt
+&#x2523; app-codepipeline-template.json +
+&#x2517; app.py +
+&#x2517; appspec.yml +
+&#x2517; buildspec.yml
 ====
 
 === Terminate application environment
 
-The last step in the assignment is to delete all the AWS resources created by the stack. You don't want to keep this stack running for a long time because the costs will accumulate.
+The last step in the assignment is to delete all the AWS resources created by the stack. You don't want to keep this stack running for a long time because the costs will accumulate. Note, you will need to empty the S3 artifact bucket before deleting the stack because CloudFormation cannot automatically delete an S3 bucket which contains objects.
 
 Go to the CloudFormation dashboard, select your running stack, and choose the
 delete option. Watch as CloudFormation deletes all the resources previously
