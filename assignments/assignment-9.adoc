@@ -5,12 +5,12 @@
 
 = SEIS 665 Assignment 9: Code pipeline
 Jason Baker <bake2352@stthomas.edu>
-1.2, 11/18/2017
+2.0, 7/20/2019
 
 == Overview
 A DevOps code pipeline helps to automate continuous delivery processes for software development organizations. Developers, testers, and operations staff depend on functioning pipelines to transform code changes into deployable software releases. While software developers are the primary users of a pipeline, IT operations professionals oftentimes have to maintain it.
 
-In this week's assignment, you will build a code deployment pipeline using Jenkins, a continuous integration tool. The pipeline will test, build, and deploy a very simple Java application.
+In this week's assignment, you will build a code deployment pipeline using AWS CodePipeline, a continuous delivery tool. The pipeline will test, build, and deploy a very simple Python application.
 
 
 == Requirements
@@ -21,120 +21,87 @@ You need to have a personal AWS account and GitHub account for this assignment.
 
 Let's get that code pipeline flowing!
 
-=== Setup the Java application
+=== Setup the Python application
 
 The first step in the assignment is to create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/874ccbb14cf1edafbdf104af22f7812f
 
 Next, copy the files and directories from the following repository into your new classroom private repository:
 
-  https://github.com/seis665/java-project
+  https://github.com/seis665/python-project
 
-How should you do this? One possible method is to clone the `java-project` repository and the classroom repository to your system, copy the java-project repository contents to your classroom repository directory, and push the classroom repository directory files back to GitHub. 
+How should you do this? One possible method is to clone the `python-project` repository and the classroom repository to your system, copy the python-project repository contents to your classroom repository directory, and push the classroom repository directory files back to GitHub. 
 
-=== Launch the Jenkins stack
+=== Create a CloudFormation stack
 
-You will use a CloudFormation template to launch a stack containing a Jenkins server. The stack will create the
-following AWS resources:
+You will use a CloudFormation template to launch a stack containing the software delivery pipeline and the infrastructure resources which will host a Python web application. You don't have to create this template from scratch. We launched a pipeline template during the hands-on portion of this week's lecture which built and deployed a Python application. You can use this template as a starting point:
 
-* An AWS Virtual Private Cloud (VPC), including all the necessary routing tables and routes, an Internet gateway, and security groups for EC2 instances to be launched into.
+  https://seis665.s3.amazonaws.com/app-codepipeline-template.json
 
-* An Amazon EC2 instance that hosts a Jenkins server, installed and configured for you with all the necessary
-plugins.
+As a quick reminder, the template will create the following resources:
 
-* An IAM instance role which allows the Jenkins server to access the S3 bucket.
+* An AWS Virtual Private Cloud (VPC), two subnets in separate AZs including all the necessary routing tables and routes, and an Internet gateway.
 
-Launch the stack by clicking on the following URL and then clicking the *Next* link:
+* An Application Load Balancer which will listen for requests on port 80 and forward these requests to an auto-scaling group containing two EC2 instances (t3.micro).
 
-https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=jenkins&templateURL=https://s3.amazonaws.com/seis665/jenkins-cf.json[Launch stack]
+* CodeBuild and CodePipeline resources required to build out a software delivery pipeline for the python-project repository you cloned above.
 
-On the stack *Specify Details* page, enter the following:
+* CodePipeline will use the CodeDeploy service to deploy the python software artifacts to the EC2 instances.
 
-1. In *Stack name*, use `jenkins` as the name for the stack.
-2. In *JenkinsPassword*, provide an administrative password for this system (choose a hard password).
-3. In *JenkinsUsername*, you can leave this set to `admin` or choose a different admin username.
-4. In *Key Name*, choose the name of your Amazon EC2 key pair.
-5. In *YourIP*, type the public IP address (appending /32) of the computer system which you will access the resources created by this template. If you do not know your current public IP address, you can open up a new web browser window and go to the URL: http://checkip.amazonaws.com/
+Your goal in this assignment is to enhance the existing pipeline defined in the CloudFormation template. Specifically, you will need to make three changes:
 
-Click the *Next* button.
+1. Separate the current build stage into separate unit test and build stages.
+2. Add linting to the unit test stage.
+3. Modify the pipeline so that it is automatically triggered when the code repository is updated using a webhook.
 
-On the *Options* page you can tag the resources created by the template. Feel free to create whatever tag you would like and click *Next*.
+=== Create a new unit test stage
 
-On the *Review* page, select the *I acknowledge that this template might cause AWS CloudFormation to create IAM resources check box*. (It will.) Review the other settings, and then choose *Create*.
+CodePipeline uses multiple stages to define a software delivery process. The first stage retrieves the software code from GitHub. The second stage performs unit testing and a build on this software code. The third and final stage deploys the software code artifact to a set of EC2 instances.
 
-It will take several minutes for CloudFormation to create the resources on your behalf. You can watch the progress messages on the *Events* tab in the console. When the stack has been created, you will see a CREATE_COMPLETE message in the *Status* column of the console and on the *Overview* tab.
+The current pipeline has a stage called `Build` which uses CodeBuild to perform unit testing and an application build. Let's separate the unit test and build steps in this stage into completely separate CodePipeline stages called `UnitTest` and `Build`. The `UnitTest` stage will use CodeBuild to perform a unit test, and the `Build` stage will use CodeBuild to build the application code (in this case the CSS part of the web application). Note that unit testing requires a Python environment and building requires a Nodejs environment, so you should only specify the appropriate environments for their related tasks.
 
-You will find the IP address of the Jenkins server in the stack
-outputs (select the stack name and look at the outputs tab). Access
-the Jenkins server with a web browser on port 8080:
+Here are some helpful documentation links that you might use for this part of the assignment:
 
-  http://<Jenkins IP address>:8080
+  https://docs.aws.amazon.com/codepipeline/index.html
+  https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-pipeline.html
+  https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html
 
-Log into Jenkins using the username and password you provided
-during the stack creation process. Note that it might take a couple minutes for the Jenkins service to start up and display a login page.
+=== Add linting to the unit test stage
 
-Congratulations! You've created the infrastructure required to build a code pipeline.
+Now that we have a new unit test stage we can expand it with some linting. Linting is a form of static code analysis and it can catch many simple types of errors. It's common to run code linting before running unit tests. Add a linting step to the `UnitTest` stage and run it before the unit test. You can lint the python application by running the command:
 
-=== Setup GitHub access
+  flake8 app.py
 
-Before you start working on a build pipeline, you should configure Jenkins to integrate with your GitHub account. This will allow Jenkins to automatically pull source code from your forked Java repository when the build pipeline runs. Create a new personal access token in your GitHub account. The token should have `admin:repo_hook` and `repo` permissions.
+It's possible that the python application code will trigger a linting error. If you encounter a linting error when running the pipeline, review the linting error message and correct the python code issue in the `app.py` script. Try to trigger the pipeline again to see if the linting issue was fixed.
 
-Go to your private classroom repository and click on the repository settings link. Next, select the *Webhook* settings. Add a new webhook with a Payload URL:
+=== Automatically trigger the pipeline during code changes.
 
-  http://<your Jenkins server IP>:8080/github-webhook/
+In this week's lecture video you saw how a CodeBuild process could automatically be triggered by code changes in the GitHub repository. This is a really common pattern in software delivery pipelines and an essential part of continuous integration. Every change a developer commits to a repository results in a build and potential application deployment. In this case we are simulating a deployment to a test environment. 
 
-The rest of the webhook settings should use the default. Okay, now your Jenkins-GitHub integration should be complete. You will be able to verify this integration in the next section when you start to push changes to your java-project repository.
+A pipeline managed by CodePipeline can also be triggered by changes to a GitHub repository using a webhook. This is setup a little differently than CodeBuild, but the results are the same. Check out the AWS::CodePipeline::Webhook CloudFormation resource documentation at:
 
-=== Create a Pipeline
+  https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-webhook.html
 
-You will create a new build pipeline using the Jenkins Pipeline DSL. Jenkins supports two different types of Pipeline DSL formats: declarative and scripted. We will use the declarative format for this assignment because it's a little easier to work with.
+Create a new webhook resource in the template and update your stack. Test it out by trying to update the `README.md` file in the repository. Is your pipeline automatically triggering? If so, congratulations you have completed the assignment!
 
-Begin by creating a new pipeline project in Jenkins called *java-pipeline*. Configure the pipeline GitHub project setting to reference the Java GitHub repository you created earlier in the assignment.
-
-Setup a build trigger for this project using the `GitHub hook trigger for GITScm polling` configuration setting. The project should create a pipeline (`Pipeline script from SCM`) based on a file called *Jenkinsfile* located at the root (top) directory of the Java project. 
-
-You will need to setup the proper credentials in your pipeline Git repository configuration to allow the pipeline to properly pull the Jenkinsfile from your private GitHub repository. Once these credentials are setup, you will have to build the pipeline manually the first time before the automatic GitHub build trigger will begin working.
-
-The project pipeline should include the following named stages (highlighted in bold):
-
-  * **Unit Tests**
-    - The pipeline will initiate unit tests using `ant` and create a junit report.
-    - The shell command to run ant tests is `ant -f test.xml -v`
-    - The junit report source data is located in `reports/result.xml`
-  *  **Build**
-    - The pipeline will compile the Java application using `ant`.
-    - The shell command to compile the application is `ant -f build.xml -v`
-  * **Deploy**
-    - The pipeline will copy the build output jar file into an S3 bucket (use an existing S3 bucket or create a new one for this assignment).
-    - The name of the output jar file will look something like `rectangle-2.jar`, where the number represents the current Jenkins build number.
-    - You can use the AWS CLI to copy files from Jenkins to the S3 bucket. Don't worry about access credentials for this step because the Jenkins server has a proper role attached which allows it to access the S3 bucket.
-  * **Report**
-    - The pipeline will generate a report of the CloudFormation stack resources created in your environment using the command: `aws cloudformation describe-stack-resources --region us-east-1 --stack-name jenkins`
-    - Note: you will need to setup proper IAM and Jenkins access credentials to run this command.
-
-=== Hints
-
-I recommend starting the pipeline by first creating a very basic Jenkinsfile and committing it to your forked repository. Then verify that the pipeline project automatically triggers and tries to create a build. Don't worry if the build initially fails.
-
-Next, begin adding build stages to the Jenkinsfile, committing changes to the GitHub repository as you add each new stage. You should monitor each build in Jenkins by reviewing the console output for each job. Once you are confident that a stage is working, move on to the next stage.
-
-It will likely take a handful of iterations and updates before you complete the pipeline. This is how we build and test pipelines in practice.
 
 === Save your work
 
-Copy the Jenkinsfile you created for this assignment into this new repository and commit the code. Also, copy the console output from a successful build job into a file called `console.txt`
+Copy the CloudFormation template you modified for this assignment into this new repository and commit the code. 
 
 === Check your work
 
 Here is what the contents of your git repository should look like before final submission:
 
 ====
-&#x2523; Jenkinsfile +
-&#x2517; console.txt
+&#x2523; app-codepipeline-template.json +
+&#x2517; app.py +
+&#x2517; appspec.yml +
+&#x2517; buildspec.yml
 ====
 
 === Terminate application environment
 
-The last step in the assignment is to delete all the AWS resources created by the stack. You don't want to keep this stack running for a long time because the costs will accumulate.
+The last step in the assignment is to delete all the AWS resources created by the stack. You don't want to keep this stack running for a long time because the costs will accumulate. Note, you will need to empty the S3 artifact bucket before deleting the stack because CloudFormation cannot automatically delete an S3 bucket which contains objects.
 
 Go to the CloudFormation dashboard, select your running stack, and choose the
 delete option. Watch as CloudFormation deletes all the resources previously
