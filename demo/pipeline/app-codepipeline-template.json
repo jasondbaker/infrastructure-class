@@ -742,34 +742,36 @@
                 "Policies": [
                     {
                         "PolicyDocument": {
+
                             "Statement": [
                                 {
-                                    "Action": [
-                                        "iam:PassRole"
-                                    ],
-                                    "Resource": "*",
                                     "Effect": "Allow",
-                                    "Condition": {
-                                        "StringEqualsIfExists": {
-                                            "iam:PassedToService": [
-                                                "cloudformation.amazonaws.com",
-                                                "elasticbeanstalk.amazonaws.com",
-                                                "ec2.amazonaws.com",
-                                                "ecs-tasks.amazonaws.com"
+                                    "Resource": [
+                                        {
+                                            "Fn::GetAtt": [
+                                                "ArtifactBucket",
+                                                "Arn"
                                             ]
-                                        }
-                                    }
-                                },
-                                {
-                                    "Action": [
-                                        "codecommit:CancelUploadArchive",
-                                        "codecommit:GetBranch",
-                                        "codecommit:GetCommit",
-                                        "codecommit:GetUploadArchiveStatus",
-                                        "codecommit:UploadArchive"
+                                        },
+                                        {"Fn::Join": [
+                                            "",
+                                            [
+                                                {
+                                                    "Fn::GetAtt": [
+                                                        "ArtifactBucket",
+                                                        "Arn"
+                                                    ]
+                                                },
+                                                "/*"
+                                            ]
+                                        ]}
                                     ],
-                                    "Resource": "*",
-                                    "Effect": "Allow"
+                                    "Action": [
+                                        "s3:PutObject",
+                                        "s3:GetObject",
+                                        "s3:GetBucketAcl",
+                                        "s3:GetBucketLocation"
+                                    ]
                                 },
                                 {
                                     "Action": [
@@ -785,55 +787,10 @@
                                 },
                                 {
                                     "Action": [
-                                        "elasticbeanstalk:*",
                                         "ec2:*",
                                         "elasticloadbalancing:*",
                                         "autoscaling:*",
-                                        "cloudwatch:*",
-                                        "s3:*",
-                                        "sns:*",
-                                        "cloudformation:*",
-                                        "rds:*",
-                                        "sqs:*",
-                                        "ecs:*"
-                                    ],
-                                    "Resource": "*",
-                                    "Effect": "Allow"
-                                },
-                                {
-                                    "Action": [
-                                        "lambda:InvokeFunction",
-                                        "lambda:ListFunctions"
-                                    ],
-                                    "Resource": "*",
-                                    "Effect": "Allow"
-                                },
-                                {
-                                    "Action": [
-                                        "opsworks:CreateDeployment",
-                                        "opsworks:DescribeApps",
-                                        "opsworks:DescribeCommands",
-                                        "opsworks:DescribeDeployments",
-                                        "opsworks:DescribeInstances",
-                                        "opsworks:DescribeStacks",
-                                        "opsworks:UpdateApp",
-                                        "opsworks:UpdateStack"
-                                    ],
-                                    "Resource": "*",
-                                    "Effect": "Allow"
-                                },
-                                {
-                                    "Action": [
-                                        "cloudformation:CreateStack",
-                                        "cloudformation:DeleteStack",
-                                        "cloudformation:DescribeStacks",
-                                        "cloudformation:UpdateStack",
-                                        "cloudformation:CreateChangeSet",
-                                        "cloudformation:DeleteChangeSet",
-                                        "cloudformation:DescribeChangeSet",
-                                        "cloudformation:ExecuteChangeSet",
-                                        "cloudformation:SetStackPolicy",
-                                        "cloudformation:ValidateTemplate"
+                                        "cloudwatch:*"
                                     ],
                                     "Resource": "*",
                                     "Effect": "Allow"
@@ -843,45 +800,10 @@
                                         "codebuild:BatchGetBuilds",
                                         "codebuild:StartBuild"
                                     ],
-                                    "Resource": "*",
+                                    "Resource": [
+                                        { "Fn::GetAtt": [ "AppBuildProject", "Arn" ] }
+                                    ],
                                     "Effect": "Allow"
-                                },
-                                {
-                                    "Effect": "Allow",
-                                    "Action": [
-                                        "devicefarm:ListProjects",
-                                        "devicefarm:ListDevicePools",
-                                        "devicefarm:GetRun",
-                                        "devicefarm:GetUpload",
-                                        "devicefarm:CreateUpload",
-                                        "devicefarm:ScheduleRun"
-                                    ],
-                                    "Resource": "*"
-                                },
-                                {
-                                    "Effect": "Allow",
-                                    "Action": [
-                                        "servicecatalog:ListProvisioningArtifacts",
-                                        "servicecatalog:CreateProvisioningArtifact",
-                                        "servicecatalog:DescribeProvisioningArtifact",
-                                        "servicecatalog:DeleteProvisioningArtifact",
-                                        "servicecatalog:UpdateProduct"
-                                    ],
-                                    "Resource": "*"
-                                },
-                                {
-                                    "Effect": "Allow",
-                                    "Action": [
-                                        "cloudformation:ValidateTemplate"
-                                    ],
-                                    "Resource": "*"
-                                },
-                                {
-                                    "Effect": "Allow",
-                                    "Action": [
-                                        "ecr:DescribeImages"
-                                    ],
-                                    "Resource": "*"
                                 }
                             ],
                             "Version": "2012-10-17"

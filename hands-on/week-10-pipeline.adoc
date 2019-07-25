@@ -3,12 +3,12 @@
 
 :sectnums!:
 
-= SEIS 665 Week 10 Project: Infrastructure Pipeline Part II
+= SEIS 665 Week 10 Project: Software Delivery Pipeline
 Jason Baker <bake2352@stthomas.edu>
-1.0, 4/5/2018
+2.0, 7/21/2019
 
 == Overview
-Create an automated infrastructure pipeline using a Jenkinsfile.
+Create an automated software delivery pipeline using CodeCommit, CodeBuild, CodeDeploy and CodePipeline.
 
 == Requirements
 
@@ -20,124 +20,195 @@ Create an automated infrastructure pipeline using a Jenkinsfile.
 
 Let's get started!
 
-=== Launch Jenkins.
 
-Open up the CloudFormation web console and create a new Jenkins stack by specifying the following S3 URL:
+=== Java project setup
 
-  https://s3.amazonaws.com/seis665/jenkins-cf.json
+During one of the lecture hands-on segments we used GitHub and AWS CodeBuild to generate a build artifact for a very simple Java application. Let's expand on that exercise a bit in this class project. Instead of hosting the application source code in GitHub let's try using AWS CodeCommit, Amazon's managed git repository service. Also, let's use AWS CodePipeline to manage the build process.
 
-Recall these input parameters from a previous project:
+Okay, let's start begin building the pipeline!
 
-1. In *JenkinsUsername*, leave the value set to `admin`.
-2. In *JenkinsPassword*, set the value to your desired password.
+=== Create a CloudFormation template
 
-Look at the stack `Outputs` tab to get the IP address of the Jenkins server. You can log into the server using
-the following web address (Jenkins runs on port 8080:
+We always create infrastructure resources using code whenever possible and code repositories are no different. You should build a CloudFormation template to create all of the resources for this project including an S3 artifact bucket,  CodeCommit repository, CodeBuild project, and CodePipeline pipeline. Instead of starting from scratch, you can use the following template as a starting point:
 
-    http://<jenkins server IP>:8080
+  * https://seis665.s3.amazonaws.com/app-codebuild-template.json
+
+=== Create a CodeCommit repository
+
+One of the first resources you need to add to the CloudFormation template is a CodeCommit repository. You will use this as a git repository to host the Java application source code. You can use the following documentation to understand how to configure the repository resource:
+
+  * https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codecommit-repository.html
+
+Here are a couple helpful notes:
+
+  * Give the repository a simple name like `java-project`.
+  * A zipfile containing the source code for the Java project is located in S3. You can configure CloudFormation to automatically copy this source code into the repository during creation.
+      
+  * https://seis665.s3.amazonaws.com/java-project.zip
+
+=== Modify the CodeBuild project
+
+The CodeBuild project resource in the template you copied was configured to use a GitHub repository, not CodeCommit. You will need to modify this resource to work properly with CodeCommit. Here is CodeBuild resource CloudFormation documentation:
+
+  * https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html#cfn-codebuild-project-source
+
+There are a number of changes you need to make to the template to get the CodeBuild project connected to CodeCommit. Here are some hints:
+
+  * Since we are no longer using GitHub there's no reason to pass a projectUrl parameter into the template. We can pass the CodeCommit repository information to the CodeBuild project because both resources are defined in the same template.
+  * The `Source` property in the CodeBuild project tells the CodeBuild service where to find the application source code.
+  * The `ReportBuildStatus` property is not supported by CodeBuild projects using CodeCommit repositories.
+  * CodeCommit doesn't use webhooks to trigger CodeBuild projects.
+  * The CodePipeline project resource uses a custom IAM role to access other AWS services and resources. For example, the role allows the project to retrieve and store objects in an S3 artifact bucket. The role does not currently allow CodePipeline to pull source code from a CodeCommit repository. You can update the project role to allow this by adding the following policy statement to the role:
+
+----
+  {
+    "Sid": "CodeCommitPolicy",
+    "Effect": "Allow",
+    "Action": [
+      "codecommit:GitPull"
+    ],
+    "Resource": [
+      "*"
+    ]
+  }
+----
 
 
-=== Infrastructure Pipeline Setup
+Once you see a successful build and a new artifact uploaded into the S3 artifact bucket you are ready to continue working on the next stage of the project. If your build doesn't work, make note of the error message and try to figure out what is going on using your favorite search engine or troubleshooting sites like StackOverflow.
 
-A month ago we setup a basic infrastructure pipeline in Jenkins by creating a new pipeline project and
-manually entering Groovy code into the project configuration. This week you will create the same sort of 
-pipeline but using a Jenkinsfile to store the pipeline definition code. Additionally, you will store this 
-Jenkinsfile in a GitHub repository and setup Jenkins to automatically run the pipeline anytime a commit is 
-made to the repository. GitHub can trigger Jenkins using a webhook. 
+=== Test your template changes
 
-I recommend breaking this project down into the following steps:
+Now is a good time to test the changes you have made to the CloudFormation template. Create a new stack using your template and wait for it to create all of the resources. Access the CodeCommit web console to verify that a `java-project` repository exists and it contains a set of application source files. One of those files should be the `buildspec.yml` file.
 
-1. Create a new public GitHub repository in your personal account called `infrastructure-pipeline`.
+Next, go to the CodeBuild web console and verify that a build project exists. It should be configured to use your `java-project` repository as a build source. Go ahead and start a build to test the build process. Take a look at the build logs as the project is building. 
 
-2. Create a new Jenkins pipeline job called `infrastructure-pipeline`. Configure the new pipeline 
-job to use a pipeline script called `Jenkinsfile` located in the GitHub repository you 
-created (see lecture presentation p39). You won't need to provide access credentials for Jenkins to 
-access this repository because it's public. 
+=== Add a pipeline resource
 
-3. Add a file called `Jenkinsfile` to your repository. How should you do this? You could clone the 
-repository to your laptop, add the Jenkinsfile, and push the commit back up to GitHub. Another quick 
-way to add the file to your repository is to use GitHub's web file editor (https://help.github.com/articles/editing-files-in-your-repository/)
-Here's an example Jenkinsfile you can start with. 
+Our current stack built out a CodeBuild project which is able to retrieve source code from CodeCommit, build it, and generate an output artifact in S3. The build process we are simulating is super simple and generally real-world processes are much more complex. What if we had to combine a number of build processes together? We could do that by creating a pipeline.
 
-    pipeline {
-      agent { label 'linux' }
-        stages {
-          stage('Test') {
-            steps {
-              sh "env"
-            }
-          }
-        }   
-    }
+Let's add a CodePipeline pipeline resource to the template. You could either start creating this resource from scratch or you could copy code from one of the hands-on templates that we used during the lecture:
 
-4. Configure the Jenkins pipeline job to trigger builds based on a GitHub webhook (see lecture presentation p27).
+  * https://seis665.s3.amazonaws.com/app-codepipeline-template.json
 
-5. Configure the GitHub repository with a webhook pointing to your Jenkins server (see lecture 
-presentation p26). Make sure you have setup the Jenkins pipeline job before configuring the GitHub webhook.
+Here's the documentation for the `AWS::CodePipeline::Pipeline` resource:
 
-6. Manually run the build once. The job should automatically clone your repository and execute the pipeline 
-steps defined in the Jenkinsfile. From this point on, anytime you commit new changes to the repository the 
-job should automatically build. 
+  * https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-pipeline.html
 
-7. Create or modify a README.md file in your GitHub repository. Commit the file and verify that Jenkins 
-automatically builds the infrastructure-pipeline job.
+The build pipeline will have two stages. The first stage should be called `Source` and it will be configured to pull source code from the CodeCommit repository. The second stage should be called `Build` and it will take the source code and build it using CodeBuild. 
 
-Okay, you're all set to begin building the pipeline!
+Here are some hints:
 
-=== Create A Pipeline
+  * Most of the work in this part of the project involves setting up the source stage. If you copied the pipeline resource from the lecture template, you will have to change the source from GitHub to CodeCommit. This means that you have to change the `Owner`, `Provider`, and `Configuration` attributes. What values should you use for CodeCommit? The easiest way to figure this out is by looking at the following AWS documentation:
 
-Create a pipeline with two stages called `GetInstances` and `CreateInstance`. The GetInstances stage will 
-retrieve a list of instances in the us-east-1 region.  The CreateInstance stage will launch a new EC2 
-instance in your account. The EC2 instance should have the
-following characteristics:
+    ** https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#action-requirements
 
-    * Use the latest Amazon Linux 2 AMI 
-    * t2.micro instance type
-    * Your EC2 key pair name
-    * A valid security group ID associated with your default VPC
-    * A valid subnet ID associated with your default VPC
+  * The pipeline configuration references a special IAM service role to access other AWS services. Here's the configuration code I recommend using for the service role:
 
-An example `aws` CLI command to launch a new EC2 instance looks like:
 
-    aws ec2 run-instances --image-id ami-287dnf7 --count 1 --instance-type t2.micro --key-name seis665 --security-group-ids sg-7edf3108 --subnet-id subnet-0bbd366e --region us-east-1
+    "CodePipelineServiceRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+          "AssumeRolePolicyDocument": {
+              "Statement": [
+                  {
+                      "Action": [
+                          "sts:AssumeRole"
+                      ],
+                      "Effect": "Allow",
+                      "Principal": {
+                          "Service": [
+                              "codepipeline.amazonaws.com"
+                          ]
+                      }
+                  }
+              ]
+          },
+          "Path": "/service-role/",
+          "Policies": [
+              {
+                  "PolicyDocument": {
+                      "Statement": [
+                          {
+                              "Effect": "Allow",
+                              "Resource": [
+                                  {
+                                      "Fn::GetAtt": [
+                                          "ArtifactBucket",
+                                          "Arn"
+                                      ]
+                                  },
+                                  {"Fn::Join": [
+                                      "",
+                                      [
+                                          {
+                                              "Fn::GetAtt": [
+                                                  "ArtifactBucket",
+                                                  "Arn"
+                                              ]
+                                          },
+                                          "/*"
+                                      ]
+                                  ]}
+                              ],
+                              "Action": [
+                                  "s3:PutObject",
+                                  "s3:GetObject",
+                                  "s3:GetBucketAcl",
+                                  "s3:GetBucketLocation"
+                              ]
+                          },
+                          {
+                              "Action": [
+                                  "codecommit:CancelUploadArchive",
+                                  "codecommit:GetBranch",
+                                  "codecommit:GetCommit",
+                                  "codecommit:GetUploadArchiveStatus",
+                                  "codecommit:UploadArchive"
+                              ],
+                              "Resource": [
+                                  { "Fn::GetAtt": [ "JavaRepository", "Arn" ] }
+                              ],
+                              "Effect": "Allow"
+                          },
+                          {
+                              "Action": [
+                                  "codebuild:BatchGetBuilds",
+                                  "codebuild:StartBuild"
+                              ],
+                              "Resource": [
+                                  { "Fn::GetAtt": [ "AppBuildProject", "Arn" ] }
+                              ],
+                              "Effect": "Allow"
+                          }
+                      ],
+                      "Version": "2012-10-17"
+                  },
+                  "PolicyName": "ec2codedeploy"
+              }
+          ]
+      }
+  }
 
-Note, this example won't work in your pipeline and you will need to modify it for your environment.
+Update your stack with the new template code and try to trigger the pipeline (release change). You should see the source and build stages successfully complete if everything is configured correctly. If you encounter any failure, look at the log messages to try to determine the cause of the error. Oftentimes an error in the pipeline is caused by a permissions problem. 
 
-Here's some pipeline code to get you started:
+Congratulations! You have created a very basic software delivery pipeline.
 
-....
-stage ("GetInstances") {
-    steps {
-      sh "aws ec2 describe-instances --region us-east-1"
-    }
-}
-
-stage ("CreateInstance") {
-    steps {
-      // TODO
-    }
-}
-....
 
 === Super-sized task (optional)
 
-Add a third stage to your pipeline which automatically terminates the instance after it is running. 
+Sometimes we need to add a manual approval stage to a pipeline. For example, the pipeline may perform a series of automated tests and then need to pause while engineers perform some manual testing on the build artifacts. The pipeline execution will continue once it receives a manual approval.
 
-You will need two things to complete this task. The EC2 instance ID created by the AWS `run-instances` command. The `sh` command can return an output value which is assigned to a variable. What does this command look like? Take a look at the `sh` command options in the Jenkins Pipeline Syntax page. 
+Create a new pipeline stage called `ManualTest` after the build which triggers a manual approval process.
 
-The AWS CLI command is returning a JSON object. The `jq` command (https://stedolan.github.io/jq/) is available on 
-the build node to parse the JSON output. Here's an example of how to assign a shell command output to a variable:
 
-    def output = sh returnStdout: true, script: 'aws ec2 describe-instances | jq .'
+=== Double-Extra Super-sized task (optional)
 
-Once the pipeline launches the instance, you need to add a waiter. The purpose of a waiter is to 
-literally wait until a specified process completes. In this case, you want the pipeline to wait until
-the EC2 instance is running. Hint, check out the `aws ec2 wait` command.
+Configure the `ManualTest` pipeline stage to send you an email notification when an approval is required.
 
 
 === Show me your work
 
-Please show me your pipeline code.
+Please show me your CloudFormation template code and successful CodePipeline execution.
 
 === Terminate AWS resources
 
