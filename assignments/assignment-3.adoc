@@ -148,9 +148,7 @@ The next step is to launch a Linux instance using EC2.
 In previous assignments, you accepted all of the server launch defaults when launching a
 Linux instance. This time you will customize some of the launch settings by
 *configuring the instance details*. In particular,
-you will associate the S3-full-access role you created previously with the new instance. You
-can only associate an instance with a role when it's being launched for the first time. The role cannot
-be added to the instance configuration later.
+you will associate the S3-full-access role you created previously with the new instance.
 
 The server should have the following characteristics:
 
