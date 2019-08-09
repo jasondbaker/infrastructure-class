@@ -68,16 +68,16 @@ Lecture Schedule
 | 1    | Course Introduction, Distributed Infrastructure Patterns               |
 | 2    | Linux fundamentals, Package management, Shell scripting                |
 | 3    | Virtualization, Cloud computing, AWS Fundamentals (IAM/ EC2/ S3)       |
-| 4    | AWS Networking                                                         |
-| 5    | AWS Integration, Management & Security                                 |
+| 4    | AWS Networking, Databases, & Security                                  |
+| 5    | AWS Integration, Management & Cloud-native patterns                    |
 | 6    | DevOps Practices, Continuous Integration & Delivery                    |
 | 7    | Midterm Challenge                                                      |
 | 8    | Infrastructure as Code, AWS CloudFormation                             |
 | 9    | Configuration Management, Ansible                                      |
-| 10   | Software Delivery Pipelines                                            |
+| 10   | Software Delivery Pipelines, AWS CodePipline                           |
 | 11   | Containers, Docker                                                     |
-| 12   | Serverless Applications, AWS Lambda                                    |
-| 13   | Service discovery, Service orchestration                               |
+| 12   | Serverless Applications, AWS Lambda, DynamoDB, Kinesis                 |
+| 13   | Service discovery, Service orchestration, Fargate                      |
 | 14   | Final Challenge                                                        |
 
 License
