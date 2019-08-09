@@ -182,7 +182,7 @@ without the written permission of the instructor. (See Class Session Recording
 |=========================================================
 |Week | Date | Topic | Assignments Due
 
-|1 | 9/19 | Course Introduction +
+|1 | 9/9 | Course Introduction +
 Distributed Infrastructure Patterns |
 
 
