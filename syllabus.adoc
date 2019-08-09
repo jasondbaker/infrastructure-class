@@ -7,7 +7,7 @@ St. Paul, MN 55105
 
 [.text-center]
 *SYLLABUS Fall 2019 SEIS 665-01* +
-Version 2019.04.29
+Version 2019.08.08
 
 {blank}
 *[.underline]#Course Title#* +
@@ -201,13 +201,13 @@ Assignment 2 +
 Watch Lecture 3 video recordings 
 
 |4 | 9/30 | AWS +
-VPC, RDS, ELB |
+VPC, RDS, ELB, Security |
 Assignment 3 +
 Watch Lecture 4 video recordings 
 
 |5 | 10/7 | AWS +
-Autoscaling, Cloud Watch, Route53, +
-SQS, SNS, SES |
+AWS Integration, Management & +
+Cloud-native patterns |
 Assignment 4 +
 Watch Lecture 5 video recordings
 
