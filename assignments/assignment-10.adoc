@@ -5,7 +5,7 @@
 
 = SEIS 665 Assignment 10: Docker
 Jason Baker <bake2352@stthomas.edu>
-1.4, 11/17/2018
+1.5, 08/10/2019
 
 == Overview
 Containers are revolutionizing the way we package and deploy applications. Traditionally, we would install applications on bare metal hardware or virtual machines in our computing environment. We would have to carefully place applications on infrastructure to minimize conflicting requirements such as different versions of shared libraries. Containers let us partition applications and related dependencies on a shared computing platform.
@@ -18,25 +18,86 @@ You need to have a personal AWS account and GitHub account for this assignment.
 
 == The assignment
 
-Let's start shipping those containers!
+The assignment this week has many different requirements. It's not difficult if you break it down into smaller tasks, but you will have to carefully read these instructions and be persistent. Give yourself plenty of time to work on this assignment. Let's start shipping those containers!
+
+=== GitHub repository
+
+Start by creating your private GitHub repository for this assignment:
+
+  https://classroom.github.com/assignment-invitations/eeea11fb5604fd931c30393c935aba6b
+
+You will need to setup a GitHub personal access token in your account and store this token in a safe place. Later on in the assignment you will provide this token to CodePipeline so that it can download the application source code from your repository.
 
 === Build Image Pipeline
 
 It is a common practice to automate the building of Docker images using a CI/CD pipeline. 
-Launch a Jenkins stack in the us-east-1 region using the following template:
+Your pipeline will utilize four services: GitHub, CodePipeline, CodeBuild, and Elastic Container Registry (ECR). You will create a Docker container using a Python application and Dockerfile stored in your classroom GitHub repository. 
 
-  https://s3.amazonaws.com/seis665/jenkins-cf.json
+You will build a pipeline in CodePipeline which contains two stages. The first stage will pull the source code from your GitHub repository. CodePipeline will need GitHub credentials (personal access token) in order to access your private repository.
 
-Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/eeea11fb5604fd931c30393c935aba6b
+The second stage will use CodeBuild to setup the build environment, get a login from ECR, lint the Python application, build a Docker container, and push the Docker container to ECR. Whew, that sounds like a lot of work but each of these tasks only represent one or two commands. 
 
-Create a new Jenkins pipeline job called `docker-pipeline` and configure it to use a Jenkinsfile located in your
-Classroom repository. Note that since you are using a private repository for this assignment, you will need to enter
-GitHub credentials for the git configuration in the pipeline job. The pipeline job will use a personal access token to access your private GitHub repository and retrieve a Jenkinsfile. You can reference the lecture PowerPoint if you
-don't recall how to set this up.
+Of course we don't want to build the pipeline manually. Create a new CloudFormation template called `docker-build-template.json` containing all of the AWS resources needed to create the Docker build pipeline. You may want to use the following CloudFormation template as a starting point for your template:
+
+  https://s3.amazonaws.com/seis665/app-codepipeline-template.json
+
+If you use this template, note that we aren't going to use the AWS CodeDeploy service or any EC2 resources in this assignment so you can remove those resources from your template. 
+
+You will need to provide the CloudFormation stack with GitHub location information and credentials. I recommend using the following parameters to store this information: GitHubUsername, GitHubAccessToken, GitHubBranchName, GitHubRepositoryName.
+
+The pipeline will create a Docker image and push it into an ECR repository. Your template needs to create this ECR repository and name it `classweb`. Additionally, you will need to grant the CodeBuild service access to the new ECR repository so that it can push Docker images into it. You can enable this access by adding the following policy statements to the CodeBuild service role:
+
+  {
+      "Effect": "Allow",
+      "Resource": [
+          { "Fn::GetAtt": [ "DockerRepository", "Arn" ] }
+      ],
+      "Action": [
+          "ecr:GetRepositoryPolicy",
+          "ecr:ListImages",
+          "ecr:PutImage",
+          "ecr:UploadLayerPart",
+          "ecr:TagResource",
+          "ecr:InitiateLayerUpload",
+          "ecr:CompleteLayerUpload",
+          "ecr:GetAuthorizationToken",
+          "ecr:DescribeImages",
+          "ecr:DescribeRepositories",
+          "ecr:BatchCheckLayerAvailability"
+      ]
+  },
+  {
+      "Effect": "Allow",
+      "Resource": [
+          "*"
+      ],
+      "Action": [
+          "ecr:GetAuthorizationToken"
+      ]
+  }
+
+CodeBuild creates a build environment for the Python project. It should use the `aws/codebuild/standard:2.0` image along with the `docker: 18` and `python: 3.7` runtime versions (remember runtime versions are defined in a buildspec.yml file).
+
+We need to provide CodeBuild with the ECR repository URI in order for CodeBuild to tag and push new Docker images to it. How should we do this? Let's setup an environment variable in CodeBuild to inject this information into the build environment. Create an environment variable called `REPOSITORY_URI` with a value that looks like this format:
+
+  <AWS account ID>.dkr.ecr.<AWS region>.amazonaws.com/<ECR repository name>
+
+The items in angle-brackets should be substituted with appropriate values in your environment. For example, the resulting value string should look something like:
+
+  914710628553.dkr.ecr.us-east-1.amazonaws.com/docker-build-1bmrwbpnofkix
+
+The CodeBuild build environment is running inside of a Docker container. Normally you can't build a Docker container when running the build inside of a container. This becomes a little mind-bending like the movie Inception. However, you can tell CodeBuild that you would like to do this by enabling `PrivilegedMode` in the CodeBuild environment.
+
+When you eventually deploy your CloudFormation stack (we're getting a little ahead of ourselves), you will need to provide a GitHub personal access token so that CodePipeline can access your private repository. Remember, when you click on the GitHub classroom link for this assignment a private repository is automatically created for you. While you may have access to this repository, AWS won't have access. That's why you need to setup a personal access token.
+
+Also, when you provide CodePipeline with your GitHub username and repository name you might make the mistake of using your standard username. However, remember that GitHub classroom creates repositories in the `seis665` organizational account and not your personal GitHub account. You may have access to the repository but you aren't the owner.
+
+The GitHub username you will provide to CodePipeline is `seis665` and the GitHub repository name will look something like this: `assignment-10-docker-<username>`.
+
 
 === Python web application
 
-Let's start by creating a Python web application file in our GitHub repository. It's common to store our application source files and build pipeline files in the same repo. Create a Python web application file called `site.py` located in a sub-directory called `app` with the following contents (note: the spacing is importantq for linting purposes!):
+Let's setup a Python web application in our GitHub classroom repository. It's common to store our application source files and build pipeline files in the same repo. Create a simple Python web application file called `site.py` located in a sub-directory called `app` with the following contents (note: the spacing is important for linting purposes!):
 
 ----
 from flask import Flask
@@ -54,25 +115,42 @@ if __name__ == '__main__':
 
 Create a Python requirements file called `requirements.txt` in the same directory as the `site.py` file with the following contents:
 
-  Flask==1.0.2
+  Flask==1.1.2
+  flake8==3.7.8
 
-=== Application Pipeline
+=== Build stages
 
-Your Jenkinsfile will have three stages: `Linting`, `Build`, `Test`. The `Linting` stage will perform a linting static test on the Python application code. The `Build` stage will use a Dockerfile to build a new Docker image. The `Test` stage will create a new Docker container using the Docker image and test it to see if it is working properly. Finally, we will add a special `post` stage (it's not technically part of the `stages` block) which will delete the Docker container built during the pipeline run.
+The CodeBuild build stages are defined by a `buildspec.yml` file placed at the root directory of your repository. You can create this file from scratch or you can start with an existing file and edit it. For example, you can take a look at the `buildspec.yml` file from a repository used in our lecture:
 
-Let's look at the requirements for each of these stages.
+  https://github.com/seis665/python-project
 
-=== The Linting stage
 
-Lint the Python script files in your repository using the flake8 application. For example:
+The build process should have 4 phases: install, pre_build, build, and post_build. The required environment runtimes are configured in the install phase. This automatically installs the basic runtime dependencies needed during the build process.
 
-  flake8 <list of files>
+Let's look at the requirements for each of the additional phases.
 
-If you encounter a linting error, fix the error in the `site.py` script file and attempt to run the pipeline again. Don't build the other stages until the Python script cleanly lints. Be careful: the `flake8` command will fail silently if you give it a file or directory which doesn't exist. In other words, the pipeline won't necessarily fail at this stage if you configure this command incorrectly. 
+=== The pre_build phase
 
-=== The Build Stage
+The pre_build phase should perform the following tasks:
 
-The `Build` stage will use a Dockerfile to create a new container image called `classweb` with a tag equivalent to the job build number (remember this value is available in an environment variable). Here are the configuration requirements for the Docker image:
+  * Install the python application dependencies:
+    `pip install -r app/requirements.txt`
+
+  * Retrieve a login token for ECR. The Docker engine needs to have an access credential in order to push a new image into ECR -- which is basically a private Docker repository associated with your account. Use the following command to retrieve a login token:
+  `$(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)`
+
+  * Lint the Python script files in your repository using the flake8 linter. Remember that a linter performs static code analysis to validate the syntax and formatting of your code. It's really useful for quickly identifying common code errors and ensuring consistent coding standards across a team. Here is the command you should use to lint the application:
+  `flake8 app/*.py`
+
+If you encounter a linting error, fix the error in the `site.py` script file and attempt to run the pipeline again. 
+
+=== The build phase
+
+The build phase will use a Dockerfile and build command to create a new container image called `<ECR repository URI>` with a `latest` tag -- where the angle brackets are replaced with your actual ECR repository URI. The ECR respository URI is passed into the build environment using an environment variable named `REPOSITORY_URI`. Remember how we set that up in the CloudFormation template? You can use that environment variable in the build command to tag the image properly.
+
+Now in the real world we probably would give every image we build a unique tag -- like a sematic version number or a datestamp. We'll just take the easy route here and use the latest tag.
+
+You will need to create a Dockerfile in your repository to define the Docker image build. Here are the configuration requirements for the Docker image:
 
   * The new image must be based off the `ubuntu` image using the `xenial` version.
   * Set the maintainer of the image to your name and email address.
@@ -83,53 +161,27 @@ The `Build` stage will use a Dockerfile to create a new container image called `
   * From the `/app` directory in the container, run the following pip command: `pip install -r requirements.txt`
   * When a container is created, Docker *must always* run the command `python`. Additionally, the container will use `site.py` as a default optional argument to the `python` command.
 
-=== The Test Stage
+=== The post_build Stage
 
-The `Test` stage will validate that the Docker image was created properly. The pipeline should create a new container called `classweb1` using the image built in the previous stage. The container should have the following configuration settings:
+The post_build stage should push the new Docker image into ECR using the `docker push` command.
 
-  * The container should run in a detached (daemon) mode.
-  * The container should map port 8080 within the container to port 80 on the host server.
 
-After launching the container, the pipeline should test the container using the curl command. The container is running on the Jenkins slave node, so you should make an HTTP request to the local host.
+=== Testing your image
 
-  curl $(curl 169.254.169.254/latest/meta-data/local-ipv4) | grep "super"
+Congratulations! If you've gotten this far that means you were able to successfully publish a Docker image to ECR. How do you know if that image actually works properly? You can test it in a couple different ways.
 
-This command might look a little strange (notice the two curl commands). We're querying the EC2 instance
-meta-data to find the private IP address of the build node, and then making a curl request to this IP.
+If you have the Docker engine installed on your local Windows or Mac workstation, you could pull down the image from ECR and use it to run a container locally. The container is listening on port 8080 so you would need to open up a web browser and browse to `localhost:8080`. You should see a response from the web application if the container is working properly.
 
-=== The `post` Stage
+Note that in order to pull down the image you will need to log into ECR first using the AWS CLI (which also means you must have access keys configured on your machine):
 
-Oftentimes it's helpful to add a stage to the pipeline which always runs after all of the other stages have 
-completed -- even if one of those stages has failed. We can use this configuration to clean up any
-build artifacts remaining after the pipeline executes. For example, this pipeline creates a container
-called `classweb1`. If the pipeline doesn't remove this container after execution, subsequent builds
-will fail because the pipeline will try to create a container which already exists (maybe you already
-discovered this during your testing).
+  aws ecr get-login --region us-east-1 --no-include-email
 
-The `post` stage appears in its own block after the `stages` block in the pipeline:
+You could also launch an EC2 instance with the Docker engine installed on it, like the instance we used in class when learning Docker:
 
-----
-pipeline {
+  https://s3.amazonaws.com/seis665/docker-single-server.json
 
-  stages {
-  
-  }
-  
-  post {
-    always {
-      echo "code which should always run goes here"
-    }
-  }
-}
-----
+Note that this instance doesn't have access to ECR in order to pull down the Docker image. You would need to modify the instance profile of the EC2 instance in order to allow ECR access using something like the `arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly` policy.
 
-Add code to the `post` stage which will stop and remove the container created in the `Test` stage. Hint: The code should only 
-try to remove the container if it exists, otherwise this stage will generate an error. 
-
-=== Console Output
-
-Once you have the pipeline working properly, copy the console output from the last 
-successful build into a file called `console.txt` and check it into the GitHub repository.
 
 === Check your work
 
@@ -137,8 +189,8 @@ Here is what the contents of your git repository should look like before final s
 
 ====
 &#x2523; Dockerfile +
-&#x2523; Jenkinsfile +
-&#x2523; console.txt +
+&#x2523; buildspec.yml +
+&#x2523; docker-build-template.json +
 &#x2517; /app +
 &nbsp;&nbsp;&nbsp;&#x2523; site.py +
 &nbsp;&nbsp;&nbsp;&#x2523; requirements.txt +
