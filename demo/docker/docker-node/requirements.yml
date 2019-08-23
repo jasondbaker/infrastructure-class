@@ -1,0 +1,4 @@
+- src: tommarshall.awscli
+  name: awscli
+- src: geerlingguy.docker
+  name: docker
