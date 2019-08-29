@@ -1,0 +1,26 @@
+:doctype: article
+:blank: pass:[ +]
+
+:sectnums!:
+
+= SEIS 665 Week 6 Project: Telemetry
+Jason Baker <bake2352@stthomas.edu>
+1.0, 8/28/2019
+
+== Overview
+Telemetry plays a key role in every Devops organization. Teams rely on telemetry collection and analysis as a feedback mechanism to understand how a service is performing. As teams deploy code changes to a service, metrics allow teams to understand how these changes are impacting the service. 
+
+Nearly every modern application generates a set of application log data which describes application events and failures. Engineers review application logs when trying to diagnose service problems. In this week's project we will utilize a common ELK stack architecture to ingest and analyze log information from a server. 
+
+== Requirements
+
+  * AWS account.
+  * SSH terminal application.
+
+
+== The project
+
+Let's get started!
+
+=== Launch a CloudFormation template.
+
