@@ -1,41 +1,15 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
     "Parameters": {
-        "projectUrl": {
-            "Description": "Git project URL. (https://github.com/<your-name>/java-project.git)",
-            "Type": "String"
-        },
         "webami": {
             "Description": "Web server AMI.",
             "Type": "String",
             "Default": "ami-09a959de3eefe1112"
         },
-        "webtype": {
-            "Description": "Web server instance type",
-            "Type": "String",
-            "Default": "t3.micro"
-        },
         "asgsize": {
             "Description": "ASG size.",
             "Type": "String",
             "Default": "2"
-        },
-        "GitHubUsername": {
-            "Type": "String"
-        },
-        "GitHubAccessToken": {
-            "Type": "String",
-            "NoEcho": true
-        },
-        "GitHubBranchName": {
-            "Description": "GitHub branch name",
-            "Type": "String",
-            "Default": "master"
-        },
-        "GitHubRepositoryName": {
-            "Description": "GitHub repository name",
-            "Type": "String",
-            "Default": "python-project"
         },
         "KeyName": {
             "Description": "Name of your EC2 KeyPair to enable SSH access to the instances.",
@@ -50,8 +24,6 @@
           }
     },
     "Resources": {
-
-
 
         "Vpc": {
             "Type": "AWS::EC2::VPC",
@@ -194,6 +166,65 @@
             }
         },
 
+        "ESCluster": {
+            "Type": "AWS::Elasticsearch::Domain",
+            "DependsOn": ["ElasticUseraccessRole"],
+            "Properties": {
+                "DomainName": "webtest",
+                "ElasticsearchVersion": "6.8",
+                "ElasticsearchClusterConfig": {
+                    "InstanceCount": 1,
+                    "InstanceType": "t2.small.elasticsearch"
+                },
+                "EBSOptions":{
+                    "EBSEnabled":true,
+                    "Iops":0,
+                    "VolumeSize":20,
+                    "VolumeType":"gp2"
+                },
+                "AccessPolicies": {
+                    "Version": "2012-10-17",
+                    "Statement":[
+                        {
+                           "Effect":"Allow",
+                           "Principal":{
+                              "AWS": [
+                                  {"Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/elastic-useraccess-role"}
+                                ]
+                           },
+                           "Action": [
+                               "es:*"
+                           ],
+                           "Resource": {"Fn::Sub": "arn:aws:es:${AWS::Region}:${AWS::AccountId}:domain/webtest/*"}
+                        },
+                        {
+                            "Effect":"Allow",
+                            "Principal":{
+                               "AWS": ["*"]
+                            },
+                            "Action": [
+                                "es:*"
+                            ],
+                            "Condition": {
+                                "IpAddress": {
+                                  "aws:SourceIp": [
+                                    {"Ref": "YourIp"}
+                                  ]
+                                }
+                            },
+                            "Resource": {"Fn::Sub": "arn:aws:es:${AWS::Region}:${AWS::AccountId}:domain/webtest/*"}
+                         }
+                     ] 
+                },
+                "Tags": [
+                    {
+                        "Key": "project",
+                        "Value": "webtest"
+                    }
+                ]
+            }
+        },
+
         "ELB": {
             "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
             "Properties": {
@@ -286,7 +317,7 @@
             "Properties": {
                 "Roles": [
                     {
-                        "Ref": "WebInstanceRole"
+                        "Ref": "ElasticUseraccessRole"
                     }
                 ]
             }
@@ -302,9 +333,7 @@
                 "ImageId": {
                     "Ref": "webami"
                 },
-                "InstanceType": {
-                    "Ref": "webtype"
-                },
+                "InstanceType": "t3.small",
                 "KeyName": {
                     "Ref": "KeyName"
                 },
@@ -330,9 +359,10 @@
                 }
             }
         },
-        "WebInstanceRole": {
+        "ElasticUseraccessRole": {
             "Type": "AWS::IAM::Role",
             "Properties": {
+                "RoleName": "elastic-useraccess-role",
                 "AssumeRolePolicyDocument": {
                     "Statement": [
                         {
@@ -348,45 +378,21 @@
                         }
                     ]
                 },
-                "ManagedPolicyArns": [
-                    "arn:aws:iam::aws:policy/AWSCodeDeployFullAccess"
-                ],
                 "Policies": [
                     {
                         "PolicyDocument": {
                             "Statement": [
                                 {
                                     "Effect": "Allow",
-                                    "Resource": [
-                                        {
-                                            "Fn::GetAtt": [
-                                                "ArtifactBucket",
-                                                "Arn"
-                                            ]
-                                        },
-                                        {"Fn::Join": [
-                                            "",
-                                            [
-                                                {
-                                                    "Fn::GetAtt": [
-                                                        "ArtifactBucket",
-                                                        "Arn"
-                                                    ]
-                                                },
-                                                "/*"
-                                            ]
-                                        ]}
-                                    ],
+                                    "Resource": ["*"],
                                     "Action": [
-                                        "s3:GetObject",
-                                        "s3:GetBucketAcl",
-                                        "s3:GetBucketLocation"
+                                        "es:Http*"
                                     ]
                                 }
                             ],
                             "Version": "2012-10-17"
                         },
-                        "PolicyName": "ec2codedeploy"
+                        "PolicyName": "elastic-app-access"
                     }
                 ]
             }
@@ -398,10 +404,6 @@
         "ELBEndpoint": {
             "Description": "ELB DNS endpoint address",
             "Value": {"Fn::GetAtt": ["ELB", "DNSName"]}
-        },
-        "S3BucketDomain": {
-            "Description": "S3 bucket domain name",
-            "Value": {"Fn::GetAtt": ["ArtifactBucket", "DomainName"]}
         }
     }
 }
