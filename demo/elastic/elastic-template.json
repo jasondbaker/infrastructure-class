@@ -8,7 +8,7 @@
         "webami": {
             "Description": "Web server AMI.",
             "Type": "String",
-            "Default": "ami-026c8acd92718196b"
+            "Default": "ami-09a959de3eefe1112"
         },
         "webtype": {
             "Description": "Web server instance type",
