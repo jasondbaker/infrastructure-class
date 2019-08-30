@@ -2,3 +2,5 @@
   name: awscli
 - src: geerlingguy.java
   name: java
+- src: nginxinc.nginx
+  name: nginx
