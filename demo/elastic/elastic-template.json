@@ -341,22 +341,7 @@
                     {
                         "Ref": "WebserverSG"
                     }
-                ],
-                "UserData": {
-                    "Fn::Base64": {
-                        "Fn::Join": [
-                            "",
-                            [
-                                "#!/bin/bash -xe\n",
-                                "apt-get update -y\n",
-                                "apt-get install wget -y\n",
-                                "wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -\n",
-                                "echo \"deb https://artifacts.elastic.co/packages/6.x/apt stable main\" | sudo tee -a /etc/apt/sources.list.d/elastic-6.x.list\n",
-                                "sudo apt install logstash\n"
-                            ]
-                        ]
-                    }
-                }
+                ]
             }
         },
         "ElasticUseraccessRole": {
@@ -396,9 +381,25 @@
                     }
                 ]
             }
+        },
+
+        "LoadServer": {
+            "Type": "AWS::EC2::Instance",
+            "Properties" : {
+              "InstanceType": "t3.small",
+              "ImageId": {"Ref": "webami"},
+              "SubnetId": {"Ref": "PublicSubnet1"},
+              "KeyName": { "Ref": "KeyName" },
+              "SecurityGroupIds": [
+                { "Ref": "WebserverSG"}
+              ],
+              "Tags" : [
+                { "Key": "Name",
+                  "Value": "loadserver"
+                }
+              ]
+            }
         }
-
-
     },
     "Outputs": {
         "ELBEndpoint": {

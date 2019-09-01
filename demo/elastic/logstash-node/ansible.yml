@@ -12,7 +12,7 @@
       java_home: ""
   
   vars:
-    extra_path: /usr/share/logstash/bin
+    gatling_version: gatling-charts-highcharts-bundle-3.2.1
 
   tasks:
 
@@ -38,7 +38,8 @@
         'jq',
         'python3-pip',
         'python3',
-        'wget'
+        'wget',
+        'zip'
       ]
   
   - name: install any required python modules
@@ -57,8 +58,8 @@
           dest=/etc/environment
           state=present
           backrefs=yes
-          regexp='PATH=(["]*)((?!.*?{{extra_path}}).*?)(["]*)$'
-          line="PATH=\1\2:{{extra_path}}\3"
+          regexp='PATH=(["]*)((?!.*?/usr/share/logstash/bin).*?)(["]*)$'
+          line="PATH=\1\2:/usr/share/logstash/bin\3"
   
       - user:
           name: ubuntu
@@ -67,6 +68,26 @@
       
       - command: /usr/share/logstash/bin/logstash-plugin install logstash-output-amazon_es
   
+  - name: install gatling
+    block:
+      - get_url: 
+          url: https://repo1.maven.org/maven2/io/gatling/highcharts/gatling-charts-highcharts-bundle/3.2.1/{{gatling_version}}-bundle.zip
+          dest: /opt/{{gatling_version}}-bundle.zip
+      - file:
+          path: /opt/{{gatling_version}}
+          state: directory
+      - unarchive:
+          src: /opt/{{gatling_version}}-bundle.zip
+          dest: /opt/{{gatling_version}}
+      - command: rm /opt/{{gatling_version}}-bundle.zip
+
+      - lineinfile: >
+          dest=/etc/environment
+          state=present
+          backrefs=yes
+          regexp='PATH=(["]*)((?!.*?/opt/l{{gatling_version}}/bin).*?)(["]*)$'
+          line="PATH=\1\2:/opt/{{gatling_version}}/bin\3"
+      
   - name: configure systemd-timesyncd
     copy:
       src: /tmp/timesyncd.conf
