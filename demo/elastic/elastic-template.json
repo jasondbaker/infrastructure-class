@@ -4,7 +4,7 @@
         "webami": {
             "Description": "Web server AMI.",
             "Type": "String",
-            "Default": "ami-0339343dc6bb83930"
+            "Default": "ami-079812e07590598ca"
         },
         "asgsize": {
             "Description": "ASG size.",
