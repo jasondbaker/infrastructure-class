@@ -4,7 +4,7 @@
         "webami": {
             "Description": "Web server AMI.",
             "Type": "String",
-            "Default": "ami-090d7ba5db7b33713"
+            "Default": "ami-0339343dc6bb83930"
         },
         "asgsize": {
             "Description": "ASG size.",
@@ -46,7 +46,8 @@
                     "Ref": "Vpc"
                 },
                 "CidrBlock": "10.0.0.0/24",
-                "AvailabilityZone" : "us-east-1a"
+                "AvailabilityZone" : "us-east-1a",
+                "MapPublicIpOnLaunch": "True"
             }
         },
     
@@ -57,7 +58,8 @@
                     "Ref": "Vpc"
                 },
                 "CidrBlock": "10.0.1.0/24",
-                "AvailabilityZone" : "us-east-1b"
+                "AvailabilityZone" : "us-east-1b",
+                "MapPublicIpOnLaunch": "True"
             }
         },
 
@@ -397,7 +399,20 @@
                 { "Key": "Name",
                   "Value": "loadserver"
                 }
-              ]
+              ],
+              "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#!/bin/bash -xe\n",
+                                "# we don't need to run nginx or supervisor so stop them\n",
+                                "service nginx stop\n",
+                                "service supervisor stop\n"
+                            ]
+                        ]
+                    }
+                }
             }
         }
     },

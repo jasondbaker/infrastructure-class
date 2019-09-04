@@ -34,8 +34,10 @@
     apt:
       name: [
         'apt-transport-https',
-        'git', 
+        'git',
+        'gunicorn',
         'jq',
+        'supervisor',
         'python3-pip',
         'python3',
         'wget',
@@ -46,6 +48,38 @@
     pip:
       name:
         - boto3==1.9.48
+        - Flask==1.1.1
+
+  - name: install webapp
+    block:
+      - file:
+          path: /home/ubuntu/webapp
+          state: directory
+      - file:
+          path: /var/log/webapp
+          state: directory
+      - copy:
+          src: /tmp/app.py
+          dest: /home/ubuntu/webapp/app.py
+          owner: ubuntu
+          group: ubuntu
+          mode: 0644
+      - copy:
+          src: /tmp/webapp.conf
+          dest: /etc/supervisor/conf.d/webapp.conf
+          owner: root
+          group: root
+          mode: 0644
+      - command: supervisorctl reread
+      - service:
+          name: supervisor
+          state: restarted
+      - copy:
+          src: /tmp/nginx.conf
+          dest: /etc/nginx/conf.d/default.conf
+          owner: root
+          group: root
+          mode: 0644
 
   - name: install logstash
     block:
@@ -78,8 +112,19 @@
           state: directory
       - unarchive:
           src: /opt/{{gatling_version}}-bundle.zip
-          dest: /opt/{{gatling_version}}
+          dest: /opt
       - command: rm /opt/{{gatling_version}}-bundle.zip
+
+      - file:
+          path: /opt/{{gatling_version}}/user-files/simulations/webapp
+          state: directory
+
+      - copy:
+          src: /tmp/RecordedSimulation.scala
+          dest: /opt/{{gatling_version}}/user-files/simulations/webapp/RecordedSimulation.scala
+          owner: root
+          group: root
+          mode: 0644
 
       - lineinfile: >
           dest=/etc/environment
