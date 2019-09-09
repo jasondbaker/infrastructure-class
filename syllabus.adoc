@@ -72,9 +72,6 @@ _The DevOps Handbook: How to Create World-Class Agility, Reliability, and Securi
 _Infrastructure as Code_ by Kief Morris, 1st Edition. (ISBN: 9781491924358) +
 
 
-_AWS Certified Solutions Architect Official Study Guide_ +
-(ISBN: 9781119138556) +
-
 {blank}
 *[.underline]#Attendance Policy and Studying#*
 
