@@ -25,11 +25,7 @@ Let's get that code pipeline flowing!
 
 The first step in the assignment is to create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/874ccbb14cf1edafbdf104af22f7812f
 
-Next, copy the files and directories from the following repository into your new classroom private repository:
-
-  https://github.com/seis665/python-project
-
-How should you do this? One possible method is to clone the `python-project` repository and the classroom repository to your system, copy the python-project repository contents to your classroom repository directory, and push the classroom repository directory files back to GitHub. 
+When your classroom repository is setup, GitHub will automatically copy projects files into it from a template repository. 
 
 === Create a CloudFormation stack
 
