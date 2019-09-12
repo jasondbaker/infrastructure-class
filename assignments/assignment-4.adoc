@@ -1,5 +1,4 @@
-:doctype:
-article
+:doctype: article
 :blank: pass:[ +]
 
 :sectnums!:
