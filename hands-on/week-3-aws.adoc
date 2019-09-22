@@ -22,46 +22,48 @@ Let's get started!
 
 === Create an S3 bucket
 
-Create an S3 bucket in the us-east-1 region using whatever name you like. Create a prefix (folder) in the bucket called `images` and upload an image  file into it. You can select any sort of image you would like and you may have to download one from the Internet if nescessary. Configure S3 to store the image on Reduced Redundancy storage and in an encrypted (AES-256) format.
+Create an S3 bucket in the us-east-1 region using whatever name you like. Create a prefix (folder) in the bucket called `images` and upload an image file into it. You can select any sort of image you would like and you may have to download one from the Internet if nescessary. Configure S3 to store the image in the infrequently access storage class and in an encrypted (AES-256) format.
 
 
 === Create an EC2 instance
 
-Create an EC2 instance called `webtemplate` with the following properties:
+Create an EC2 instance called `web1` with the following properties:
 
 * t2.micro instance size
 * AWS Linux 2 AMI
 * us-east-1 region
 * 10GB root volume storage size
-* A `MyWebserver` security group with the following rules:
+* A `webserver-sg` security group with the following rules:
 
 ** Allow access to the instance from the Internet via SSH (port 22) and HTTP (port 80)
 
-You might notice after creating your security group that AWS adds an additional source to your rules with a funny looking syntax: `::/0`. This is the IPv6 (Internet Protocol version 6) representation of all the network addresses on the Internet. There's no need to remove or change this source.
+You might notice after creating your security group that AWS adds an additional source to your rules with a funny looking syntax: `::/0`. This is the IPv6 (Internet Protocol version 6) representation of all the network addresses on the Internet. There's no need to remove or change this source. IPv6 is a new form of Internet network addressing. We are running out of traditional IPv4 address space (entire countries like China have already exhausted all of their assigned addresses!) and IPv6 addresses will become the norm in the future.
 
-SSH into the new EC2 instance and update all the system packages (review previous lecture if you don't remember how to do this). Install the Nginx webserver software on the instance. Access the public IP address of the instance from a web browser to verify that the Nginx webserver is running properly.
+SSH into the new EC2 instance and update all of the system packages (review previous lecture if you don't remember how to do this). Install the Nginx webserver software on the instance and configure it to start automatically during the system boot. Access the public IP address of the instance from a web browser to verify that the Nginx webserver is running properly.
 
 === Create an AMI and New Instance
 
-Create an AMI based off the new EC2 instance you created above. Once the AMI is built, launch a new EC2 instance called `web1` using your new AMI. The properties of the new EC2 instance should be similar to the previous instance.
+Create an AMI based off the new EC2 instance you created above. Once the AMI is built, launch a second EC2 instance called `web2` using your new AMI. The properties of the new EC2 instance should be similar to the previous instance. Try to access the Nginx webserver running on this new instance using your web browser. If the webserver doesn't repond, check to make sure the service is running and the security group rules are configured properly.
 
-=== Create API Server
+=== Create an API Server
 
-Create a second EC2 instance called `apiserver` using the new AMI with the following properties: 
+Create a third EC2 instance called `apiserver` using the new AMI with the following properties: 
 
 * t2.micro instance size
 * AWS Linux 2 AMI
 * us-east-1 region
 * 10GB root volume storage size
-* MyAPIService security group with the following rules:
+* `apiservice-sg` security group with the following rules:
 
-** Allow access to the instance from MyWebserver security group via SSH (port 22), HTTP (port 80), and HTTPS (443).
+** Allow access to the instance from `webserver-sg` security group via SSH (port 22), HTTP (port 80), and HTTPS (443).
+
+Try to make a web request to the webserver running on the `apiserver`. How can you do this when the server isn't directly accessible via the Internet? You could log into `web1` or `web2` and initiate a web request using the `curl` text-based web browser. You would need to make a curl request to the private IP address of the `web3` server.
 
 === Extra super funtastic task (optional)
 
-Write a shell script called `server-properties.sh` located in your user home directory which queries the instance meta-data endpoint to retrieve the public IP address and security group of the instance. Write these values to a file called `server-data.txt` in the home directory. Upload this file into the S3 bucket you created earlier in this exercise.
+Write a shell script called `server-properties.sh` located in your user home directory which queries the instance meta-data endpoint to retrieve the public IP address and security group of the `web1` instance. The script should write these values to a file called `server-data.txt` in the home directory and upload this file into the S3 bucket you created earlier in this exercise.
 
-Hint: You can use the `aws s3 cp` command and a set of API credentials to copy files to S3.
+Hint: You can use the `aws s3 cp` command and a set of API credentials to copy files to S3. The best way to supply these credentials is to create an EC2 instance role which can access the S3 bucket. You can attach this IAM role to the `web1` instance.
 
 
 === Show me your work
