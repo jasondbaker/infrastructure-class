@@ -43,6 +43,10 @@ SSH into the new EC2 instance and update all of the system packages (review prev
 
  sudo amazon-linux-extras install nginx1.12 -y
  
+You can configure the Nginx software to start at boot time using `chkconfig`:
+
+  sudo chkconfig nginx on
+ 
 Access the public IP address of the instance from a web browser to verify that the Nginx webserver is running properly.
 
 === Create an AMI and New Instance
