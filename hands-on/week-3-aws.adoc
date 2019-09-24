@@ -54,7 +54,6 @@ Create an AMI based off the new EC2 instance you created above. Once the AMI is 
 Create a third EC2 instance called `apiserver` using the new AMI with the following properties: 
 
 * t2.micro instance size
-* AWS Linux 2 AMI
 * us-east-1 region
 * 10GB root volume storage size
 * `apiservice-sg` security group with the following rules:
