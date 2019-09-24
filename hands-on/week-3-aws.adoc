@@ -39,7 +39,11 @@ Create an EC2 instance called `web1` with the following properties:
 
 You might notice after creating your security group that AWS adds an additional source to your rules with a funny looking syntax: `::/0`. This is the IPv6 (Internet Protocol version 6) representation of all the network addresses on the Internet. There's no need to remove or change this source. IPv6 is a new form of Internet network addressing. We are running out of traditional IPv4 address space (entire countries like China have already exhausted all of their assigned addresses!) and IPv6 addresses will become the norm in the future.
 
-SSH into the new EC2 instance and update all of the system packages (review previous lecture if you don't remember how to do this). Install the Nginx webserver software on the instance and configure it to start automatically during the system boot. Access the public IP address of the instance from a web browser to verify that the Nginx webserver is running properly.
+SSH into the new EC2 instance and update all of the system packages (review previous lecture if you don't remember how to do this). Install the Nginx webserver software on the instance and configure it to start automatically during the system boot. You can install Nginx using the command:
+
+ sudo amazon-linux-extras install nginx1.12 -y
+ 
+Access the public IP address of the instance from a web browser to verify that the Nginx webserver is running properly.
 
 === Create an AMI and New Instance
 
