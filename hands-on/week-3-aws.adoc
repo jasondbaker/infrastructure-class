@@ -64,7 +64,7 @@ Create a third EC2 instance called `apiserver` using the new AMI with the follow
 
 ** Allow access to the instance from `webserver-sg` security group via SSH (port 22), HTTP (port 80), and HTTPS (443).
 
-Try to make a web request to the webserver running on the `apiserver`. How can you do this when the server isn't directly accessible via the Internet? You could log into `web1` or `web2` and initiate a web request using the `curl` text-based web browser. You would need to make a curl request to the private IP address of the `web3` server.
+Try to make a web request to the webserver running on the `apiserver`. How can you do this when the server isn't directly accessible via the Internet? You could log into `web1` or `web2` and initiate a web request using the `curl` text-based web browser. You would need to make a curl request to the private IP address of the `apiserver` server.
 
 === Extra super funtastic task (optional)
 
