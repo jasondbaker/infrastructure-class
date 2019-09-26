@@ -276,7 +276,7 @@ Try it out now by typing:
 Pretty cool, huh? You can do pretty much anything with this CLI. Let's use it
 now:
 
-  $ sudo aws s3 cp s3://<your S3 bucket name>/index.html html/index.html
+  $ sudo aws s3 cp s3://<your S3 bucket name>/index.html /usr/share/nginx/html/index.html
 
 .Example
 ----
