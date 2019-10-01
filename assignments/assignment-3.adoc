@@ -218,8 +218,6 @@ the public ip address of your Linux instance as the URL. Do you see the
 welcome page? If so, congratulations! You've built a web server -- the first of
 many in this course.
 
-image:../images/assignment3/welcome-page.png["600","600"]
-
 Don't panic if the welcome page doesn't appear in your browser. Part of the _joy_
 of working in IT is learning how to troubleshoot problems. Here are some things
 you can check:
