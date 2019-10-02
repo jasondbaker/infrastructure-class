@@ -195,28 +195,29 @@ methodically. You should be able to find the configuration error.
 
 === Connect to the private web server
 
-You were able to connect to the first web server but what about the second
-web server you launched in the private network? Well, it isn't accessible for
-two reasons. First, the second instance doesn't have a public IP address. Verify
+You were able to connect to the `webserver1` instance from your workstation but what about the `backend1`
+instance you launched in the private network? Well, it isn't accessible for
+two reasons. First, the `backend1` instance doesn't have a public IP address. Verify
 that by looking at the instance properties on the EC2 dashboard. Second, the
 instance is hosted within a subnet that doesn't have a route connected to
 an Internet Gateway.
 
-You should be able to access the `backend1` instance from one of the two public
+You should be able to communicate with the `backend1` instance from one of the two public
 webservers. Log into a public webserver and use the `curl` command to make a
 request to the webserver running on the `backend1` instance.
 
 The `backend1` instance may not be accessible from the Internet, but you
-should be able to access it from `webserver1` using this server as a bastion host.
+should be able to log into it from `webserver1` using this server as a bastion host.
 Basically you need to establish an ssh connection to `webserver1` and tunnel through
-this host to `backend1`.
+this host to `backend1`. In order to do this you need to configure the ssh agent service
+on your local workstation.
 
 ===== Windows Proxy Configuration
-The first step is to make sure the ssh-agent is running on your workstation. This is a small helper application which caches your ssh credentials for the ssh client in Git for Windows. Open up a Git bash shell and type in the command:
+If you have a Windows computer, the first step is to make sure the ssh-agent is running on your workstation. This is a small helper application which caches your ssh credentials for the ssh client provided by Git for Windows. Open up a Git bash shell and type in the command:
 
   eval $(ssh-agent -s)
 
-Next add your EC2 private key to the Mac keychain, replacing `server-key.pem` with your key name:
+Next add your EC2 private key to the agent, replacing `server-key.pem` with your key name:
 
   ssh-add server-key.pem
 
@@ -228,14 +229,17 @@ Note the use of the `-A` argument flag in this command. This argument tells ssh 
 look for your private server key in the keychain.
 
 Finally, once you have connected to `webserver1` you should be able to ssh into
-the `backend1` server:
+the `backend1` server by running this command on `webserver1`:
 
   ssh ec2-user@<backend1 private IP>
 
 ===== Mac Proxy configuration
-The first step is to add your EC2 private key to the Mac keychain:
+If you have a Mac computer, the first step is to add your EC2 private key to the Mac keychain:
 
   eval "$(ssh-agent -s)"
+  
+Next add your EC2 private key to the agent, replacing `server-key.pem` with your key name:
+
   ssh-add -K server-key.pem
 
 Next you can ssh to `webserver1` using the ssh command:
@@ -246,7 +250,7 @@ Note the use of the `-A` argument flag in this command. This argument tells ssh 
 look for your private server key in the keychain.
 
 Finally, once you have connected to `webserver1` you should be able to ssh into
-the `backend1` server:
+the `backend1` server by running this command on `webserver1`:
 
   ssh ec2-user@<backend1 private IP>
 
