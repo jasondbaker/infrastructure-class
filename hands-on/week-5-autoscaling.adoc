@@ -48,7 +48,7 @@ Create an Application Elastic Load Balancer with the following properties:
 
 * Listen on port 80 (http)
 * Perform a health check on port 80 to the URL endpoint: `/`
-* ELB is associated with the `eco-elb-sg` security group.
+* ELB is associated with the `ecolb-sg` security group.
   ** Allows port 80 (http) traffic from the Internet
 * Setup a target group called `ecotech-webservers`, but don't associate any EC2 instances
 with the target group.
@@ -59,7 +59,7 @@ Create an EC2 autoscaling group configuration called `ecotech-asg` which runs 3 
 creating the security group for the autoscaled instances first. Create a security group called `ecoweb-sg` with the
 following incoming traffic rules:
 
-* Incoming traffic on port 80 (http) from the `eco-elb-sg`.
+* Incoming traffic on port 80 (http) from the `ecolb-sg`.
 * Incoming traffic on port 22 (ssh) from your workstation (remember to use http://checkip.amazonaws.com).
  
 The autoscaling group should use a launch configuration with the following properties:
@@ -78,8 +78,8 @@ The autoscaling group should use a launch configuration with the following prope
   systemctl start nginx.service
 
 * The three instances should launch into public subnets in separate AZs.
-* The instances are associated with the existing `ecoweb-sg` security group called `ecoweb-sg`.
-* Enable load balancing on the group by associate the Autoscaling group with the `ecotech-webservers` target group.
+* The instances are associated with the existing `ecoweb-sg` security group.
+* Enable load balancing on the group by associating the Autoscaling group with the `ecotech-webservers` target group.
 
 Once you have created the autoscaling group, go to the EC2 console and watch AWS
 launch each of your webservers. Verify that the webservers are passing the ELB
