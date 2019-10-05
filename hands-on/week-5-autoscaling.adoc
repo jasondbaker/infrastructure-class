@@ -8,8 +8,7 @@ Jason Baker <bake2352@stthomas.edu>
 1.0, 2/24/2018
 
 == Overview
-Launch a CloudFormation template and review the resources created by the CloudFormation service. Create an infrastructure architecture which utilizes
-the EC2 autoscaling service.
+Create an infrastructure architecture which utilizes the EC2 autoscaling service.
 
 == Requirements
 
@@ -20,39 +19,6 @@ the EC2 autoscaling service.
 == The project
 
 Let's get started!
-
-=== Launch a CloudFormation template.
-
-Open up the CloudFormation web console and create a new stack by specifying the following S3 URL:
-
-  https://s3.amazonaws.com/seis665/docker-single-server.json
-
-
-The template will create a stack containing a number of AWS resources:
-
-* An AWS Virtual Private Cloud (VPC) including a subnet, routing table, routes, an Internet gateway, and a security group.
-
-* A single EC2 instance.
-
-After clicking on the launch link, click the *Next* link:
-
-On the stack *Specify Details* page, enter the following:
-
-1. In *Stack name*, the value should be `mystack`.
-2. In *Key Name*, select the name of your Amazon EC2 key pair.
-
-Click the *Next* button.
-
-On the *Options* page just click *Next*.
-
-On the *Review* page, review the settings. Finally, click the *Create* link.
-
-It will take a few minutes for CloudFormation to create the AWS resources for you. You can watch the progress messages on the *Events* tab in 
-the console. When the stack has been created, you will see a CREATE_COMPLETE message in the *Status* column of the console and on the 
-*Overview* tab.
-
-Review the stack outputs by looking at the resources in the `Outputs` tab. Take a look at the resources created by the template by going to the VPC web console and the EC2 web console. When you are finished reviewing
-the resources go ahead and delete the stack.
 
 === Autoscaling architecture
 
