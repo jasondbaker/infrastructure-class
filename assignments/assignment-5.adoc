@@ -36,7 +36,7 @@ You will build a VPC and set of AWS services which conforms to the service
 diagram below.
 image:../images/assignment5/diagram.png["600","600"]
 
-Start the assignment by creating a VPC named `productionVpc` in the `us-west-2 (Oregon)`
+Start the assignment by creating a VPC named `productionVpc` in the `us-west-1 (N. California)`
 region with a CIDR block of `10.0.0.0/16`. Note, we're using a different region than
 previous assignments! The VPC needs to have four subnets, each set of public and private subnets are located 
 in *separate* availability zones (your choice):
@@ -100,25 +100,23 @@ second security group:
       *** MySQL (3306) allowed from the web servers
 
 
-=== Create RDS database
+=== Create RDS database cluster
 
 Wordpress is a very popular Content Management System (CMS) and like most CMS
 systems it requires a database to persist content and user account information.
 We will use a MySQL database managed by the RDS service to support this
 database requirement.
 
-Go to the RDS dashboard on AWS and launch a new MySQL database instance. The
+Go to the RDS dashboard on AWS and launch a new MySQL database cluster. The
 launch wizard may ask you if you plan to use the instance for production (multi-instance) or
-development purposes. In this case, select the development option (single-instance). In a real
-production scenario you would want to use a database tier that supports
-multi-AZ deployments. A single lower-cost database instance is fine for this
-assignment.
+development purposes. In this case, select the production option (multi-instance). We want to deploy
+a primary and secondary database in multiple AZs.
 
-The MySQL instance should have the following properties:
+The MySQL cluster should have the following properties:
 
   * DB Engine Version = ~5.6 (most any recent release should work)
   * DB Class = db.t2.micro
-  * Multi-AZ deployment: No
+  * Multi-AZ deployment: Yes
   * Allocated Storage: 20GB
   * DB Instance Identifier: wordpressdb
   * Master Username: wpdbadmin
@@ -130,7 +128,7 @@ The MySQL instance should have the following properties:
   * VPC Security Group: production-db
   * Database Name: wordpress
 
-The MySQL database instance will take several minutes to launch. Once the
+The MySQL database cluster will take several minutes to launch. Once the
 instance is available, take a look at the instance properties and copy or
 write down the database endpoint address. The address will look something
 like this:
@@ -138,8 +136,7 @@ like this:
    wordpressdb.c4mwrq8d4std.us-east-1.rds.amazonaws.com
 
 You will need to know this database endpoint address when setting up the WordPress web
-application. Note that RDS will create the instance in one of the two private subnets. 
-It doesn't matter which private subnet is used. 
+application. 
 
 === Create an application load balancer
 
