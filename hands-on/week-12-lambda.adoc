@@ -84,7 +84,7 @@ We need to add the `--capabilities CAPABILITY_IAM` flag to the command because t
 
 You can log into the AWS CloudFormation web dashboard to watch the stack deployment. If the deployment fails, check out the stack events to determine the failure and fix your CloudFormation template. You will need to re-package and re-deploy your template again if you make any changes.
 
-image:../images/assignment1/serverless-pipeline.png["800","800"]
+image:../images/assignment11/serverless-pipeline.png["800","800"]
 
 === Push data into Kinesis stream
 
