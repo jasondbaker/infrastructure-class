@@ -25,11 +25,13 @@ Let's start consuming those Kinesis messages!
 
 === Setup project environment
 
-The assignment will use the same EC2 instance (ami-09ef51eee3a444c89) as our recent class project. Review the project again for details. You can continue to use the EC2 instance you created during the project or you can create a new one. If you skipped the class project, you will need to complete it before continuing work on this assignment. Note, while the work from the class project is required to complete this assignment successfully, only the additional resources added in this assignment will be graded.
+The assignment will use the same EC2 instance (ami-09ef51eee3a444c89) as our recent class project. Review the project again for details. You can continue to use the EC2 instance you created during the project or you can create a new one. *If you skipped the class project, you will need to complete it before continuing work on this assignment.* Note, while the work from the class project is required to complete this assignment successfully, only the additional resources added in this assignment will be graded.
 
 You should be able to shell into the EC2 instance and access the serverless application files. The `datapipe.yml` CloudFormation template should contain the two resources setup in the class project: a Lambda function and a Kinesis stream. 
 
 Our goal in this assignment is to extend the existing serverless application to store Kinesis message data in a DynamoDB table.
+
+image:../images/assignment11/serverless-pipeline-extended.png["800","800"]
 
 === Create DynamoDB table
 

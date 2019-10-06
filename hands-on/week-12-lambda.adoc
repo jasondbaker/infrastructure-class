@@ -84,6 +84,8 @@ We need to add the `--capabilities CAPABILITY_IAM` flag to the command because t
 
 You can log into the AWS CloudFormation web dashboard to watch the stack deployment. If the deployment fails, check out the stack events to determine the failure and fix your CloudFormation template. You will need to re-package and re-deploy your template again if you make any changes.
 
+image:../images/assignment1/serverless-pipeline.png["800","800"]
+
 === Push data into Kinesis stream
 
 Now we've arrived at the fun part of the project. We can use Kinesis streams to ingest large amounts of data into an application platform. The source of the data could be log events from servers, data collected from physical sensors, or messages from other application services running in our cloud environment. Each message ingested by a Kinesis stream is placed on a shard where it is stored for up to 24 hours. Stream consumers can read messages that are currently stored in shards. 
