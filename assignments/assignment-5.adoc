@@ -104,17 +104,18 @@ second security group:
 
 Wordpress is a very popular Content Management System (CMS) and like most CMS
 systems it requires a database to persist content and user account information.
-We will use a MySQL database managed by the RDS service to support this
+We will use a MariaDB database (MySQL opensource clone) managed by the RDS service to support this
 database requirement.
 
-Go to the RDS dashboard on AWS and launch a new MySQL database cluster. The
+Go to the RDS dashboard on AWS and launch a new MariaDB database cluster. The
 launch wizard may ask you if you plan to use the instance for production (multi-instance) or
 development purposes. In this case, select the production option (multi-instance). We want to deploy
 a primary and secondary database in multiple AZs.
 
-The MySQL cluster should have the following properties:
+The MariaDB cluster should have the following properties:
 
-  * DB Engine Version = ~5.6 (most any recent release should work)
+  * DB Engine Version = ~10.2.21 (most any recent release should work)
+  * Template: Dev/Test
   * DB Class = db.t2.micro
   * Multi-AZ deployment: Yes
   * Allocated Storage: 20GB
@@ -126,10 +127,10 @@ The MySQL cluster should have the following properties:
   * Publicly Accessible: No
   * Availability Zone: No Preference
   * VPC Security Group: production-db
-  * Database Name: wordpress
+  * Initial Database Name: wordpress
 
-The MySQL database cluster will take several minutes to launch. Once the
-instance is available, take a look at the instance properties and copy or
+The MariaDB database cluster will take several minutes to launch. Once the
+cluster is available, take a look at the cluster properties and copy or
 write down the database endpoint address. The address will look something
 like this:
 
@@ -161,7 +162,7 @@ proper subnets with this target group. The target group will remain empty for no
 === Create WordPress instance and AMI
 
 The next step is to create a custom AMI containing a basic WordPress installation.
-You will connect this installation to your MySQL database, and then store the
+You will connect this installation to your MariaDB database, and then store the
 completed configuration as an AMI. You can use the new AMI to create an auto scaling
 launch configuration.
 
@@ -176,9 +177,10 @@ Launch an EC2 instance with the following properties:
 
   #!/bin/bash
   yum update -y
-  yum install -y git httpd php php-mysqlnd
-  systemctl start httpd.service
-  chkconfig httpd on
+  amazon-linux-extras install -y lamp-mariadb10.2-php7.2 php7.2
+  yum install -y httpd
+  systemctl start httpd
+  systemctl enable httpd
 
 
   * Tag: Name = wordpress1
@@ -194,7 +196,7 @@ Once the instance is running, open a web browser on your desktop and browse
 to the public IP address of the new instance. You should see a test page
 appear in your browser. The user data script automatically updated the server
 and installed a number of basic components needed by Wordpress, including
-the Apache web server, PHP, and a MySQL library.
+the Apache web server, PHP, and a database library.
 
 Connect to the new instance using an ssh terminal program. Create a new directory
 in your home directory called `wpinstall` and create a git repository inside this
@@ -321,7 +323,7 @@ d) Modify the following line in the `wp-config.php` file to replace `localhost` 
 [WARNING]
 ====
 Note, in a production WordPress configuration you would never use
-the administrator username and password for your MySQL database. Instead you
+the administrator username and password for your MariaDB database. Instead you
 would create a database access account specifically for the WordPress
 application. In this case, we're just using the administrative account as
 a shortcut. Don't rely on this as a best practice!
@@ -565,7 +567,7 @@ files are properly stored on Github.
 The last step in the assignment is to delete the auto scaling group, launch
 configuration, EC2 instances, EC2 load balancer, AMI, EC2 snapshots, RDS database, and VPC. I'll leave
 this as an exercise for you to figure out how to complete. When deleting the
-RDS database instance, you don't need to save a copy of the database as a
+RDS database cluster, you don't need to save a copy of the database as a
 snapshot.
 
 Remember, you will
