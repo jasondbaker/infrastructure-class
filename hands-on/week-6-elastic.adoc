@@ -67,7 +67,7 @@ The input stage retrieves events from the system. These events are usually creat
 
 We'll start playing with Logstash by creating the simpliest possible pipeline. In this example, Logstash will use your keyboard input during the input stage, do nothing during the filter stage, and display the resulting message event on your console screen in the output stage.
 
-Log into one of the EC2 instances created by the stack using ssh. Note, these instances are using Ubuntu linux so you need to log in using the `ubuntu` user account.
+Log into one of the `webapp` EC2 instances created by the stack using ssh. Note, these instances are using Ubuntu linux so you need to log in using the `ubuntu` user account, *not* the `ec2-user` account.
 
 Create a text file called `logstash_basic.conf` in the current working directory containing the following text:
 
@@ -125,13 +125,15 @@ Then start up Logstash using this configuration file. You will likely see a stre
             "host" => "ip-10-0-0-44"
   }
 
-The CloudFormation stack you launched created an application load balancer. Go back to the Cloudformation dashboard and select your stack. Look at the `Outputs` tab to find the ELBEndpoint value. This is the web URL endpoint for the ALB. You could also find this value by looking in the Elastic Load Balancer dashboard. Open up a web browser and type in this load balancer endpoint address. Notice that as you make a web request to the server, your access request is logged and emitted as a message by Logstash.
+The CloudFormation stack you launched created an application load balancer. Go back to the Cloudformation dashboard and select your stack. Look at the `Outputs` tab to find the ELBEndpoint value. This is the web URL endpoint for the ALB. You could also find this value by looking in the Elastic Load Balancer dashboard. 
+
+Open up a web browser and type in this load balancer endpoint address. Watch your shell console window at the same time. Notice that as you make a web request to the server, your access request is logged and emitted as a message by Logstash.
 
 Stop the Logstash application before proceeding.
 
 === Filtering log messages
 
-The Logstash event message contains a field called `message` which contains the full Nginx log message. For example:
+The Logstash event message contains a field called `message` which contains the full Nginx log message. There's a lot of useful information packed in this field. For example:
 
   "message" => "10.0.0.217 - - [30/Aug/2019:21:01:15 +0000] \"GET /health HTTP/1.1\" 404 153 \"-\" \"ELB-HealthChecker/2.0\" \"-\""
 
@@ -183,7 +185,7 @@ Stop the Logstash application before proceeding.
 
 Elasticsearch uses the Elastic database to provide an extremely fast data indexing and search service. Logstash can use its event pipeline to output messages into Elasticsearch. In order to do that Logstash needs to use a special output plugin called `amazon_es`.
 
-Logstash needs to use AWS credentials to push data into Elasticsearch. We could store these credentials in the Logstash configuration file, but that wouldn't be a very good security practice. Instead we'll take advantage of an EC2 instance profile. When the EC2 instance was created by CloudFormation, a role was attached to the instance which grants access to the Elasticsearch service. We'll take advantage of this role when setting up the output plugin.
+Logstash needs to use AWS credentials to push data into Elasticsearch. We could store these credentials in the Logstash configuration file, but that wouldn't be a very good security practice. Instead we'll take advantage of an EC2 instance profile. When the `webapp` EC2 instance was created by CloudFormation, a role was attached to the instance which grants access to the Elasticsearch service. We'll take advantage of this role when setting up the output plugin.
 
 Let's modify the `logstash-nginx.conf` file again to update the output stage. Before modifying the file, you will need to look up the Elasticsearch service endpoint address. Go to the Elasticsearch dashboard and select the `webtest` domain. Copy the endpoint address (you shouldn't use the https:// part of the address in the pipeline configuration file). Your configuration file should look similar to the one below:
 
@@ -221,9 +223,9 @@ In this exercise, Kibana access is restricted to your IP address (remember provi
 
 You can find the Kibana web address for your Elasticsearch cluster by going to the Elasticsearch dashboard and selecting the `webtest` domain. Type this web address into a browser to open up the Kibana website. 
 
-The first thing you should do in Kibana is create an index pattern. Define a new index pattern called `access-logs-*`. Kibana should show you that your index pattern matches 1 index. This is good news because it means that data was successfully pushed from Logstash to Elasticsearch. You can also define a time filter field for your index. Using the `@timestamp` field makes sense. Finish creating the index pattern.
+The first thing you should do in Kibana is create an index pattern. Define a new index pattern called `access-logs-*`. Kibana should show you that your index pattern matches 1 index. This is good news because it means that data was successfully pushed from Logstash to Elasticsearch! You can also define a time filter field for your index. Using the `@timestamp` field makes sense. Finish creating the index pattern.
 
-Next, click on the `Discover` menu in Kibana. The discover dashboard allows you to quickly create adhoc queries. You can use this to discover new things about your data. Select the `request` field in the available fields list.  Notice how it gives you a quick breakdown of the top 5 values. These represent the requests that are being handled by the Nginx web server. Do you see any unusual requests? For example, you might see a request for something like `/index.php`. Your ELB and webserver is exposed to the Internet and any webserver connected to the Internet will receive random requests -- sometimes from bad actors probing your site for vulnerabilities. Always remember that from the moment your webserver is connected to the Internet it will be under constant attack.
+Next, click on the `Discover` menu in Kibana. The discover dashboard allows you to quickly create adhoc queries. You can use this to discover new things about your data. Select the `request` field in the available fields list.  Notice how it gives you a quick breakdown of the top 5 values. These represent the requests that are being handled by the Nginx web server. Most or all of the requests are going to the `/health` endpoint right now. Do you see any unusual requests? For example, you might see a request for something like `/index.php`. Your ELB and webserver is exposed to the Internet and any webserver connected to the Internet will receive random requests -- sometimes from bad actors probing your site for vulnerabilities. Always remember that from the moment your webserver is connected to the Internet it will be under constant attack.
 
 === Configure second web server
 
