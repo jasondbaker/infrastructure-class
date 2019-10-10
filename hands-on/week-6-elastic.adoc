@@ -225,30 +225,37 @@ You can find the Kibana web address for your Elasticsearch cluster by going to t
 
 The first thing you should do in Kibana is create an index pattern. Define a new index pattern called `access-logs-*`. Kibana should show you that your index pattern matches 1 index. This is good news because it means that data was successfully pushed from Logstash to Elasticsearch! You can also define a time filter field for your index. Using the `@timestamp` field makes sense. Finish creating the index pattern.
 
-Next, click on the `Discover` menu in Kibana. The discover dashboard allows you to quickly create adhoc queries. You can use this to discover new things about your data. Select the `request` field in the available fields list.  Notice how it gives you a quick breakdown of the top 5 values. These represent the requests that are being handled by the Nginx web server. Most or all of the requests are going to the `/health` endpoint right now. Do you see any unusual requests? For example, you might see a request for something like `/index.php`. Your ELB and webserver is exposed to the Internet and any webserver connected to the Internet will receive random requests -- sometimes from bad actors probing your site for vulnerabilities. Always remember that from the moment your webserver is connected to the Internet it will be under constant attack.
+Next, click on the `Discover` menu in Kibana. The discover dashboard allows you to quickly create adhoc queries. You can use this to discover new things about your data. There are several types of queries you can run in Kibana. Let's try a free-text query. Type the number `200` into the search field and click the `Update` button. You should see a set of messages appear which all contain the search value you entered.
+
+Now type `200 health` into the search field and click the `Update` button. This search will find all of the messages which contain `200` or `health`. Note that we could have explicitly defined this boolean search by typing `200 OR health`. We didn't have to include the `OR` keyword because it was implied by the space between our search terms.
+
+What if we wanted to search for a specific phrase? You can do that by enclosing the search terms in double-quotes like this: `"health HTTP"`. Try it now.
+
+We can also search for terms using specific fields. This is a much faster form of search because it does not require Elastic to perform a full index scan. A field search is performed by specifying a field-name and search value, separate by a colon: `field:value`. For example, type in this search expression: `request:health`.
+
+Okay, that's all you need to know about performing searches for now. Feel free to play with the search interface a little bit before moving on.
 
 === Configure second web server
 
-Use a new terminal console to log into the second `webapp` webserver. Create a `logstash-nginx.conf` on this server and configure it like the first webserver. Launch Logstash on the server using this configuration file. Now you should have Logstash running on two webservers collecting logs and forwarding messages to the Elasticsearch service.
+Use a new terminal console to log into the second `webapp` webserver. Create a `logstash-nginx.conf` on this server and configure it like the first webserver. Launch Logstash on the server using this configuration file. Now you should have Logstash running on two webservers collecting logs and forwarding messages to the Elasticsearch service. Keep both of these sessions open in separate terminals.
 
-You might be wondering what our website is doing. Let's try it out. You should be able to find the ELB endpoint address listed as one of the outputs in the CloudFormation stack. You could also find the address by going to the ELB dashboard. Enter this address in a web browser and access the site.
+You might be wondering what our website is doing. Let's try it out. You should be able to find the ELB endpoint address listed as one of the outputs in the CloudFormation stack. You can also find the address by going to the ELB dashboard. Enter this address in a web browser and access the site.
 
-The website simulates a very basic RESTful API. You are looking at the main (index) page. There are a couple other endpoints you can try:
+The website simulates a very basic REST-like API. You are looking at the main (index) page. There are a couple other endpoints you can try:
 
   http://<elb_endpoint>/Dumbledore
   http://<elb_endpoint>/data
   http://<elb_endpoint>/healthcheck
 
+Obviously this website and API are incredibly simple. We'll use this simple site to perform some load testing and log analysis.
 
 === Load simulation
 
-The webservers are receiving requests from your web browser, the ELB health checker, and possibly random Internet clients. Oftentimes we want to be able to simulate a number of web clients accessing a service for testing and analysis purposes. We call this placing a _load_ on the web service and this form of testing is called _load testing_ or _performance testing_.
+The webservers are eceiving requests from your web browser, the ELB health checker, and possibly random Internet clients. Oftentimes we want to be able to simulate a number of web clients accessing a service for testing and analysis purposes. We call this placing a _load_ on the web service and this form of testing is called _load testing_ or _performance testing_.
 
-We can use various tools and third-party services to perform load testing on a web service. We'll use a load generation application called Gatling for this purpose. Gatling can use a scripted plan (called a _scenario_) to simulate hundreds or thousands of web clients accessing the service. Typically you run a tool like Gatling on a separate server rather than on the same server as Nginx. That's because you don't want the execution of the load testing tool to impact the service being tested.
+We can use various tools and third-party services to perform load testing on a web service. We'll use a load generation application called Gatling for this purpose. Gatling can use a scripted plan (called a _scenario_) to simulate hundreds or thousands of web clients accessing the service. Typically you run a tool like Gatling on a separate server rather than on the webservers you are testing. That's because you don't want the execution of the load testing tool to impact the service being tested.
 
 Our CloudFormation stack created a separate EC2 instance named `loadserver` that we can use for load testing purposes. Open up a new terminal console and log into this instance. We will use the Gatling software to run a simulation.
-
-
 
   JAVA_OPTS="-Dendpoint=http://jasontest-alb-844427988.us-east-1.elb.amazonaws.com" gatling.sh
 
