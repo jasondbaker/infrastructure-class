@@ -24,9 +24,20 @@ Let's get started!
 
 === Launch a CloudFormation template.
 
-Open up the CloudFormation web console and create a new stack in us-east-1 by specifying the following S3 URL:
+We're going to get a little preview of CloudFormation, a tool we will learn much more about in a few weeks.
+CloudFormation allows us to quickly create sets of resources called stacks. Log into your AWS account and click on
+the link below:
 
-  https://s3.amazonaws.com/seis665/elastic-template.json
+  https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?templateURL=https://s3.amazonaws.com/seis665/elastic-template.json&stackName=ElasticStack&param_asgsize=2&param_webami=ami-079812e07590598ca
+
+
+You will see a quick create stack page showing the name of the stack and a list of
+input parameter values. Set the following parameter values:
+
+  * KeyName should be set to the name of your EC2 keypair.
+  * YourIp should be set to your workstation's IP address in x.x.x.x/32 CIDR notation (use checkip.amazonaws.com to verify)
+
+Select the checkbox next to *I acknowledge that AWS CloudFormation might create IAM resources with custom names.* Click the *Create Stack* button.
 
 
 The template will create a stack containing several resources:
@@ -38,15 +49,11 @@ an Internet gateway.
 
 * An application load balancer targeting a set of EC2 instances running the Nginx webserver.
 
-On the stack *Specify Details* page, take note of the following input parameters which you haven't encountered
-before:
-
-1. In *asgsize*, leave the value set to `2`.
-3. In *YourIp*, type in the value of your workstation's IP address in x.x.x.x/32 CIDR notation (use checkip.amazonaws.com to verify).
 
 It will take a few minutes for CloudFormation to create the AWS resources for you. You can watch the progress messages on the *Events* tab in 
-the console. When the stack has been created, you will see a CREATE_COMPLETE message in the *Status* column of the console and on the 
-*Overview* tab.
+the console. When the stack has been created, you will see a CREATE_COMPLETE message in the *Status* column of the console and on the *Overview* tab.
+
+image:../images/assignment6/Elastic-project.png["800","800"]
 
 === Working with Logstash
 
