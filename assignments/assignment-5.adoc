@@ -55,7 +55,7 @@ the Internet. You will need to configure the subnets and routing tables in the V
 allow this communication. How do you do this? You should be able to use the
 knowledge you gained from previous assignments to figure this out.
 
-=== Create Security Groups
+=== Create security groups
 
 While you are in the VPC dashboard, go ahead and create a couple security
 groups. You will need to use these security groups when launching services
@@ -102,7 +102,7 @@ second security group:
 
 === Create RDS database
 
-Wordpress is a very popular Content Management System (CMS) and like most CMS
+WordPress is a very popular Content Management System (CMS) and like most CMS
 systems it requires a database to persist content and user account information.
 We will use a MySQL database managed by the RDS service to support this
 database requirement.
@@ -116,8 +116,8 @@ assignment.
 
 The MySQL instance should have the following properties:
 
-  * DB Engine Version = ~5.6 (most any recent release should work)
-  * DB Class = db.t2.micro
+  * DB Engine Version: ~5.6 (most any recent release should work)
+  * DB Class: db.t2.micro
   * Multi-AZ deployment: No
   * Allocated Storage: 20GB
   * DB Instance Identifier: wordpressdb
@@ -149,7 +149,7 @@ to ensure that the service is highly available.
 
 Go to the EC2 dashboard and select the `Load Balancers` menu item. Create a
 new application load balancer called `wordpress-lb` that will distribute HTTP (port 80) requests across
-web servers located in both us-west subnets. The load
+web servers located in both us-west-2 public subnets. The load
 balancer should use `/wordpress/readme.html` as the health check ping path. You won't
 be able to associate any EC2 instances with the load balancer yet. That's not
 a problem since you can associate an instance with the load balancer later.
@@ -187,7 +187,7 @@ Launch an EC2 instance with the following properties:
   * Tag: Name = wordpress1
   * Security group: production-web
 
-Note, if this is the first time you are launching instances in the us-west region, AWS
+Note, if this is the first time you are launching instances in the us-west-2 region, AWS
 will likely prompt you to create a new set of SSH access keys. You should give this
 keypair a different name than your other keypair. Also, if you are running Putty on
 Windows you will need to use the Puttygen tool to create a private key that you can
@@ -196,7 +196,7 @@ import into Putty (see Assignment 2 video if you forgot how to do this step).
 Once the instance is running, open a web browser on your desktop and browse
 to the public IP address of the new instance. You should see a test page
 appear in your browser. The user data script automatically updated the server
-and installed a number of basic components needed by Wordpress, including
+and installed a number of basic components needed by WordPress, including
 the Apache web server, PHP, and a MySQL library.
 
 Connect to the new instance using an ssh terminal program. Create a new directory
@@ -268,7 +268,7 @@ script should perform all of the following tasks in the order below:
 
 {blank}
 
-*Step 1)* Download the latest Wordpress software to the instance using the `wget` command:
+*Step 1)* Download the latest WordPress software to the instance using the `wget` command:
 
   wget -O /var/www/html/wp.tar.gz https://wordpress.org/latest.tar.gz
 
@@ -278,7 +278,7 @@ data from a website, whereas `curl` may be used to upload data as well.
 
 {blank}
 
-*Step 2)* Now that the script has downloaded the latest version of the Wordpress software, it should unpack the software archive into the `/var/www/html/` directory using the `tar` command:
+*Step 2)* Now that the script has downloaded the latest version of the WordPress software, it should unpack the software archive into the `/var/www/html/` directory using the `tar` command:
 
   tar xf /var/www/html/wp.tar.gz -C /var/www/html/
 
@@ -286,15 +286,15 @@ A tar archive is kind of like the Linux version of a zip archive on a Windows sy
 
 {blank}
 
-*Step 3)* Remove the downloaded archive package (`wp.tar.gz`) from the /var/www/html directory.
+*Step 3)* Remove the downloaded archive package (`wp.tar.gz`) from the `/var/www/html/` directory.
 
 {blank}
 
 *Step 4)* The `tar` command extracted the contents of the software archive package into a new directory
-called `wordpress` within the `/var/www/html/` directory. Technically the Wordpress web application is installed in the website document root at this point. However, you need to configure the Wordpress software to communicate with your database instance before accessing the Wordpress site on the web server.
+called `wordpress` within the `/var/www/html/` directory. Technically the WordPress web application is installed in the website document root at this point. However, you need to configure the WordPress software to communicate with your database instance before accessing the WordPress site on the web server.
 
-Wordpress, like many software applications,
-is configured using a text file containing various application configuration settings. The Wordpress software files include
+WordPress, like many software applications,
+is configured using a text file containing various application configuration settings. The WordPress software files include
 a sample configuration file called `wp-config-sample.php`. Your script should copy this sample configuration file to another file in the same directory called `wp-config.php`.
 
 {blank}
@@ -333,7 +333,7 @@ a shortcut. Don't rely on this as a best practice!
 {blank}
 
 *Step 6)* Next, your script needs to make a change to the Apache web server configuration to improve
-the security of the Wordpress application. The change will allow `.htaccess`
+the security of the WordPress application. The change will allow `.htaccess`
 files to work properly. The proper `sed` command required in your script to make this change is a little tricky, so it is provided for you below:
 
   sed '/Directory \"\/var\/www\/html/,/AllowOverride None/s/AllowOverride None/AllowOverride All/' -i /etc/httpd/conf/httpd.conf
@@ -341,7 +341,7 @@ files to work properly. The proper `sed` command required in your script to make
 {blank}
 
 *Step 7)* The script will also need to make some changes to the file access permissions on the
-Wordpress directory because the application needs to be able to update local
+WordPress directory because the application needs to be able to update local
 files. The script should execute the following set of commands:
 
   groupadd www
@@ -373,7 +373,7 @@ balancer as the URL with the `/wordpress` path. For example:
 
   http://wordpressLB-2127306763.us-west-2.elb.amazonaws.com/wordpress
 
-You should see a Wordpress installation page.
+You should see a WordPress installation page.
 Congratulations! If you don't see the installation page, check to make sure
 that the instance status in the load balancer properties is set to _InService_.
 
@@ -399,9 +399,9 @@ You will be prompted to enter the master (administrative) password you setup on 
 
 ====
 
-=== Configure Wordpress server
+=== Configure WordPress server
 
-The next step of the process is to configure the Wordpress website settings.
+The next step of the process is to configure the WordPress website settings.
 Type in the following properties:
 
   * Site Title: My WordPress Site (or use anything you like, be creative!)
@@ -409,7 +409,7 @@ Type in the following properties:
   * Password: (make up a password)
   * Email: (your email address)
 
-Then click the install button to install the Wordpress website. Once the
+Then click the install button to install the WordPress website. Once the
 site is installed, you can enter your admin username and password to access
 the WordPress administrative console. Open up a new tab on your web browser
 and type in the public IP address of your EC2 instance along with the `/wordpress`
