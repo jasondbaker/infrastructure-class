@@ -36,7 +36,7 @@ You will build a VPC and set of AWS services which conforms to the service
 diagram below.
 image:../images/assignment5/diagram.png["600","600"]
 
-Start the assignment by creating a VPC named `productionVpc` in the `us-west-2 (Oregon)`
+Start the assignment by creating a VPC named `productionVPC` in the `us-west-2 (Oregon)`
 region with a CIDR block of `10.0.0.0/16`. Note, we're using a different region than
 previous assignments! The VPC needs to have four subnets, each set of public and private subnets are located 
 in *separate* availability zones (your choice):
@@ -50,7 +50,7 @@ will use the `10.0.2.0/25` network.
 * The `production-private-2` subnet
 will use the `10.0.2.128/25` network.
 
-All instances on the two production subnets will need to be able to communicate with
+All instances on the two public production subnets will need to be able to communicate with
 the Internet. You will need to configure the subnets and routing tables in the VPC to
 allow this communication. How do you do this? You should be able to use the
 knowledge you gained from previous assignments to figure this out.
