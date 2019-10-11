@@ -121,7 +121,7 @@ The MariaDB cluster should have the following properties:
   * Allocated Storage: 20GB
   * DB Instance Identifier: wordpressdb
   * Master Username: wpdbadmin
-  * Master Password: (choose a suitable password)
+  * Master Password: (warning: this password will be shared with the instructor so do not use one of your favorite passwords)
   * VPC: productionVPC
   * Subnet Group: Create a new DB Subnet Group which is associated with the two private subnets.
   * Publicly Accessible: No
@@ -188,9 +188,7 @@ Launch an EC2 instance with the following properties:
 
 Note, if this is the first time you are launching instances in the us-west region, AWS
 will likely prompt you to create a new set of SSH access keys. You should give this
-keypair a different name than your other keypair. Also, if you are running Putty on
-Windows you will need to use the Puttygen tool to create a private key that you can
-import into Putty (see Assignment 2 video if you forgot how to do this step).
+keypair a different name than your other keypair. 
 
 Once the instance is running, open a web browser on your desktop and browse
 to the public IP address of the new instance. You should see a test page
@@ -550,6 +548,11 @@ Here is what the contents of your git repository should look like before final s
 &#x2523; getdata.sh +
 &#x2523; wp-config.php +
 &#x2517; wordpress_install +
+====
+
+[WARNING]
+====
+You should never commit the wp-config.php file to a Git repository because this file may contain the database credentials for your wordpress application. In this case we are using Wordpress for learning and I need to be able to see the content of your wp-config.php file for grading purposes. 
 ====
 
 === Submit your work
