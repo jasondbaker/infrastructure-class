@@ -5,7 +5,7 @@
 
 = SEIS 665 Assignment 7: CloudFormation
 Jason Baker <bake2352@stthomas.edu>
-1.2, 4/1/2017
+2.0, 10/5/2019
 
 == Overview
 In our class we discussed how IT professionals now design and provision infrastructure using
@@ -84,7 +84,7 @@ The stack template should create the following logical resources:
     ** The VPC should have two public subnets called: *publicSubnet1* and *publicSubnet2*.
         *** publicSubnet1 has a CIDR block of 10.0.0.0/24
         *** publicSubnet2 has a CIDR block of 10.0.1.0/24
-    ** The subnets should be highly available.
+    ** The subnets should be deployed in an architecture which maximizes service availability.
   * Two EC2 instances with logical resource names of *web1* and *web2* with associated *Name* tags.
     ** web1 is located in the publicSubnet1 subnet.
     ** web2 is located in the publicSubnet2 subnet.
@@ -92,11 +92,15 @@ The stack template should create the following logical resources:
     ** The instance AMIs should use this public image: *ami-3ea13f29*
     ** The instance key-pairs are based on the KeyPair parameter.
   * A security group with a logical name and group name of *webserversSG* in the VPC.
-    ** Allow incoming requests on port 22 from your workstation (based on the YourIp parameter)
-    ** Allow incoming requests on port 80 from 0.0.0.0/0
+    ** Allow incoming requests on port 22 from your workstation (based on the YourIp parameter).
+    ** Allow incoming requests on port 80 from the engineeringlbSG.
   * An application load balancer named *engineeringLB* and target group named *engineeringWebservers*
     ** Load balance incoming requests on port 80 and send to instance port 80 using the http protocol.
     ** Load balancer health check via http on port 80 to the "/" url location.
+  * The ALB is associated with a security group called *engineeringlbSG*.
+    ** Allow incoming requests on port 80 from the Internet.
+
+image:../images/assignment7/cloudformation-diagram.png["800","800"]
 
 [NOTE]
 ====

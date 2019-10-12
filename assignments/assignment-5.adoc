@@ -36,7 +36,7 @@ You will build a VPC and set of AWS services which conforms to the service
 diagram below.
 image:../images/assignment5/diagram.png["600","600"]
 
-Start the assignment by creating a VPC named `productionVPC` in the `us-west-2 (Oregon)`
+Start the assignment by creating a VPC named `productionVPC` in the `us-west-1 (N. California)`
 region with a CIDR block of `10.0.0.0/16`. Note, we're using a different region than
 previous assignments! The VPC needs to have four subnets, each set of public and private subnets are located 
 in *separate* availability zones (your choice):
@@ -100,46 +100,44 @@ second security group:
       *** MySQL (3306) allowed from the web servers
 
 
-=== Create RDS database
+=== Create RDS database cluster
 
 WordPress is a very popular Content Management System (CMS) and like most CMS
 systems it requires a database to persist content and user account information.
-We will use a MySQL database managed by the RDS service to support this
+We will use a MariaDB database (MySQL opensource clone) managed by the RDS service to support this
 database requirement.
 
-Go to the RDS dashboard on AWS and launch a new MySQL database instance. The
+Go to the RDS dashboard on AWS and launch a new MariaDB database cluster. The
 launch wizard may ask you if you plan to use the instance for production (multi-instance) or
-development purposes. In this case, select the development option (single-instance). In a real
-production scenario you would want to use a database tier that supports
-multi-AZ deployments. A single lower-cost database instance is fine for this
-assignment.
+development purposes. In this case, select the production option (multi-instance). We want to deploy
+a primary and secondary database in multiple AZs.
 
-The MySQL instance should have the following properties:
+The MariaDB cluster should have the following properties:
 
-  * DB Engine Version: ~5.6 (most any recent release should work)
+  * DB Engine Version: ~10.2.21 (most any recent release should work)
+  * Template: Dev/Test
   * DB Class: db.t2.micro
-  * Multi-AZ deployment: No
+  * Multi-AZ deployment: Yes
   * Allocated Storage: 20GB
   * DB Instance Identifier: wordpressdb
   * Master Username: wpdbadmin
-  * Master Password: (choose a suitable password)
+  * Master Password: (warning: this password will be shared with the instructor so do not use one of your favorite passwords)
   * VPC: productionVPC
   * Subnet Group: Create a new DB Subnet Group which is associated with the two private subnets.
   * Publicly Accessible: No
   * Availability Zone: No Preference
   * VPC Security Group: production-db
-  * Database Name: wordpress
+  * Initial Database Name: wordpress
 
-The MySQL database instance will take several minutes to launch. Once the
-instance is available, take a look at the instance properties and copy or
+The MariaDB database cluster will take several minutes to launch. Once the
+cluster is available, take a look at the cluster properties and copy or
 write down the database endpoint address. The address will look something
 like this:
 
    wordpressdb.c4mwrq8d4std.us-east-1.rds.amazonaws.com
 
 You will need to know this database endpoint address when setting up the WordPress web
-application. Note that RDS will create the instance in one of the two private subnets. 
-It doesn't matter which private subnet is used. 
+application. 
 
 === Create an application load balancer
 
@@ -149,7 +147,7 @@ to ensure that the service is highly available.
 
 Go to the EC2 dashboard and select the `Load Balancers` menu item. Create a
 new application load balancer called `wordpress-lb` that will distribute HTTP (port 80) requests across
-web servers located in both us-west-2 public subnets. The load
+web servers located in both us-west-1 public subnets. The load
 balancer should use `/wordpress/readme.html` as the health check ping path. You won't
 be able to associate any EC2 instances with the load balancer yet. That's not
 a problem since you can associate an instance with the load balancer later.
@@ -164,7 +162,7 @@ proper subnets with this target group. The target group will remain empty for no
 === Create WordPress instance and AMI
 
 The next step is to create a custom AMI containing a basic WordPress installation.
-You will connect this installation to your MySQL database, and then store the
+You will connect this installation to your MariaDB database, and then store the
 completed configuration as an AMI. You can use the new AMI to create an auto scaling
 launch configuration.
 
@@ -179,25 +177,24 @@ Launch an EC2 instance with the following properties:
 
   #!/bin/bash
   yum update -y
-  yum install -y git httpd php php-mysqlnd
-  systemctl start httpd.service
-  chkconfig httpd on
+  amazon-linux-extras install -y lamp-mariadb10.2-php7.2 php7.2
+  yum install -y httpd
+  systemctl start httpd
+  systemctl enable httpd
 
 
   * Tag: Name = wordpress1
   * Security group: production-web
 
-Note, if this is the first time you are launching instances in the us-west-2 region, AWS
+Note, if this is the first time you are launching instances in the us-west-1 region, AWS
 will likely prompt you to create a new set of SSH access keys. You should give this
-keypair a different name than your other keypair. Also, if you are running Putty on
-Windows you will need to use the Puttygen tool to create a private key that you can
-import into Putty (see Assignment 2 video if you forgot how to do this step).
+keypair a different name than your other keypair. 
 
 Once the instance is running, open a web browser on your desktop and browse
 to the public IP address of the new instance. You should see a test page
 appear in your browser. The user data script automatically updated the server
 and installed a number of basic components needed by WordPress, including
-the Apache web server, PHP, and a MySQL library.
+the Apache web server, PHP, and a database library.
 
 Connect to the new instance using an ssh terminal program. Create a new directory
 in your home directory called `wpinstall` and create a git repository inside this
@@ -324,7 +321,7 @@ d) Modify the following line in the `wp-config.php` file to replace `localhost` 
 [WARNING]
 ====
 Note, in a production WordPress configuration you would never use
-the administrator username and password for your MySQL database. Instead you
+the administrator username and password for your MariaDB database. Instead you
 would create a database access account specifically for the WordPress
 application. In this case, we're just using the administrative account as
 a shortcut. Don't rely on this as a best practice!
@@ -371,7 +368,7 @@ balancer. Go to the `instances` property of your load balancer and
 Open up a web browser on your desktop and type in the DNS name of the load
 balancer as the URL with the `/wordpress` path. For example:
 
-  http://wordpressLB-2127306763.us-west-2.elb.amazonaws.com/wordpress
+  http://wordpressLB-2127306763.us-west-1.elb.amazonaws.com/wordpress
 
 You should see a WordPress installation page.
 Congratulations! If you don't see the installation page, check to make sure
@@ -383,7 +380,7 @@ If you encounter a *database connection error* when trying to view your wordpres
 
 Check to make sure the web server can communicate with the database instance. Run the following command from the webserver (substitute your RDS endpoint for the one in this example). If you don't see a "connection succeeded!" message then you should review the security group configuration for both your webserver and the RDS instance.
 
-    $ nc -zv wordpressdb.coqhf0zpvdaj.us-west-2.rds.amazonaws.com 3306
+    $ nc -zv wordpressdb.coqhf0zpvdaj.us-west-1.rds.amazonaws.com 3306
 
 Verify your login credentials on the database instance. If the web server is able to connect to the database instance and the wordpress application is unable to access the database, then the access credentials you entered into the wordpress configuration file are probably incorrect.
 
@@ -393,7 +390,7 @@ You can use the mysql client application to test the database credentials. Insta
 
 Next, log into your RDS instance using the following command (substituting your instance endpoint for the one in this example):
 
-    $ mysql -h wordpressdb.coqhf0zpvdaj.us-west-2.rds.amazonaws.com -P 3306 -u wpdbadmin -p
+    $ mysql -h wordpressdb.coqhf0zpvdaj.us-west-1.rds.amazonaws.com -P 3306 -u wpdbadmin -p
 
 You will be prompted to enter the master (administrative) password you setup on the RDS instance. If you receive an "access denied" error message, that means the username or password you are providing to the database server is incorrect. You will need to reset the master password on the RDS instance and try to connect with the mysql client again.
 
@@ -465,7 +462,7 @@ being launched in the EC2 dashboard. Once the instances are running, locate
 the DNS name of your load balancer and type it into your browser along with
 the `/wordpress` path. It should look something like:
 
-  http://wordpressLB-2127306763.us-west-2.elb.amazonaws.com/wordpress
+  http://wordpressLB-2127306763.us-west-1.elb.amazonaws.com/wordpress
 
 Type the load balancer DNS name into your web browser. You should see the
 Hello World page from your WordPress site. Hit the refresh button on your
@@ -521,7 +518,7 @@ IAM Role with the instance. Type in the following command:
 
 The CLI will prompt you for your API credentials. Your AWS user account has an Access Key and a Secret Key configured to allow you to programmatically access the AWS API. The keys are located in your account properties in IAM. If you do not know your secret key, you can use IAM to generate a new one since previously generated keys cannot be recovered. Note, this secret API is not the same as your private server key.
 
-The default region name for the AWS CLI configuration is: `us-west-2` and
+The default region name for the AWS CLI configuration is: `us-west-1` and
 select the `json` output format.
 
 Next, change to the `wpinstall` directory in your home directory.
@@ -553,6 +550,11 @@ Here is what the contents of your git repository should look like before final s
 &#x2517; wordpress_install +
 ====
 
+[WARNING]
+====
+You should never commit the wp-config.php file to a Git repository because this file may contain the database credentials for your wordpress application. In this case we are using Wordpress for learning and I need to be able to see the content of your wp-config.php file for grading purposes. 
+====
+
 === Submit your work
 
 Check each of the files to make sure the files contain data. Add all of the
@@ -568,7 +570,7 @@ files are properly stored on Github.
 The last step in the assignment is to delete the auto scaling group, launch
 configuration, EC2 instances, EC2 load balancer, AMI, EC2 snapshots, RDS database, and VPC. I'll leave
 this as an exercise for you to figure out how to complete. When deleting the
-RDS database instance, you don't need to save a copy of the database as a
+RDS database cluster, you don't need to save a copy of the database as a
 snapshot.
 
 Remember, you will

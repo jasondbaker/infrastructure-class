@@ -8,8 +8,7 @@ Jason Baker <bake2352@stthomas.edu>
 1.0, 2/24/2018
 
 == Overview
-Launch a CloudFormation template and review the resources created by the CloudFormation service. Create an infrastructure architecture which utilizes
-the EC2 autoscaling service.
+Create an infrastructure architecture which utilizes the EC2 autoscaling service.
 
 == Requirements
 
@@ -20,39 +19,6 @@ the EC2 autoscaling service.
 == The project
 
 Let's get started!
-
-=== Launch a CloudFormation template.
-
-Open up the CloudFormation web console and create a new stack by specifying the following S3 URL:
-
-  https://s3.amazonaws.com/seis665/docker-single-server.json
-
-
-The template will create a stack containing a number of AWS resources:
-
-* An AWS Virtual Private Cloud (VPC) including a subnet, routing table, routes, an Internet gateway, and a security group.
-
-* A single EC2 instance.
-
-After clicking on the launch link, click the *Next* link:
-
-On the stack *Specify Details* page, enter the following:
-
-1. In *Stack name*, the value should be `mystack`.
-2. In *Key Name*, select the name of your Amazon EC2 key pair.
-
-Click the *Next* button.
-
-On the *Options* page just click *Next*.
-
-On the *Review* page, review the settings. Finally, click the *Create* link.
-
-It will take a few minutes for CloudFormation to create the AWS resources for you. You can watch the progress messages on the *Events* tab in 
-the console. When the stack has been created, you will see a CREATE_COMPLETE message in the *Status* column of the console and on the 
-*Overview* tab.
-
-Review the stack outputs by looking at the resources in the `Outputs` tab. Take a look at the resources created by the template by going to the VPC web console and the EC2 web console. When you are finished reviewing
-the resources go ahead and delete the stack.
 
 === Autoscaling architecture
 
@@ -82,7 +48,7 @@ Create an Application Elastic Load Balancer with the following properties:
 
 * Listen on port 80 (http)
 * Perform a health check on port 80 to the URL endpoint: `/`
-* ELB is associated with the `eco-elb-sg` security group.
+* ELB is associated with the `ecolb-sg` security group.
   ** Allows port 80 (http) traffic from the Internet
 * Setup a target group called `ecotech-webservers`, but don't associate any EC2 instances
 with the target group.
@@ -93,7 +59,7 @@ Create an EC2 autoscaling group configuration called `ecotech-asg` which runs 3 
 creating the security group for the autoscaled instances first. Create a security group called `ecoweb-sg` with the
 following incoming traffic rules:
 
-* Incoming traffic on port 80 (http) from the `eco-elb-sg`.
+* Incoming traffic on port 80 (http) from the `ecolb-sg`.
 * Incoming traffic on port 22 (ssh) from your workstation (remember to use http://checkip.amazonaws.com).
  
 The autoscaling group should use a launch configuration with the following properties:
@@ -112,8 +78,8 @@ The autoscaling group should use a launch configuration with the following prope
   systemctl start nginx.service
 
 * The three instances should launch into public subnets in separate AZs.
-* The instances are associated with the existing `ecoweb-sg` security group called `ecoweb-sg`.
-* Enable load balancing on the group by associate the Autoscaling group with the `ecotech-webservers` target group.
+* The instances are associated with the existing `ecoweb-sg` security group.
+* Enable load balancing on the group by associating the Autoscaling group with the `ecotech-webservers` target group.
 
 Once you have created the autoscaling group, go to the EC2 console and watch AWS
 launch each of your webservers. Verify that the webservers are passing the ELB

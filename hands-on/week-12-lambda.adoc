@@ -5,7 +5,7 @@
 
 = SEIS 665 Week 12 Project: Serverless Data Pipeline
 Jason Baker <bake2352@stthomas.edu>
-1.0, 11/5/2018
+1.1, 10/5/2019
 
 == Overview
 Create a lambda function.
@@ -28,11 +28,11 @@ AWS uses S3 as a storage location for Lambda functions. Lambda functions are pac
 
 === Launch an EC2 instance
 
-Let's launch an EC2 instance containing some of the resources we will use to work on this project. Launch a public Amazon Linux 2 EC2 instance in us-east-1 using the following AMI:
+Let's launch an EC2 instance called `datagen1` containing some of the resources we will use to work on this project. Launch a public Amazon Linux 2 EC2 instance into the default VPC on us-east-1 using the following AMI:
 
   ami-09ef51eee3a444c89
 
-Shell into the new EC2 instance and change to a directory called `serverless-start`.
+The instance should be associated with a security group allowing ssh access from your workstation's IP address. Shell into the new EC2 instance and change to a directory called `serverless-start`.
 
 === Build a serverless template
 
@@ -83,6 +83,8 @@ We need to add the `--capabilities CAPABILITY_IAM` flag to the command because t
   aws cloudformation deploy --template-file packaged-datapipe.yml --capabilities CAPABILITY_IAM --stack-name datapipe
 
 You can log into the AWS CloudFormation web dashboard to watch the stack deployment. If the deployment fails, check out the stack events to determine the failure and fix your CloudFormation template. You will need to re-package and re-deploy your template again if you make any changes.
+
+image:../images/assignment11/serverless-pipeline.png["800","800"]
 
 === Push data into Kinesis stream
 
