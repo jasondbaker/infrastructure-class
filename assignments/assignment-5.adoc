@@ -68,6 +68,7 @@ requirements for the security group include:
 
   * production-elb
     ** Name tag: production-elb
+    ** Group name: production-elb
     ** Description: production load balancer
     ** VPC: productionVPC
     ** Inbound:
@@ -88,7 +89,7 @@ first security group:
       *** HTTP allowed from the Internet
 
 The second security group will allow only the web servers to communicate with
-the MySQL database instance using port 3306. Here are the requirements for the
+the MariaDB (MySQL) database instance using port 3306. Here are the requirements for the
 second security group:
 
   * production-db
@@ -107,17 +108,13 @@ systems it requires a database to persist content and user account information.
 We will use a MariaDB database (MySQL opensource clone) managed by the RDS service to support this
 database requirement.
 
-Go to the RDS dashboard on AWS and launch a new MariaDB database cluster. The
-launch wizard may ask you if you plan to use the instance for production (multi-instance) or
-development purposes. In this case, select the production option (multi-instance). We want to deploy
-a primary and secondary database in multiple AZs.
+Go to the RDS dashboard on AWS and launch a new MariaDB database cluster.
 
-The MariaDB cluster should have the following properties:
+The MariaDB instance should have the following properties:
 
   * DB Engine Version: ~10.2.21 (most any recent release should work)
-  * Template: Dev/Test
+  * Template: Free tier
   * DB Class: db.t2.micro
-  * Multi-AZ deployment: Yes
   * Allocated Storage: 20GB
   * DB Instance Identifier: wordpressdb
   * Master Username: wpdbadmin
@@ -170,7 +167,7 @@ Launch an EC2 instance with the following properties:
 
   * Amazon Linux AMI 2 64-bit
   * t2.micro
-  * Network: productionVpc
+  * Network: productionVPC
   * Subnet: production-public-1
   * Auto-assign public IP: Enable
   * User data (in Advanced section):
@@ -183,12 +180,14 @@ Launch an EC2 instance with the following properties:
   systemctl enable httpd
 
 
-  * Tag: Name = wordpress1
+  * Tag:
+  ** Key = Name
+  ** Value = wordpress1
   * Security group: production-web
 
 Note, if this is the first time you are launching instances in the us-west-1 region, AWS
 will likely prompt you to create a new set of SSH access keys. You should give this
-keypair a different name than your other keypair. 
+key pair a different name than your other key pair. 
 
 Once the instance is running, open a web browser on your desktop and browse
 to the public IP address of the new instance. You should see a test page
@@ -197,7 +196,7 @@ and installed a number of basic components needed by WordPress, including
 the Apache web server, PHP, and a database library.
 
 Connect to the new instance using an ssh terminal program. Create a new directory
-in your home directory called `wpinstall` and create a git repository inside this
+in your home directory called `wpinstall` and create a Git repository inside this
 new directory.
 
 === Using the sed command
@@ -296,7 +295,7 @@ a sample configuration file called `wp-config-sample.php`. Your script should co
 
 {blank}
 
-*Step 5)* Next, your script needs to modify the value of several configuration settings in the `wp-config.php` file. You learned how to use the `sed` command to update configuration values in the `database.conf` file earlier in this assignment. You should use the same technique here. Your script needs to configure the MySQL database access information in the `wp-config.php` configuration file by modifying values in four specific places:
+*Step 5)* Next, your script needs to modify the value of several configuration settings in the `wp-config.php` file. You learned how to use the `sed` command to update configuration values in the `database.conf` file earlier in this assignment. You should use the same technique here. Your script needs to configure the MariaDB database access information in the `wp-config.php` configuration file by modifying values in four specific places:
 
 a) Modify the following line in the `wp-config.php` file to replace `database_name_here` with the value `wordpress`:
 
@@ -309,11 +308,11 @@ b) Modify the following line to replace `username_here` with the `wpdbadmin` use
 
   define('DB_USER', 'username_here');
 
-c) Modify the following line in the `wp-config.php` file to replace `password_here` with the admin password value you entered when creating the MySQL database:
+c) Modify the following line in the `wp-config.php` file to replace `password_here` with the admin password value you entered when creating the MariaDB database:
 
   define('DB_PASSWORD', 'password_here');
 
-d) Modify the following line in the `wp-config.php` file to replace `localhost` with your MySQL RDS instance endpoint address:
+d) Modify the following line in the `wp-config.php` file to replace `localhost` with your MariaDB RDS instance endpoint address:
 
   define('DB_HOST', 'localhost');
 
@@ -362,8 +361,7 @@ fully qualified domain name associated with the private IP address of the server
 
 After creating and successfully executing the script, the WordPress site should now be accessible via a web browser. The site is configured to use your elastic load
 balancer, therefore you need to associate the EC2 instance with the load
-balancer. Go to the `instances` property of your load balancer and
-*edit* the instances to add the `wordpress1` server.
+balancer. Go to the target group for your load balancer and add the `wordpress1` server to your registered targets.
 
 Open up a web browser on your desktop and type in the DNS name of the load
 balancer as the URL with the `/wordpress` path. For example:
@@ -421,14 +419,14 @@ quiesce. After the instance stops, create an image based on the instance
 called `wordpressweb`. AWS will take a few minutes to build the new AMI. Make
 sure the AMI is configured to use hardware assisted virtualization.
 
-Go back to the load balancer properties and remove the instance from the
-load balancer.
+Go back to the target group and remove the instance from the
+target group's registered targets.
 
 === Create an Auto Scaling group
 
 The next step in the assignment is to create a launch configuration and auto
 scaling group. Select the `Launch Configuration` menu item and click on the
-button to create a new auto scaling group. Here are the properties for the
+button to create a new launch configuration. Here are the properties for the
 new launch configuration:
 
   * AMI: wordpressweb (located in your personal AMI listing)
@@ -441,7 +439,7 @@ The auto scaling group should have the following properties:
 
   * Group name: wordpress-web-group
   * Group size: 2
-  * Network: productionVpc
+  * Network: productionVPC
   * Subnets: production-public-1 & production-public-2
   * Receive traffic from Elastic Load Balancers: Enabled
     ** Select the `production-webservers` target group
@@ -506,7 +504,7 @@ way to solve this issue for new implementations.
 
 === Collecting session data
 
-Connect to your original web server instance using a terminal program. In assignment
+Connect to your original web server instance using a terminal program. (You may need to start the instance because we stopped it to create the AMI earlier.) In assignment
 4, you used the AWS command line interface to interact with S3. Let's use the
 same CLI to pull some event information from the EC2 auto scaling service.
 
@@ -516,7 +514,7 @@ IAM Role with the instance. Type in the following command:
 
   $ aws configure
 
-The CLI will prompt you for your API credentials. Your AWS user account has an Access Key and a Secret Key configured to allow you to programmatically access the AWS API. The keys are located in your account properties in IAM. If you do not know your secret key, you can use IAM to generate a new one since previously generated keys cannot be recovered. Note, this secret API is not the same as your private server key.
+The CLI will prompt you for your API credentials. Your AWS user account has an Access Key and a Secret Key configured to allow you to programmatically access the AWS API. The keys are located in your account properties in IAM. If you do not know your secret key, you can use IAM to generate a new one since previously generated keys cannot be recovered. Note, this secret API key is not the same as your private server key.
 
 The default region name for the AWS CLI configuration is: `us-west-1` and
 select the `json` output format.
@@ -538,6 +536,8 @@ Create a small bash script called `getdata.sh` which performs the following:
   * Copies the `/var/log/httpd/access_log` file to the current directory into
   a file with the same name
 
+Execute `getdata.sh`.
+
 === Check your work
 Here is what the contents of your Git repository should look like before final submission:
 
@@ -546,8 +546,8 @@ Here is what the contents of your Git repository should look like before final s
 &#x2523; activity.json +
 &#x2523; database.conf +
 &#x2523; getdata.sh +
-&#x2523; wp-config.php +
-&#x2517; wordpress_install +
+&#x2523; wordpress_install +
+&#x2517; wp-config.php +
 ====
 
 [WARNING]
@@ -563,7 +563,7 @@ files to the Git repository and commit your work.
 Finally, create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/27135615bd2442d325b1d44fc3cbc568
 
 Associate your local repository with this new GitHub repo and push the local master branch from your repository up to GitHub. Verify that your
-files are properly stored on Github.
+files are properly stored on GitHub.
 
 === Terminate server
 
