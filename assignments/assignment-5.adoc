@@ -309,7 +309,7 @@ b) Modify the following line to replace `username_here` with the `wpdbadmin` use
 
   define('DB_USER', 'username_here');
 
-c) Modify the following line in the `wp-config.php` file to replace `password_here` with the admin password value you entered when creating the Mysql database:
+c) Modify the following line in the `wp-config.php` file to replace `password_here` with the admin password value you entered when creating the MySQL database:
 
   define('DB_PASSWORD', 'password_here');
 
@@ -457,7 +457,7 @@ that means either the launch configuration settings or the auto scaling group
 settings are incorrect. You may need to delete the new launch configuration and
 scaling group to build the configuration again.
 
-If the auto scaling process is working properly you should see two new instanced
+If the auto scaling process is working properly you should see two new instances
 being launched in the EC2 dashboard. Once the instances are running, locate
 the DNS name of your load balancer and type it into your browser along with
 the `/wordpress` path. It should look something like:
@@ -530,16 +530,16 @@ Type in the following command to view all the autoscaling activities and copy th
 Take a look at the contents of the `activity.json` file. You should see a long text output including a list of activities with each
 having a Description, ActivityId, StartTime, etc.
 
-Create a small batch script called `getdata.sh` which performs the following:
+Create a small bash script called `getdata.sh` which performs the following:
 
-  * Copies the /var/www/html/wordpress/wp-config.php file to the current directory into
+  * Copies the `/var/www/html/wordpress/wp-config.php` file to the current directory into
   a file with the same name.
 
-  * Copies the /var/log/httpd/access_log file to the current directory into
+  * Copies the `/var/log/httpd/access_log` file to the current directory into
   a file with the same name
 
 === Check your work
-Here is what the contents of your git repository should look like before final submission:
+Here is what the contents of your Git repository should look like before final submission:
 
 ====
 &#x2523; access_log +
