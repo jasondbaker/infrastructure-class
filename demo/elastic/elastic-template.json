@@ -435,7 +435,7 @@
                                 "# we need to reinstall nginx\n",
                                 "service nginx stop\n",
                                 "apt-get purge nginx -y\n",
-                                "apt-get isntall nginx -y\n",
+                                "apt-get install nginx -y\n",
                                 "service nginx start\n"
                             ]
                         ]
