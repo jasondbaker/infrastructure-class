@@ -261,7 +261,46 @@ Run the following command, substituting your ALB endpoint address for the one in
 
   JAVA_OPTS="-Dendpoint=http://elasticproject-alb-844427988.us-east-1.elb.amazonaws.com" gatling.sh
 
-Gatling will take a little while to start as the JVM loads up. Once it is running it will present you with a set of simulations it can run. Select the `webapp.RecordedSimulation`.
+Gatling will take a little while to start as the JVM loads up. Once it is running it will present you with a set of simulations it can run. Select the `webapp.RecordedSimulation`. You don't need to add a simulation description.
 
-Gatling will generate thousands of web requests simulating hundreds of users accessing the web API application. The _watiting_ statistic shows the number of users waiting to access the API. The _active_ statistic describes the number of active users currently making requests. The increasing bar graph at the bottom shows how much of the simulation has been completed.
+Once Gatling starts running you will start to see statistics scroll down the screen. What's going on here?
 
+Gatling is generating thousands of web requests simulating hundreds of users accessing your web API application. The simulation is using two different types of users separated into Group1 and Group2. Each group is performing a slightly different set of requests.
+
+The _Requests_ list shows the types and numbers of requests that are being performed. Next to each group name is a bar graph showing the progress of the simulation for that particular group. Once the bar reaches 100% the simulations for the group are complete.
+
+The _watiting_ statistic shows the number of users waiting to join the simulation. The _active_ statistic describes the number of active users currently making requests to the web API. The _done_ statistic shows the number of users which have completed the simulation.
+
+=== Data analysis
+
+Once the simulation completes (in about 5 minutes) you will see a summary of the test results. Note the number of requests/second (~60) and the average latency (likely single-digit milliseconds!). Gatling will also produce a pretty web report for us. You need to copy this web report to the webserver home directory (substitute your report path for the one in the example below):
+
+  sudo cp -R /opt/gatling-charts-highcharts-bundle-3.2.1/results/recordedsimulation-20191013163048255/* /usr/share/nginx/html/
+
+Open up the report by browsing to the public IP address of the `loadserver` instance. Look at the charts on both the _Global_ and _Details_ report tabs. Do you see any interesting data trends? Look closely at the response time distribution and the response time percentiles over time. 
+
+Next, go to your Kibana instance and take a look at the data in the _Discovery_ menu. You can use your mouse to select a time interval in the chart and zoom in on the data. Try to answer the following questions:
+
+  * How many total requests were recorded during load testing?
+  * How many requests were handled by the /data API endpoint?
+  * How many times did uses requests information on Alicia?
+  * How many requests generated an HTTP 404 error?
+
+
+=== Extra superfabulous task (optional)
+
+Gatling uses the Scala programming language to define simulations. This language is pretty straightforward to use once you understand some of the basic conventions. 
+
+Modify the simulation code to add a new group called `Group3` which executes only the 
+`GetData` requests and which simulates 50 constant users per second for 30 seconds.
+
+The simulation script is located in the following file on the `loadserver` instance:
+
+  /opt/gatling-charts-highcharts-bundle-3.2.1/user-files/simulations/webapp/RecordedSimulation.scala
+
+
+=== Cleaning up
+
+You should delete all the AWS resources after you have completed this project because the cost of these resources will begin to add up over time. In previous projects and assignments you had to manually delete resources -- a tedious and mistake-prone process. Since we launched all of the resources using a CloudFormation stack, we can also delete the resources using CloudFormation. 
+
+Go to the CloudFormation web console and select the stack you created for this project. Click the `Delete` button to delete the stack and all of its resources. That's it!

@@ -24,10 +24,8 @@ class RecordedSimulation extends Simulation {
 
         val headers_1 = Map("Accept" -> "image/webp,*/*")
 
-
-
-        val scn = scenario("RecordedSimulation")
-                .exec(_.set("times", times))
+        object GetNames1 {
+            val getnames = exec(_.set("times", times))
                 .repeat("${times.random()}")(
                         exec(http("request_Suri")
                                 .get("/")
@@ -48,26 +46,48 @@ class RecordedSimulation extends Simulation {
                         .get("/Mark")
                         .headers(headers_0))
                 .pause(1, 5)
-                .exec(http("request_Alicia")
-                        .get("/Alicia")
-                        .headers(headers_0))
+        }
+
+        object GetNames2 {
+            val getnames = exec(http("request_Alicia")
+                .get("/Alicia")
+                .headers(headers_0))
                 .pause(1, 5)
                 .exec(http("request_Toni")
-                        .get("/Toni")
-                        .headers(headers_0))
+                    .get("/Toni")
+                    .headers(headers_0))
                 .pause(1, 5)
                 .exec(http("request_Roberto")
-                        .get("/Roberto")
-                        .headers(headers_0))
+                    .get("/Roberto")
+                    .headers(headers_0))
                 .pause(1, 5)
-                .repeat(30)(
+        }
+
+        object GetData {
+            val getdata = repeat(30)(
                     exec(http("data_request")
                         .get("/data")
                         .headers(headers_0))
                     .pause(1, 5)
                 )
+        }
+        object BadRequest {
+            val badrequest = exec(http("request_error")
+                .get("/data/data")
+                .headers(headers_0)
+                .check(
+                        status.is(404)
+                ))
+                .pause(1, 5)
+        }
+
+        val group1 = scenario("Group1").exec(GetNames1.getnames, GetData.getdata)
+        val group2 = scenario("Group2").exec(GetNames2.getnames, GetData.getdata, BadRequest.badrequest)
+
+                
 
         setUp(
-            scn.inject(rampUsers(500) during (180 seconds))
+            group1.inject(rampUsers(400) during (180 seconds)),
+            group2.inject(rampUsers(100) during (60 seconds))
         ).protocols(httpProtocol)
 }

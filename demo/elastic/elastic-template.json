@@ -4,7 +4,7 @@
         "webami": {
             "Description": "Web server AMI.",
             "Type": "String",
-            "Default": "ami-079812e07590598ca"
+            "Default": "ami-0414e79e87fbc38af"
         },
         "asgsize": {
             "Description": "ASG size.",
@@ -102,6 +102,30 @@
                             "SourceSecurityGroupId": {
                                 "Fn::GetAtt": ["ElbSG", "GroupId"]
                             }
+                        }
+                    ]
+            }
+        },
+
+        "PerftestSG": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "Vpc"
+                    },
+                "GroupDescription": "Allow port 80 from admin and 22 from admin",
+                "SecurityGroupIngress": [
+                        {
+                            "IpProtocol": "tcp",
+                            "FromPort": "22",
+                            "ToPort": "22",
+                            "CidrIp": {"Ref": "YourIp"}
+                        },
+                        {
+                            "IpProtocol": "tcp",
+                            "FromPort": "80",
+                            "ToPort": "80",
+                            "CidrIp": {"Ref": "YourIp"}
                         }
                     ]
             }
@@ -393,7 +417,7 @@
               "SubnetId": {"Ref": "PublicSubnet1"},
               "KeyName": { "Ref": "KeyName" },
               "SecurityGroupIds": [
-                { "Ref": "WebserverSG"}
+                { "Ref": "PerftestSG"}
               ],
               "Tags" : [
                 { "Key": "Name",
@@ -406,9 +430,13 @@
                             "",
                             [
                                 "#!/bin/bash -xe\n",
-                                "# we don't need to run nginx or supervisor so stop them\n",
+                                "# we don't need to run supervisor so stop it\n",
+                                "service supervisor stop\n",
+                                "# we need to reinstall nginx\n",
                                 "service nginx stop\n",
-                                "service supervisor stop\n"
+                                "apt-get purge nginx -y\n",
+                                "apt-get isntall nginx -y\n",
+                                "service nginx start\n"
                             ]
                         ]
                     }
