@@ -8,6 +8,8 @@ import io.gatling.jdbc.Predef._
 
 class RecordedSimulation extends Simulation {
 
+        private val times = 1 to 10
+
         val endpoint = System.getProperty("endpoint")
 
         val httpProtocol = http
@@ -25,30 +27,40 @@ class RecordedSimulation extends Simulation {
 
 
         val scn = scenario("RecordedSimulation")
-                .exec(http("request_0")
+                .exec(_.set("times", times))
+                .repeat("${times.random()}")(
+                        exec(http("request_Suri")
+                                .get("/")
+                                .headers(headers_0)
+                                .resources(http("request_1")
+                                .get("/Suri")
+                                .headers(headers_1)))
+                        .pause(1, 5)                  
+                )
+                .exec(http("request_Suri")
                         .get("/")
                         .headers(headers_0)
                         .resources(http("request_1")
                         .get("/Suri")
                         .headers(headers_1)))
-                .pause(1, 3)
-                .exec(http("request_2")
+                .pause(1, 5)
+                .exec(http("request_Mark")
                         .get("/Mark")
                         .headers(headers_0))
-                .pause(1, 3)
-                .exec(http("request_3")
+                .pause(1, 5)
+                .exec(http("request_Alicia")
                         .get("/Alicia")
                         .headers(headers_0))
-                .pause(1, 3)
-                .exec(http("request_4")
+                .pause(1, 5)
+                .exec(http("request_Toni")
                         .get("/Toni")
                         .headers(headers_0))
-                .pause(1, 3)
-                .exec(http("request_5")
+                .pause(1, 5)
+                .exec(http("request_Roberto")
                         .get("/Roberto")
                         .headers(headers_0))
-                .pause(1, 3)
-                .repeat(15)(
+                .pause(1, 5)
+                .repeat(30)(
                     exec(http("data_request")
                         .get("/data")
                         .headers(headers_0))
@@ -56,6 +68,6 @@ class RecordedSimulation extends Simulation {
                 )
 
         setUp(
-            scn.inject(rampUsers(250) during (60 seconds))
+            scn.inject(rampUsers(500) during (180 seconds))
         ).protocols(httpProtocol)
 }

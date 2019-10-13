@@ -122,9 +122,15 @@
       - copy:
           src: /tmp/RecordedSimulation.scala
           dest: /opt/{{gatling_version}}/user-files/simulations/webapp/RecordedSimulation.scala
-          owner: root
+          owner: ubuntu
           group: root
           mode: 0644
+
+      - file:
+          path: /opt/{{gatling_version}}
+          state: directory
+          owner: ubuntu
+          recurse: yes
 
       - lineinfile: >
           dest=/etc/environment

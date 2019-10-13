@@ -103,7 +103,7 @@ Logstash took your raw input message and converted it into an event message whic
 
 Now that you have a basic understanding of how Logstash event pipelines work, let's setup a pipeline which reads messages from an Nginx access log file. Every time Nginx receives a web request it writes a small entry into its logfile. Oftentimes product teams want to analyze this logfile data to identify service trends.
 
-Create a new Logstash configuration file called `logstash-nginx.conf` containing the following content:
+Create a new Logstash configuration file called `logstash_nginx.conf` containing the following content:
 
   input {
     file {
@@ -139,7 +139,7 @@ The Logstash event message contains a field called `message` which contains the 
 
 Nginx access log events follow a standardized format. If Logstash could understand this format it could unpack the data before forwarding it to another service for analysis. Fortunately Logstash can unpack the message using a plugin called `grok` in the filter pipeline stage.
 
-Modify the `logstash-nginx.conf` file to add a filter:
+Modify the `logstash_nginx.conf` file to add a filter:
 
   input {
     file {
@@ -187,7 +187,7 @@ Elasticsearch uses the Elastic database to provide an extremely fast data indexi
 
 Logstash needs to use AWS credentials to push data into Elasticsearch. We could store these credentials in the Logstash configuration file, but that wouldn't be a very good security practice. Instead we'll take advantage of an EC2 instance profile. When the `webapp` EC2 instance was created by CloudFormation, a role was attached to the instance which grants access to the Elasticsearch service. We'll take advantage of this role when setting up the output plugin.
 
-Let's modify the `logstash-nginx.conf` file again to update the output stage. Before modifying the file, you will need to look up the Elasticsearch service endpoint address. Go to the Elasticsearch dashboard and select the `webtest` domain. Copy the endpoint address (you shouldn't use the https:// part of the address in the pipeline configuration file). Your configuration file should look similar to the one below:
+Let's modify the `logstash_nginx.conf` file again to update the output stage. Before modifying the file, you will need to look up the Elasticsearch service endpoint address. Go to the Elasticsearch dashboard and select the `webtest` domain. Copy the endpoint address (you shouldn't use the https:// part of the address in the pipeline configuration file). Your configuration file should look similar to the one below:
 
   input {
     file {
@@ -257,7 +257,11 @@ We can use various tools and third-party services to perform load testing on a w
 
 Our CloudFormation stack created a separate EC2 instance named `loadserver` that we can use for load testing purposes. Open up a new terminal console and log into this instance. We will use the Gatling software to run a simulation.
 
-  JAVA_OPTS="-Dendpoint=http://jasontest-alb-844427988.us-east-1.elb.amazonaws.com" gatling.sh
+Run the following command, substituting your ALB endpoint address for the one in this example:
 
+  JAVA_OPTS="-Dendpoint=http://elasticproject-alb-844427988.us-east-1.elb.amazonaws.com" gatling.sh
 
+Gatling will take a little while to start as the JVM loads up. Once it is running it will present you with a set of simulations it can run. Select the `webapp.RecordedSimulation`.
+
+Gatling will generate thousands of web requests simulating hundreds of users accessing the web API application. The _watiting_ statistic shows the number of users waiting to access the API. The _active_ statistic describes the number of active users currently making requests. The increasing bar graph at the bottom shows how much of the simulation has been completed.
 
