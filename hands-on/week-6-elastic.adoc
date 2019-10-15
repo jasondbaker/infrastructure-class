@@ -285,7 +285,7 @@ Next, go to your Kibana instance and take a look at the data in the _Discovery_ 
 
   * How many total requests were recorded during load testing?
   * How many requests were handled by the /data API endpoint?
-  * How many times did user requests information on Alicia?
+  * How many times did users request information on Alicia?
   * How many requests generated an HTTP 404 error?
 
 
