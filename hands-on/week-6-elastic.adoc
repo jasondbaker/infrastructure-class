@@ -8,7 +8,7 @@ Jason Baker <bake2352@stthomas.edu>
 1.0, 8/28/2019
 
 == Overview
-Telemetry plays a key role in every Devops organization. Teams rely on telemetry collection and analysis as a feedback mechanism to understand how a service is performing. As teams deploy code changes to a service, metrics allow teams to understand how these changes are impacting the service. 
+Telemetry plays a key role in every DevOps organization. Teams rely on telemetry collection and analysis as a feedback mechanism to understand how a service is performing. As teams deploy code changes to a service, metrics allow teams to understand how these changes are impacting the service. 
 
 Nearly every modern application generates a set of application log data which describes application events and failures. Engineers review application logs when trying to diagnose service problems. In this week's project we will utilize a common ELK stack architecture to ingest and analyze log information from a server. 
 
@@ -43,7 +43,7 @@ Select the checkbox next to *I acknowledge that AWS CloudFormation might create 
 The template will create a stack containing several resources:
 
 * An AWS Virtual Private Cloud (VPC) including two subnets, routing tables, routes, and
-an Internet gateway.
+an Internet Gateway.
 
 * A single-node Elasticsearch instance.
 
@@ -67,9 +67,9 @@ The input stage retrieves events from the system. These events are usually creat
 
 === Create a basic pipeline
 
-We'll start playing with Logstash by creating the simpliest possible pipeline. In this example, Logstash will use your keyboard input during the input stage, do nothing during the filter stage, and display the resulting message event on your console screen in the output stage.
+We'll start playing with Logstash by creating the simplest possible pipeline. In this example, Logstash will use your keyboard input during the input stage, do nothing during the filter stage, and display the resulting message event on your console screen in the output stage.
 
-Log into one of the `webapp` EC2 instances created by the stack using ssh. Note, these instances are using Ubuntu linux so you need to log in using the `ubuntu` user account, *not* the `ec2-user` account.
+Log into one of the `webapp` EC2 instances created by the stack using ssh. Note, these instances are using Ubuntu Linux so you need to log in using the `ubuntu` user account, *not* the `ec2-user` account.
 
 Create a text file called `logstash_basic.conf` in the current working directory containing the following text:
 
@@ -127,7 +127,7 @@ Then start up Logstash using this configuration file. You will likely see a stre
             "host" => "ip-10-0-0-44"
   }
 
-The CloudFormation stack you launched created an application load balancer. Go back to the Cloudformation dashboard and select your stack. Look at the `Outputs` tab to find the _ELBEndpoint_ value. This is the web URL endpoint for the ALB. You can also find this value by looking in the Elastic Load Balancer dashboard. 
+The CloudFormation stack you launched created an application load balancer. Go back to the CloudFormation dashboard and select your stack. Look at the `Outputs` tab to find the _ELBEndpoint_ value. This is the web URL endpoint for the ALB. You can also find this value by looking in the Elastic Load Balancer dashboard. 
 
 Open up a web browser and type in this load balancer endpoint address. Watch your shell console window at the same time. Notice that as you make a web request to the server, your access request is logged and emitted as a message by Logstash.
 
@@ -253,7 +253,7 @@ Obviously this website and API are incredibly simple. We'll use this simple site
 
 === Load simulation
 
-The webservers are eceiving requests from your web browser, the ELB health checker, and possibly random Internet clients. Oftentimes we want to be able to simulate a number of web clients accessing a service for testing and analysis purposes. We call this placing a _load_ on the web service and this form of testing is called _load testing_ or _performance testing_.
+The webservers are receiving requests from your web browser, the ELB health checker, and possibly random Internet clients. Oftentimes we want to be able to simulate a number of web clients accessing a service for testing and analysis purposes. We call this placing a _load_ on the web service and this form of testing is called _load testing_ or _performance testing_.
 
 We can use various tools and third-party services to perform load testing on a web service. We'll use a load generation application called Gatling for this purpose. Gatling can use a scripted plan (called a _scenario_) to simulate hundreds or thousands of web clients accessing the service. Typically you run a tool like Gatling on a separate server rather than on the webservers you are testing. That's because you don't want the execution of the load testing tool to impact the service being tested.
 
@@ -285,7 +285,7 @@ Next, go to your Kibana instance and take a look at the data in the _Discovery_ 
 
   * How many total requests were recorded during load testing?
   * How many requests were handled by the /data API endpoint?
-  * How many times did uses requests information on Alicia?
+  * How many times did users request information on Alicia?
   * How many requests generated an HTTP 404 error?
 
 
