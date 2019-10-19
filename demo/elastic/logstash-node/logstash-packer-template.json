@@ -14,7 +14,7 @@
       },
       "instance_type": "t2.small",
       "ssh_username": "ubuntu",
-      "ami_name": "DOCKER-NODE-{{ timestamp }}",
+      "ami_name": "LOGSTASH-NODE-{{ timestamp }}",
       "ami_groups": ["all"]
     }
   ],
