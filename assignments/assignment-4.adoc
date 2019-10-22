@@ -142,7 +142,7 @@ instance should have the following properties:
 
   * Use the private AMI you created from the previous lesson (look in the *My AMIs* panel
     during the AMI selection)
-  * Located in Northern Virginia (us-east)
+  * Located in Northern Virginia (us-east-1)
   * t2.micro instance type
   * Network is `nextgen-vpc`
   * Subnet is `nextgen-public-1`
@@ -160,7 +160,7 @@ private subnet. The second instance should have the following properties:
 
 * Use the private AMI you created from the previous lesson (look in the *My AMIs* panel
   during the AMI selection)
-* Located in Northern Virginia (us-east)
+* Located in Northern Virginia (us-east-1)
 * t2.micro instance type
 * Network is `nextgen-vpc`
 * Subnet is `nextgen-private`
