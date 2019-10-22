@@ -36,7 +36,7 @@ You will build a VPC and set of AWS services which conforms to the service
 diagram below.
 image:../images/assignment5/diagram.png["600","600"]
 
-Start the assignment by creating a VPC named `productionVpc` in the `us-west-1 (N. California)`
+Start the assignment by creating a VPC named `productionVpc` in the `us-west-2 (Oregon)`
 region with a CIDR block of `10.0.0.0/16`. Note, we're using a different region than
 previous assignments! The VPC needs to have four subnets, each set of public and private subnets are located 
 in *separate* availability zones (your choice):
