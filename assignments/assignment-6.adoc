@@ -57,9 +57,7 @@ us-east-1 (N. Virginia) region. Yes, you can use the AWS console for this task (
 last time!).
 
 [NOTE]
-If you accidentally deleted the default VPC in the us-east-1 region you can try to use one of the 
-other regions such as us-west-1. You will have to modify the assignment instructions accordingly. 
-You can also contact AWS support and ask them to recreate the default VPC in us-east-1 for you.
+If you accidentally deleted the default VPC in the us-east-1 region you can create a new Default VPC in the VPC web console.
 
 === Setup EB CLI configuration
 
