@@ -1,5 +1,17 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
+  "Parameters": {
+    "InstanceType": {
+      "Description": "Server instance type",
+      "Type": "String",
+      "Default": "t2.micro",
+      "AllowedValues": [
+        "t2.micro",
+        "t2.medium"
+      ],
+      "ConstraintDescription": "Must be a valid EC2 type."
+    }
+  },
   "Resources": {
     "classVpc": {
       "Type": "AWS::EC2::VPC",
@@ -54,28 +66,67 @@
         "InternetGateway"
       ]
     },
-    "publicSubnet1RTassoc": {
+    "PublicSubnet1": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+            "Ref": "classVpc"
+        },
+        "MapPublicIpOnLaunch" : "true",
+        "CidrBlock": "10.0.1.0/24",
+        "AvailabilityZone" : {
+          "Fn::Select" : [ "0", { "Fn::GetAZs" : { "Ref" : "AWS::Region" }}]
+        },
+        "Tags" : [
+          { "Key": "Name",
+            "Value": "Website-Public-Subnet"
+          }
+        ]
+      }
+    },
+    "PublicSubnet1RTassoc": {
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
       "Properties": {
         "RouteTableId": {
           "Ref": "PublicRouteTable"
         },
         "SubnetId": {
-          "Ref": "publicSubnet1"
+          "Ref": "PublicSubnet1"
         }
       }
-    }
-  },
-  "Parameters": {
-    "InstanceType": {
-      "Description": "Server instance type",
-      "Type": "String",
-      "Default": "t2.micro",
-      "AllowedValues": [
-        "t2.micro",
-        "t2.medium"
-      ],
-      "ConstraintDescription": "Must be a valid EC2 type."
+    },
+    "Webserver": {
+      "Type": "AWS::EC2::Instance",
+      "Properties" : {
+        "InstanceType": {"Ref": "InstanceType"},
+        "ImageId": "ami-3ea13f29",
+        "SubnetId": { "Ref": "PublicSubnet1" },
+        "SecurityGroupIds": [
+          { "Ref": "WebserverSG"}
+        ],
+        "Tags" : [
+          { "Key": "Name",
+            "Value": "webserver1"
+          }
+        ]
+      }
+    },
+    "WebserverSG": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "VpcId": {
+            "Ref": "classVpc"
+        },
+        "GroupDescription": "Security group rules for webserver host.",
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "80",
+            "ToPort": "80",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ]
+      }
     }
   },
   "Outputs": {
@@ -87,7 +138,7 @@
             "http://",
             {
               "Fn::GetAtt": [
-                "WebServer",
+                "Webserver",
                 "PublicIp"
               ]
             }
