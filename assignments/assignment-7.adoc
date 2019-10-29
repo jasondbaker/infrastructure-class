@@ -91,7 +91,7 @@ The stack template should create the following logical resources:
     ** Each instance type is based on the InstanceType input parameter.
     ** The instance AMIs should use this public image: *ami-3ea13f29*
     ** The instance key-pairs are based on the KeyPair parameter.
-  * A security group with a logical name and group name of *webserversSG* in the VPC.
+  * A security group with a logical name of *webserversSG* in the VPC.
     ** Allow incoming requests on port 22 from your workstation (based on the YourIp parameter).
     ** Allow incoming requests on port 80 from the engineeringlbSG.
   * An application load balancer named *engineeringLB* and target group named *engineeringWebservers*
