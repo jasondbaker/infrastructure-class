@@ -46,7 +46,7 @@ The template will create a stack containing a basic VPC environment:
 
     * VPC
     * Internet Gateway
-    * Public subnet
+    * Two public subnets
     * Routing table with an Internet route
     * Webserver security group
     * Two input parameters (KeyName and YourIp)
@@ -56,11 +56,10 @@ image:../images/week-8-cf-project.png["800","800"]
 
 Start by adding an input parameter which allows a user to specify the webserver instance type. The parameter should allow the user to select from a t2.micro or t2.medium instance type, defaulting to a t2.micro instance.
 
-You will need to add two webservers named *web1* and *web2* to this template. The webservers should use the
+You will need to add two webservers with logical names of *web1* and *web2* to this template. The webservers should use the
 *ami-3ea13f29* AMI and be associated with the *webserverSG* security group. 
 
-You will also need to add an application load balancer called *websiteLB*, an ELB listerner and a target group 
-called *webservers*. Note, cloudformation considers application load balancers to be a version 2 (V2) ELB resource.
+You will also need to add an application load balancer using the following resouces: a load balancer resource with the logical name *web-alb*, an ELB listerner resource with the logical name *web-alb-listener*, and a target group with the logical name *web-alb-tg*. Note, CloudFormation considers application load balancers to be a version 2 (V2) ELB resource meaning that you need to use the AWS::ElasticLoadBalancingV2 resource types. The original load balancing type was designed for Classic ELBs and it will not work for this project. The ALB is associated with the *webserverSG* security group.
 
 The first step is to figure out which resources you need to add to the template. Create a list of AWS resources you need to
 add and review the CloudFormation documentation to understand the associated resource types. Each resource has a set of 
