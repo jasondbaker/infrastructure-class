@@ -133,17 +133,19 @@ Initiate the Packer build by running the command:
 
     packer build webserver.json
 
-Watch as Packer performs a series of steps to automatically build the AMI for you. If Packer 
-encounters an error during the build process it will terminate the build and clean up any 
+Watch as Packer performs a series of steps to automatically build the AMI for you. Check out the EC2 web console and notice
+that Packer is launching a new EC2 instanced called `Packer Builder`. Packer will shell into this instance and use Ansible to
+configure the server. Once Ansible completes, Packer will shut down the instance and create a new AMI.
+
+If Packer encounters an error during the build process it will terminate the build and clean up any 
 temporary AWS resources it created. Take note of any error messages and fix any issues 
-identified in your Packer template or Anisible playbook. It may take 10 minutes or so for 
+identified in your Packer template or Ansible playbook. It may take 10 minutes or so for 
 Packer to completely finish the build process.
 
 You may end up running the Packer build multiple times as you correct different errors in the 
-templates. This is pretty common. Sometimes I'll try to build a complex template dozens of 
+templates. This is pretty common. Sometimes I'll try to build a complex template a dozen 
 times before all of the issues are sorted out. This is a very basic template so you should be 
-able to get it running without too much effort. If you look at your EC2 web console you will 
-see the terminated temporary EC2 instances Packer created for each build.
+able to get it running without too much effort.
 
 === Launch a new webserver
 
