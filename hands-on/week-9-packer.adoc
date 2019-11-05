@@ -131,7 +131,7 @@ playbook.
 You are ready to create the AMI once you have created the Packer template and Ansible playbook. 
 Initiate the Packer build by running the command:
 
-    packer build webserver.json
+    packer build webserver-packer-template.json
 
 Watch as Packer performs a series of steps to automatically build the AMI for you. Check out the EC2 web console and notice
 that Packer is launching a new EC2 instanced called `Packer Builder`. Packer will shell into this instance and use Ansible to
