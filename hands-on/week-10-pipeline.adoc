@@ -55,10 +55,11 @@ The CodeBuild project resource in the template you copied was configured to use 
 There are a number of changes you need to make to the template to get the CodeBuild project connected to CodeCommit. Here are some hints:
 
   * Since we are no longer using GitHub there's no reason to pass a projectUrl parameter into the template. We can pass the CodeCommit repository information to the CodeBuild project because both resources are defined in the same template.
-  * The `Source` property in the CodeBuild project tells the CodeBuild service where to find the application source code.
-  * The `ReportBuildStatus` property is not supported by CodeBuild projects using CodeCommit repositories.
+    ** The `Source` property in the CodeBuild project tells the CodeBuild service where to find the application source code.
+    ** The location of the CodeCommit repository is going to reference the CloneUrlHttp attribute.
+  * The `ReportBuildStatus` property is not supported by CodeBuild projects using CodeCommit repositories and can be removed.
   * CodeCommit doesn't use webhooks to trigger CodeBuild projects.
-  * The CodePipeline project resource uses a custom IAM role to access other AWS services and resources. For example, the role allows the project to retrieve and store objects in an S3 artifact bucket. The role does not currently allow CodePipeline to pull source code from a CodeCommit repository. You can update the project role to allow this by adding the following policy statement to the role:
+  * The CodePipeline project resource uses a custom IAM role (AppBuildRole) to access other AWS services and resources. For example, the role allows the project to retrieve and store objects in an S3 artifact bucket. The role does not currently allow CodePipeline to pull source code from a CodeCommit repository. You can update the project role to allow this by adding the following policy statement to the list of existing statements in the role:
 
 ----
   {
@@ -73,14 +74,13 @@ There are a number of changes you need to make to the template to get the CodeBu
   }
 ----
 
-
-Once you see a successful build and a new artifact uploaded into the S3 artifact bucket you are ready to continue working on the next stage of the project. If your build doesn't work, make note of the error message and try to figure out what is going on using your favorite search engine or troubleshooting sites like StackOverflow.
-
 === Test your template changes
 
 Now is a good time to test the changes you have made to the CloudFormation template. Create a new stack using your template and wait for it to create all of the resources. Access the CodeCommit web console to verify that a `java-project` repository exists and it contains a set of application source files. One of those files should be the `buildspec.yml` file.
 
 Next, go to the CodeBuild web console and verify that a build project exists. It should be configured to use your `java-project` repository as a build source. Go ahead and start a build to test the build process. Take a look at the build logs as the project is building. 
+
+Once you see a successful build and a new artifact uploaded into the S3 artifact bucket you are ready to continue working on the next stage of the project. If your build doesn't work, make note of the error message and try to figure out what is going on using your favorite search engine or troubleshooting sites like StackOverflow.
 
 === Add a pipeline resource
 
@@ -102,7 +102,7 @@ Here are some hints:
 
     ** https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#action-requirements
 
-  * The pipeline configuration references a special IAM service role to access other AWS services. Here's the configuration code I recommend using for the service role:
+  * The pipeline configuration references a special IAM service role (CodePipelineServiceRole) to access other AWS services. Here's the configuration code I recommend using for the service role:
 
 
     "CodePipelineServiceRole": {
@@ -189,7 +189,7 @@ Here are some hints:
       }
   }
 
-Update your stack with the new template code and try to trigger the pipeline (release change). You should see the source and build stages successfully complete if everything is configured correctly. If you encounter any failure, look at the log messages to try to determine the cause of the error. Oftentimes an error in the pipeline is caused by a permissions problem. 
+Update your CloudFormation stack with the new template code and try to trigger the pipeline (release change). You should see the source and build stages successfully complete if everything is configured correctly. If you encounter any failure, look at the log messages to try to determine the cause of the error. Oftentimes an error in the pipeline is caused by a permissions problem. 
 
 Congratulations! You have created a very basic software delivery pipeline.
 
