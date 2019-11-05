@@ -94,6 +94,8 @@ Here are the tasks you should configure in the first play:
 
     * Update all the current software packages on the system.
     * Install the `httpd`, `php`, and `php-mysqlnd` software packages
+      ** Run the command `amazon-linux-extras install -y lamp-mariadb10.2-php7.2 php7.2`
+      ** Use the yum module to install the `httpd` (Apache) package
     * Start the Apache web service and configure it to automatically start on system boot.
 
 [WARNING]
