@@ -131,13 +131,12 @@ Create a basic Docker compose file called `docker-compose.yaml` to launch the `d
 
 === Ninja Rockstar task (optional)
 
-It's common to store Docker images in a repository after the images are built. This allows multiple systems and teams to share commonly used images across the enterprise. AWS provides a Docker repository service called the Elastic Container Registry (ECR). Create a new repository in ECR called `dynacorpweb` and push the Docker image you created earlier into this repository.
+It's common to store Docker images in a repository after the images are built, and this allows multiple systems and teams to share commonly used images across the enterprise. AWS provides a Docker repository service called the Elastic Container Registry (ECR). Create a CloudFormation template to build a new repository in ECR called `dynacorpweb`. Launch the stack and push the Docker image you created earlier into this Docker repository.
 
 === Show me your work
 
-Please show me your pipeline code.
+Please show me your Docker compose file code.
 
 === Terminate AWS resources
 
-Remember to terminate all the resources created in this project, including the EC2 instance created by your
-pipeline.
+Remember to terminate all the resources created in this project.
