@@ -212,5 +212,4 @@ Please show me your CloudFormation template code and successful CodePipeline exe
 
 === Terminate AWS resources
 
-Remember to terminate all the resources created in this project, including the EC2 instance created by your
-pipeline.
+Remember to terminate all the resources created in this project.
