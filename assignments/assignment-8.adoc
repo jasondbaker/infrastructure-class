@@ -100,7 +100,7 @@ Here are the tasks you should configure in the first play:
 
 [WARNING]
 ====
-While Ansible can run shell commands on servers using the `shell` or `command` modules, you will not receive credit for any configuration work completed in this assignment using shell commands. In general we try to avoid using shell commands in playbooks as much as possible because shell commands tend to be less maintainable. Playbooks are not shell scripts.
+While Ansible can run shell commands on servers using the `shell` or `command` modules, in general we try to avoid using shell commands in playbooks as much as possible because shell commands tend to be less maintainable. Playbooks are not shell scripts. You should not have more than one shell command in this playbook.
 ====
 
 Note that the `ec2-user` user doesn't have the necessary permissions to install new services on the instance. Ansible will need to become a super-user on these systems in order to install new packages.
