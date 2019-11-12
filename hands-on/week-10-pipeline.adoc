@@ -42,7 +42,7 @@ One of the first resources you need to add to the CloudFormation template is a C
 Here are a couple helpful notes:
 
   * Give the repository a simple name like `java-project`.
-  * A zipfile containing the source code for the Java project is located in S3. You can configure CloudFormation to automatically copy this source code into the repository during creation.
+  * A zipfile containing the source code for the Java project is located in S3. You can configure CloudFormation to automatically copy this source code into the repository during creation using the `Code` property.
       
    ** https://seis665.s3.amazonaws.com/java-project.zip
 
