@@ -39,13 +39,9 @@ One of the first resources you need to add to the CloudFormation template is a C
 
   * https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codecommit-repository.html
 
-Here are a couple helpful notes:
-
-  * Give the repository a simple name like `java-project`.
-  * A zipfile containing the source code for the Java project is located in S3. You can configure CloudFormation to automatically copy this source code into the repository during creation using the `Code` property. 
+Give the repository a simple name like `java-project`. When CloudFormation creates the CodeCommit repository, it can automatically populate the repository with code specified by the `Code` property. In other words, CloudFormation will copy an archive file from a specified bucket and expand the contents of the file in the repository. This is a convenient way to bootstrap the files in a repository. The Code property will reference a source bucket. The value of this property is the actual bucket name, not a URL. A zipfile containing the source code for the Java project is located in the following S3 location:
       
    ** https://seis665.s3.amazonaws.com/java-project.zip
-   ** Note: The Code property will reference a source bucket. The value is the actual bucket name, not the bucket URL above. Remember, the Key for bucket objects is a filename.
 
 === Modify the CodeBuild project
 
