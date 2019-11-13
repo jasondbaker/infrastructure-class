@@ -88,7 +88,7 @@ Copy the CloudFormation template you modified for this assignment into this new 
 
 === Check your work
 
-Here is what the contents of your git repository should look like before final submission:
+Your repository will contain all of the application files created by the repository template. Additionally, your git repository should contain the following files before final submission:
 
 ====
 &#x2523; app-codepipeline-template.json +
