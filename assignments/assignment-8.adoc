@@ -43,12 +43,14 @@ servers in the environment.
 
 The CloudFormation template is missing a couple resources that you need to add:
 
+    * An application load balancer with a logical name of `webserverlb` which distributes HTTP (port 80) requests to the `web1` and `web2` instances. The health check endpoint for the load balancer should be the root (`/`) directory.
     * A `db.t2.micro` RDS database instance (not a cluster) running a MariaDB 10.2.21 database called `wordpress` located in a private VPC subnet. Use the logical name `wordpressdb` for the CloudFormation RDS resource. RDS and EC2 instances actually pre-date the arrival of VPCs in AWS so confusingly there are two different ways to configure these resources. You need to make sure this database instance is designed to run inside a VPC with the proper database subnet group and security group resources defined.
     * A security group called `WordpressDbSecurityGroup` which allows incoming access on the standard MySQL port from the `WebServerSecurityGroup`
     * An input parameter called `DBName` which will define the database name to create (default to `wordpress`)
     * An input parameter called `DBUser` which will be used for the database server username.
     * An input parameter called `DBPassword` which will be used for the database server password.
     * A stack output called `wordpressDbEndpoint` which shows the MariaDB instance endpoint address.
+    * A stack output called `wordpressLbEndpoint` which shows the application load balancer URL.
 
 [WARNING]
 ====
@@ -82,7 +84,7 @@ If Ansible returns a successful `pong` for the `web1` host then you are ready to
 
 == Configure servers
 
-You will create an Ansible playbook to configure the web1 instance as a Wordpress webserver. Before beginning the playbook, take a look at the facts that Ansible can collect from a remote host:
+You will create an Ansible playbook to configure the web1 and web2 instances as Wordpress webservers. Before beginning the playbook, take a look at the facts that Ansible can collect from a remote host:
 
     $ ansible web1 -m setup
 
@@ -124,9 +126,9 @@ Your playbook can use these environment variable values to create a set of varia
     vars:
       foo:  '{{ lookup("env", "BAR") }}'
 
-Once you have written the plays in the playbook, execute the playbook to configure the `web1` host. If you encounter any error messages, review the playbook script and correct any mistakes. Configuration tools like Ansible are designed to be idempotent, meaning that you should be able to run the playbook multiple times. If for some reason the `web1` server is hopelessly misconfigured and you want to start over, you can always delete your CloudFormation stack and create a new one.
+Once you have written the plays in the playbook, execute the playbook to configure the `web1` and `web2` hosts. If you encounter any error messages, review the playbook script and correct any mistakes. Configuration tools like Ansible are designed to be idempotent, meaning that you should be able to run the playbook multiple times. If for some reason the servers are hopelessly misconfigured and you want to start over, you can always delete your CloudFormation stack and create a new one.
 
-You should confirm that all the configuration tasks have been applied to the `web1` server and that the wordpress application is working before submitting your work.
+You should confirm that all the configuration tasks have been applied to the `web1` and `web2` servers and that the wordpress application is accessible via the application load balancer before submitting your work.
 
 === Save your work
 
