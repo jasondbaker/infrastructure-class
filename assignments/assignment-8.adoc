@@ -43,7 +43,7 @@ servers in the environment.
 
 The CloudFormation template is missing a couple resources that you need to add:
 
-    * A `db.t2.micro` RDS database instance (not a cluster) running a MySQL 5.6.41 database called `wordpress` located in a private VPC subnet. Use the logical name `wordpressdb` for the CloudFormation RDS resource.
+    * A `db.t2.micro` RDS database instance (not a cluster) running a MySQL 5.6.41 database called `wordpress` located in a private VPC subnet. Use the logical name `wordpressdb` for the CloudFormation RDS resource. RDS and EC2 instances actually pre-date the arrival of VPCs in AWS so confusingly there are two different ways to configure these resources. You need to make sure this database instance is designed to run inside a VPC with the proper database subnet group and security group resources defined.
     * A security group called `WordpressDbSecurityGroup` which allows incoming access on the standard MySQL port from the `WebServerSecurityGroup`
     * An input parameter called `DBName` which will define the database name to create (default to `wordpress`)
     * An input parameter called `DBUser` which will be used for the database server username.
