@@ -159,7 +159,7 @@
         ],
         "Properties": {
             "InstanceType": "t2.micro",
-            "ImageId": {"Ref": "ami-00dc79254d0461090"},
+            "ImageId": {"Ref": "AMI"},
             "IamInstanceProfile": {
               "Ref": "SSMInstanceProfile"
             },
@@ -228,7 +228,7 @@
         ],
         "Properties": {
             "InstanceType": "t2.micro",
-            "ImageId": {"Ref": "ami-00dc79254d0461090"},
+            "ImageId": {"Ref": "AMI"},
             "IamInstanceProfile": {
               "Ref": "SSMInstanceProfile"
             },
@@ -295,7 +295,7 @@
         "DependsOn" : ["web1", "web2"],
         "Properties": {
             "InstanceType": "t2.micro",
-            "ImageId": {"Ref": "ami-00dc79254d0461090"},
+            "ImageId": {"Ref": "AMI"},
             "IamInstanceProfile": {
               "Ref": "SSMInstanceProfile"
             },
