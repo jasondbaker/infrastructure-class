@@ -93,7 +93,7 @@ Create a playbook called `playbook.yml` in the `/home/ec2-user/assignment8` dire
 Here are the tasks you should configure in the first play:
 
     * Update all the current software packages on the system.
-    * Install the `httpd`, `php`, and `php-mysqlnd` software packages
+    * Install the `httpd`, `php7.2`, and `lamp-mariadb10.2-php7.2` software packages using the following :
       ** Run the command `amazon-linux-extras install -y lamp-mariadb10.2-php7.2 php7.2`
       ** Use the yum module to install the `httpd` (Apache) package
     * Start the Apache web service and configure it to automatically start on system boot.
