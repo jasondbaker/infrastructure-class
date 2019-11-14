@@ -88,7 +88,7 @@ first security group:
       *** HTTP allowed from the Internet
 
 The second security group will allow only the web servers to communicate with
-the MySQL database instance using port 3306. Here are the requirements for the
+the MariaDB database instance using port 3306. Here are the requirements for the
 second security group:
 
   * production-db
@@ -296,7 +296,7 @@ a sample configuration file called `wp-config-sample.php`. Your script should co
 
 {blank}
 
-*Step 5)* Next, your script needs to modify the value of several configuration settings in the `wp-config.php` file. You learned how to use the `sed` command to update configuration values in the `database.conf` file earlier in this assignment. You should use the same technique here. Your script needs to configure the MySQL database access information in the `wp-config.php` configuration file by modifying values in four specific places:
+*Step 5)* Next, your script needs to modify the value of several configuration settings in the `wp-config.php` file. You learned how to use the `sed` command to update configuration values in the `database.conf` file earlier in this assignment. You should use the same technique here. Your script needs to configure the MariaDB database access information in the `wp-config.php` configuration file by modifying values in four specific places:
 
 a) Modify the following line in the `wp-config.php` file to replace `database_name_here` with the value `wordpress`:
 
@@ -313,7 +313,7 @@ c) Modify the following line in the `wp-config.php` file to replace `password_he
 
   define('DB_PASSWORD', 'password_here');
 
-d) Modify the following line in the `wp-config.php` file to replace `localhost` with your MySQL RDS instance endpoint address:
+d) Modify the following line in the `wp-config.php` file to replace `localhost` with your MariaDB RDS instance endpoint address:
 
   define('DB_HOST', 'localhost');
 
