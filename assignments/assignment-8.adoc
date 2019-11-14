@@ -27,10 +27,10 @@ Let's start managing our server configuration!
 
 == Launch AWS resources
 
-In this assignment you will revisit the Wordpress application again. This time we will try to automate most of the environment configuration using Cloudformation and Ansible. You will need to launch two EC2 instances and a MariaDB RDS database for this assignment. We will configure the first instance as a management server with the Ansible tool installed and the second instance will become the Wordpress webserver. We will use the RDS database as the Wordpress database server.
+In this assignment you will revisit the Wordpress application again. This time we will try to automate most of the environment configuration using Cloudformation and Ansible. You will need to launch three EC2 instances, a MariaDB RDS database, and an application load balancer for this assignment. We will configure one instance as a management server with the Ansible tool installed and the other instances will become Wordpress webservers. We will use the RDS database instance as the Wordpress database server.
 
 You can use a CloudFormation template to rapidly create many of the infrastructure
-resources needed for this assignment. Unfortunately the template is incomplete and you will need to add a couple missing components. The template is available in this S3 bucket location:
+resources needed for this assignment. Most of the resources in the template have already been created for you, but unfortunately the template is incomplete and you will need to add a couple missing components. The starter template is available in this S3 bucket location:
 
   https://s3.amazonaws.com/seis665/AnsiblePress.json
 
@@ -41,7 +41,7 @@ common to use a small amount of scripting code to bootstrap configuration manage
 onto a new system. Once Ansible is installed it can be used to install and configure other
 servers in the environment.
 
-The CloudFormation template is missing a couple resources that you need to add:
+The CloudFormation template is missing a couple resources that you will need to add:
 
     * An application load balancer with a logical name of `webserverlb` which distributes HTTP (port 80) requests to the `web1` and `web2` instances. The health check endpoint for the load balancer should be the root (`/`) directory.
     * A `db.t2.micro` RDS database instance (not a cluster) running a MariaDB 10.2.21 database called `wordpress` located in a private VPC subnet. Use the logical name `wordpressdb` for the CloudFormation RDS resource. RDS and EC2 instances actually pre-date the arrival of VPCs in AWS so confusingly there are two different ways to configure these resources. You need to make sure this database instance is designed to run inside a VPC with the proper database subnet group and security group resources defined.
@@ -63,32 +63,43 @@ image:../images/assignment8/Configuration-mgmt.png["800","800"]
 
 Launch a new stack using the modified `AnsiblePress.json` template into the us-east-1 region. You can give the stack any name you like. When you create the stack, you will need to click a checkbox acknowledging the creation of IAM resources.
 
-You will use the Ansible software installed on `mgmt1` to configure the `web1` system. Ansible communicates with remote hosts using the SSH protocol which means that the proper access credentials need to be in place on `mgmt1` in order to establish shell connections with the other servers. Fortunately, the CloudFormation stack automates the setup of ssh credentials on `web1`.
+You will use the Ansible software installed on `mgmt1` to configure the `web1` and `web2` systems. Ansible communicates with remote hosts using the SSH protocol which means that the proper access credentials need to be in place on `mgmt1` in order to establish shell connections with the other servers. Fortunately, the CloudFormation stack automates the setup of ssh credentials on the web instances.
 
 
 == Test Ansible
 
 Log into the `mgmt1` instance and create a new directory in your home directory called `assignment8`. Initialize a new Git repository in this directory.
 
-Ansible uses an inventory file to track managed hosts. The inventory file specifies how Ansible should connect to a remote host. It usually contains the IP address or fully-qualified domain name of a host, as well as the username and key required to access a host. The `hosts` file was dynamically created by an EC2 userdata script, so it already contains the IP address of the `web1` instance. Take a look at the hosts file located at `/etc/ansible/hosts`.
+Ansible uses an inventory file to track managed hosts. The inventory file specifies how Ansible should connect to a remote host. It usually contains the IP address or fully-qualified domain name of a host, as well as the username and key required to access a host. The `hosts` file was dynamically created by an EC2 userdata script, so it already contains the IP address of the `web1` and `web2` instances. Take a look at the hosts file located at `/etc/ansible/hosts`.
 
-You can verify that Ansible can successfully access managed hosts by typing the
+You can verify that Ansible can successfully access the managed hosts by typing the
 following commands:
 
     $ ansible all -m ping
 
 You should see a response from Ansible that looks like this:
 
-  web1 | SUCCESS => {
+  web1 | SUCCESS => 
+      "ansible_facts": {
+          "discovered_interpreter_python": "/usr/bin/python"
+      },
       "changed": false,
       "ping": "pong"
   }
 
-If Ansible returns a successful `pong` for the `web1` host then you are ready to move on!
+  web2 | SUCCESS => {
+      "ansible_facts": {
+          "discovered_interpreter_python": "/usr/bin/python"
+      },
+      "changed": false,
+      "ping": "pong"
+  }
+
+If Ansible returns a successful `pong` for the `web1` and `web2` hosts then you are ready to move on!
 
 == Configure servers
 
-You will create an Ansible playbook to configure the web1 and web2 instances as Wordpress webservers. Before beginning the playbook, take a look at the facts that Ansible can collect from a remote host:
+You will create an Ansible playbook to configure the `web1` and `web2` instances as Wordpress webservers. Before beginning the playbook, take a look at the facts that Ansible can collect from a remote host:
 
     $ ansible web1 -m setup
 
