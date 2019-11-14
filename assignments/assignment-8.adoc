@@ -54,8 +54,12 @@ The CloudFormation template is missing a couple resources that you need to add:
 
 [WARNING]
 ====
-In the workplace we would never pass in usernames and passwords (secrets) into a template using input parameters. This is way too insecure. However, I think this is okay for a learning exercise.
+In the workplace we would never pass in usernames and passwords (secrets) into a template using input parameters. This is way too insecure. However, I think this is okay for a learning exercise. We definitely would never hard-code credentials into code which is checked into a repository.
 ====
+
+The environment we need to create with CloudFormation will look something like this:
+
+image:../images/assignment8/Configuration-mgmt.png["800","800"]
 
 Launch a new stack using the modified `AnsiblePress.json` template into the us-east-1 region. You can give the stack any name you like. When you create the stack, you will need to click a checkbox acknowledging the creation of IAM resources.
 
