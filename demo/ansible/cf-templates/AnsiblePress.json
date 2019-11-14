@@ -76,7 +76,20 @@
         "Description": "web1 instance private key."
       }
     },
-
+    "web2pem" : {
+      "Type" : "AWS::SSM::Parameter",
+      "Properties" : {
+        "Name" : {
+          "Fn::Join" : [
+            "",
+            [ { "Ref": "AWS::StackName" }, ".web2pem" ]
+          ]
+        },
+        "Type" : "String",
+        "Value" : "0",
+        "Description": "web2 instance private key."
+      }
+    },
     "wordpressVpc": {
         "Type": "AWS::EC2::VPC",
         "Properties": {
@@ -91,16 +104,31 @@
             ]
         }
     },
-    "publicSubnet": {
+    "publicSubnet1": {
         "Type": "AWS::EC2::Subnet",
         "Properties": {
             "VpcId": {
                 "Ref": "wordpressVpc"
             },
-            "CidrBlock": "10.0.0.0/24"
+            "CidrBlock": "10.0.0.0/24",
+             "AvailabilityZone" : {
+                "Fn::Select" : [ "0", { "Fn::GetAZs" : { "Ref" : "AWS::Region" }}]
+              }
         }
     },
-    "privateSubnet": {
+    "publicSubnet2": {
+        "Type": "AWS::EC2::Subnet",
+        "Properties": {
+            "VpcId": {
+                "Ref": "wordpressVpc"
+            },
+            "CidrBlock": "10.0.1.0/24",
+             "AvailabilityZone" : {
+                "Fn::Select" : [ "1", { "Fn::GetAZs" : { "Ref" : "AWS::Region" }}]
+              }
+        }
+    },
+    "privateSubnet1": {
         "Type": "AWS::EC2::Subnet",
         "Properties": {
             "VpcId": {
@@ -118,7 +146,7 @@
             "VpcId": {
                 "Ref": "wordpressVpc"
             },
-            "CidrBlock": "10.0.4.0/24",
+            "CidrBlock": "10.0.3.0/24",
             "AvailabilityZone" : {
                 "Fn::Select" : [ "1", { "Fn::GetAZs" : { "Ref" : "AWS::Region" }}]
               }
@@ -131,7 +159,7 @@
         ],
         "Properties": {
             "InstanceType": "t2.micro",
-            "ImageId": "ami-00dc79254d0461090",
+            "ImageId": {"Ref": "ami-00dc79254d0461090"},
             "IamInstanceProfile": {
               "Ref": "SSMInstanceProfile"
             },
@@ -149,7 +177,7 @@
                     "DeviceIndex": "0",
                     "DeleteOnTermination": "true",
                     "SubnetId": {
-                        "Ref": "publicSubnet"
+                        "Ref": "publicSubnet1"
                     }
                 }
             ],
@@ -193,12 +221,14 @@
             }
         }
     },
-    "mgmt1": {
+    "web2": {
         "Type": "AWS::EC2::Instance",
-        "DependsOn" : ["web1"],
+        "DependsOn": [
+            "web1pem"
+        ],
         "Properties": {
             "InstanceType": "t2.micro",
-            "ImageId": "ami-00dc79254d0461090",
+            "ImageId": {"Ref": "ami-00dc79254d0461090"},
             "IamInstanceProfile": {
               "Ref": "SSMInstanceProfile"
             },
@@ -216,7 +246,74 @@
                     "DeviceIndex": "0",
                     "DeleteOnTermination": "true",
                     "SubnetId": {
-                        "Ref": "publicSubnet"
+                        "Ref": "publicSubnet2"
+                    }
+                }
+            ],
+            "Tags": [
+                {
+                    "Key": "Name",
+                    "Value": "web2"
+                }
+            ],
+            "UserData" : {
+              "Fn::Base64" : {
+                "Fn::Join" : [
+                  "", [
+                    "#!/bin/bash -xe\n",
+                    "ssh-keygen -f /home/ec2-user/.ssh/web2-key.pem -q -N \"\"\n",
+                    "chown ec2-user:ec2-user /home/ec2-user/.ssh/web2-key.pem\n",
+                    "chown ec2-user:ec2-user /home/ec2-user/.ssh/web2-key.pem.pub\n",
+                    "PEMFILE=`cat /home/ec2-user/.ssh/web2-key.pem`\n",
+                    "aws ssm put-parameter --name ", { "Ref" : "web2pem" }, " --type String --value \"${PEMFILE}\" --overwrite --region ", { "Ref" : "AWS::Region" },"\n",
+                    "cat /home/ec2-user/.ssh/web2-key.pem.pub >> /home/ec2-user/.ssh/authorized_keys\n",
+                    "# Signal the status from cfn-init\n",
+                    "/opt/aws/bin/cfn-signal -e $? ",
+                    "         --stack ",
+                    {
+                        "Ref": "AWS::StackName"
+                    },
+                    "         --resource web2 ",
+                    "         --region ",
+                    {
+                        "Ref": "AWS::Region"
+                    },
+                    "\n"
+                  ]
+                ]
+              }
+            }
+        },
+        "CreationPolicy": {
+            "ResourceSignal": {
+                "Timeout": "PT5M"
+            }
+        }
+    },
+    "mgmt1": {
+        "Type": "AWS::EC2::Instance",
+        "DependsOn" : ["web1", "web2"],
+        "Properties": {
+            "InstanceType": "t2.micro",
+            "ImageId": {"Ref": "ami-00dc79254d0461090"},
+            "IamInstanceProfile": {
+              "Ref": "SSMInstanceProfile"
+            },
+            "KeyName": {
+                "Ref": "KeyName"
+            },
+            "NetworkInterfaces": [
+                {
+                    "GroupSet": [
+                        {
+                            "Ref": "WebServerSecurityGroup"
+                        }
+                    ],
+                    "AssociatePublicIpAddress": "true",
+                    "DeviceIndex": "0",
+                    "DeleteOnTermination": "true",
+                    "SubnetId": {
+                        "Ref": "publicSubnet1"
                     }
                 }
             ],
@@ -268,8 +365,10 @@
                     "mkdir -p /home/ec2-user/ansible_templates\n",
                     "wget -O /home/ec2-user/ansible_templates/wp-config.j2 https://s3.amazonaws.com/seis665/wp-config.j2\n",
                     "echo \"web1 ansible_host=", {"Fn::GetAtt" : ["web1","PrivateIp"]}, " ansible_user=ec2-user ansible_ssh_private_key_file=/home/ec2-user/.ssh/web1-key.pem\" > /etc/ansible/hosts\n",
+                     "echo \"web2 ansible_host=", {"Fn::GetAtt" : ["web2","PrivateIp"]}, " ansible_user=ec2-user ansible_ssh_private_key_file=/home/ec2-user/.ssh/web2-key.pem\" >> /etc/ansible/hosts\n",
                     "sed -i '/host_key_checking/s/^#//g' /etc/ansible/ansible.cfg\n",
                     "aws ssm get-parameters --name \"", { "Ref" : "web1pem" }, "\" --region ", { "Ref" : "AWS::Region" }, " | jq '.Parameters[0].Value' --raw-output > /home/ec2-user/.ssh/web1-key.pem\n",
+                    "aws ssm get-parameters --name \"", { "Ref" : "web2pem" }, "\" --region ", { "Ref" : "AWS::Region" }, " | jq '.Parameters[0].Value' --raw-output > /home/ec2-user/.ssh/web2-key.pem\n",
                     "chown ec2-user:ec2-user /home/ec2-user/.ssh/*.pem\n",
                     "chmod 600 /home/ec2-user/.ssh/*.pem"
                   ]
@@ -352,14 +451,25 @@
             "InternetGateway", "AttachGateway"
         ]
     },
-    "RouteTableAssociation": {
+    "Public1RouteTableAssociation": {
         "Type": "AWS::EC2::SubnetRouteTableAssociation",
         "Properties": {
             "RouteTableId": {
                 "Ref": "PublicRouteTable"
             },
             "SubnetId": {
-                "Ref": "publicSubnet"
+                "Ref": "publicSubnet1"
+            }
+        }
+    },
+    "Public2RouteTableAssociation": {
+        "Type": "AWS::EC2::SubnetRouteTableAssociation",
+        "Properties": {
+            "RouteTableId": {
+                "Ref": "PublicRouteTable"
+            },
+            "SubnetId": {
+                "Ref": "publicSubnet2"
             }
         }
     }
@@ -375,12 +485,22 @@
         "Type": "String",
         "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-9]|3[0-2]))$",
         "ConstraintDescription": "Must be a valid IP CIDR range of the form x.x.x.x/x."
+      },
+      "AMI": {
+        "Description": "The EC2 instance AMI",
+        "Type": "String",
+        "Default": "ami-00dc79254d0461090"
       }
+    
   },
   "Outputs": {
       "web1PublicIp": {
         "Value": {"Fn::GetAtt": ["web1","PublicIp"]},
         "Description": "web1 public IP"
+      },
+      "we2PublicIp": {
+        "Value": {"Fn::GetAtt": ["web2","PublicIp"]},
+        "Description": "web2 public IP"
       },
       "mgmt1PublicIp": {
           "Value": {"Fn::GetAtt": ["mgmt1","PublicIp"]},
