@@ -69,7 +69,9 @@ Now that we have a new unit test stage we can expand it with some linting. Linti
 
   flake8 app.py
 
-It's possible that the python application code will trigger a linting error. If you encounter a linting error (like error code `E302`) when running the pipeline, review the linting error message and correct the python code issue in the `app.py` script. The linting error message usually shows the line number and column position in the source code text file where the linting issue was found. Try to trigger the pipeline again (release change) to see if the linting issue was fixed.
+It's possible that the python application code will trigger a linting error. If you encounter a linting error (like error code `E302`) when running the pipeline, review the linting error message and correct the python code issue in the `app.py` script. The linting error message usually shows the line number and column position in the source code text file where the linting issue was found. 
+
+Try to trigger the pipeline again (release change) to see if the linting issue was fixed. It may take you a few attempts to fix any linting issues. Once the pipeline runs all of the stages successfully, you should be able to access the application load balancer endpoint to view the deployed web application running in the deployment environment.
 
 === Automatically trigger the pipeline during code changes.
 
