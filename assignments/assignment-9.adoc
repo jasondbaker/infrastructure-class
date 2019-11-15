@@ -86,8 +86,8 @@ Create a new webhook resource in your template and update your CloudFormation st
   * The webhook needs to authenticate with GitHub since that is where the repository is hosted.
   * The webhook will target the pipeline defined in your stack, and it will need to know the name of the action it should trigger in the pipeline (typically found in the first stage).
   * You should be able to look in the Settings->Webhooks page on your classroom repository dashboard and see a new webhook defined after updating the stack.
-  
-  Test out the webhook by trying to update the `README.md` file in the repository. Is your pipeline automatically triggering? If so, congratulations you have completed the assignment!
+
+Test out the webhook by trying to update the `README.md` file in the repository. Is your AWS pipeline automatically triggering? If so, congratulations you have completed the assignment!
 
 
 === Save your work
