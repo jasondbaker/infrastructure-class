@@ -75,13 +75,19 @@ Try to trigger the pipeline again (release change) to see if the linting issue w
 
 === Automatically trigger the pipeline during code changes.
 
-In this week's lecture video you learned that a CodeBuild project can automatically be triggered by code changes in a GitHub repository. This is a really common pattern in software delivery pipelines and an essential part of continuous integration. Every change a developer commits to a repository results in a build and potential application deployment. In this case we are simulating a deployment to a test environment. 
+In this week's lecture video you learned that GitHub code changes can automatically trigger a CodeBuild project. This is a really common pattern in software delivery pipelines and an essential part of continuous integration. Every change a developer commits to a repository results in a build and potential application deployment. In this case we are simulating a deployment to a test environment. 
 
-A pipeline managed by CodePipeline can be triggered by changes to a GitHub repository using a webhook. Check out the AWS::CodePipeline::Webhook CloudFormation resource documentation at:
+A pipeline managed by CodePipeline can be triggered by changes to a GitHub repository using a webhook. GitHub can initiate a webhook when a commit is made to the repository. What is a webhook? It's basically just a special web request sent to a specified API endpoint -- in this case an endpoint hosted by AWS. Check out the AWS::CodePipeline::Webhook CloudFormation resource documentation at:
 
   https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-webhook.html
 
-Create a new webhook resource in the template and update your stack. Test it out by trying to update the `README.md` file in the repository. Is your pipeline automatically triggering? If so, congratulations you have completed the assignment!
+Create a new webhook resource in your template and update your CloudFormation stack. Here are a couple hints:
+
+  * The webhook needs to authenticate with GitHub since that is where the repository is hosted.
+  * The webhook will target the pipeline defined in your stack, and it will need to know the name of the action it should trigger in the pipeline (typically found in the first stage).
+  * You should be able to look in the Settings->Webhooks page on your classroom repository dashboard and see a new webhook defined after updating the stack.
+  
+  Test out the webhook by trying to update the `README.md` file in the repository. Is your pipeline automatically triggering? If so, congratulations you have completed the assignment!
 
 
 === Save your work
