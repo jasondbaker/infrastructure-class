@@ -43,6 +43,8 @@ As a quick reminder, the template will create the following resources:
 
 * CodePipeline will use the CodeDeploy service to deploy the python software artifacts to the EC2 instances.
 
+When launching the template you will need to specify the location of the GitHub repository the pipeline will pull source code from. Note that this repository isn't technically owned by you. It belongs to an organization called `SEIS665` and therefore you must use `seis665` for the GithubUsername parameter, not your personal username. The GithubRepositoryName parameter also must reference your classroom repository name, for example: `assignment-9-code-pipeline-jasondbaker`.
+
 Your goal in this assignment is to enhance the existing pipeline defined in the CloudFormation template. Specifically, you will need to make three changes:
 
 1. Separate the current build stage into separate unit test and build stages.
