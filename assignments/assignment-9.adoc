@@ -57,7 +57,9 @@ CodePipeline uses multiple stages to define a software delivery process. The fir
 
 The `Build` stage of the pipeline uses CodeBuild and a `buildspec.yml` file to perform unit testing and an application build. Let's separate the unit test and build steps in this stage into completely separate CodePipeline stages called `UnitTest` (the new second stage) and `Build` (now the third stage). Is this separation really necessary in this case? Not really, but it provides good practice for working with CodeBuild and CodePipeline resources.
 
-We can reuse the existing CodeBuild resource in the pipeline but we need to employ some trickery using environment variables to do it. Each pipeline stage using CodeBuild will need to set an environment variable called `BUILD_TYPE`. The UnitTest stage should assign this variable the value `UNITTEST` and the Build stage should assign this variable the value `BUILD`. You can set this environment variable in the `Configuration` section of the stage. See the CodePipeline documentation for more details.
+We can reuse the existing CodeBuild resource in the pipeline but we need to employ some trickery using environment variables to do it. Each pipeline stage using CodeBuild will need to set an environment variable called `BUILD_TYPE`. The UnitTest stage should assign this variable the value `UNITTEST` and the Build stage should assign this variable the value `BUILD`. You can set this environment variable in the `Configuration` section of the stage. See the following CodePipeline documentation for more details:
+
+  https://docs.aws.amazon.com/codepipeline/latest/userguide/action-reference-CodeBuild.html
 
 Now that the UnitTest and Build stages are passing an environment variable to CodeBuild, we need to modify the `buildspec.yml` file to make use of this environment variable. We want the UnitTest stage to run the unit test commands and the Build stage to run the build commands. Check out this example code snippet:
 
