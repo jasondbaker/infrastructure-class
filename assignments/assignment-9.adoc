@@ -65,7 +65,7 @@ Here are some helpful documentation links that you might use for this part of th
 
 === Add linting to the unit test stage
 
-Now that we have a new unit test stage we can expand it with some linting. Linting is a form of static code analysis and it can catch many simple types of errors. It's common to run code linting before running unit tests. Add a linting step to the `UnitTest` stage and run it before the unit test. You can lint the python application by running the command:
+Now that we have a new unit test stage we can expand it with some linting. Linting is a form of static code analysis and it can catch many simple types of errors. It's common to run code linting before running unit tests. Add a linting step to the `UnitTest` stage and run it before the unit test command (`pytest`). You can lint the python application by running the command:
 
   flake8 app.py
 
