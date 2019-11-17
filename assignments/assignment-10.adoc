@@ -76,7 +76,7 @@ The pipeline will create a Docker image and push it into an ECR repository. Your
       ]
   }
 
-CodeBuild creates the proper build environment for the Python project. It should use the `aws/codebuild/standard:2.0` image along with the `docker: 18` and `python: 3.7` runtime versions (remember runtime versions are defined in a `buildspec.yml` file).
+CodeBuild creates the proper build environment for the Python project. It should use the `aws/codebuild/standard:2.0-1.12.0` image along with the `docker: 18` and `python: 3.7` runtime versions (remember runtime versions are defined in a `buildspec.yml` file).
 
 We need to provide CodeBuild with the ECR repository URI (it's DNS name location) in order for CodeBuild to tag and push new Docker images to it. How should we do this? Let's setup an environment variable in CodeBuild to inject this information into the build environment. Create an environment variable called `REPOSITORY_URI` with a value that looks like this format:
 
