@@ -458,7 +458,7 @@
                 "Description": "app build project",
                 "Environment": {
                     "ComputeType": "BUILD_GENERAL1_SMALL",
-                    "Image": "aws/codebuild/standard:2.0",
+                    "Image": "aws/codebuild/standard:2.0-1.12.0",
                     "ImagePullCredentialsType": "CODEBUILD",
                     "Type": "LINUX_CONTAINER"
                 },
