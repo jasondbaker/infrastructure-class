@@ -1,0 +1,191 @@
+:doctype: article
+:blank: pass:[ +]
+
+:sectnums!:
+
+= SEIS 665 Week 13 Project: AWS Fargate
+Jason Baker <bake2352@stthomas.edu>
+2.0, 11/17/2019
+
+== Overview
+Use the AWS ECS and Fargate to create a container cluster and launch the Wordpress application into it.
+
+== Requirements
+
+  * AWS account.
+  * SSH terminal application.
+
+== The project
+
+Let's get started!
+
+=== Create a CloudFormation template
+
+Start out by downloading this CloudFormation template to your workstation:
+
+  https://s3.amazonaws.com/seis665/pets-discovery-template.json
+
+We used this template to create an ECS/Fargate cluster in this last week's lecture. It creates the following resources:
+
+    * A VPC containing subnets and Internet Gateway
+    * An ECS cluster with a couple services and tasks
+    * An application load balancer
+    * A Cloud Map service namespace
+
+
+We need to modify this template to run the Wordpress application. Remember Wordpress? Of course you do. This is the fourth and final time we will use it in this course.
+
+Download the `pets-discovery-template.json` file from S3 and rename it `wordpress-template.json`. Now modify the `wordpress-template.json` template code in your code editor to launch the Wordpress environment. There are a number of change you will need to make to the template.
+
+    * Add 4 stack parameters to store database information:
+        ** String parameter called mysqlRootPassword with NoEcho enabled.
+        ** String parameter called mysqlDatabase with a default value of `wordpress`.
+        ** String parameter called mysqlUser with a default value of `wpdbadmin`.
+        ** String parameter called mysqlPassword with NoEcho enabled.
+
+    * Change the name of the ECS cluster to `WordpressCluster`.
+    * Create a web service task using the `wordpress` Docker image (see: https://hub.docker.com/_/wordpress/)
+        ** The Wordpress service in the container is listening on port 80.
+        ** Configure the service to run 3 web service tasks.
+        ** Modify the webserver security group to allow incoming access on port 80 and allow egress access to the database security group on port 3306. Note this template uses both ingress and egress security group rules so you will need to modify both!
+        ** Setup the following web task environment variables:
+            *** `WORDPRESS_DB_HOST` with a value `db.service.wordpress:3306`.
+            *** `WORDPRESS_DB_USER` with a value referencing parameter mysqlUser.
+            *** `WORDPRESS_DB_PASSWORD` with a value referencing parameter mysqlPassword.
+            *** `WORDPRESS_DB_NAME` with a value referencing parameter mysqlDatabase.
+
+    * Create a db service task using the `mariadb` Docker image (see: https://hub.docker.com/_/mariadb)
+        ** The MariaDB container should listen on port 3306.
+        ** Modify the database security group to allow access from the web security group on port 3306 (update egress rules too!)
+        ** Setup the following database task environment variables:
+            *** `MYSQL_ROOT_PASSWORD` with a value referencing parameter mysqlRootPassword.
+            *** `MYSQL_DATABASE` with a value referencing parameter mysqlDatabase.
+            *** `MYSQL_USER` with a value referencing parameter mysqlUser.
+            *** `MYSQL_PASSWORD` with a value referencing parameter mysqlPassword.
+    
+    * Modify the application load balancer:
+        ** The load balancer target group should forward requests to port 80.
+        ** Application load balancer health check endpoint is `/`.
+        ** The application load balancer security group should allow egress access to the webserver security group on port 80.
+
+    * Setup a Cloud Map service namespace named `service.wordpress`.
+
+We're almost done with the template changes. Now we need to add a bunch of parameters and environment variables related to the Wordpress password salt. What is a salt? It's a set of randomly generated values which are used to securely hash passwords. Our template will launch 3 Wordpress webservers and we need to make sure that all three Wordpress configuration files are using the same password salt. If we don't do this, we won't be able to log into the load balanced Wordpress application properly.
+
+Add the following parameters to your template (I've provided the code to make it easier for you):
+
+            "authKey": {
+            "Description": "Auth key.",
+            "Type": "String",
+            "NoEcho": "true"
+        },
+        "secureAuthKey": {
+            "Description": "Secure auth key.",
+            "Type": "String",
+            "NoEcho": "true"
+        },
+        "loggedInKey": {
+            "Description": "Logged in key.",
+            "Type": "String",
+            "NoEcho": "true"
+        },
+        "nonceKey": {
+            "Description": "Nonce key.",
+            "Type": "String",
+            "NoEcho": "true"
+        },
+        "authSalt": {
+            "Description": "Auth salt.",
+            "Type": "String",
+            "NoEcho": "true"
+        },
+        "secureAuthSalt": {
+            "Description": "Secure auth salt.",
+            "Type": "String",
+            "NoEcho": "true"
+        },
+        "loggedInSalt": {
+            "Description": "Logged in salt.",
+            "Type": "String",
+            "NoEcho": "true"
+        },
+        "nonceSalt": {
+            "Description": "Nonce salt.",
+            "Type": "String",
+            "NoEcho": "true"
+        }
+
+Next, add the following environment variables to the web task (again I've provided the code):
+
+        {
+            "Name": "WORDPRESS_AUTH_KEY",
+            "Value": {"Ref": "authKey"}
+        },
+        {
+            "Name": "WORDPRESS_SECURE_AUTH_KEY",
+            "Value": {"Ref": "secureAuthKey"}
+        },
+        {
+            "Name": "WORDPRESS_LOGGED_IN_KEY",
+            "Value": {"Ref": "loggedInKey"}
+        },
+        {
+            "Name": "WORDPRESS_NONCE_KEY",
+            "Value": {"Ref": "nonceKey"}
+        },
+        {
+            "Name": "WORDPRESS_AUTH_SALT",
+            "Value": {"Ref": "authSalt"}
+        },
+        {
+            "Name": "WORDPRESS_SECURE_AUTH_SALT",
+            "Value": {"Ref": "secureAuthSalt"}
+        },
+        {
+            "Name": "WORDPRESS_LOGGED_IN_SALT",
+            "Value": {"Ref": "loggedInSalt"}
+        },
+        {
+            "Name": "WORDPRESS_NONCE_SALT",
+            "Value": {"Ref": "nonceSalt"}
+        }
+
+
+=== Launch Wordpress cluster
+
+Create a stack called `wordpress` using your new CloudFormation template. You can select a reasonable set of passwords for the database service (the passwords can be the same). We need to provide a bunch of values for the salt parameters. What should we use? Wordpress provides a random salt generator for us located at:
+
+    https://api.wordpress.org/secret-key/1.1/salt/
+
+You can use the following values if that site isn't working. Note, you should never use these values in a production site because these are public and therefore compromised. If you ignore this warning you will probably lose all of your bitcoins. You have been warned.
+
+    AUTH_KEY         @G9uQ-k;2CMlzx|Cb/3!A%~Uw5l#C7Oz0&GyOL?-O+Yh.v+oK3]O_uDXnDW>Yt!P
+    SECURE_AUTH_KEY  %NgX+yn-17++p2vQQf8Nu+d<g)VAz;RIcDaWZY,}sm zrZOX+hRf`m{4O|RG|8h%
+    LOGGED_IN_KEY    >RaZqf)aSXU(UZxVw|Sf>-}=K|ud@|X~c|H^.EL:U^1I%.2%qRK%&n<c|^+#*-~O
+    NONCE_KEY        {G!U:@y,75(l;^`U:.c_[xl8=mYTJ<!)!B<VENd2%ag`l^5v(V(VWTdQyG2h}f.>
+    AUTH_SALT        euF6Z(Cwj=^[wLVL]s]Gm(Tv7F4X ..9u*g64qjRQ%?LwP3}]uL||!8nra$d*}!y
+    SECURE_AUTH_SALT WG|:f0Z%_Ls#_gf3BE|K),^M-gu+S8&p.?`egj{-{2CnI2j[zVSY<@tLCbAjd+t$
+    LOGGED_IN_SALT   b:q`F= WK1pa{?w5%Bv@nZK~5-c5T67$D@7q(?|~s[ `yJnEI-yByB<Fu6EdQ^^B
+    NONCE_SALT       `66jB-c}c|3pS+j`QUcNr<opJja &=.is1V^>5eWk;&s.36XoOL{ItsB7Id?R><Y
+
+The stack will take about 10 minutes to launch.
+
+Test out the Wordpress application by going to the ELB endpoint address in your web browser. If you see the standard Wordpress installation page then congratulations! Here are some troubleshooting hints if you encounter an error message.
+
+    * Check the load balancer target group to see if the load balancer health check is failing.
+    * Go to the ECS web console and look at the task logs. Sometimes the log files can provide helpful troubleshooting info. For example, maybe the Wordpress containers can't communicate properly with the MariaDB container.
+    * You can stop the database task to clear the database. The cluster will automatically start a fresh database server for you.
+
+Is this Wordpress template production worthy? No. It has two big problems. First, we are persisting data inside of a container. The data will disappear when the container goes away. Using something like RDS would be a much better idea. Second, data uploads are stored on each individual web container. We would need to install something like an S3 plugin to handle data uploads.
+
+=== Cluster Hero task (optional)
+
+Generally we don't pass in secrets to stacks like database passwords using CloudFormation string parameters. It's possible to retrieve these stack parameter in cleartext. Modify the stack template parameters to use secure values stored in AWS Parameter Store keys. 
+
+=== Show me your work
+
+Please show me your running Wordpress application.
+
+=== Terminate AWS resources
+
+Remember to terminate the CloudFormation stack.

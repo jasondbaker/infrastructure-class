@@ -451,6 +451,9 @@
                 "HealthCheckTimeoutSeconds": 5,
                 "HealthyThresholdCount": 2,
                 "UnhealthyThresholdCount": 2,
+                "Matcher": {
+                    "HttpCode": "200,302"
+                },
                 "TargetType": "ip",
                 "Port": 5000,
                 "Protocol": "HTTP",
