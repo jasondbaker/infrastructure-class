@@ -66,12 +66,14 @@ Now that the UnitTest and Build stages are passing an environment variable to Co
    pre_build:
     commands:
       - |
+        set -e
         if [ "$BUILD_TYPE" = "UNITTEST" ]; then
           # run unittest commands
         fi
   build:
     commands:
       - |
+        set -e
         if [ "$BUILD_TYPE" = "BUILD" ]; then
           # run build commands
         fi
