@@ -116,7 +116,7 @@ if __name__ == '__main__':
 
 Create a Python requirements file called `requirements.txt` in the same directory as the `site.py` file with the following contents:
 
-  Flask==1.1.2
+  Flask==1.1.1
   flake8==3.7.8
 
 === Build stages
