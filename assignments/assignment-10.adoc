@@ -82,7 +82,7 @@ We need to provide CodeBuild with the ECR repository URI (it's DNS name location
 
   <AWS account ID>.dkr.ecr.<AWS region>.amazonaws.com/classweb
 
-The items in angle-brackets should be substituted with appropriate values in your environment. For example, the resulting value string should look something like:
+The items in angle-brackets should be substituted with appropriate values in your environment. Hard-coding these values in the template is strongly discouraged because the template should be portable (hint: use parameter substitution). For example, the resulting value string should look something like:
 
   914710628553.dkr.ecr.us-east-1.amazonaws.com/classweb
 
@@ -152,7 +152,7 @@ If you encounter a linting error, fix the error in the `site.py` script file and
 
 The build phase will use a Dockerfile and build command to create a new container image called `<ECR repository URI>` with a `latest` tag -- where the angle brackets are replaced with your actual ECR repository URI. The ECR repository URI is passed into the build environment using an environment variable named `REPOSITORY_URI`. Remember how we set that up in the CloudFormation template? You can use that environment variable in the Docker build command to tag the image properly.
 
-Now in the real world we probably would give every image we build a unique tag -- like a sematic version number or a datestamp. We'll just take the easy route here and use the `latest` tag for each of our builds.
+Now in the real world we probably would give every image we build a unique tag -- like a semantic version number or a datestamp. We'll just take the easy route here and use the `latest` tag for each of our builds.
 
 You will need to create a Dockerfile in your repository to define the Docker image build. Here are the configuration requirements for the Docker image:
 
