@@ -45,7 +45,7 @@ If you use this example template, note that we aren't going to use the AWS CodeD
 
 You also don't need to use most of the parameters defined in the example template. You will need to provide the CloudFormation stack with GitHub location information and credentials. I recommend using the following parameters to store this information: GitHubUsername, GitHubAccessToken, GitHubBranchName, GitHubRepositoryName.
 
-The pipeline will create a Docker image and push it into an ECR repository. Your template should create this ECR repository and name it `classweb`. Additionally, the template will need to grant the CodeBuild service access to the new ECR repository so that it can push Docker images into it. You can enable this access by adding the following policy statements to the CodeBuild service role in the template:
+The pipeline will create a Docker image and push it into an ECR repository. Your template should create this ECR repository with a logical name of `DockerRepository` and RepositoryName of `classweb`. Additionally, the template will need to grant the CodeBuild service access to the new ECR repository so that it can push Docker images into it. You can enable this access by adding the following policy statements to the CodeBuild service role in the template:
 
   {
       "Effect": "Allow",
