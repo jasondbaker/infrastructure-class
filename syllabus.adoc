@@ -107,6 +107,8 @@ before the start of the semester if they haven't used Git before. Your understan
 git will have a significant impact on your ability to successfully complete assignments.
 Training is available at:  https://www.codeschool.com/courses/try-git
 
+Important note: Your assignment work each week must be submitted to the classroom GitHub repository before the assigned due date. If you make *any* changes to the repository after the due date whether purposely or accidentally, your assignment will be considered late and you will receive no credit.
+
 {blank}
 *[.underline]#Slack#* +
 Slack is a great real-time chat and collaboration tool for teams. Sign up for a
@@ -152,7 +154,7 @@ system administration skills.
 * Homework assignments (30%)
   ** 10 graded assignments.
   ** Assignments due by beginning of Monday class period.
-  ** No credit for late submissions.
+  ** No credit for late submissions. Your assignment submission will be considered late if modified after the assignment due date.
   ** Extra credit points may be given for helping others troubleshoot technical issues through Slack.
 * Exams (60%)
   * Practical exams based on weekly assignments.
