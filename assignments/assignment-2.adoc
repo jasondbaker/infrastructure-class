@@ -589,3 +589,5 @@ how to terminate your EC2 instance.
 You should have emailed me your GitHub username during the previous assignment.
 There is no need to email your username again. I will review your published
 work on GitHub after the homework due date.
+
+Important note: Your assignment work each week must be submitted to the classroom repository before the assigned due date. If you make *any* changes to the repository after the due date whether purposely or accidentally, your assignment will be considered late and you will receive no credit. *Do not make modifications to your classroom repository after the assignment due date.*
