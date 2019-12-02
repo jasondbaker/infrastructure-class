@@ -19,9 +19,17 @@ Use the AWS ECS and Fargate to create a container cluster and launch the Wordpre
 
 Let's get started!
 
+=== Setup an ECS Service-Linked Role
+
+You will need to setup a special Service-Linked Role for ECS if you have never used the ECS service before. The easiest way to do this is to access the AWS ECS web console and click on the `Get Started` button. Clicking this button will take you to a wizard where you can launch a sample task called `first-run-task-definition`. The wizard process creates the necessary role in the background for you.
+
+Another way to create the role is to access the AWS CLI and run the following command:
+
+  aws iam create-service-linked-role --aws-service-name ecs.amazonaws.com
+
 === Create a CloudFormation template
 
-Start out by downloading this CloudFormation template to your workstation:
+Download this CloudFormation template to your workstation:
 
   https://s3.amazonaws.com/seis665/pets-discovery-template.json
 
