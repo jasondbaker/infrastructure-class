@@ -47,7 +47,8 @@ Download the `pets-discovery-template.json` file from S3 and rename it `wordpres
     * Create a web service task using the `wordpress` Docker image (see: https://hub.docker.com/_/wordpress/)
         ** The Wordpress service in the container is listening on port 80.
         ** Configure the service to run 3 web service tasks.
-        ** Modify the webserver security group to allow incoming access on port 80 and allow egress access to the database security group on port 3306. Note this template uses both ingress and egress security group rules so you will need to modify both!
+        ** Modify the webserver security group to allow incoming access on port 80 and allow egress access to the database security group on port 3306. Note this template uses both ingress and egress security group rules, so I recommend modifying the ingress rules and removing the egress rules entirely (feel free to modify the egress rules if you feel ambitious).
+        
         ** Setup the following web task environment variables:
             *** `WORDPRESS_DB_HOST` with a value `db.service.wordpress:3306`.
             *** `WORDPRESS_DB_USER` with a value referencing parameter mysqlUser.
@@ -56,7 +57,7 @@ Download the `pets-discovery-template.json` file from S3 and rename it `wordpres
 
     * Create a db service task using the `mariadb` Docker image (see: https://hub.docker.com/_/mariadb)
         ** The MariaDB container should listen on port 3306.
-        ** Modify the database security group to allow access from the web security group on port 3306 (update egress rules too!)
+        ** Modify the database security group to allow access from the web security group on port 3306.
         ** Setup the following database task environment variables:
             *** `MYSQL_ROOT_PASSWORD` with a value referencing parameter mysqlRootPassword.
             *** `MYSQL_DATABASE` with a value referencing parameter mysqlDatabase.
@@ -66,7 +67,6 @@ Download the `pets-discovery-template.json` file from S3 and rename it `wordpres
     * Modify the application load balancer:
         ** The load balancer target group should forward requests to port 80.
         ** Application load balancer health check endpoint is `/`.
-        ** The application load balancer security group should allow egress access to the webserver security group on port 80.
 
     * Setup a Cloud Map service namespace named `service.wordpress`.
 
@@ -157,7 +157,7 @@ Create a stack called `wordpress` using your new CloudFormation template. You ca
 
     https://api.wordpress.org/secret-key/1.1/salt/
 
-You can use the following values if that site isn't working. Note, you should never use these values in a production site because these are public and therefore compromised. If you ignore this warning you will probably lose all of your bitcoins. You have been warned.
+You can use the following values if that site isn't working. Note, you should never use these values in a production site because these are public and therefore compromised. If you ignore this warning your site will be hacked. You have been warned.
 
     AUTH_KEY         @G9uQ-k;2CMlzx|Cb/3!A%~Uw5l#C7Oz0&GyOL?-O+Yh.v+oK3]O_uDXnDW>Yt!P
     SECURE_AUTH_KEY  %NgX+yn-17++p2vQQf8Nu+d<g)VAz;RIcDaWZY,}sm zrZOX+hRf`m{4O|RG|8h%
