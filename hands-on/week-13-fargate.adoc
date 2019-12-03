@@ -70,7 +70,7 @@ Rename the downloaded file `wordpress-template.json`. Now modify the `wordpress-
         ** The load balancer target group should forward requests to port 80.
         ** Application load balancer health check endpoint is `/`.
 
-    * Setup a Cloud Map service namespace named `service.wordpress`.
+    * Modify the Cloud Map service discovery namespace to use the name `service.wordpress`.
 
 We're almost done with the template changes. Now we need to add a bunch of environment variables related to the Wordpress password salt. What is a salt? It's a set of randomly generated values which are used to securely hash passwords. Our template will launch 3 Wordpress webservers and we need to make sure that all three Wordpress configuration files are using the same password salt. If we don't do this, we won't be able to log into the load balanced Wordpress application properly.
 
