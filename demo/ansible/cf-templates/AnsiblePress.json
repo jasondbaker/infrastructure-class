@@ -154,9 +154,6 @@
     },
     "web1": {
         "Type": "AWS::EC2::Instance",
-        "DependsOn": [
-            "web1pem"
-        ],
         "Properties": {
             "InstanceType": "t2.micro",
             "ImageId": {"Ref": "AMI"},
@@ -223,9 +220,6 @@
     },
     "web2": {
         "Type": "AWS::EC2::Instance",
-        "DependsOn": [
-            "web1pem"
-        ],
         "Properties": {
             "InstanceType": "t2.micro",
             "ImageId": {"Ref": "AMI"},
