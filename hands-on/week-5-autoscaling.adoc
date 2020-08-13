@@ -3,9 +3,9 @@
 
 :sectnums!:
 
-= SEIS 665 Week 5 Project: Autoscaling
+= SEIS 615 Week 5 Project: Autoscaling
 Jason Baker <bake2352@stthomas.edu>
-1.0, 2/24/2018
+2.0, 8/10/2020
 
 == Overview
 Create an infrastructure architecture which utilizes the EC2 autoscaling service.

@@ -3,9 +3,9 @@
 
 :sectnums!:
 
-= SEIS 665 Assignment 3: AWS
+= SEIS 615 Assignment 3: AWS
 Jason Baker <bake2352@stthomas.edu>
-1.0, 4/3/2016
+2.0, 8/10/2020
 
 == Overview
 This week we will get some hands-on experience with EC2 and S3. You have been
@@ -436,9 +436,9 @@ pushed an existing local repository up to GitHub. We are going to follow the
 same process in this assignment. Refer back to the previous assignment if you
 need to recall the specific commands.
 
-  * Create the assignment repository on GiHub Classroom: https://classroom.github.com/assignment-invitations/5ee41c34f8397fc833df21d8fdc485fa
+  * Create the assignment repository on GiHub Classroom: https://classroom.github.com/a/ITDThRDb
   * Modify the origin remote on your local Git repository to point to the
-  address of this new GitHub repository, something like: https://github.com/seis665/assignment-3-aws-<username>.git
+  address of this new GitHub repository, something like: https://github.com/ustseis615/assignment-3-aws-<username>.git
 
   * Push your local master branch up to the GitHub repository
 

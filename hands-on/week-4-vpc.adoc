@@ -3,9 +3,9 @@
 
 :sectnums!:
 
-= SEIS 665 Week 4 Project: VPC
+= SEIS 615 Week 4 Project: VPC
 Jason Baker <bake2352@stthomas.edu>
-1.1, 8/15/2018
+2.0, 8/10/2020
 
 == Overview
 Setup an AWS VPC and ELB.

@@ -3,9 +3,9 @@
 
 :sectnums!:
 
-= SEIS 665 Week 13 Project: AWS Fargate
+= SEIS 615 Week 13 Project: AWS Fargate
 Jason Baker <bake2352@stthomas.edu>
-2.0, 11/17/2019
+2.0, 8/10/2020
 
 == Overview
 Use the AWS ECS and Fargate to create a container cluster and launch the Wordpress application into it.

@@ -3,9 +3,9 @@
 
 :sectnums!:
 
-= SEIS 665 Assignment 4: VPC
+= SEIS 615 Assignment 4: VPC
 Jason Baker <bake2352@stthomas.edu>
-1.1, 1/21/2017
+2.0, 8/10/2020
 
 == Overview
 This week we will build a VPC from scratch and work with an elastic load
@@ -379,10 +379,10 @@ the data returned by accessing the URL:
 ** Create a file called `backend1-message.txt` in the present working directory containing the data returned by accessing the following URL. Note, you will need to pass the `-vs` flag (verbose/silent) to the `curl` command to output this data properly. Also, you will need to redirect the output
 in a special way based on the way the `curl` command works (using the `tee` command).
 
-  https://s3.amazonaws.com/seis665/message.json
+  https://s3.amazonaws.com/seis615/message.json
 
     Example:
-    $ curl -vs https://s3.amazonaws.com/seis665/message.json 2>&1 | tee backend1-message.txt
+    $ curl -vs https://s3.amazonaws.com/seis615/message.json 2>&1 | tee backend1-message.txt
 
 
 ** Copy the file `/var/log/nginx/access.log` into the present working directory.
@@ -398,7 +398,7 @@ in a special way based on the way the `curl` command works (using the `tee` comm
 Once you have completed the shell script, make sure you run the script properly to create the two required files. Commit all the files in the assignment directory to the develop branch in the repository. Next, you will need to push your local
 repository up to GitHub:
 
-* Create a new repository on GiHub Classroom by clicking this link: https://classroom.github.com/assignment-invitations/a76427f483ecfc98a401a1fef07473d4
+* Create a new repository on GiHub Classroom by clicking this link: https://classroom.github.com/a/wCOFqtu3
 * Merge your `develop` branch back into the `master` branch on your local Git repository.
 * Push your local master branch up to the GitHub repository.
 
@@ -576,11 +576,11 @@ assignment. Open a terminal connection to the `webserver1` instance (you might
 
 Change to your home directory and clone the git repository you created earlier:
 
-  $ git clone https://github.com/seis665/assignment-4-vpc-<username>.git
+  $ git clone https://github.com/seis615/assignment-4-vpc-<username>.git
 
 .Example
 ----
-https://github.com/seis665/assignment-4-vpc-jasondbaker.git
+https://github.com/ustseis615/assignment-4-vpc-jasondbaker.git
 ----
 
 If you recall, the Git clone operation makes a copy of the public GitHub repository in

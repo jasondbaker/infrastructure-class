@@ -3,9 +3,9 @@
 
 :sectnums!:
 
-= SEIS 665 Assignment 9: Code pipeline
+= SEIS 615 Assignment 9: Code pipeline
 Jason Baker <bake2352@stthomas.edu>
-2.0, 7/20/2019
+2.1, 8/10/2020
 
 == Overview
 A DevOps code pipeline helps to automate continuous delivery processes for software development organizations. Developers, testers, and operations staff depend on functioning pipelines to transform code changes into deployable software releases. While software developers are the primary users of a pipeline, IT operations professionals oftentimes have to maintain it.
@@ -23,7 +23,7 @@ Let's get that code pipeline flowing!
 
 === Setup the Python application
 
-The first step in the assignment is to create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/874ccbb14cf1edafbdf104af22f7812f
+The first step in the assignment is to create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/a/rdHjH7DJ
 
 When your classroom repository is setup, GitHub will automatically copy projects files into it from a template repository. 
 
@@ -31,7 +31,7 @@ When your classroom repository is setup, GitHub will automatically copy projects
 
 You will use a CloudFormation template to launch a stack containing the software delivery pipeline and the infrastructure resources which will host a Python web application. You don't have to create this template from scratch. We launched a pipeline template during the hands-on portion of this week's lecture which built and deployed a Python application. You can use this template as a starting point:
 
-  https://seis665.s3.amazonaws.com/app-codepipeline-template.json
+  https://seis615.s3.amazonaws.com/app-codepipeline-template.json
 
 As a quick reminder, the template will create the following resources:
 
@@ -43,7 +43,7 @@ As a quick reminder, the template will create the following resources:
 
 * CodePipeline will use the CodeDeploy service to deploy the python software artifacts to the EC2 instances.
 
-When launching the template you will need to specify the location of the GitHub repository the pipeline will pull source code from. Note that this repository isn't technically owned by you. It belongs to an organization called `SEIS665` and therefore you must use `seis665` for the GithubUsername parameter, not your personal username. The GithubRepositoryName parameter also must reference your classroom repository name, for example: `assignment-9-code-pipeline-jasondbaker`.
+When launching the template you will need to specify the location of the GitHub repository the pipeline will pull source code from. Note that this repository isn't technically owned by you. It belongs to an organization called `SEIS615` and therefore you must use `seis615` for the GithubUsername parameter, not your personal username. The GithubRepositoryName parameter also must reference your classroom repository name, for example: `assignment-9-code-pipeline-jasondbaker`.
 
 Your goal in this assignment is to enhance the existing pipeline defined in the CloudFormation template. Specifically, you will need to make three changes:
 

@@ -3,9 +3,9 @@
 
 :sectnums!:
 
-= SEIS 665 Week 6 Project: Telemetry
+= SEIS 615 Week 6 Project: Telemetry
 Jason Baker <bake2352@stthomas.edu>
-1.0, 8/28/2019
+2.0, 8/10/2020
 
 == Overview
 Telemetry plays a key role in every DevOps organization. Teams rely on telemetry collection and analysis as a feedback mechanism to understand how a service is performing. As teams deploy code changes to a service, metrics allow teams to understand how these changes are impacting the service. 

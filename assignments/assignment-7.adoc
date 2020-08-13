@@ -3,9 +3,9 @@
 
 :sectnums!:
 
-= SEIS 665 Assignment 7: CloudFormation
+= SEIS 615 Assignment 7: CloudFormation
 Jason Baker <bake2352@stthomas.edu>
-2.0, 10/5/2019
+2.1, 8/10/2020
 
 == Overview
 In our class we discussed how IT professionals now design and provision infrastructure using
@@ -57,7 +57,7 @@ Note that some of the existing resources in this template will need to be modifi
 If you prefer, you can also build the template from scratch.
 
 ====
-https://s3.amazonaws.com/seis665/BasicWebserverInVPC.json
+https://s3.amazonaws.com/seis615/BasicWebserverInVPC.json
 ====
 
 Here's the background story for this assignment: The engineering manager at your office came to you and asked
@@ -140,7 +140,7 @@ Here is what the contents of your git repository should look like before final s
 
 === Save your work
 
-Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/4bb37342c50150f66bef6b83443c44fc
+Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/a/XBiLBt8A
 
 Commit your `corpweb.json` stack template file to this repository. You could create a new Git repository on your local machine, commit the template file to it, and then push the local repository up to GitHub. Or, you could use the GitHub web console to create a new repository and upload your template file to it. The
 latter method is probably a little quicker for this assignment.

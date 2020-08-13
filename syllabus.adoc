@@ -6,15 +6,15 @@ University of St. Thomas +
 St. Paul, MN 55105
 
 [.text-center]
-*SYLLABUS Fall 2019 SEIS 665-01* +
-Version 2019.08.08
+*SYLLABUS Fall 2020 SEIS 615-01* +
+Version 2020.08.10
 
 {blank}
 *[.underline]#Course Title#* +
 DevOps & Cloud Infrastructure
 
 *[.underline]#Meeting Time Place#* +
-Mondays, 5:45 - 9:00 PM, OSS 326
+Mondays, 5:45 - 9:00 PM, Online
 
 *[.underline]#Credit Value#* +
 3 semester credits
@@ -37,7 +37,7 @@ By Appointment
 
 *[.underline]#Office Hours#* +
 Before class or by appointment +
-(Remote conferencing via Google Hangouts/ Skype encouraged)
+(Remote conferencing via Zoom, Hangouts or Skype)
 
 {blank}
 *[.underline]#Course Description#* +
@@ -112,7 +112,7 @@ Important note: Your assignment work each week must be submitted to the classroo
 {blank}
 *[.underline]#Slack#* +
 Slack is a great real-time chat and collaboration tool for teams. Sign up for a
-free account at https://ustseis665.slack.com/signup using your @stthomas.edu
+free account at https://ustseis615.slack.com/signup using your @stthomas.edu
 email address. We will all join this team for the duration of the course and make use
 of chat channels while working on projects.
 
@@ -139,6 +139,10 @@ course you can take:
 
 https://training.linuxfoundation.org/linux-courses/system-administration-training/introduction-to-linux
 
+If you have access to LinkedIn Learning, you can check out the following class:
+
+https://www.linkedin.com/learning/learning-linux-command-line-2/learning-linux-command-line
+
 By completing the required course assignments you will gain basic Linux
 system administration skills.
 
@@ -148,7 +152,7 @@ system administration skills.
 *[.underline]#Grading Policy#*
 
 * Attendance (10%)
-  ** Up to two excused lecture absences are acceptable.
+  ** Up to two excused class absences are acceptable.
   ** 25% attendance score reduction for each additional absence.
   ** Four or more absences will result in a grade reduction.
 * Homework assignments (30%)
@@ -181,11 +185,11 @@ without the written permission of the instructor. (See Class Session Recording
 |=========================================================
 |Week | Date | Topic | Assignments Due
 
-|1 | 9/9 | Course Introduction +
+|1 | 9/14 | Course Introduction +
 Distributed Infrastructure Patterns |
 
 
-|2 | 9/16 | Linux fundamentals +
+|2 | 9/21 | Linux fundamentals +
 Shell scripting
  |
 Assignment 1 +
@@ -193,69 +197,69 @@ Read _Git Hands On Guide_ +
 Read _Linux Hands On Guide_ +
 Watch Lecture 2 video recordings
 
-|3 | 9/23 | Virtualization & Cloud Computing +
+|3 | 9/28 | Virtualization & Cloud Computing +
 AWS +
 IAM, EC2, S3 |
 Assignment 2 +
 Watch Lecture 3 video recordings 
 
-|4 | 9/30 | AWS +
+|4 | 10/5 | AWS +
 VPC, RDS, ELB, Security |
 Assignment 3 +
 Watch Lecture 4 video recordings 
 
-|5 | 10/7 | AWS +
+|5 | 10/12 | AWS +
 AWS Integration, Management & +
 Cloud-native patterns |
 Assignment 4 +
 Watch Lecture 5 video recordings
 
-|6 | 10/14 | DevOps +
+|6 | 10/19 | DevOps +
 Continuous integration & delivery +
  |
 Assignment 5 +
 Watch Lecture 6 video recordings 
 
 
-|7 | 10/21 | Midterm Challenge|
+|7 | 10/26 | Midterm Challenge|
 
 
-|8 | 10/28 | Infrastructure as code +
+|8 | 11/2 | Infrastructure as code +
 CloudFormation +
  |
 Assignment 6 +
 Watch Lecture 8 video recordings
 
 
-|9 | 11/4 | Configuration Management +
+|9 | 11/9 | Configuration Management +
  |
 Assignment 7 +
 Watch Lecture 9 video recordings
 
-|10 | 11/11 | Software Delivery Pipelines +
+|10 | 11/16 | Software Delivery Pipelines +
 CodePipeline, CodeCommit, CodeDeploy +
  |
 Assignment 8 +
 Watch Lecture 10 video recordings
 
-|11 | 11/18 | Containers +
+|11 | 11/23 | Containers +
 Docker |
 Assignment 9 +
 Watch Lecture 11 video recordings
 
-|12 | 11/25 | Serverless Applications +
+|12 | 11/30 | Serverless Applications +
 Lambda, Kinesis, DynamoDB |
 Assignment 10 +
 Watch Lecture 12 video recordings
 
-|13 | 12/2 | Service Discovery +
+|13 | 12/7 | Service Discovery +
 Service Orchestration +
 ECS, Fargate |
 Assignment 11 +
 Watch Lecture 13 video recordings
 
 
-|14 | 12/9 | Final Challenge |
+|14 | 12/14 | Final Challenge |
 
 
 |=========================================================

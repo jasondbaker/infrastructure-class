@@ -3,9 +3,9 @@
 
 :sectnums!:
 
-= SEIS 665 Week 11 Project: Docker
+= SEIS 615 Week 11 Project: Docker
 Jason Baker <bake2352@stthomas.edu>
-1.0, 4/28/2018
+2.0, 8/10/2020
 
 == Overview
 Create a Docker image using a Dockerfile.

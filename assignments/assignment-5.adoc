@@ -3,9 +3,9 @@
 
 :sectnums!:
 
-= SEIS 665 Assignment 5: Autoscaling
+= SEIS 615 Assignment 5: Autoscaling
 Jason Baker <bake2352@stthomas.edu>
-1.0, 4/8/2016
+2.0, 8/10/2020
 
 == Overview
 This week we will enable auto scaling for a WordPress web application. The web
@@ -560,7 +560,7 @@ You should never commit the wp-config.php file to a Git repository because this 
 Check each of the files to make sure the files contain data. Add all of the
 files to the Git repository and commit your work.
 
-Finally, create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/27135615bd2442d325b1d44fc3cbc568
+Finally, create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/a/sTCxCao8
 
 Associate your local repository with this new GitHub repo and push the local master branch from your repository up to GitHub. Verify that your
 files are properly stored on Github.

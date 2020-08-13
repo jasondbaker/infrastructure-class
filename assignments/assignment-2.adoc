@@ -3,9 +3,9 @@
 
 :sectnums!:
 
-= SEIS 665 Assignment 2: Shell scripting
+= SEIS 615 Assignment 2: Shell scripting
 Jason Baker <bake2352@stthomas.edu>
-1.1, 1/23/2017
+2.0, 8/10/2020
 
 == Overview
 This week we launched a Linux server on AWS and worked with several basic
@@ -529,7 +529,7 @@ to GitHub. That's what we will do now.
 
 First, click on the following link to create a new repository for this assignment:
 
-https://classroom.github.com/assignment-invitations/82e8cbf52dcb14bc6f56d61001e9ff05
+https://classroom.github.com/a/j6Eny6wo
 
 GitHub Classroom will provide you with a URL (https) to access
 the assignment repository. Either copy this address to your clipboard or write it down
@@ -537,7 +537,7 @@ somewhere.
 
 .Example:
 ----
-https://github.com/seis665/assignment-2-shell-scripting-jasondbaker
+https://github.com/ustseis615/assignment-2-shell-scripting-jasondbaker
 ----
 
 Next, you need to connect your local Git repository on the Linux server to
@@ -552,7 +552,7 @@ about is the remote called origin. Setup the origin remote by typing:
 
 .Example:
 ----
-$ git remote add origin https://github.com/seis665/assignment-2-shell-scripting-jasondbaker.git
+$ git remote add origin https://github.com/ustseis615/assignment-2-shell-scripting-jasondbaker.git
 ----
 
 Now push your local repository to the GitHub repo by typing:

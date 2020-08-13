@@ -1,4 +1,4 @@
-DevOps & Cloud Infrastructure (SEIS 665) Curriculum
+DevOps & Cloud Infrastructure (SEIS 615) Curriculum
 ===================================================
 
 Overview

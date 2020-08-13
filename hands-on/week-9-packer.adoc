@@ -3,9 +3,9 @@
 
 :sectnums!:
 
-= SEIS 665 Week 9 Project: Packer
+= SEIS 615 Week 9 Project: Packer
 Jason Baker <bake2352@stthomas.edu>
-1.0, 3/20/2018
+2.0, 8/10/2020
 
 == Overview
 Packer is a tool that is commonly used to automate the building of AMIs. We can use Packer to bake our 

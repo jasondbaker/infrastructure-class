@@ -1,8 +1,8 @@
 :blank: pass:[ +]
 
-= SEIS 665 Assignment 1: Account Setup
+= SEIS 615 Assignment 1: Account Setup
 Jason Baker <bake2352@stthomas.edu>
-1.1, 8/25/2016
+2.0, 8/10/2020
 
 :sectnums!:
 
@@ -25,7 +25,7 @@ Sign up for a free GitHub account by going to https://github.com and clicking
 the `Sign Up` button. You are welcome to use an existing personal GitHub account if have one. *Please e-mail me your GitHub username once you have an account setup.* Do not send me your GiHub password. Every assignment in this class is submitted using GitHub repositories.
 
 == Slack account
-Sign up for a free Slack account at https://ustseis665.slack.com/signup using
+Sign up for a free Slack account at https://ustseis615.slack.com/signup using
 your @stthomas.edu email address. Slack is
 a chat-based collaborative platform used by thousands of organizations. It is heavily
 used in DevOps organizations.

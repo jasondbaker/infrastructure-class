@@ -3,9 +3,9 @@
 
 :sectnums!:
 
-= SEIS 665 Week 3 Project: AWS
+= SEIS 615 Week 3 Project: AWS
 Jason Baker <bake2352@stthomas.edu>
-1.0, 9/25/2018
+2.0, 8/10/2020
 
 == Overview
 Setup AWS S3 and EC2 resources.

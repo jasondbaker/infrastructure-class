@@ -1,0 +1,337 @@
+:blank: pass:[ +]
+
+[.text-center]
+GRADUATE PROGRAMS IN SOFTWARE +
+University of St. Thomas +
+St. Paul, MN 55105
+
+[.text-center]
+*SYLLABUS Fall 2019 SEIS 665-01* +
+Version 2019.08.08
+
+{blank}
+*[.underline]#Course Title#* +
+DevOps & Cloud Infrastructure
+
+*[.underline]#Meeting Time Place#* +
+Mondays, 5:45 - 9:00 PM, OSS 326
+
+*[.underline]#Credit Value#* +
+3 semester credits
+
+*[.underline]#Prerequisites#* +
+SEIS 601 or 603 +
+SEIS 610
+
+*[.underline]#Instructor#* +
+Jason Baker
+
+*[.underline]#E-Mail Address#* +
+bake2352@stthomas.edu
+
+*[.underline]#Phone Number#* +
+612-695-7775 (cell)
+
+*[.underline]#Office Address#* +
+By Appointment
+
+*[.underline]#Office Hours#* +
+Before class or by appointment +
+(Remote conferencing via Google Hangouts/ Skype encouraged)
+
+{blank}
+*[.underline]#Course Description#* +
+
+This course covers the
+engineering and design of IT infrastructure, focusing on cloud-scale distributed
+systems and modern DevOps practices. IT infrastructure deployment practices are rapidly changing as organizations build
+infrastructure as code and adopt cloud computing platforms. We will examine the theory behind these modern practices and the real-world implementation challenges faced by IT organizations.
+
+While the lessons will cover a number of
+theoretical concepts, we will primarily learn by doing. Students will gain hands-on
+experience with several widely-adopted IT platforms including Github,
+AWS, and Docker.
+
+{blank}
+*[.underline]#Course Objectives#*
+
+*   Understand how IT organizations are deploying modern infrastructure and how
+to build infrastructure as code.
+*   Understand how to architect cloud-scale distributed systems and the key design
+patterns used to enhance scalability and reliability within these systems.
+*   Develop specific skills related to DevOps practices including source control
+  management, package management, and configuration management.
+
+{blank}
+*[.underline]#Optional Texts#* +
+
+No textbooks are required for this course. However, students in the past have benefited from the following reading materials:
+
+_The DevOps Handbook: How to Create World-Class Agility, Reliability, and Security in Technology Organizations_ by Kim, Debois, Willis, Humble, and Allspaw (ISBN: 978-1942788003)
+
+_Infrastructure as Code_ by Kief Morris, 1st Edition. (ISBN: 9781491924358) +
+
+
+{blank}
+*[.underline]#Attendance Policy and Studying#*
+
+* The Instructor will record attendance in Canvas weekly.
+* 2-3 hours work for each hour of in class instruction is the academic standard, so plan on spending 6-9 hours a week outside the classroom watching course videos and working on assignments. This course is very technical, and you may need to budget more time than a typical graduate course if you don't have much hands-on technical experience.
+
+{blank}
+*[.underline]#Amazon Web Services#* +
+Most class assignments will make use of infrastructure running on Amazon Web
+Services (AWS). The University of St. Thomas is an AWS Educate Institution
+which means that students can apply for $100 worth of AWS credits per year. Students
+should sign up for an AWS account using their @stthomas.edu email address at
+http://aws.amazon.com/. After signing up for an account, you can apply
+for educational credits at https://www.awseducate.com/Application.
+
+The educational credits should cover the costs associated with your usage of
+AWS in this class throughout the semester. However, if you use AWS in other classes you may consume all of your available credits. You are responsible for
+paying any expenses not covered by these credits.
+
+{blank}
+*[.underline]#Canvas#* +
+Lecture notes (powerpoint/pdf format), lecture recordings, and grades will be available on
+Canvas (https://www.stthomas.edu/canvas).
+
+{blank}
+*[.underline]#GitHub#* +
+We will use GitHub throughout the course and a free GitHub account is required to complete assignments. You can
+create an account, if you don't already have one, by going to the website:
+https://github.com/join
+
+Students are strongly encouraged to sign up and participate in free Git training
+before the start of the semester if they haven't used Git before. Your understanding of
+git will have a significant impact on your ability to successfully complete assignments.
+Training is available at:  https://www.codeschool.com/courses/try-git
+
+Important note: Your assignment work each week must be submitted to the classroom GitHub repository before the assigned due date. If you make *any* changes to the repository after the due date whether purposely or accidentally, your assignment will be considered late and you will receive no credit.
+
+{blank}
+*[.underline]#Slack#* +
+Slack is a great real-time chat and collaboration tool for teams. Sign up for a
+free account at https://ustseis665.slack.com/signup using your @stthomas.edu
+email address. We will all join this team for the duration of the course and make use
+of chat channels while working on projects.
+
+{blank}
+*[.underline]#Computers#* +
+A computer is an essential tool for this class since most of the lectures will include
+opportunities for hands-on learning. A personal computer is strongly encouraged.
+￼￼￼￼￼￼￼￼￼￼
+
+{blank}
+*[.underline]#Linux#* +
+Understanding the Linux command line interface is critical to success in this
+course. It's likely that some students have significant amounts of experience
+with Linux while others have none. We will spend a little time at the beginning of
+the course covering essential Linux skills so that everyone has an opportunity
+to successfully complete assignments.
+
+It's not possible to teach Linux in a handful of videos. If you
+have never used Linux before, you will need to invest extra time in the early
+weeks of this course getting comfortable with the operating system. There are
+plenty of free Linux training videos on the Internet and I strongly encourage you
+to check these out if you lack Linux experience. For example, here is a free online
+course you can take:
+
+https://training.linuxfoundation.org/linux-courses/system-administration-training/introduction-to-linux
+
+By completing the required course assignments you will gain basic Linux
+system administration skills.
+
+
+
+{blank}
+*[.underline]#Grading Policy#*
+
+* Attendance (10%)
+  ** Up to two excused lecture absences are acceptable.
+  ** 25% attendance score reduction for each additional absence.
+  ** Four or more absences will result in a grade reduction.
+* Homework assignments (30%)
+  ** 10 graded assignments.
+  ** Assignments due by beginning of Monday class period.
+  ** No credit for late submissions. Your assignment submission will be considered late if modified after the assignment due date.
+  ** Extra credit points may be given for helping others troubleshoot technical issues through Slack.
+* Exams (60%)
+  * Practical exams based on weekly assignments.
+  * Midterm Challenge (30%)
+  * Final Challenge (30%)
+* Historical grade distribution: A=~40%, B=~38%, C=~20%, F=2%.
+* Factors that may severely impact your grade:
+  ** Significant disregard for assignments.
+  ** Multiple class absences.
+  ** A failing grade on the midterm or final.
+
+{blank}
+*[.underline]#Recording of Classroom Activities#* +
+
+All recordings of class sessions using any device is expressly prohibited
+without the written permission of the instructor. (See Class Session Recording
+  Permission Form.)
+
+{blank}
+*[.underline]#Schedule#* +
+
+
+[cols="10,10,40,40",options="header"]
+|=========================================================
+|Week | Date | Topic | Assignments Due
+
+|1 | 9/9 | Course Introduction +
+Distributed Infrastructure Patterns |
+
+
+|2 | 9/16 | Linux fundamentals +
+Shell scripting
+ |
+Assignment 1 +
+Read _Git Hands On Guide_ +
+Read _Linux Hands On Guide_ +
+Watch Lecture 2 video recordings
+
+|3 | 9/23 | Virtualization & Cloud Computing +
+AWS +
+IAM, EC2, S3 |
+Assignment 2 +
+Watch Lecture 3 video recordings 
+
+|4 | 9/30 | AWS +
+VPC, RDS, ELB, Security |
+Assignment 3 +
+Watch Lecture 4 video recordings 
+
+|5 | 10/7 | AWS +
+AWS Integration, Management & +
+Cloud-native patterns |
+Assignment 4 +
+Watch Lecture 5 video recordings
+
+|6 | 10/14 | DevOps +
+Continuous integration & delivery +
+ |
+Assignment 5 +
+Watch Lecture 6 video recordings 
+
+
+|7 | 10/21 | Midterm Challenge|
+
+
+|8 | 10/28 | Infrastructure as code +
+CloudFormation +
+ |
+Assignment 6 +
+Watch Lecture 8 video recordings
+
+
+|9 | 11/4 | Configuration Management +
+ |
+Assignment 7 +
+Watch Lecture 9 video recordings
+
+|10 | 11/11 | Software Delivery Pipelines +
+CodePipeline, CodeCommit, CodeDeploy +
+ |
+Assignment 8 +
+Watch Lecture 10 video recordings
+
+|11 | 11/18 | Containers +
+Docker |
+Assignment 9 +
+Watch Lecture 11 video recordings
+
+|12 | 11/25 | Serverless Applications +
+Lambda, Kinesis, DynamoDB |
+Assignment 10 +
+Watch Lecture 12 video recordings
+
+|13 | 12/2 | Service Discovery +
+Service Orchestration +
+ECS, Fargate |
+Assignment 11 +
+Watch Lecture 13 video recordings
+
+
+|14 | 12/9 | Final Challenge |
+
+
+|=========================================================
+
+{blank}
+*[.underline]#STUDENTS WITH DISABILITIES#* +
+
+Academic accommodations will be provided for qualified students with documented disabilities including but not limited to mental health diagnoses, learning disabilities, Attention Deficit Disorder, Autism, chronic medical conditions, visual, mobility, and hearing disabilities. Students are invited to contact the Disability Resources office about accommodations early in the semester. Appointments can be made by calling 651-962-6315 or in person in Murray Herrick, room 110. For further information, you can locate the Disability Resources office on the web at http://www.stthomas.edu/enhancementprog/
+
+{blank}
+*[.underline]#CHEATING DEFINED IN THIS COURSE#* +
+
+* Copying, sharing, or providing code to others which is used in weekly assignments is considered cheating. Assignments are to be worked on individually. There are no group assignments in this course.
+
+* If you have to copy the work created by others to complete weekly assignments, you will really struggle during the exams.
+
+* I won't know if you are struggling in this course if the work you submit is not your own.
+
+
+{blank}
+*[.underline]#ACADEMIC INTEGRITY#* +
+
+Academic integrity is defined as not cheating and not plagiarizing; honesty and trust among students and between students and faculty are essential for a strong, functioning academic community. Consequently, students are expected to do their own work on all academic assignments, tests, projects and research/term papers. Academic dishonesty, whether cheating, plagiarism or some other form of dishonest conduct related to academic coursework and listed in the Student Policy Book under “Discipline: Rules of Conduct” will automatically result in failure for the work involved. But academic dishonesty could also result in failure for the course and, in the event of a second incident of academic dishonesty, suspension from the University.
+
+{blank}
+*[.underline]#Cheating#* +
+
+In cases of cheating, the instructor will impose a minimum sanction of failure of work involved. The instructor will inform the student and the director of the program in writing of:
+
+1. the nature of the offense,
+2. the penalty imposed within the course;
+3. the recommendation of the instructor as to whether further disciplinary action by the director is warranted.
+
+If the instructor or the director of the program determines that further disciplinary action is warranted, a disciplinary hearing shall be commenced at the request of either the instructor or the director. (If there is a previous offense of this nature on the student’s record, a hearing is mandatory.)
+
+Here are the common ways to violate the academic integrity code: +
+
+* Cheating - Intentionally using or attempting to use unauthorized materials, information, or study aids in any academic exercise. The term academic exercise includes all forms of work submitted for credit.
+* Fabrication -Intentional and unauthorized falsification or invention of any information or citation in an academic exercise.
+* Facilitating Academic Dishonesty - Intentionally or knowingly helping or attempting to help another to violate a provision of the institutional code of academic integrity.
+* Plagiarism -The deliberate adoption or reproduction of ideas or words or statements of another person as one’s own without acknowledgment. You commit plagiarism whenever you use a source in any way without indicating that you have used it.
+
+{blank}
+*[.underline]#Plagiarism#* +
+
+The following statement of plagiarism is reprinted here for the use of faculty and students.
+
+Reprinted from _Writing: A College Handbook_, James A.W. Heffernan and John E. Lincoln. By permission W. W. Norton & Company, Inc., Copyright 1982 by W.W. Norton & Company, Inc.
+
+*Plagiarism is the dishonest act of presenting the words or thoughts of another writer as if they were your own.*
+
+You commit plagiarism whenever you use a source in any way without indicating that you have used it. If you quote anything at all, even a phrase, you must put quotation marks around it, or set it off from your text; if you summarize or paraphrase an author’s words, you must clearly indicate where the summary or paraphrase begins and ends; if you use an author’s idea, you must say that you are doing so. In every instance, you must also formally acknowledge the written source from which you took the material.
+
+The only time you can use a source without formal acknowledgment is when you refer to a specific phrase, statement, or passage that you have used and acknowledged earlier in the same paper. If the
+writer has already formally acknowledged the specific source of the material, there is no need to acknowledge it again in the conclusion. Nor is there any need to enumerate the sources of a summary statement based on several different passages that have been used earlier in the paper and have already been acknowledged. But you are free to skip the acknowledgment only when you are referring a second time to exactly the same material. When you use new material from a source already cited, you must make a new acknowledgment.
+
+Here are examples of various kinds of plagiarism. In each instance, the source is a passage from p. 102 of E.R. Dodd’s _The Greek and the Irrational_ (Berkeley, 1971; reprinted: Boston: Beacon, 1957). First here is the original note, copied accurately from the book.
+
+Functions, Dodds 12, p. 102 +
+“If the waking world has certain advantages of solidary and continuity its social opportunities are terribly restricted. In it we need as a rule, only the neighbors whereas the dream world offers the chance of intercourse, however fugitive, with our distant friends, our dead and gods. For normal men it is the sole experience in which they escape the offensive and incomprehensible bondage of time and space.”
+
+*And here are five ways of plagiarizing this source*: (If you have any questions about plagiarism, ask the instructor)
+
+1. *Word-for-word continuous copying without quotation marks or mention of the author’s name.*
+Dreams help us satisfy another important psychic need - our need to vary our social life. This need is regularly thwarted in our waking moments. If the waking world has certain advantages of solidity and continuity, its social opportunities are terribly restricted. In it we need, as a rule, only the neighbors, whereas the dream world offers the change of intercourse, however fugitive, with our distant friends, our dead, and our gods. We awaken from such encounters feeling refreshed, the dream having liberated us from the here and now...
+
+2. *Copying many words and phrases without quotation marks or mention of the author’s name.*
+Dreams help us satisfy another important psychic need - our need to vary our social life. In the waking world our social opportunities, for example, are terribly restricted. As a rule, we usually encounter only the neighbors. In the dream world, on the other hand, we have the chance of meeting our distant friends. For most of us it is the sole experience in which we escape the bondage of time and space....
+
+3. *Copying an occasional key word or phrase without quotation marks or mention of the author’s name.*
+Dreams help us satisfy another important psychic need - our need to vary our social life. During our waking hours our social opportunities are terribly restricted. We see only the people next door and our business associates. In contrast, whenever we dream, we can see our distant friends. Even though the encounter is brief, we awaken refreshed, having freed ourselves from the bondage of the here and now...
+
+4. *Paraphrasing without mention of the author’s name.*
+Dreams help us satisfy another important psychic need - our need to vary our social life. When awake, we are creatures of this time and this place. Those we meet are usually those we live near and work with.
+When dreaming, on the other hand, we can meet far-off friends. We awaken refreshed by our flight from
+the here and now.
+
+5. *Taking the author’s idea without acknowledging the source.*
+Dreams help us to satisfy another important psychic need - the need for a change. They liberate us from the here and now, taking us out of the world we normally live in....

@@ -3,9 +3,9 @@
 
 :sectnums!:
 
-= SEIS 665 Assignment 8: Configuration Management
+= SEIS 615 Assignment 8: Configuration Management
 Jason Baker <bake2352@stthomas.edu>
-1.2, 11/2/2018
+2.0, 8/10/2020
 
 == Overview
 
@@ -32,7 +32,7 @@ In this assignment you will revisit the Wordpress application again. This time w
 You can use a CloudFormation template to rapidly create many of the infrastructure
 resources needed for this assignment. Most of the resources in the template have already been created for you, but unfortunately the template is incomplete and you will need to add a couple missing components. The starter template is available in this S3 bucket location:
 
-  https://s3.amazonaws.com/seis665/AnsiblePress.json
+  https://s3.amazonaws.com/seis615/AnsiblePress.json
 
 Take a quick look at the template in a text editor. Notice how the UserData property for
 the `mgmt1` instance is configured. When CloudFormation launches this stack, it will
@@ -147,7 +147,7 @@ You should confirm that all the configuration tasks have been applied to the `we
 
 === Save your work
 
-Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/assignment-invitations/68c6b367013ed3711b1b1c9aa7bf8678
+Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/a/vkJk8nED
 
 Commit the contents of the `assignment8` directory to this repository, including the CloudFormation template you modified earlier in the assignment.
 

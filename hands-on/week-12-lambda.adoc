@@ -3,9 +3,9 @@
 
 :sectnums!:
 
-= SEIS 665 Week 12 Project: Serverless Data Pipeline
+= SEIS 615 Week 12 Project: Serverless Data Pipeline
 Jason Baker <bake2352@stthomas.edu>
-1.1, 10/5/2019
+2.0, 8/10/2020
 
 == Overview
 Create a lambda function.

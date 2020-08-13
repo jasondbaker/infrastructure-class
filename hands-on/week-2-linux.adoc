@@ -3,9 +3,9 @@
 
 :sectnums!:
 
-= SEIS 665 Week 2 Project: Linux & Git
+= SEIS 615 Week 2 Project: Linux & Git
 Jason Baker <bake2352@stthomas.edu>
-1.0, 8/16/2018
+2.0, 8/10/2020
 
 == Overview
 This week we will focus on becoming familiar with launching a Linux server and
@@ -32,7 +32,7 @@ The first step in the project is to setup a Git repository on GitHub. We will us
 Here are the basic steps:
 
 [start = 1]
-  . Click on the following link to open Project 2 on the GitHub Classroom site: https://classroom.github.com/assignment-invitations/b9731aff0b1982c9faba287eee565d4a
+  . Click on the following link to open Project 2 on the GitHub Classroom site: https://classroom.github.com/a/mAE_YJw3
 
 [start = 2]
   . Click on the *Accept this assignment* button.
@@ -45,7 +45,7 @@ Here are the basic steps:
 
 .Example:
 ----
-https://github.com/seis665/project-2-linux-git-jasondbaker
+https://github.com/ustseis615/project-2-linux-git-jasondbaker
 ----
 
 At this point your new repository to ready to use. The repository is currently
@@ -625,7 +625,7 @@ copied earlier.
 
 .Example:
 ----
-git clone https://github.com/seis665/project-2-linux-git-jasondbaker.git
+git clone https://github.com/seis615/project-2-linux-git-jasondbaker.git
 ----
 
 The git application will ask you for your GitHub username and password. Note, if you have multi-factor authentication enabled on your GitHub account you will need to provide a personal token instead of your password.
@@ -690,7 +690,7 @@ there? Congratulations, you completed the exercise!
 
 .Example:
 ----
-Your repository link should be something like https://github.com/seis665/project-2-linux-git-jasondbaker
+Your repository link should be something like https://github.com/ustseis615/project-2-linux-git-jasondbaker
 ----
 
 === Extra Super Fly task (optional)

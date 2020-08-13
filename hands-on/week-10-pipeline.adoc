@@ -3,9 +3,9 @@
 
 :sectnums!:
 
-= SEIS 665 Week 10 Project: Software Delivery Pipeline
+= SEIS 615 Week 10 Project: Software Delivery Pipeline
 Jason Baker <bake2352@stthomas.edu>
-2.0, 7/21/2019
+2.1, 8/10/2020
 
 == Overview
 Create an automated software delivery pipeline using CodeCommit, CodeBuild, CodeDeploy and CodePipeline.
