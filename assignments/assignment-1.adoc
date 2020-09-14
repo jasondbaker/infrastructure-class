@@ -52,26 +52,18 @@ We will use Amazon Web Services extensively throughout the course to learn how
 to work with cloud-based infrastructure. You are required to setup an AWS account
 to complete many of the assignments. You may use an existing school AWS
 account for the class as long as it is associated with your UST email account. 
-*You must provide a valid credit card when signing up for an AWS account*.
+*You must provide a valid credit card when signing up for an AWS account*. Note, if you plan to use an existing AWS account which you used in a previous class, you must make sure that this account was *not* created as an AWS Educate Starter account because this account type will not work for our class. You would need to create a new AWS account in this case.
 
 Amazon offers a _free_ tier of service for users with new accounts. This free tier
-lasts for one year after the account is registered. Additionally, since the
-University of St. Thomas is an AWS Educate Institution, you may qualify
-for up to $100 in AWS annual credits.
-
-This course makes every effort to stay within the free tier of service at AWS.
-However, there are times when your account will likely incur hourly charges. The
-free tier of service combined with educational credits should cover all of your
-expenses. *You are responsible for covering any additional expenses not covered by
-these credits.*
+lasts for one year after the account is registered. This course makes every effort to stay within the free tier of service at AWS. However, there are times when your account will likely incur hourly charges. The free tier of service combined with educational credits should cover all of your expenses. *You are responsible for covering any additional expenses not covered by these credits.*
 
 Go to http://aws.amazon.com/ and click on the `Sign In` link to sign up for a
 new AWS account. You should use your @stthomas.edu email address when signing
-up for the account. Also, you need to provide Amazon with a valid credit card during the account setup process otherwise you will not be able to apply for educational credit. Choose the basic support option. The other support options are designed for businesses. We will provide AWS support to one another via the class Slack channel.
+up for the account. Also, you need to provide Amazon with a valid credit card during the account setup process. Choose the basic support option. The other support options are designed for businesses. We will provide AWS support to one another via the class Slack channel.
 
 *Note, do not select the AWS Educate Starter Account option when signing up for an account.* If you select this option, you *will not* be able to complete all of the assignments in this course. 
 
-Once your AWS account is setup, your instructor will e-mail you an educational credit code which you can apply to your account. In previous semesters AWS generously gave each student $100 worth of credit to work on assignments.
+Once your AWS account is setup, your instructor will e-mail you an educational credit code after the semester begins which you can apply to your account. In previous semesters AWS generously gave each student $100 worth of credit to work on assignments.
 
 == Git training
 

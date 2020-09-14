@@ -81,11 +81,9 @@ _Infrastructure as Code_ by Kief Morris, 1st Edition. (ISBN: 9781491924358) +
 {blank}
 *[.underline]#Amazon Web Services#* +
 Most class assignments will make use of infrastructure running on Amazon Web
-Services (AWS). The University of St. Thomas is an AWS Educate Institution
-which means that students can apply for $100 worth of AWS credits per year. Students
+Services (AWS). Students
 should sign up for an AWS account using their @stthomas.edu email address at
-http://aws.amazon.com/. After signing up for an account, you can apply
-for educational credits at https://www.awseducate.com/Application.
+http://aws.amazon.com/. The instructor will provide you with $100 in educational credits after the semester begins.
 
 The educational credits should cover the costs associated with your usage of
 AWS in this class throughout the semester. However, if you use AWS in other classes you may consume all of your available credits. You are responsible for
