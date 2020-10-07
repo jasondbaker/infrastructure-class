@@ -20,7 +20,7 @@ Students taking this course may have 10+ years of IT experience or no experience
 Curriculum Approach
 -------------------
 
-I didn't follow any particular methodology when creating this course. Over 100 graduate students have taken this course since 2015 and the curriculum is iteratively improved each semester based on student feedback and market trends. I practice what I preach. Ultimately I created the kind of class that I'd like to take.
+Hundreds of graduate students have taken this course since 2015 and the curriculum is iteratively improved each semester based on student feedback and technology trends. I practice what I preach. Ultimately I created the kind of class that I'd like to take.
 
 The curriculum is based around a process of exploration and hands-on learning. Students are presented with a few theories and best practices, and then we dive straight into real-world implementation. We learn by doing. My hope is that an appreciation for DevOps practices will emerge as students progress through the course.
 
