@@ -22,7 +22,9 @@
                     "Ref": "Vpc"
                 },
                 "CidrBlock": "10.0.0.0/24",
-                "AvailabilityZone" : "us-east-1a"
+                "AvailabilityZone" : {
+                  "Fn::Select" : [ "0", { "Fn::GetAZs" : { "Ref" : "AWS::Region" }}]
+                }
             }
         },
     
@@ -33,7 +35,9 @@
                     "Ref": "Vpc"
                 },
                 "CidrBlock": "10.0.1.0/24",
-                "AvailabilityZone" : "us-east-1b"
+                "AvailabilityZone" : {
+                  "Fn::Select" : [ "1", { "Fn::GetAZs" : { "Ref" : "AWS::Region" }}]
+                }
             }
         },
 
