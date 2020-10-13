@@ -65,7 +65,7 @@ following incoming traffic rules:
 The autoscaling group should use a launch configuration with the following properties:
 
 * t2.micro instance size
-* Latest version of Amazon Linux 2 AMI 
+* Latest version of Amazon Linux 2 AMI (ami-0947d2ba12ee1ff75)
 * IP Address Type: `Assign a public IP address to every instance.`
 * 10GB root volume storage size
 * Instances are named `ecoweb`
