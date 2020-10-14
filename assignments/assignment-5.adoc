@@ -368,7 +368,7 @@ balancer. Go to the `instances` property of your load balancer and
 Open up a web browser on your desktop and type in the DNS name of the load
 balancer as the URL with the `/wordpress` path. For example:
 
-  http://wordpressLB-2127306763.us-west-1.elb.amazonaws.com/wordpress
+  http://wordpressLB-2127306763.us-west-2.elb.amazonaws.com/wordpress
 
 You should see a Wordpress installation page.
 Congratulations! If you don't see the installation page, check to make sure
@@ -380,7 +380,7 @@ If you encounter a *database connection error* when trying to view your wordpres
 
 Check to make sure the web server can communicate with the database instance. Run the following command from the webserver (substitute your RDS endpoint for the one in this example). If you don't see a "connection succeeded!" message then you should review the security group configuration for both your webserver and the RDS instance.
 
-    $ nc -zv wordpressdb.coqhf0zpvdaj.us-west-1.rds.amazonaws.com 3306
+    $ nc -zv wordpressdb.coqhf0zpvdaj.us-west-2.rds.amazonaws.com 3306
 
 Verify your login credentials on the database instance. If the web server is able to connect to the database instance and the wordpress application is unable to access the database, then the access credentials you entered into the wordpress configuration file are probably incorrect.
 
@@ -390,7 +390,7 @@ You can use the mysql client application to test the database credentials. Insta
 
 Next, log into your RDS instance using the following command (substituting your instance endpoint for the one in this example):
 
-    $ mysql -h wordpressdb.coqhf0zpvdaj.us-west-1.rds.amazonaws.com -P 3306 -u wpdbadmin -p
+    $ mysql -h wordpressdb.coqhf0zpvdaj.us-west-2.rds.amazonaws.com -P 3306 -u wpdbadmin -p
 
 You will be prompted to enter the master (administrative) password you setup on the RDS instance. If you receive an "access denied" error message, that means the username or password you are providing to the database server is incorrect. You will need to reset the master password on the RDS instance and try to connect with the mysql client again.
 
@@ -462,7 +462,7 @@ being launched in the EC2 dashboard. Once the instances are running, locate
 the DNS name of your load balancer and type it into your browser along with
 the `/wordpress` path. It should look something like:
 
-  http://wordpressLB-2127306763.us-west-1.elb.amazonaws.com/wordpress
+  http://wordpressLB-2127306763.us-west-2.elb.amazonaws.com/wordpress
 
 Type the load balancer DNS name into your web browser. You should see the
 Hello World page from your WordPress site. Hit the refresh button on your
@@ -518,7 +518,7 @@ IAM Role with the instance. Type in the following command:
 
 The CLI will prompt you for your API credentials. Your AWS user account has an Access Key and a Secret Key configured to allow you to programmatically access the AWS API. The keys are located in your account properties in IAM. If you do not know your secret key, you can use IAM to generate a new one since previously generated keys cannot be recovered. Note, this secret API is not the same as your private server key.
 
-The default region name for the AWS CLI configuration is: `us-west-1` and
+The default region name for the AWS CLI configuration is: `us-west-2` and
 select the `json` output format.
 
 Next, change to the `wpinstall` directory in your home directory.
