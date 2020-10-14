@@ -611,7 +611,8 @@ Here is what the contents of your git repository should look like before final s
 ====
 
 Note, the shell script file should be executable. Also, I'll never ask you to submit an
-empty file, so I recommend that you check the content of all your files before submission.
+empty file, so I recommend that you check the content of all your files before submission. If your
+*.log files are empty, you likely missed a step!
 
 === Terminate server
 
