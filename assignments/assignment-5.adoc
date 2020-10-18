@@ -378,8 +378,9 @@ that the instance status in the load balancer properties is set to _InService_.
 ====
 If you encounter a *database connection error* when trying to view your wordpress website, there could be a couple things wrong with your setup.
 
-Check to make sure the web server can communicate with the database instance. Run the following command from the webserver (substitute your RDS endpoint for the one in this example). If you don't see a "connection succeeded!" message then you should review the security group configuration for both your webserver and the RDS instance.
+Check to make sure the web server can communicate with the database instance. Run the *nc* command from the webserver (substitute your RDS endpoint for the one in this example). If you don't see a "connection succeeded!" message then you should review the security group configuration for both your webserver and the RDS instance.
 
+    $ sudo yum install nc -y
     $ nc -zv wordpressdb.coqhf0zpvdaj.us-west-2.rds.amazonaws.com 3306
 
 Verify your login credentials on the database instance. If the web server is able to connect to the database instance and the wordpress application is unable to access the database, then the access credentials you entered into the wordpress configuration file are probably incorrect.
