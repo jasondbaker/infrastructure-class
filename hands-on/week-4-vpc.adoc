@@ -95,8 +95,9 @@ Next, create a security group for this RDS instance called `ecodb-sg`. Setup the
 
 Finally, create an RDS instance and specify the database subnet group and security group you created above in the instance configuration.
 
-Verify that you can reach the database service endpoint from one of the webservers. One way to verify this connectivity is to shell into an EC2 instance and run the command:
+Verify that you can reach the database service endpoint from one of the webservers. One way to verify this connectivity is to shell into an EC2 instance and run the *nc* command which is a diagnostic tool you can use to test network connectivity:
 
+  sudo yum install nc -y
   nc -vz <RDS instance endpoint> 3306
 
 where you substitute the actual RDS endpoint address in the command string.
