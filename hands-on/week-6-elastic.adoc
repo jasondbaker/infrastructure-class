@@ -281,7 +281,7 @@ Once the simulation completes (in about 5 minutes) you will see a summary of the
 
 Open up the report by browsing to the public IP address of the `loadserver` instance. Look at the charts on both the _Global_ and _Details_ report tabs. Do you see any interesting data trends? Look closely at the response time distribution and the response time percentiles over time. 
 
-Next, go to your Kibana instance and take a look at the data in the _Discovery_ menu. You can use your mouse to select a time interval in the chart and zoom in on the data. Try to answer the following questions:
+Next, go to your Kibana instance and take a look at the data in the _Discover_ menu. You can use your mouse to select a time interval in the chart and zoom in on the data. Try to answer the following questions:
 
   * How many total requests were recorded during load testing?
   * How many requests were handled by the /data API endpoint?
