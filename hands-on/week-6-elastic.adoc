@@ -28,7 +28,7 @@ We're going to get a little preview of CloudFormation, a tool we will learn much
 CloudFormation allows us to quickly create sets of resources called stacks. Log into your AWS account and click on
 the link below:
 
-  https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?templateURL=https://s3.amazonaws.com/seis665/elastic-template.json&stackName=ElasticStack&param_asgsize=2&param_webami=ami-0414e79e87fbc38af
+  https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?templateURL=https://s3.amazonaws.com/seis615/elastic-template.json&stackName=ElasticStack&param_asgsize=2&param_webami=ami-0414e79e87fbc38af
 
 
 You will see a quick create stack page showing the name of the stack and a list of
