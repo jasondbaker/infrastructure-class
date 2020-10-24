@@ -163,21 +163,21 @@ following command:
 You should see something like:
 
 	Environment details for: wordpress-dev
-	Application name: wordpress
-	Region: us-east-1
-	Deployed Version: app-309e-170325_215522
-	Environment ID: e-2jxqcjvjkh
-	Platform: arn:aws:elasticbeanstalk:us-east-1::platform/PHP 5.6 running on 64bit Amazon Linux/2.3.2
-	Tier: WebServer-Standard
-	CNAME: jbaker-wordpress-dev.us-east-1.elasticbeanstalk.com
-	Updated: 2017-03-25 22:13:34.241000+00:00
-	Status: Ready
-	Health: Green
+	  Application name: wordpress
+	  Region: us-east-1
+	  Deployed Version: app-201024_194802
+	  Environment ID: e-8ypya6xcfq
+	  Platform: arn:aws:elasticbeanstalk:us-east-1::platform/PHP 7.4 running on 64bit Amazon Linux 2/3.1.2
+	  Tier: WebServer-Standard-1.0
+	  CNAME: wordpress-dev.eba-tc3epku7.us-east-1.elasticbeanstalk.com
+	  Updated: 2020-10-24 19:58:07.002000+00:00
+	  Status: Ready
+	  Health: Green
 
 If the Status attribute is `Ready` and the Health is `Green` then you should be able to open up the 
 Wordpress application in a browser using the CNAME address in the output above. For example:
 
-	http://jbaker-wordpress-dev.us-east-1.elasticbeanstalk.com
+	http://wordpress-dev.eba-tc3epku7.us-east-1.elasticbeanstalk.com
 
 Go ahead and configure the Wordpress application like the previous assignment. Feel free to log 
 into the Wordpress application and play around with the interface a little bit. For example, try to 
