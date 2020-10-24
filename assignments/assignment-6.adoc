@@ -120,7 +120,7 @@ to `wordpress`:
 	Application name: wordpress
 
 Next, the EB CLI should automatically detect that our application is using `PHP`. It will ask us 
-what version of PHP our application needs. The PHP platform version we want is `5.6`.
+what version of PHP our application needs. The PHP platform version we want is `7.4`.
 
 We don’t need to use CodeCommit for this project, choose `no` when prompted.
 
