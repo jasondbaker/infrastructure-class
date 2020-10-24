@@ -52,7 +52,7 @@ The bottom line is that a code-based approach is easier to document, automate, a
 more scalable and reliable approach to building infrastructure. Let's start practicing what we 
 preach.
 
-Go ahead and create a new t2.micro linux instance called `mgmt1` in a default VPC in the 
+Go ahead and create a new Amazon Linux 2 t2.micro linux instance called `mgmt1` in a default VPC in the 
 us-east-1 (N. Virginia) region. Yes, you can use the AWS console for this task (but this is the 
 last time!).
 
