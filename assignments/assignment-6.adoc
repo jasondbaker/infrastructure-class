@@ -77,9 +77,9 @@ Next, we need to install some development tools and execute the ebcli installer.
     zlib-devel openssl-devel ncurses-devel libffi-devel \
     sqlite-devel.x86_64 readline-devel.x86_64 bzip2-devel.x86_64 -y
   sudo ./aws-elastic-beanstalk-cli-setup/scripts/bundled_installer
-  echo 'export PATH="/root/.ebcli-virtual-env/executables:$PATH"' >> ~/.bash_profile && source ~/.bash_profile
-  echo 'export PATH=/root/.pyenv/versions/3.*/bin:$PATH' >> /root/.bash_profile && source /root/.bash_profile  
-  python aws-elastic-beanstalk-cli-setup/scripts/ebcli_installer.py
+  sudo echo 'export PATH="/root/.ebcli-virtual-env/executables:$PATH"' >> ~/.bash_profile && source ~/.bash_profile
+  sudo echo 'export PATH=/root/.pyenv/versions/3.*/bin:$PATH' >> /root/.bash_profile && source /root/.bash_profile  
+  sudo python aws-elastic-beanstalk-cli-setup/scripts/ebcli_installer.py
   
 You should be able to run the EB CLI now. Try running the command:
 
