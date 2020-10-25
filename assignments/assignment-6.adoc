@@ -159,7 +159,7 @@ may take about 20 minutes.
 Elastic Beanstalk uses the access permissions associated with your IAM account to create resources 
 such as EC2 instances and security groups. If the creation process fails, your IAM account may not 
 have the proper permissions in place to create all the necessary resources. You should go into the 
-IAM console and add the AdministratorAccess policy to your account.
+IAM console and add the AWSElastikBeanstalkFullAccess or AdministratorAccess policy to your account.
 
 After the launch process completes, check out the status of your EB environment by using the 
 following command:
