@@ -117,7 +117,7 @@ The MariaDB cluster should have the following properties:
   * DB Engine Version = ~10.2.21 (most any recent release should work)
   * Template: Dev/Test
   * DB Class = db.t2.micro
-  * Multi-AZ deployment: Yes
+  * Multi-AZ deployment: Create a standby instance
   * Allocated Storage: 20GB
   * DB Instance Identifier: wordpressdb
   * Master Username: wpdbadmin
