@@ -54,7 +54,7 @@ The template will create a stack containing a basic VPC environment:
 
 image:../images/week-8-cf-project.png["800","800"]
 
-Start by adding an input parameter which allows a user to specify the webserver instance type. The parameter should allow the user to select from a t2.micro or t2.medium instance type, defaulting to a t2.micro instance.
+Start by adding an input parameter called *instanceType* which allows a user to specify the webserver instance type. The parameter should allow the user to select from a t2.micro or t2.medium instance type, defaulting to a t2.micro instance.
 
 You will need to add two webservers with logical names of *web1* and *web2* to this template. The webservers should use the
 *ami-3ea13f29* AMI and be associated with the *webserverSG* security group. 
