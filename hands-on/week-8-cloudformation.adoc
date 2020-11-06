@@ -59,7 +59,7 @@ Start by adding an input parameter which allows a user to specify the webserver 
 You will need to add two webservers with logical names of *web1* and *web2* to this template. The webservers should use the
 *ami-3ea13f29* AMI and be associated with the *webserverSG* security group. 
 
-You will also need to add an application load balancer using the following resouces: a load balancer resource with the logical name *webAlb*, an ELB listerner resource with the logical name *webAlbListener*, and a target group with the logical name *webAlbTg*. The load balancer will verify the health of target instances using the root path (\) endpoint.
+You will also need to add an application load balancer using the following resouces: a load balancer resource with the logical name *webAlb*, an ELB listerner resource with the logical name *webAlbListener*, and a target group with the logical name *webAlbTg*. The load balancer will verify the health of target instances using the root path (/) endpoint.
 
 [IMPORTANT]
 ====
