@@ -39,7 +39,7 @@ helpful:
 
 You may use the template below as a starting point for the project. 
 
-    https://s3.amazonaws.com/seis665/BasicVPC.json
+    https://s3.amazonaws.com/seis615/BasicVPC.json
 
 
 The template will create a stack containing a basic VPC environment:
@@ -59,7 +59,14 @@ Start by adding an input parameter which allows a user to specify the webserver 
 You will need to add two webservers with logical names of *web1* and *web2* to this template. The webservers should use the
 *ami-3ea13f29* AMI and be associated with the *webserverSG* security group. 
 
-You will also need to add an application load balancer using the following resouces: a load balancer resource with the logical name *webAlb*, an ELB listerner resource with the logical name *webAlbListener*, and a target group with the logical name *webAlbTg*. Note, CloudFormation considers application load balancers to be a version 2 (V2) ELB resource meaning that you need to use the AWS::ElasticLoadBalancingV2 resource types. The original load balancing type was designed for Classic ELBs and it will not work for this project. The ALB is associated with the *webserverSG* security group.
+You will also need to add an application load balancer using the following resouces: a load balancer resource with the logical name *webAlb*, an ELB listerner resource with the logical name *webAlbListener*, and a target group with the logical name *webAlbTg*. 
+
+[IMPORTANT]
+====
+CloudFormation considers application load balancers to be a version 2 (V2) ELB resource meaning that you need to use the AWS::ElasticLoadBalancingV2 resource types. The original load balancing type was designed for Classic ELBs and it will not work for this project.
+====
+
+The ALB is associated with the *webserverSG* security group.
 
 The first step is to figure out which resources you need to add to the template. Create a list of AWS resources you need to
 add and review the CloudFormation documentation to understand the associated resource types. Each resource has a set of 
