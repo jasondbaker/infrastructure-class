@@ -128,7 +128,7 @@ Here are the tasks you should configure in the second play:
         ** There are a couple different Ansible modules you can use to download files from the Internet. You can choose any one you want.
     * Unarchive the Wordpress software package to the directory `/var/www/html`
         ** Hint: Look at using the `unarchive` module.
-    * Create the Wordpress configuration file (`/var/www/html/wordpress/wp-config.php`) on `web1` using the Jinja template called `wp-config.j2` located in the `/home/ec2-user/ansible_templates` directory on the `mgmt1` server.
+    * Create the Wordpress configuration file (`/var/www/html/wordpress/wp-config.php`) on the webservers using the Jinja template called `wp-config.j2` located in the `/home/ec2-user/ansible_templates` directory on the `mgmt1` server.
 
 The Jinja template engine allows us to take template files and automatically interpolate the value of variables in the template. The values of the interpolated variables are provided by Ansible. If the variable name in an Ansible play and the variable name in the template match, Ansible will swap out the template variable name with the value of the Ansible variable. This is really handy because it means we can convert application configuration files into templates which can be parameterized and reused.
 
