@@ -88,7 +88,7 @@ Normally this policy would be too powerful for this type of use in the real worl
 Next, create a Packer template called `webserver-packer-template.json`. You can use the following starter template to build your own 
 template:
 
-    https://s3.amazonaws.com/seis665/packer-template.json
+    https://s3.amazonaws.com/seis615/packer-template.json
 
 You will need to add and define the following properties to the builder section:
 
