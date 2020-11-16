@@ -446,7 +446,7 @@ Congratulations! Your work is now saved.
 
 === Terminate server
 
-The last step in the assignment is to terminate your Linux instance. AWS will bill you for every
+The last step in the assignment is to terminate your Linux instance and all other AWS resources (S3, security group, etc) you created in the assignment. AWS will bill you for every
 hour the instance is running. The cost is nominal, but there's no need to rack
 up unnecessary charges and we won't use this instance in the next lesson. Don't delete the AMI created during this assignment because you will need to use it again next week.
 

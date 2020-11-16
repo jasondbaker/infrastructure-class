@@ -616,9 +616,7 @@ empty file, so I recommend that you check the content of all your files before s
 
 === Terminate server
 
-The last step in the assignment is to terminate the EC2 instances, delete
-the load balancer, and delete the VPC. I'll leave this as an exercise for you to
-figure out how to complete. Remember, you will get billed for each hour the EC2 instances and ELB are running (or at least consume your credits).
+The last step in the assignment is to delete the EC2 instances, load balancer, VPC, and any other AWS resources you created during the assigment. I'll leave this as an exercise for you to figure out how to complete. As you complete future assignments, you should continue this practice of deleting all the resources you created each week. Remember, you will get billed for each second the EC2 instances and ELB are running.
 
 == Submitting your assignment
 I will review your published work on GitHub after the homework due date.
