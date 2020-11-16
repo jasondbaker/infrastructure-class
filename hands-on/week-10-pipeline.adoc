@@ -31,7 +31,7 @@ Okay, let's start begin building the pipeline!
 
 We always create infrastructure resources using code whenever possible and code repositories are no different. You should build a CloudFormation template to create all of the resources for this project including an S3 artifact bucket,  CodeCommit repository, CodeBuild project, and CodePipeline pipeline. Instead of starting from scratch, you can use the following template as a starting point:
 
-  * https://seis665.s3.amazonaws.com/app-codebuild-template.json
+  * https://seis615.s3.amazonaws.com/app-codebuild-template.json
 
 === Create a CodeCommit repository
 
@@ -41,7 +41,7 @@ One of the first resources you need to add to the CloudFormation template is a C
 
 Give the repository a simple name like `java-project`. When CloudFormation creates the CodeCommit repository, it can automatically populate the repository with code specified by the `Code` property. In other words, CloudFormation will copy an archive file from a specified bucket and expand the contents of the file in the repository. This is a convenient way to bootstrap the files in a repository. The Code property will reference a source bucket. The value of this property is the actual bucket name, not a URL. A zipfile containing the source code for the Java project is located in the following S3 location:
       
-   ** https://seis665.s3.amazonaws.com/java-project.zip
+   ** https://seis615.s3.amazonaws.com/java-project.zip
 
 === Modify the CodeBuild project
 
@@ -85,7 +85,7 @@ Our current stack built out a CodeBuild project which is able to retrieve source
 
 Let's add a CodePipeline pipeline resource to the template. You could either start creating this resource from scratch or you could copy code from one of the hands-on templates that we used during the lecture:
 
-  * https://seis665.s3.amazonaws.com/app-codepipeline-template.json
+  * https://seis615.s3.amazonaws.com/app-codepipeline-template.json
 
 Here's the documentation for the `AWS::CodePipeline::Pipeline` resource:
 
