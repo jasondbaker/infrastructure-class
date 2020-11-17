@@ -43,7 +43,7 @@ servers in the environment.
 
 The CloudFormation template is missing a couple resources that you will need to add:
 
-    * An application load balancer with a logical name of `webserverlb` which distributes HTTP (port 80) requests to the `web1` and `web2` instances. The health check endpoint for the load balancer should be the root (`/`) directory.
+    * An application load balancer with a logical name of `webserverlb` which distributes HTTP (port 80) requests to the `web1` and `web2` instances. The health check endpoint for the load balancer should be the Wordpress readme path (`/wordpress/readme.html`).
     * A `db.t2.micro` RDS database instance (not a cluster) running a MariaDB 10.2.21 database called `wordpress` located in a private VPC subnet. Use the logical name `wordpressdb` for the CloudFormation RDS resource. RDS and EC2 instances actually pre-date the arrival of VPCs in AWS so confusingly there are two different ways to configure these resources. You need to make sure this database instance is designed to run inside a VPC with the proper database subnet group and security group resources defined.
     * A security group called `WebserverLbSecurityGroup` which allows incoming http access from the Internet.
     * A security group called `WordpressDbSecurityGroup` which allows incoming access on the standard MySQL port from the `WebServerSecurityGroup`
