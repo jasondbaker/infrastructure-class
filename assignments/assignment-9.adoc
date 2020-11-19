@@ -43,7 +43,7 @@ As a quick reminder, the template will create the following resources:
 
 * CodePipeline will use the CodeDeploy service to deploy the python software artifacts to the EC2 instances.
 
-When launching the template you will need to specify the location of the GitHub repository the pipeline will pull source code from. Note that this repository isn't technically owned by you. It belongs to an organization called `ustseis615` and therefore you must use `ustseis615` for the GithubUsername parameter, not your personal username. The GithubRepositoryName parameter also must reference your classroom repository name, for example: `assignment-9-code-pipeline-jasondbaker`.
+When launching the template you will need to specify the location of the GitHub repository the pipeline will pull source code from. Note that this repository isn't technically owned by you. It belongs to an organization called `ustseis615` and therefore you must use `ustseis615` for the GithubUsername parameter, not your personal username. The GithubRepositoryName parameter also must reference your classroom repository name, for example: `assignment-9-code-pipeline-jasondbaker`. Finally, the GitHubAccessToken parameter value should be a GitHub personal access token (watch the lecture videos again if you don't remember how to create this).
 
 Your goal in this assignment is to enhance the existing pipeline defined in the CloudFormation template. Specifically, you will need to make three changes:
 
