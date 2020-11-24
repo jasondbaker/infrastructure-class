@@ -99,7 +99,7 @@ The directory structure and location of the `index.html` file should look someth
 A Dockerfile is a handy way to encapsulate all the configuration commands required to build a single container. The remaining part of your project this week is to build a simple nginx webserver container using a Dockerfile. Create the `Dockerfile` in the `docker` directory. Here are the configuration requirements for the Docker image:
 
   * The new image must be based off the `nginx` image.
-  * Set the maintainer of the image to your name and email address.
+  * Label the image with some metadata specifying your name and e-mail address like "Sarah Student <sarah@ilovedocker.com>".
   * The image should expose port 80.
   * Copy the files from the `html` directory you created earlier in the assignment to the /usr/share/nginx/html directory in the container.
 
