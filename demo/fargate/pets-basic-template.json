@@ -153,7 +153,7 @@
                 "ContainerDefinitions": [
                     {
                         "Name": "petsweb",
-                        "Image": "jasondbaker/docker-pets:1.0",
+                        "Image": "ghcr.io/ustseis615/docker-pets:1.0",
                         "Essential": "true",
                         "PortMappings": [
                             { "ContainerPort": 5000 }
