@@ -31,7 +31,7 @@ Another way to create the role is to access the AWS CLI and run the following co
 
 Download this CloudFormation template to your workstation:
 
-  https://s3.amazonaws.com/seis665/pets-discovery-wp-project.json
+  https://s3.amazonaws.com/seis615/pets-discovery-wp-project.json
 
 We used a similar version of this template to create an ECS/Fargate cluster in this last week's lecture. It creates the following resources:
 
@@ -46,7 +46,7 @@ We need to modify this template to run the Wordpress application. Remember Wordp
 Rename the downloaded file `wordpress-template.json`. Now modify the `wordpress-template.json` template code in your code editor to launch a Wordpress environment. There are a number of change you will need to make to the template.
 
     * Change the name of the ECS cluster to `WordpressCluster`.
-    * Create a web service task using the `wordpress` Docker image (see: https://hub.docker.com/_/wordpress/)
+    * Create a web service task using the `ghcr.io/ustseis615/wordpress` Docker image (see: https://hub.docker.com/_/wordpress/)
         ** The Wordpress service in the container is listening on port 80.
         ** Configure the service to run 3 web service tasks.
         ** Modify the webserver security group to allow incoming access on port 80.
@@ -57,7 +57,7 @@ Rename the downloaded file `wordpress-template.json`. Now modify the `wordpress-
             *** `WORDPRESS_DB_PASSWORD` with a value referencing parameter mysqlPassword.
             *** `WORDPRESS_DB_NAME` with a value referencing parameter mysqlDatabase.
 
-    * Create a db service task using the `mariadb` Docker image (see: https://hub.docker.com/_/mariadb)
+    * Create a db service task using the `ghcr.io/ustseis615/mariadb` Docker image (see: https://hub.docker.com/_/mariadb)
         ** The MariaDB container should listen on port 3306.
         ** Modify the database security group to allow access from the web security group on port 3306.
         ** Setup the following database task environment variables:
