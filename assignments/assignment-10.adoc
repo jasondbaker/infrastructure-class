@@ -156,7 +156,7 @@ Now in the real world we probably would give every image we build a unique tag -
 
 You will need to create a Dockerfile in your repository to define the Docker image build. Here are the configuration requirements for the Docker image:
 
-  * The new image must be based off the `jasondbaker/ubuntu` image using the `xenial` version.
+  * The new image must be based off the `ghcr.io/ustseis615/ubuntu` image using the `xenial` version.
   * Set the maintainer of the image to your name and email address.
   * The image should expose port 8080.
   * Update the package repositories using `apt-get update`
