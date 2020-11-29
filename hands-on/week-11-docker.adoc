@@ -28,7 +28,7 @@ The first step in the project is to build a Docker server running on EC2 using t
 
 Launch the template to create a new stack. Shell into the new EC2 instance, logging in as the `ubuntu` user, and run the following command:
 
-  $ docker --version
+  docker --version
 
 The system should respond with the docker client version. Something like:
 
@@ -38,7 +38,7 @@ The system should respond with the docker client version. Something like:
 
 Let's start by getting comfortable with the Docker command line. How about a Hello World application? Type in the following command:
 
-  $ docker run busybox echo hello world
+  docker run busybox echo hello world
 
 The system should respond back with a bunch of output text including the words `hello world`. What is happening here? Docker created a small container using the `busybox` image, executed a single small process, and echoed the text `hello world`.
 
@@ -46,7 +46,7 @@ The process isn't running anymore. You can confirm that by running the command `
 
 Let's do something a little more sophisticated. Type in the following command:
 
-  $ docker run -it ubuntu bash
+  docker run -it ubuntu bash
 
 This tells Docker to load the `ubuntu` image and run the `bash` command. Additionally, Docker was told to setup a virtual terminal connection to the container (-it). You should see the Docker client download the Ubuntu Linux image and launch the container. It may take a minute the first time you run this command.
 
@@ -54,25 +54,25 @@ Now that you are in the container terminal, look around a little bit. Type in `l
 
 Notice that the container you just launched is now stopped (`docker ps -a`). This was an interactive container just like the first container you created. Try to run the container again, type:
 
-  $ docker run -it ubuntu bash
+  docker run -it ubuntu bash
 
 Did you notice how much faster the container launched this time? That's because Docker is pretty smart about caching the different build layers of the container. It knew how to build the container this time because it cached all the layers from the previous container. Exit out of the container again.
 
 Next, let's launch a container that runs in the background named `web1`. Type in the command:
 
-  $ docker run -d -P --name web1 nginx
+  docker run -d -P --name web1 nginx
 
 This will download and create a container running the popular `nginx` webserver. You didn't specify a tag for the `nginx` image, so Docker defaults to using the `latest` tag. Note, the `latest` tag doesn't mean that Docker is necessarily using the latest image. It's just a default label and it can be applied to any image regardless of when the image was created.
 
 When you create a container, Docker assigns it a long ID. It's not very easy to remember long ID strings, so using the `--name` parameter to assign a memorable name to containers is helpful. You should see this container running on the system. Check the Docker process list to confirm:
 
-  $ docker ps
+  docker ps
 
 Look at the ports in the output that have been assigned to the web1 container.  You should see a a port mapping that looks similar to this: `0.0.0.0:32768->80/tcp`.  The nginx container image exposes port 80 in its dockerfile.  When you launched the container using the `-P` flag, Docker assigned a random port number (32768), and mapped it to the exposed port 80 on the container. Usually we want more control over the ports that a Docker container is exposing. We can use the `-p` (lowercase p) flag to map a network port inside the container to a port on the host system. Remember, Docker containers usually have their own network stack so the container networking environment is separate from the host.
 
 Now, you should be able to retrieve the nginx test page using `curl` substituting <PORT_NUMBER> with the random port mapped to the container by Docker:
 
-  $ curl localhost:<PORT_NUMBER>
+  curl localhost:<PORT_NUMBER>
 
 You should see the html of the nginx test page displayed (`Welcome to nginx!`). Go ahead and stop this container (`docker stop <container ID>`) before proceeding.
 
@@ -116,7 +116,7 @@ Now that you have a Docker image you can launch a container using that image. La
 
 Once the container is running you should be able to see the basic web page you added to the Docker image by using the curl command.
 
-  $ curl localhost
+  curl localhost
 
 === Docker Compose file
 
