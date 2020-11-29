@@ -576,7 +576,7 @@ assignment. Open a terminal connection to the `webserver1` instance (you might
 
 Change to your home directory and clone the git repository you created earlier:
 
-  $ git clone https://github.com/seis615/assignment-4-vpc-<username>.git
+  git clone https://github.com/seis615/assignment-4-vpc-<username>.git
 
 .Example
 ----
@@ -592,8 +592,8 @@ the current directory.
 It's likely that you will need to set the Git identity settings before committing.
 Enter these commands, substituting the values as necessary:
 
-  $ git config --global user.email "your@email.com"
-  $ git config --global user.name "your GitHub username"
+  git config --global user.email "your@email.com"
+  git config --global user.name "your GitHub username"
 
 Create a new `develop` Git branch and check it out. Now add the `access2.log` file to the repository and commit your changes to the develop branch. Merge the `develop` branch into the `master` branch. Push the master branch back up to GitHub. Verify that the new `access2.log` file exists on
 your GitHub repository.
