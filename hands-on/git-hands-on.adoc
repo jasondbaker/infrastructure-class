@@ -23,7 +23,7 @@ the git command is executed in a file directory containing a Git repository.
 
 .Example:
 ----
-$ git status
+git status
 ----
 
 === Getting help
@@ -34,7 +34,7 @@ particular command.
 
 .Example:
 ----
-$ git help status
+git help status
 ----
 
 === Creating a repository
@@ -53,7 +53,7 @@ Add files in the curent working directory to the staging area using:
 
 .Example:
 ----
-$ git add index.html
+git add index.html
 ----
 
   * Important: this just adds the file to the temporary staging
@@ -82,7 +82,7 @@ If you accidentally added a file to the staging area, you can remove the file us
 
 .Example:
 ----
-$ git reset HEAD index.html
+git reset HEAD index.html
 ----
 
 === Adding files (committing) to the repository
@@ -92,7 +92,7 @@ typing: `git commit -m 'commit message'`
 
 .Example:
 ----
-$ git commit -m 'refactor data processing module'
+git commit -m 'refactor data processing module'
 ----
 
   * The commit message should succinctly describe the file changes made
@@ -110,7 +110,7 @@ the `git commit --amend` command. This command modifies the previous commit by a
 
 .Example:
 ----
-$ git commit --amend
+git commit --amend
 ----
 
 === Removing files from the repository
@@ -132,7 +132,7 @@ Once a file is committed to a repository, you can easily revert future changes m
 
 .Example:
 ----
-$ git checkout -- index.html
+git checkout -- index.html
 ----
 
 === Reverting to a previous commit
@@ -167,7 +167,8 @@ Display the list of commits in the repository by typing: `git log`
 
 .Example:
 ----
-$ git log
+git log
+
 commit df4a36555abacf9c2fdf20e8fb6bb5e00177a616
 Author: Jason Baker <bake2352@stthomas.edu>
 Date:   Sun Mar 20 17:00:03 2016 -0500
@@ -199,7 +200,7 @@ Create a branch by typing in the command: `git branch <name>`
 
 .Example:
 ----
-$ git branch test
+git branch test
 ----
 
   * It's common practice to create a new branch for every feature or bug fix you
@@ -209,7 +210,7 @@ $ git branch test
 
 .Example:
 ----
-$ git branch features/update-branding
+git branch features/update-branding
 ----
 
   * Making all your commits against the master branch is a lazy and discouraged practice.
@@ -223,7 +224,8 @@ the asterisk character (`*`).
 
 .Example:
 ----
-$ git branch
+git branch
+
 * master
 testing
 ----
@@ -236,7 +238,7 @@ It's easy to switch to a different branch by typing: `git checkout <branch name>
 
 .Example:
 ----
-$ git checkout -b testing
+git checkout -b testing
 ----
 
 === Merging branches
@@ -246,8 +248,8 @@ members can use it. To merge a branch into the existing checked out branch type:
 
 .Example:
 ----
-$ git checkout master
-$ git merge develop
+git checkout master
+git merge develop
 ----
 
 In this example, the master branch is checked out and the develop branch is merged
@@ -263,7 +265,7 @@ To delete an existing branch, type: `git branch -d <branch name>`
 
 .Example:
 ----
-$ git branch -d testing
+git branch -d testing
 ----
 
   * Git will produce a warning if you try to delete a branch that contains unmerged
@@ -274,7 +276,7 @@ It's useful to be able to see the changes made to files in specific commits or s
 
 To see the file changes made in a specific commit, use the `git diff <commit hash>` command. For example:
 
-  $ git diff f83d738
+  git diff f83d738
 
 This command will display a list of changes made in the commit:
 
@@ -298,13 +300,13 @@ In this example, the word `Great` was added to the html code and a new file call
 
 You can compare the changes between two different commits by using the command: `git diff <hash>..<hash>`. For example:
 
-  $ git diff f83d738..HEAD
+  git diff f83d738..HEAD
 
 This command compares the file changes made between the f83d738 commit and the current HEAD.
 
 Finally, you can also easily compare the file changes between two different branches using the command: `git diff <branch name>..<branch name>`. For example:
 
-  $ git diff master..develop
+  git diff master..develop
 
 Note that the diff command output can be a little bit cryptic depending on the number of changes present in the commits being analyzed. Oftentimes it is more helpful to use a graphical diff tool to review file changes.
 
@@ -319,7 +321,7 @@ host (git server) to your local computer. Clone a repository by typing: `git clo
 
 .Example:
 ----
-$ git clone https://github.com/jasondbaker/infrastructure-class.git
+git clone https://github.com/jasondbaker/infrastructure-class.git
 ----
 
 This example will download a repository from GitHub and store it in
@@ -342,7 +344,7 @@ typing: `git push origin <branch name>`
 
 .Example:
 ----
-$ git push origin develop
+git push origin develop
 ----
 
 image:../images/git-hands-on/git-hands-on-pull.png["500","500"]
@@ -352,7 +354,7 @@ Over time the repository on the central server will get out of sync with
 your local clone of the repository as other developers push their code updates.
 Sync your current branch with the central server by typing: `git pull <repository name>`
 
-$ git pull https://github.com/jasondbaker/infrastructure-class.git
+git pull https://github.com/jasondbaker/infrastructure-class.git
 
   * When working with a team using a remote server, you establish a routine of
   pushing and pulling updates periodically from the remote server -- possibly
@@ -367,7 +369,7 @@ using the command: `git rebase <parent branch> <rebase branch>`
 
 .Example:
 ----
-$ git rebase develop feature/cool-widget
+git rebase develop feature/cool-widget
 ----
 
 This example takes the commits in the *cool-widget* branch and moves them to
