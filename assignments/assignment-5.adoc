@@ -380,18 +380,18 @@ If you encounter a *database connection error* when trying to view your wordpres
 
 Check to make sure the web server can communicate with the database instance. Run the *nc* command from the webserver (substitute your RDS endpoint for the one in this example). If you don't see a "connection succeeded!" message then you should review the security group configuration for both your webserver and the RDS instance.
 
-    $ sudo yum install nc -y
-    $ nc -zv wordpressdb.coqhf0zpvdaj.us-west-2.rds.amazonaws.com 3306
+    sudo yum install nc -y
+    nc -zv wordpressdb.coqhf0zpvdaj.us-west-2.rds.amazonaws.com 3306
 
 Verify your login credentials on the database instance. If the web server is able to connect to the database instance and the wordpress application is unable to access the database, then the access credentials you entered into the wordpress configuration file are probably incorrect.
 
 You can use the mysql client application to test the database credentials. Install the client application on the web server by typing the command:
 
-    $ sudo yum install mysql -y
+    sudo yum install mysql -y
 
 Next, log into your RDS instance using the following command (substituting your instance endpoint for the one in this example):
 
-    $ mysql -h wordpressdb.coqhf0zpvdaj.us-west-2.rds.amazonaws.com -P 3306 -u wpdbadmin -p
+    mysql -h wordpressdb.coqhf0zpvdaj.us-west-2.rds.amazonaws.com -P 3306 -u wpdbadmin -p
 
 You will be prompted to enter the master (administrative) password you setup on the RDS instance. If you receive an "access denied" error message, that means the username or password you are providing to the database server is incorrect. You will need to reset the master password on the RDS instance and try to connect with the mysql client again.
 
@@ -515,7 +515,7 @@ First you need to configure the AWS CLI using your credentials. You didn't have
 to do this in the previous assignment with S3 because you associated an
 IAM Role with the instance. Type in the following command:
 
-  $ aws configure
+  aws configure
 
 The CLI will prompt you for your API credentials. Your AWS user account has an Access Key and a Secret Key configured to allow you to programmatically access the AWS API. The keys are located in your account properties in IAM. If you do not know your secret key, you can use IAM to generate a new one since previously generated keys cannot be recovered. Note, this secret API is not the same as your private server key.
 
@@ -526,7 +526,7 @@ Next, change to the `wpinstall` directory in your home directory.
 
 Type in the following command to view all the autoscaling activities and copy them to a test file called `activity.json`:
 
-  $ aws autoscaling describe-scaling-activities --auto-scaling-group-name wordpress-web-group > activity.json
+  aws autoscaling describe-scaling-activities --auto-scaling-group-name wordpress-web-group > activity.json
 
 Take a look at the contents of the `activity.json` file. You should see a long text output including a list of activities with each
 having a Description, ActivityId, StartTime, etc.
