@@ -192,19 +192,19 @@ Next, let's install the Nginx webserver on the new Linux instance. Nginx is a
 fast and lightweight web server platform that is widely used by many of the
 largest websites in the world. Type in:
 
-  $ sudo amazon-linux-extras install nginx1.12 -y
+  sudo amazon-linux-extras install nginx1.12 -y
 
 You've installed Nginx, but the web service isn't actually running yet. You can
 confirm this by checking the running processes on the system and searching for
 the term `nginx`:
 
-  $ ps ax | grep nginx | grep -v grep
+  ps ax | grep nginx | grep -v grep
 
 Remember learning about the pipe operator (vertical bar)? In this command we are piping the output from the list processes command (ps) into a text search command (grep). Putting it all together, this command tells the system to list out all running process and look for one named nginx.
 
 Go ahead and start up the Nginx webserver:
 
-  $ sudo systemctl start nginx.service
+  sudo systemctl start nginx.service
 
 Try to run the `ps` command sequence again to see if the webserver is running. Just
 hit the up arrow twice to replay the command or type it in again. You should
@@ -235,7 +235,7 @@ this assignment.
 Nginx is installed on the Linux instance and is currently running. However, if you
 reboot the instance Nginx will not automatically restart. Let's fix that:
 
-  $ sudo systemctl enable nginx.service
+  sudo systemctl enable nginx.service
 
 The Nginx web document root is located in the `/usr/share/nginx/html` directory.
 The web document root is the default location that the Nginx webserver will
@@ -269,16 +269,16 @@ Amazon created a command line interface (CLI) that you can use to work with
 AWS infrastructure. The CLI is automatically installed on Amazon Linux instances.
 Try it out now by typing:
 
-  $ aws help
+  aws help
 
 Pretty cool, huh? You can do pretty much anything with this CLI. Let's use it
 now:
 
-  $ sudo aws s3 cp s3://<your S3 bucket name>/index.html /usr/share/nginx/html/index.html
+  sudo aws s3 cp s3://<your S3 bucket name>/index.html /usr/share/nginx/html/index.html
 
 .Example
 ----
-$ sudo aws s3 cp s3://jbaker-assignment-3/index.html /usr/share/nginx/html/index.html
+sudo aws s3 cp s3://jbaker-assignment-3/index.html /usr/share/nginx/html/index.html
 ----
 
 Go back to your web browser and reload the web page. You should see your
@@ -347,7 +347,7 @@ Basically, AWS provides a virtual web server that any instance can access to
 discover information about itself. Sounds kind of strange doesn't it? Try it
 out:
 
-  $ curl http://169.254.169.254/latest/meta-data/
+  curl http://169.254.169.254/latest/meta-data/
 
 You should receive a list of meta-data categories in the response. The `curl`
 command is a simple text-based web browser. The curl browser accessed
@@ -356,7 +356,7 @@ All of the meta-data associated with the instance can be accessed by
 constructing appropriate URL paths. For example, if you want to retrieve the
 instance type for the current instance, enter:
 
-  $ curl http://169.254.169.254/latest/meta-data/instance-type
+  curl http://169.254.169.254/latest/meta-data/instance-type
 
 You should see `t2.micro` in the response. Understanding how to access
 instance meta-data is important when programmatically working with
