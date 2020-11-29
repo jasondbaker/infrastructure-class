@@ -44,7 +44,7 @@ use Amazon Linux systems. The default username for these Linux instances is: `ec
 
 .Example (MacOS):
 ----
-$ ssh -i server-key.pem ec2-user@54.173.25.113
+ssh -i server-key.pem ec2-user@54.173.25.113
 ----
 
 In this example, the `-i server-key.pem` option defines the key that will be
@@ -58,7 +58,7 @@ It's really easy to log out and disconnect from a remote Linux system. Simply ty
 
 .Example:
 ----
-$ logout
+logout
 ----
 
 === The Shell
@@ -87,12 +87,12 @@ application. To see a list of the commands built into the shell, type the `help`
 
 .Example:
 ----
-$ help
+help
 ----
 
 Or, if you want help on a specific command:
 ----
-$ help echo
+help echo
 ----
 
 If you type in a command that isn't built into the shell, it will look in a few
@@ -109,7 +109,7 @@ a bit complicated to read. To view a man page, type in the command: `man <comman
 
 .Example:
 ----
-$ man date
+man date
 ----
 
 Frankly, if you a struggling to figure out how to use a particular command it's
@@ -140,7 +140,7 @@ A user can escalate their privileges to that of a super-user by using the
 
 .Example:
 ----
-$ sudo nano /etc/httpd.conf
+sudo nano /etc/httpd.conf
 ----
 
 If your user account has sudo privileges, you can do pretty much anything you
@@ -155,7 +155,11 @@ temporarily to perform a set of tasks as a super-user.
 
 .Example:
 ----
-$ sudo su
+sudo su
+----
+
+.Output:
+----
 #
 ----
 
@@ -198,9 +202,9 @@ simply using a `/`.
 
 .Example:
 ----
-$ cd /
-$ cd /home
-$ cd /home/web
+cd /
+cd /home
+cd /home/web
 ----
 
 In this example, we are starting at the root directory and progressively changing
@@ -237,7 +241,7 @@ a sub-directory of the root directory).
 
 .Example:
 ----
-$ cd /home/web
+cd /home/web
 ----
 
 A relative directory path name refers to a directory that's relative to the current
@@ -247,8 +251,12 @@ preceding forward-slash.
 
 .Example:
 ----
-$ cd web
-$ pwd
+cd web
+pwd
+----
+
+.Output:
+----
 /home/web
 ----
 
@@ -257,7 +265,7 @@ located _above_ the current working directory by using two dots (`..`).
 
 .Example:
 ----
-$ ls ../web
+ls ../web
 ----
 
 In this example, if the current working directory is `/home/web`, then this
@@ -269,7 +277,7 @@ The current working directory is changed by typing the command: `cd <new directo
 
 .Example:
 ----
-$ cd /home
+cd /home
 ----
 
 If you lose track of what directory you are currently in you can type the command:
@@ -277,8 +285,12 @@ If you lose track of what directory you are currently in you can type the comman
 
 .Example:
 ----
-$ cd /home
-$ pwd
+cd /home
+pwd
+----
+
+.Output:
+----
 home
 ----
 
@@ -291,8 +303,12 @@ to denote this special directory using the tilde character (`~`).
 
 .Example:
 ----
-$ cd ~
-$ pwd
+cd ~
+pwd
+----
+
+.Output:
+----
 /home/jason
 ----
 
@@ -303,7 +319,7 @@ directory.
 
 .Example:
 ----
-$ ls
+ls
 ----
 
 You can also use an absolute or relative directory reference as an argument to
@@ -311,8 +327,8 @@ this command.
 
 .Example:
 ----
-$ ls /home
-$ ls ../web
+ls /home
+ls ../web
 ----
 
 The `ls` command without any options provides a basic listing which omits many
@@ -321,7 +337,7 @@ detailed listing. That's when we add the `-la` option to the command.
 
 .Example:
 ----
-$ ls -la /home/web
+ls -la /home/web
 ----
 
 You will quickly learn that a plethora of options are available for every
@@ -333,7 +349,7 @@ Create a directory inside the current working directory using the command: `mkdi
 
 .Example:
 ----
-$ mkdir test
+mkdir test
 ----
 
 As with other file system commands, you can use either absolute or relative
@@ -343,7 +359,7 @@ Delete a directory using the command: `rmdir <directory name>`
 
 .Example:
 ----
-$ rmdir test
+rmdir test
 ----
 
 Note that in the above example, if the `test` directory isn't empty then the
@@ -359,7 +375,7 @@ if you reference the root directory as a super-user.
 
 .Example:
 ----
-$ rm -fr test
+rm -fr test
 ----
 
 === Creating a file
@@ -368,7 +384,7 @@ generate an empty file is using the command: `touch`
 
 .Example:
 ----
-$ touch myfile
+touch myfile
 ----
 
 You can also create files using a text editor (discussed in a bit).
@@ -378,7 +394,7 @@ Copy a file from one location to another using the command: `cp <filename> <newf
 
 .Example:
 ----
-$ cp myfile.txt myfile.bak
+cp myfile.txt myfile.bak
 ----
 
 This example makes a new copy of the `myfile.txt` file and stores it in the
@@ -389,7 +405,7 @@ another copy. Use the `mv <filename> <location>` command to move files.
 
 .Example:
 ----
-$ mv /home/web/myfile.txt /var/www/html
+mv /home/web/myfile.txt /var/www/html
 ----
 
 In this example, the `myfile.txt` file is moved to the `var/www/html` directory.
@@ -399,7 +415,7 @@ Delete files in a directory by using the `rm` command.
 
 .Example:
 ----
-$ rm myfile
+rm myfile
 ----
 
 === File patterns
@@ -409,7 +425,7 @@ a wildcard pattern.
 
 .Example:
 ----
-$ ls log*
+ls log*
 ----
 
 In this example, the command will list all of the files in the current working
@@ -422,7 +438,7 @@ only want to refer to a single wildcard character, you can use the question mark
 
 .Example:
 ----
-$ ls record?log
+ls record?log
 ----
 
 This example might output a file listing containing files like `record1log`,
@@ -442,7 +458,11 @@ To see the access credentials for files in a directory, type: `ls -la`
 
 .Example:
 ----
-$ ls -la
+ls -la
+----
+
+.Output:
+----
 -rw-------  1 ec2-user users     778 Jun 29  2015 file1
 -rw-r--r--  1 jbaker webusers    972 Mar 15 16:57 file2
 drwxr-xr-x  3 root   root        4096 Jun 28  2015 logs
@@ -472,7 +492,7 @@ Its possible to modify the access control list for a file using the command: `ch
 
 .Example:
 ----
-$ sudo chmod a+r file1
+sudo chmod a+r file1
 ----
 
 In this example, the access control list for `file1` is modified to allow everyone
@@ -483,8 +503,8 @@ and `chgrp <groupname> <filename>` commands respectively.
 
 .Example:
 ----
-$ sudo chown jbaker file1
-$ sudo chgrp webusers file1
+sudo chown jbaker file1
+sudo chgrp webusers file1
 ----
 
 === Viewing text files
@@ -500,8 +520,8 @@ contents of text files. Two popular programs are called `cat` and `less`.
 
 .Example:
 ----
-$ cat myfile.txt
-$ less server.conf
+cat myfile.txt
+less server.conf
 ----
 
 Both commands output the contents of a text file to your terminal.
@@ -520,7 +540,7 @@ use Linux, the `nano` editor is probably a better choice. Edit a file by typing:
 
 .Example:
 ----
-$ nano myfile.conf
+nano myfile.conf
 ----
 
 The nano editor will present you with a set of commands, most of which are accessed
@@ -546,7 +566,7 @@ use the right angle-bracket character (`>`) and the name of the output file.
 
 .Example:
 ----
-$ ls /home/web > files.txt
+ls /home/web > files.txt
 ----
 
 In this example, the `ls` command will create a listing of all files and directories
@@ -559,7 +579,7 @@ it, use two right angle-brackets (`>>`).
 
 .Example:
 ----
-$ ls /home/web >> files.txt
+ls /home/web >> files.txt
 ----
 
 We can also redirect the input of a program. Typically the program input comes
@@ -568,7 +588,7 @@ use the left angle-bracket character (`<`) and the name of the input file.
 
 .Example:
 ----
-$ wc -w < report.doc
+wc -w < report.doc
 ----
 
 The `wc -w` command above performs a word count of input data. In this case, the
@@ -587,7 +607,7 @@ another. To pipe data between programs use the vertical bar character (`|`).
 
 .Example:
 ----
-$ ls /var/www/html | less
+ls /var/www/html | less
 ----
 
 This example command takes the directory listing output from the `/var/www/html` directory
@@ -618,8 +638,12 @@ programming languages. The shell supports the creation and use of variables.
 
 .Example:
 ----
-$ j=123
-$ echo $j
+j=123
+echo $j
+----
+
+.Output:
+----
 123
 ----
 
@@ -648,7 +672,11 @@ the form of numbered variables, starting with `$1`, `$2`, `$3`, etc.
 
 .Example:
 ----
-$ cat myscript
+cat myscript
+----
+
+.Output:
+----
 #!/bin/bash
 echo Hello $1
 
@@ -669,7 +697,11 @@ script.
 
 .Example:
 ----
-$ cat myscript
+cat myscript
+----
+
+.Output:
+----
 #!/bin/bash
 echo Let\'s say hello to $# people
 echo Hello $*
@@ -695,7 +727,11 @@ and then writes a file into the directory.
 
 .Example:
 ----
-$ cat createconfig
+cat createconfig
+----
+
+.Output:
+----
 #!/bin/bash
 # My Hello World script
 mkdir myconfig
@@ -728,7 +764,11 @@ using a `for-do-done` construct.
 
 .Example:
 ----
-$ cat myscript
+cat myscript
+----
+
+.Output:
+----
 #!/bin/bash
 # for-loop test script
 names='Jason John Jane'
@@ -736,8 +776,15 @@ for i in $names
 do
   echo Hello $i
 done
+----
 
+.Example:
+----
 $ ./myscript
+----
+
+.Output:
+----
 Hello Jason
 Hello John
 Hello Jane
@@ -751,7 +798,11 @@ allow your scripts to make decisions based on testable conditions.
 
 .Example:
 ----
-$ cat myscript
+cat myscript
+----
+
+.Output:
+----
 #!/bin/bash
 if [ -f "$1" ]
 then
@@ -759,12 +810,26 @@ then
 else
   echo 'Cannot find the file.'
 fi
+----
 
-$ ./myscript testfile
+.Example:
+----
+./myscript testfile
+----
+
+.Output:
+----
 Cannot find the file.
+----
 
-$ touch testfile
-$ ./myscript testfile
+.Example:
+----
+touch testfile
+./myscript testfile
+----
+
+.Output:
+----
 The file testfile exists
 ----
 
@@ -783,7 +848,7 @@ different system. Linux makes this process really easy using the `tar <options> 
 
 .Example:
 ----
-$ tar -cvzf newarchive.tar.gz /var/www/html
+tar -cvzf newarchive.tar.gz /var/www/html
 ----
 
 This tar command will archive and compress all of the files and directories
@@ -795,7 +860,7 @@ You can use a very similar looking command to unpack and uncompress the archive.
 
 .Example:
 ----
-$ tar -xvzf newarchive.tar.gz
+tar -xvzf newarchive.tar.gz
 ----
 
 This will unpack and uncompress the `newarchive.tar.gz` archive in the current
@@ -813,7 +878,7 @@ You can start and stop services on the Linux system using the `systemctl` comman
 
 .Example:
 ----
-$ sudo systemctl start httpd.service
+sudo systemctl start httpd.service
 ----
 
 This command starts the Apache2 webserver on the system. Stopping the service is
@@ -821,21 +886,21 @@ just as easy.
 
 .Example:
 ----
-$ sudo systemctl stop httpd.service
+sudo systemctl stop httpd.service
 ----
 
 A service can be configured to automatically start when a system boots using the `systemctl enable` command.
 
 .Example:
 ----
-$ sudo systemctl enable httpd.service
+sudo systemctl enable httpd.service
 ----
 
 Similarly, you can configure a service to not start when a system boots up.
 
 .Example:
 ----
-$ sudo systemctl disable httpd.service
+sudo systemctl disable httpd.service
 ----
 
 Each service runs as a process, or set of processes, on the system. You can
@@ -844,7 +909,7 @@ quickly view a list of all the processes running on the system by using the
 
 .Example:
 ----
-$ ps
+ps
 ----
 
 The `ps` command alone provides basic information about the running processes.
@@ -852,7 +917,7 @@ The command accepts a number of options to provide more details.
 
 .Example:
 ----
-$ ps -ax
+ps -ax
 ----
 
 Linux also offers a way to view the current performance of a system using the
@@ -862,7 +927,7 @@ a Windows PC.
 
 .Example:
 ----
-$ top
+top
 ----
 
 If a process is running improperly or consuming too many system resources,
@@ -870,7 +935,7 @@ you can forcibly stop it using the `kill <process id>` command.
 
 .Example:
 ----
-$ sudo kill 955
+sudo kill 955
 ----
 
 Be careful with this command. You could accidently stop a critical service or
@@ -882,7 +947,7 @@ will need to have super-user privileges to run this command.
 
 .Example:
 ----
-$ sudo shutdown
+sudo shutdown
 ----
 
 The shutdown command starts a count down timer which delays the system shutdown
@@ -893,7 +958,7 @@ You can also restart the system using the `shutdown` command with the `-r` optio
 
 .Example:
 ----
-$ sudo shutdown -r now
+sudo shutdown -r now
 ----
 
 If the Linux system is running as an instance at a cloud provider like AWS, you
@@ -932,7 +997,7 @@ The package manager installed on the Linux systems in our course is called
 
 .Example:
 ----
-$ sudo yum update -y
+sudo yum update -y
 ----
 
 The command in this example is very similar to running a Windows Update on a Windows system.
@@ -945,7 +1010,7 @@ You can use the `yum install <package>` command to install new software on the s
 
 .Example:
 ----
-$ sudo yum install httpd
+sudo yum install httpd
 ----
 
 In this example, yum will download and install the latest version of the Apache
@@ -955,5 +1020,5 @@ To remove an existing package from the system, use the `yum remove <package>` co
 
 .Example:
 ----
-$ sudo yum remove httpd
+sudo yum remove httpd
 ----
