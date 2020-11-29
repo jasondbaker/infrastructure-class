@@ -76,7 +76,7 @@ Ansible uses an inventory file to track managed hosts. The inventory file specif
 You can verify that Ansible can successfully access the managed hosts by typing the
 following commands:
 
-    $ ansible all -m ping
+    ansible all -m ping
 
 You should see a response from Ansible that looks like this:
 
@@ -102,7 +102,7 @@ If Ansible returns a successful `pong` for the `web1` and `web2` hosts then you 
 
 You will create an Ansible playbook to configure the `web1` and `web2` instances as Wordpress webservers. Before beginning the playbook, take a look at the facts that Ansible can collect from a remote host:
 
-    $ ansible web1 -m setup
+    ansible web1 -m setup
 
 You can create a playbook file on the `mgmt1` server using a local text editor like nano or vi. Alternatively, you can use your favorite source code editor on your local workstation and copy (scp) the file from your local workstation to the `assignment8` directory on `mgmt1`. Use whichever method is easiest for you.
 
