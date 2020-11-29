@@ -117,14 +117,14 @@ the command prompt.
 
 Let's start by asking the shell for some help. Type in:
 
-  $ help
+  help
 
 The shell provides you with a list of commands you can run along with posssible
 command options.
 
 Next, check out one of the pages in the built-in manual:
 
-  $ man ls
+  man ls
 
 A _man page_ will appear with information on how to use the `ls` command. This
 command is used to list the contents of file directories. Either `space` through
@@ -138,7 +138,7 @@ When you initially log into Linux, the system places you in your home directory.
 Each user on the system has a separate home directory. Let's see where your
 home directory is located:
 
-  $ pwd
+  pwd
 
 The response should be `/home/ec2-user`. The `pwd` command is handy to remember
 if you ever forget what file directory you are currently located in. If you recall
@@ -147,7 +147,7 @@ directory.
 
 Type in:
 
-  $ cd /
+  cd /
 
 The `cd` command let's you change to a new working directory on the server. In
 this case, we changed to the _root_ (`/`) directory. This is the parent of all
@@ -155,7 +155,7 @@ the other directories on the file system.
 
 Type in:
 
-  $ ls
+  ls
 
 The `ls` command lists the contents of the current directory. As you can see,
 root directory contains many other directories. You will become familiar
@@ -166,7 +166,7 @@ the command with some options if you want to see more detailed information.
 
 Type in:
 
-  $ ls -la
+  ls -la
 
 See how this command provides you much more detailed information about the
 files and directories? You can use this detailed listing to see the owner, group,
@@ -181,15 +181,15 @@ are called hidden files. These files won't appear on normal directory listings.
 
 Type in:
 
-  $ cd /var
+  cd /var
 
 Then, type in:
 
-  $ ls
+  ls
 
 You will see a directory listing for the `/var` directory. Next, type in:
 
-  $ ls ..
+  ls ..
 
 Huh. This directory listing looks the same as the earlier root directory listing.
 When you use two periods (`..`) in a directory path that means you are referring
@@ -198,8 +198,8 @@ meaning the directory _above_ the current directory.
 
 Now, type in:
 
-  $ cd ~
-  $ pwd
+  cd ~
+  pwd
 
 Whoa. We're back at our home directory again. The tilda character (`~`) is another
 one of those handy little directory path shortcuts. It always refers to our
@@ -228,11 +228,11 @@ directory still exists at this point. Go ahead and check.
 
 Let's create another directory. Type in:
 
-  $ mkdir documents
+  mkdir documents
 
 Next, change to the new directory:
 
-  $ cd documents
+  cd documents
 
 Did you notice that your command prompt displays the name of the current directory?
 Something like: `[ec2-user@ip-172-31-15-26 documents]$`. Pretty handy, huh?
@@ -240,17 +240,17 @@ Something like: `[ec2-user@ip-172-31-15-26 documents]$`. Pretty handy, huh?
 Okay, let's create our first file in the `documents` directory. This is just an
 empty file for training purposes. Type in:
 
-  $ touch paper.txt
+  touch paper.txt
 
 Check to see that the new file is in the directory. Now, go back to the previous
 directory. Remember the double dot shortcut?
 
-  $ cd ..
+  cd ..
 
 Okay, we don't like our `documents` directory any more. Let's blow it away.
 Type in:
 
-  $ rmdir documents
+  rmdir documents
 
 Uh oh. The shell didn't like that command because the directory isn't empty.
 Let's change back into the documents directory. But this time don't type in
@@ -258,30 +258,30 @@ the full name of the directory. You can let shell auto-completion do the typing
 for you. Type in the first couple characters of the directory name and then
 hit the tab key:
 
-  $ cd doc<tab>
+  cd doc<tab>
 
 You should use the `tab` auto-completion feature often. It saves typing and
 makes working with the Linux file system much much easier. Tab is your friend.
 
 Now, remove the file by typing:
 
-  $ rm paper.txt
+  rm paper.txt
 
 Did you try to use the `tab` key instead of typing in the whole file name?
 Check to make sure the file was deleted from the directory.
 
 Next, create a new file:
 
-  $ touch file1
+  touch file1
 
 We like `file1` so much that we want to make a backup copy. Type:
 
-  $ cp file1 file1-backup
+  cp file1 file1-backup
 
 Check to make sure the new backup copy was created. We don't really like the
 name of that new file, so let's rename it. Type:
 
-  $ mv file1-backup backup
+  mv file1-backup backup
 
 Moving a file to the same directory and giving it a new name is basically the
 same thing as renaming it. We could have moved it to a different directory if
@@ -290,7 +290,7 @@ we wanted.
 Let's list all of the files in the current directory that start with the
 letter `f`:
 
-  $ ls f*
+  ls f*
 
 Using wildcard pattern matching in file commands is really useful if you want
 the command to impact or filter a group of files. Now, go up one directory to
@@ -301,7 +301,7 @@ Obviously that won't work again. However, we can use a more powerful command
 to destroy the directory and vanquish its contents. Behold, the all powerful
 remove command:
 
-  $ rm -fr documents
+  rm -fr documents
 
 Did you remember to use auto-completion when typing in `documents`? This command
 and set of options forcibly removes the directory and its contents. It's a
@@ -320,7 +320,7 @@ directory, it cannot change files all across the system. At least it can't
 as a normal user. The `ec2-user` is a member of the _root_ group, so it can
 escalate its privileges to _super-user_ status when necessary. Let's try it:
 
-  $ sudo mkdir test
+  sudo mkdir test
 
 Check to make sure the directory exists now. Using `sudo` we can execute commands
 as a super-user. We can do anything we want now that we know this powerful new
@@ -336,13 +336,13 @@ users or those acting as a super-user can write changes to the directory.
 
 Let's go back to our home directory:
 
-  $ cd ~
+  cd ~
 
 Editing text files is a really common task on Linux systems because many of
 the application configuration files are text files. We can create a text file
 by using a text editor. Type in:
 
-  $ nano myfile.conf
+  nano myfile.conf
 
 The shell starts up the `nano` text editor and places your terminal cursor
 in the editing screen. Nano is a simple text-based word processor. Type in
@@ -353,7 +353,7 @@ text to the filename you specified.
 Check to see that your file was saved in the directory. You can take a look
 at the contents of your file by typing:
 
-  $ cat myfile.conf
+  cat myfile.conf
 
 The `cat` command displays your text file content on the terminal screen. This
 command works fine for displaying small text files. But if your file is hundreds
@@ -361,7 +361,7 @@ of lines long, the content will scroll down your terminal screen so fast that
 you won't be able to easily read it. There's a better way to view larger text
 files. Type in:
 
-  $ less myfile.conf
+  less myfile.conf
 
 The `less` command will page the display of a text file, allowing you to page
 through the contents of the file using the space bar. Your text file is probably
@@ -378,7 +378,7 @@ Now, hit `ctrl-c`. This cancels whatever command is displayed on the command lin
 
 Type in the following command to create a couple empty files in the directory:
 
-  $ touch file1 file2 file3
+  touch file1 file2 file3
 
 Confirm that the files were created. Some commands, like `touch`. allow you to
 specify multiple files as arguments. You will find that Linux commands have all
@@ -389,7 +389,7 @@ the terminal screen. The screen is the standard place for commands to output
 results. It's known as the standard out (_stdout_). However, it's really useful
 to output results to the file system sometimes. Type in:
 
-  $ ls > listing.txt
+  ls > listing.txt
 
 Take a look at the directory listing now. You just created a new file. View
 the contents of the `listing.txt` file. What do you see? Instead of sending
@@ -397,7 +397,7 @@ the output from the `ls` command to the screen we sent it to a text file.
 
 Let's try another one. Type:
 
-  $ cat myfile.conf > listing.txt
+  cat myfile.conf > listing.txt
 
 Take a look at the contents of the `listing.txt` file again. It looks like your
 `myfile.conf` file now. It's like you made a copy of it. But what happened to
@@ -405,7 +405,7 @@ the previous content in the `listing.txt` file? When you redirect the output of
 a command using the right angle-bracket character (`>`), the output overwrites
 the existing file. Type this command in:
 
-  $ cat myfile.conf >> listing.txt
+  cat myfile.conf >> listing.txt
 
 Now look at the contents of the `listing.txt` file. You should see your original
 content displayed twice. When you use two angle-bracket characters in the commmand
@@ -416,14 +416,14 @@ redirect the input to a command. Typically we use a keyboard to provide input,
 but sometimes it makes more sense to input a file to a command. For example,
 how many words are in your new `listing.txt` file? Let's find out. Type in:
 
-  $ wc -w < listing.txt
+  wc -w < listing.txt
 
 Did you get a number? This command inputs the `listing.txt` file into a
 word count program called `wc`.
 
 Type in the command:
 
-  $ ls /usr/bin
+  ls /usr/bin
 
 The terminal screen probably scrolled quickly as filenames flashed by. The
 `/usr/bin` directory holds quite a few files. It would be nice if we could
@@ -432,7 +432,7 @@ special shell feature called _pipes_. In previous steps we redirected I/O
 using the file system. Pipes allow us to redirect I/O between programs. We
 can redirect the output from one program into another. Type in:
 
-  $ ls /usr/bin | less
+  ls /usr/bin | less
 
 Now the directory listing is paged. Hit the `spacebar` to page through the
 listing. The pipe, represented by a vertical bar character (`|`), takes the
@@ -453,8 +453,8 @@ procedural programming language. Let's write some code.
 
 Type in this command:
 
-  $ j=123
-  $ echo $j
+  j=123
+  echo $j
 
 We just created a variable named `j` referencing the string `123`. The
 `echo` command printed out the value of the variable. We had to use a
@@ -462,8 +462,8 @@ dollar sign (`$`) when referencing the variable in another command.
 
 Next, type in:
 
-  $ j=1+1
-  $ echo $j
+  j=1+1
+  echo $j
 
 Is that what you expected? The shell just interprets the variable value
 as a string. It's not going to do any sort of computation.
@@ -482,13 +482,13 @@ in the editor, type in the following lines of code:
 
 Now quit the editor and save your file. We can run our script by typing:
 
-  $ ./myscript World
+  ./myscript World
 
 Er, what happened? Permission denied. Didn't we create this file? Why can't
 we run it? We can't run the script file because we haven't set the execute
 permission on the file. Type in:
 
-  $ chmod u+x myscript
+  chmod u+x myscript
 
 This modifies the file access control list to allow the owner of the file to
 execute it. Let's try to run the command again. Hit the up-arrow key a couple
@@ -502,7 +502,7 @@ numbered variables inside the script (`$1`, `$2`, etc). Pretty simple.
 You might be wondering why we had to type the `./` characters before the name
 of our script file. Try to type in the command without them:
 
-  $ myscript World
+  myscript World
 
 Command not found. That seems a little weird. Aren't we currently in the directory where
 the shell script is located? Well, that's just not how the shell works. When you
@@ -523,7 +523,7 @@ type:
 Exit the editor window and save the file. Change the permissions on the script
 file so that you can execute it. Now run the command:
 
-  $ ./cleanup
+  ./cleanup
 
 Take a look at the file directory listing. Notice the `archive` directory? List
 the contents of that directory. The script automatically created a new directory
@@ -543,7 +543,7 @@ Here is content of the script:
 
 Change the permissions on the script file so that you can execute it. Run the command:
 
-  $ ./namelist
+  ./namelist
 
 The script will loop through a set of names stored in a variable displaying each one.
 Scripts support several programming constructs like for-loops, do-while loops, and
@@ -555,7 +555,7 @@ We're nearing the end of this exercise. But before we finish, let's install some
 new software packages on our server. The first thing we should do is make sure
 all the current packages installed on our Linux server are up-to-date. Type in:
 
-  $ sudo yum update -y
+  sudo yum update -y
 
 This is one of those really powerful commands that requires `sudo` access. The
 system will review the currently installed packages and go out to the Internet
@@ -563,34 +563,34 @@ and download appropriate updates.
 
 Next, let's install an Apache webserver on our system. Type in:
 
-  $ sudo yum install httpd -y
+  sudo yum install httpd -y
 
 Bam! You probably never knew that installing a webserver was so easy. We're not
 going to actually use the webserver in this exercise, but we will in future assignments.
 
 We installed the webserver, but is it actually running? Let's check. Type in:
 
-  $ sudo service httpd status
+  sudo service httpd status
 
 Nope. Let's start it. Type:
 
-  $ sudo service httpd start
+  sudo service httpd start
 
 We can use the `service` command to control the services running on the system.
 Let's setup the service so that it automatically starts when the system boots up.
 Type in:
 
-  $ sudo chkconfig httpd on
+  sudo chkconfig httpd on
 
 Cool. We installed the Apache webserver on our system, but what other programs
 are currently running? We can use the `ps` command to find out. Type in:
 
-  $ ps -ax
+  ps -ax
 
 Lots of processes are running on our system. We can even look at the overall
 performance of our system using the `top` command. Let's try that now. Type in:
 
-  $ top
+  top
 
 The display might seem a little overwhelming at first. You should see lots of
 performance information displayed including the cpu usage, free memory, and a
@@ -599,7 +599,7 @@ list of running tasks.
 We're almost across the finish line. Let's make sure all of our valuable work
 is stored in a git repository. First we need to install git. Type in the command:
 
-  $ sudo yum install git -y
+  sudo yum install git -y
 
 === Check your work
 It's very important to check your work before submitting it for grading. A misspelled, misplaced or missing file will cost you points. This may seem harsh, but the reality is that these sorts of mistakes have consequences in the real world. For example, a server instance could fail to launch properly and impact customers because a single required file is missing.
@@ -621,7 +621,7 @@ install the git repository you created at the beginning of this exercise. You
 will need to modify this command by typing in the GitHub repository URL you
 copied earlier.
 
-  $ git clone <your GitHub URL here>.git
+  git clone <your GitHub URL here>.git
 
 .Example:
 ----
@@ -638,7 +638,7 @@ cloning process.
 
 Change to the `project-2-linux-git-<username>` directory and type:
 
-  $ ls -la
+  ls -la
 
 Notice the `.git` hidden directory? This is where git actually stores all of
 the file changes in your repository. Nothing is actually in your repository yet.
@@ -646,9 +646,9 @@ the file changes in your repository. Nothing is actually in your repository yet.
 Change back to the parent directory (`cd ..`). Next, let's move some of our
 files into the repository. Type:
 
-  $ mv archive project-2-linux-git-<username>
-  $ mv namelist project-2-linux-git-<username>
-  $ mv myfile.conf project-2-linux-git-<username>
+  mv archive project-2-linux-git-<username>
+  mv namelist project-2-linux-git-<username>
+  mv myfile.conf project-2-linux-git-<username>
 
 Hopefully you remembered to use the auto-complete function to reduce some of that
 typing. Change to the `project-2-linux-git-<username>` directory and list the directory
@@ -657,29 +657,29 @@ stored in the repository because they haven't been committed yet.
 
 Type in:
 
-  $ git status
+  git status
 
 You should see a list of untracked files. Let's tell git that we want these files
 tracked. Type in:
 
-  $ git add *
+  git add *
 
 Now type in the `git status` command again. Notice how all the files
 are now being tracked and are ready to be committed. These files are in the
 git staging area. We'll commit them to the repository next. Type:
 
-  $ git commit -m 'project 2 files'
+  git commit -m 'project 2 files'
 
 Next, take a look at the commit log. Type:
 
-  $ git log
+  git log
 
 You should see your commit listed along with an assigned hash (long string of
   random-looking characters).
 
 Finally, let's save the repository to our GitHub account. Type in:
 
-  $ git push origin master
+  git push origin master
 
 The git client will ask you for your GitHub username and password before pushing
 the repository.
