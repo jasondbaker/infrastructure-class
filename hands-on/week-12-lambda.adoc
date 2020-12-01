@@ -47,7 +47,7 @@ Modify the `datapipe.yml` file to add a Lambda function called `DatalogFunction`
     ** The CodeUri references the local storage location of the Lambda function code file relative to the CloudFormation YAML template file you are editing.
   * MemorySize: 256
   * Timeout: 15
-  * Add an execution policy using the managed role AWSLambdaKinesisExecutionRole
+  * Policies: AWSLambdaKinesisExecutionRole 
     ** The Lambda function executes with the access permissions associated with the execution role. If the function needs to access other AWS resources, like a Kinesis stream, the execution role needs to explicitly allow the function to access these resources.
   * An event source called `StreamData` using a Kinesis type event source. 
     ** The stream should reference the `DataStream` Kinesis stream resource Arn in the template. (Hint: look at GetAtt function)
