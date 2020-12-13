@@ -504,4 +504,4 @@
             "Value": {"Fn::GetAtt": ["ELB", "DNSName"]}
         }
     }
-}
+} 
