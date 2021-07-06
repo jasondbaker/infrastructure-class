@@ -124,7 +124,7 @@ Typically in a production environment we don't launch individual Docker containe
 
     docker-compose up -d
 
-Create a basic Docker compose file called `docker-compose.yaml` to launch the `dynaweb1` container. You can find documentation for Docker Compose at the following website:
+Create a basic Docker compose file called `docker-compose.yaml` to launch the `dynacorpweb1` container. You can find documentation for Docker Compose at the following website:
 
     https://docs.docker.com/compose/
 
