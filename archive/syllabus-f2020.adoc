@@ -6,8 +6,8 @@ University of St. Thomas +
 St. Paul, MN 55105
 
 [.text-center]
-*SYLLABUS Fall 2021 SEIS 615-01* +
-Version 2021.07.25
+*SYLLABUS Fall 2020 SEIS 615-01* +
+Version 2020.08.10
 
 {blank}
 *[.underline]#Course Title#* +
@@ -183,11 +183,11 @@ without the written permission of the instructor. (See Class Session Recording
 |=========================================================
 |Week | Date | Topic | Assignments Due
 
-|1 | 9/13 | Course Introduction +
+|1 | 9/14 | Course Introduction +
 Distributed Infrastructure Patterns |
 
 
-|2 | 9/20 | Linux fundamentals +
+|2 | 9/21 | Linux fundamentals +
 Shell scripting
  |
 Assignment 1 +
@@ -195,69 +195,69 @@ Read _Git Hands On Guide_ +
 Read _Linux Hands On Guide_ +
 Watch Lecture 2 video recordings
 
-|3 | 9/27 | Virtualization & Cloud Computing +
+|3 | 9/28 | Virtualization & Cloud Computing +
 AWS +
 IAM, EC2, S3 |
 Assignment 2 +
 Watch Lecture 3 video recordings 
 
-|4 | 10/4 | AWS +
+|4 | 10/5 | AWS +
 VPC, RDS, ELB, Security |
 Assignment 3 +
 Watch Lecture 4 video recordings 
 
-|5 | 10/11 | AWS +
+|5 | 10/12 | AWS +
 AWS Integration, Management & +
 Cloud-native patterns |
 Assignment 4 +
 Watch Lecture 5 video recordings
 
-|6 | 10/18 | DevOps +
+|6 | 10/19 | DevOps +
 Continuous integration & delivery +
  |
 Assignment 5 +
 Watch Lecture 6 video recordings 
 
 
-|7 | 10/25 | Midterm Challenge|
+|7 | 10/26 | Midterm Challenge|
 
 
-|8 | 11/1 | Infrastructure as code +
+|8 | 11/2 | Infrastructure as code +
 CloudFormation +
  |
 Assignment 6 +
 Watch Lecture 8 video recordings
 
 
-|9 | 11/8 | Configuration Management +
+|9 | 11/9 | Configuration Management +
  |
 Assignment 7 +
 Watch Lecture 9 video recordings
 
-|10 | 11/15 | Software Delivery Pipelines +
+|10 | 11/16 | Software Delivery Pipelines +
 CodePipeline, CodeCommit, CodeDeploy +
  |
 Assignment 8 +
 Watch Lecture 10 video recordings
 
-|11 | 11/22 | Containers +
+|11 | 11/23 | Containers +
 Docker |
 Assignment 9 +
 Watch Lecture 11 video recordings
 
-|12 | 11/29 | Serverless Applications +
+|12 | 11/30 | Serverless Applications +
 Lambda, Kinesis, DynamoDB |
 Assignment 10 +
 Watch Lecture 12 video recordings
 
-|13 | 12/6 | Service Discovery +
+|13 | 12/7 | Service Discovery +
 Service Orchestration +
 ECS, Fargate |
 Assignment 11 +
 Watch Lecture 13 video recordings
 
 
-|14 | 12/13 | Final Challenge |
+|14 | 12/14 | Final Challenge |
 
 
 |=========================================================
