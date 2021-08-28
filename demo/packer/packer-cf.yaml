@@ -1,0 +1,143 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  YourIp:
+    Description: "The current CIDR IP address of your workstation (x.x.x.x/32)."
+    Type: "String"
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-9]|3[0-2]))$"
+    ConstraintDescription: "Must be a valid IP CIDR range of the form x.x.x.x/x."
+
+  KeyName:
+    Description: "Name of your EC2 KeyPair to enable SSH access to the instances."
+    Type: "AWS::EC2::KeyPair::KeyName"
+    ConstraintDescription: "must be the name of an existing EC2 KeyPair."
+
+Mappings:
+  RegionMap:
+    us-east-1:
+      image: "ami-0e6988a4d7ef3eb1e"
+    us-east-2:
+      image: "ami-028d17a996d7a0407"
+
+Resources:
+  PackerVpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      EnableDnsSupport: "true"
+      EnableDnsHostnames: "true"
+      CidrBlock: "10.0.0.0/16"
+      Tags:
+        - Key: Environment
+          Value: Packer
+
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref PackerVpc
+      CidrBlock: "10.0.0.0/24"
+
+  PackerInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties: 
+      Roles: 
+        - !Ref PackerServerRole
+
+  PackerServerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "ec2.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
+
+  PackerServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.small
+      ImageId: !FindInMap [ "RegionMap", !Ref AWS::Region, "image"]
+      IamInstanceProfile: !Ref PackerInstanceProfile
+      KeyName: !Ref KeyName
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet: 
+            - !Ref PackerSG
+          SubnetId: !Ref PublicSubnet
+      UserData:
+        !Base64 |
+          #!/bin/bash
+          yum -y update
+      Tags:
+        - Key: "Name"
+          Value: "packer-build"
+    DependsOn:
+      - PublicRoute
+
+  PackerSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !Ref PackerVpc
+      GroupDescription: "Allow access from SSH traffic"
+      SecurityGroupIngress:
+        - IpProtocol: "tcp"
+          FromPort: "22"
+          ToPort: "22"
+          CidrIp: !Ref YourIp
+  
+  WebserverSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !Ref PackerVpc
+      GroupDescription: "Allow access from http traffic"
+      SecurityGroupIngress:
+        - IpProtocol: "tcp"
+          FromPort: "80"
+          ToPort: "80"
+          CidrIp: "0.0.0.0/0"
+
+  InternetGW:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+      - Key: stack
+        Value: packer
+
+  GatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGW
+      VpcId: !Ref PackerVpc
+
+  PublicRT:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref PackerVpc
+
+  PublicRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: "0.0.0.0/0"
+      RouteTableId: !Ref PublicRT
+      GatewayId: !Ref InternetGW
+    DependsOn:
+      - InternetGW
+
+  RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRT
+      SubnetId: !Ref PublicSubnet
+
+Outputs:
+  PackerIP:
+    Value: !GetAtt PackerServer.PublicIp
+    Description: "Packer server public IP"

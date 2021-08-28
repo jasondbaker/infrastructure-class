@@ -5,11 +5,10 @@
 
 = SEIS 615 Week 9 Project: Packer
 Jason Baker <bake2352@stthomas.edu>
-2.0, 8/10/2020
+3.0, 8/27/2021
 
 == Overview
-Packer is a tool that is commonly used to automate the building of AMIs. We can use Packer to bake our 
-software configuration into a server image. In this week's class project, you will create a 
+Packer is a tool that is commonly used to automate the building of AMIs. We can use Packer to bake our desired software configuration into a server image. In this week's class project, you will create a 
 Packer template which uses Ansible to build a basic webserver AMI. 
 
 == Requirements
@@ -29,19 +28,12 @@ Let's get started!
 You should review the class powerpoint presentation, Packer documentation, and Ansible documentation 
 while working on this project. Here are some documentation links:
 
-    https://www.packer.io/docs/index.html
+    https://learn.hashicorp.com/tutorials/packer/aws-get-started-build-image?in=packer/aws-get-started
     http://docs.ansible.com/
 
-You will use the Packer software tool to create an AMI. You can either 
-download and install the software on your laptop (https://www.packer.io/downloads.html) or launch 
-a CloudFormation template which creates a Packer development environment running on an Ubuntu 
-linux instance. These instructions assume that you will use the CloudFormation template, but you 
-are welcome to try running the software on your laptop. I won't be able to help you troubleshoot any software 
-installation issues if you attempt to run it locally. 
+You will use the Packer software tool running on an EC2 instance to create an AMI. Here's the CloudFormation template required to launch the Packer development environment in AWS regions us-east-1 or us-east-2: 
 
-Here's the CloudFormation template required to launch the Packer development environment in AWS regions us-east-1 or us-east-2: 
-
-    https://s3.amazonaws.com/seis665/packer-cf.json
+    https://s3.amazonaws.com/seis615/packer-cf.yaml
 
 The template will create a stack containing a basic VPC environment:
 
@@ -50,45 +42,34 @@ The template will create a stack containing a basic VPC environment:
     * Public subnet
     * Routing table with an Internet route
     * Packer security group
-    * EC2 instance with Ubuntu linux and Packer software installed
+    * EC2 instance with Amazon Linux 2 and Packer software installed
     * Two input parameters (KeyName and YourIp)
 
 Packer automates the building of EC2 AMIs. It does this by launching a new EC2 instance based on 
-a predefined AMI, configuring the instance, and then creating a new AMI based on this modified 
-instance. Packer automatically terminates the temporary EC2 instance after the AMI is created.
+a predefined base AMI (Amazon Linux 2), installing software on the instance, shutting down the instance, and creating a new AMI based on this instance. Packer automatically terminates the temporary EC2 instance after the AMI is created.
 
-Launch the stack and shell into the Packer server. This is an Ubuntu linux server so you will need 
-to use `ubuntu` as the login username. Once you have logged into the server, type in the command 
-`packer version` to verify that the Packer tool is installed and working. It should be installed since 
-Packer was used to build the Packer server AMI!
+Launch the stack and shell into the Packer server. Once you have logged into the server, type in the command 
+`packer version` to verify that the Packer tool is installed and working. It should be installed since Packer was used to build the Packer server AMI!
 
-The next step is to create a Packer template which is written as a JSON file. The template has
-two main sections: builders and provisioners. The builders section describes what type of image 
-Packer should build. In this case we want to use the `amazon-ebs` builder to create an AMI:
+The next step is to create a Packer template which is written as a HashiCorp Configuration Language (HCL2) file. HCL is a special configuration language developed by HashiCorp and used in a number of their tools. It's sort of like a more human-readable version of JSON. Packer actually supports configuration files written in JSON, and that was the preferred configuration format for many years. However at the time of this writing, Packer recommends creating new templates in the HCL2 format because that's what they will support in the future.
+
+The HCL template has three main sections: packer, source, and build. The packer section defines which plugins Packer will use to build images. We will use the Amazon plugin to build an EC2 AMI.
+
+The source section describes what type of image Packer should build. We're definine an amazon-ebs source which will create an AMI. You can find documentation below on some of the properties you can set in this section. Note, the Packer documentation will describe how to configure these properties in both HCL2 code and JSON code. Make sure you are looking at the HCL2 version of the code in the documentation.
 
     https://www.packer.io/docs/builders/amazon-ebs.html
 
-Provisioners describe how to actually configure the image. We will use both the `shell` provisioner 
-and the `ansible-local` provisioner. The shell provisioner can run shell script commands to install 
-and configure software on the image. The ansible-local provisioner executes an Ansible playbook 
-file, which is located in the same directory as your Packer template, on the build image.
+Provisioners describe how to actually configure the image in the build section. We will use both the `shell` provisioner and the `ansible-local` provisioner. The shell provisioner can run shell script commands to install and configure software on the image. The ansible-local provisioner executes an Ansible playbook file which is located in the same directory as your Packer template on the build image.
 
     https://www.packer.io/docs/provisioners/shell.html
-    https://www.packer.io/docs/provisioners/ansible-local.html
+    https://www.packer.io/docs/provisioners/ansible/ansible-local
 
-When you use Packer to build an AMI, it must use a set of AWS IAM user credentials to access the 
-AWS API. Packer is automating the same steps you would do manually, so it needs the ability to 
-access AWS just like you do. 
-
-Add a new Instance Role to the EC2 instance called `packer-poweruser` which is associated with the PowerUserAccess policy. 
-Normally this policy would be too powerful for this type of use in the real world, but for educational purposes it's fine.
 
 === Create a Packer template
 
-Next, create a Packer template called `webserver-packer-template.json`. You can use the following starter template to build your own 
-template:
+Next, create a Packer template called `webserver-packer-template.pkr.hcl`. You will use this template along with the packer software to create a new AMI with webserver software installed. You can use the following starter template to build your template:
 
-    https://s3.amazonaws.com/seis615/packer-template.json
+    https://s3.amazonaws.com/seis615/packer-template.pkr.hcl
 
 You will need to add and define the following properties to the builder section:
 
@@ -98,73 +79,51 @@ You will need to add and define the following properties to the builder section:
     * source_ami
     * ssh_username
 
-The source_ami should be the latest Amazon Linux 2 AMI (which means the ssh_username should be 
-set to `ec2-user`). The region should be the same as the region the Packer build server is 
-running in. You are free to decide what instance type to use and what to name the AMI produced by Packer.
+The source_ami should be the latest Amazon Linux 2 AMI (which means the ssh_username should be set to `ec2-user`). The region should be the same as the region the Packer build server is running in. You are free to decide what instance type to use and what to name the AMI produced by Packer.
 
-Once you have created the builder definition, you need to create a shell provisioner. This 
-provisioner has a very important task which is to install Ansible software on your new build 
-image. Ansible isn't installed by default on the Amazon Linux 2 AMI and if you want to use the 
-ansible-local provisioner in Packer you have to install this software on the image first.
+Once you have created the builder definition, you need to create a shell provisioner. This provisioner has a very important task which is to install Ansible software on your new build image. Ansible isn't installed by default on the Amazon Linux 2 AMI, and if you want to use the ansible-local provisioner in Packer you have to install this software on the image first.
 
 Here are the commands your shell provisioner should run:
 
-    sleep 30
-    sudo yum update -y
-    sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-    sudo yum-config-manager --enable epel
-    sudo yum install ansible --enablerepo=epel -y
+      sudo yum update -y
+      sudo amazon-linux-extras install ansible2 -y
+      sudo amazon-linux-extras enable nginx1
 
-Next, you need to configure the ansible-local provisioner to install an nginx webserver on the 
-image. You will do this by defining a local playbook YAML file, called `webserver.yml`, which lives in the same 
-directory as your Packer template. Remember that when writing YAML files whitespace and indentation is 
-important!
+Next, you need to configure the ansible-local provisioner to install an nginx webserver on the image. You will do this by defining a local playbook YAML file, called `webserver-playbook.yml`, which lives in the same 
+directory as your Packer template. Remember that when writing YAML files whitespace and indentation is important!
 
-The playbook will only contain a single play which is executed against the local host (the 
-server that Packer is building). The play can refer to this host using the special IP 
-address `127.0.0.1` or `localhost`. The play needs to perform two tasks: installing the Nginx webserver and 
-enabling it to run at boot. The class lecture presentation includes an example of this type of 
+The playbook will only contain a single play which is executed against the local host (the server that Packer is building). The play can refer to this host using the special IP address `127.0.0.1` or `localhost`. The play needs to perform two tasks: installing the Nginx webserver and enabling it to run at boot. The class lecture presentation includes an example of this type of 
 playbook.
 
 === Build the AMI
 
-You are ready to create the AMI once you have created the Packer template and Ansible playbook. 
-Initiate the Packer build by running the command:
+Let's try to build the new AMI now that your Packer template and Ansible playbook are complete. The first step you need to do is to install any plugins required by Packer to build the AMI. We defined these plugins in the `packer{}` section of the Packer template file. You can install the plugins by running the command:
 
-    packer build webserver-packer-template.json
+    packer init webserver-packer-template.pkr.hcl
 
-Watch as Packer performs a series of steps to automatically build the AMI for you. Check out the EC2 web console and notice
-that Packer is launching a new EC2 instanced called `Packer Builder`. Packer will shell into this instance and use Ansible to
-configure the server. Once Ansible completes, Packer will shut down the instance and create a new AMI.
+Next, initiate the AMI build by running the command:
 
-If Packer encounters an error during the build process it will terminate the build and clean up any 
-temporary AWS resources it created. Take note of any error messages and fix any issues 
-identified in your Packer template or Ansible playbook. It may take 10 minutes or so for 
-Packer to completely finish the build process.
+    packer build webserver-packer-template.pkr.hcl
 
-You may end up running the Packer build multiple times as you correct different errors in the 
-templates. This is pretty common. Sometimes I'll try to build a complex template a dozen 
-times before all of the issues are sorted out. This is a very basic template so you should be 
-able to get it running without too much effort.
+Watch as Packer performs a series of steps to automatically build the AMI for you. Check out the EC2 web console and notice that Packer is launching a new EC2 instanced called `Packer Builder`. Packer will shell into this instance and use Ansible to configure the server. Once Ansible completes, Packer will shut down the instance and create a new AMI.
+
+If Packer encounters an error during the build process it will terminate the build and clean up any temporary AWS resources it created. Take note of any error messages and fix any issues identified in your Packer template or Ansible playbook. It may take 10 minutes or so for Packer to completely finish the build process.
+
+You may end up running the Packer build multiple times as you correct different errors in the templates. This is pretty common. Sometimes I'll try to build a complex template a dozen times before all of the issues are sorted out. This is a very basic template so you should be able to get it running without too much effort.
 
 === Launch a new webserver
 
-Once Packer successfully creates a new AMI, go ahead and manually launch a new EC2 instance using the new AMI into the VPC created by the Packer stack. Launching a newly built AMI is a common practice and oftentimes we will automate the testing of a 
-new AMI after it's built. 
+Once Packer successfully creates a new AMI, go ahead and manually launch a new EC2 instance using the new AMI into the VPC created by the Packer stack. Launching a newly built AMI is a common practice and oftentimes we will automate the testing of a new AMI after it's built. 
 
 You will need to setup ssh and http access to the new EC2 instance. Verify that the Nginx webserver is installed and running on the instance. 
 
-You can create a new AMI if the instance you tested isn't working quite right. You will need to 
-deregister the new AMI first before running a new Packer build or change the name of the AMI 
-that Packer is trying to build. 
+You can create a new AMI if the instance you tested isn't working quite right. You will need to deregister the new AMI first before running a new Packer build or change the name of the AMI that Packer is trying to build. 
 
 Congratulations, you have automated the building of a webserver AMI!
 
 === 3l173 status (optional)
 
-Modify the template to automatically use the latest version of the Amazon Linux AMI instead of 
-actually hardcoding the AMI value into the template. Hint, look at the `source_ami_filter` 
-builder property. Additionally, make sure that the AMI that Packer builds is encrypted. 
+Modify the template to automatically use the latest version of the Amazon Linux AMI instead of hardcoding the AMI value into the template. Hint, look at the `source_ami_filter` source property. Additionally, make sure that the AMI that Packer builds is encrypted. Build a new AMI and test it.
 
 === Show me your work
 
@@ -172,5 +131,4 @@ Please show me your template code.
 
 === Terminate AWS resources
 
-Remember to terminate all the resources created in this project, including the stack created by
-the Packer template.
+Remember to terminate all the resources created in this project, including the stack created by the Packer template.
