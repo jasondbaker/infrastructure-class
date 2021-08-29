@@ -1,0 +1,14 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+
+Resources:
+  ClassBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      Tags:
+        - Key: "Environment"
+          Value: "Class"
+    Metadata:
+      Comment: "Real bucket name will inclue ClassBucket plus random characters"
+
+

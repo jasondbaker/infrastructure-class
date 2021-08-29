@@ -10,7 +10,7 @@ Jason Baker <bake2352@stthomas.edu>
 == Overview
 In our class we discussed how IT professionals now design and provision infrastructure using
 code -- a concept known as Infrastructure as Code. The AWS CloudFormation
-service allows you to define cloud infrastructure using JSON template files.
+service allows you to define cloud infrastructure using YAML template files.
 These template files create resource stacks in AWS.
 
 In this week's assignment, you will use AWS CloudFormation to create a
@@ -57,11 +57,11 @@ Note that some of the existing resources in this template will need to be modifi
 If you prefer, you can also build the template from scratch.
 
 ====
-https://s3.amazonaws.com/seis615/BasicWebserverInVPC.json
+https://s3.amazonaws.com/seis615/BasicWebserverInVPC.yaml
 ====
 
 Here's the background story for this assignment: The engineering manager at your office came to you and asked
-if you could build a new CloudFormation stack template called `corpweb.json` for the development team. The stack must have
+if you could build a new CloudFormation stack template called `corpweb.yaml` for the development team. The stack must have
 two Amazon Linux EC2 instances located behind an Application ELB. The
 load balancer must handle incoming requests on port 80 and send those to the
 EC2 instances on port 80. Additionally, the two instances need to be members of a security group which
@@ -74,30 +74,30 @@ The engineering manager would like users to be able to provide three *input para
   * A parameter called *KeyPair* that specifies the server key-pair name for the EC2 instances.
   * A parameter called *YourIp* that specifies your public IP address in CIDR notation.
 
-Also, she would like you to create an output called *weburl* that displays the load balancer DNS name
+Also, she would like you to create an output called *WebUrl* that displays the load balancer DNS name
 after the stack is launched.
 
 The stack template should create the following logical resources:
 
-  * A VPC with the logical name: *engineeringVpc*
+  * A VPC with the logical name: *EngineeringVpc*
     ** The VPC CIDR block should be: 10.0.0.0/18
-    ** The VPC should have two public subnets with logical names: *publicSubnet1* and *publicSubnet2*.
+    ** The VPC should have two public subnets with logical names: *PublicSubnet1* and *PublicSubnet2*.
         *** publicSubnet1 has a CIDR block of 10.0.0.0/24
         *** publicSubnet2 has a CIDR block of 10.0.1.0/24
     ** The subnets should be deployed in an architecture which maximizes service availability.
-  * Two EC2 instances with logical resource names of *web1* and *web2* with associated *Name* metadata tags.
+  * Two EC2 instances with logical resource names of *Web1* and *Web2* with associated *Name* metadata tags.
     ** web1 is located in the publicSubnet1 subnet.
     ** web2 is located in the publicSubnet2 subnet.
     ** Each instance type is based on the InstanceType input parameter.
     ** The instance AMIs should use this public image: *ami-3ea13f29*
     ** The instance key-pairs are based on the KeyPair parameter.
-  * A security group with a logical name of *webserversSG* in the VPC.
+  * A security group with a logical name of *WebserversSG* in the VPC.
     ** Allow incoming requests on port 22 from your workstation (based on the YourIp parameter).
     ** Allow incoming requests on port 80 from the engineeringlbSG.
-  * An application load balancer with the logical name *engineeringLB* and target group with the logical name *engineeringWebservers*
+  * An application load balancer with the logical name *EngineeringLB* and target group with the logical name *EngineeringWebserversTG*
     ** Load balance incoming requests on port 80 and send to instance port 80 using the http protocol.
     ** Load balancer health check via http on port 80 to the "/" url location.
-  * The ALB is associated with a security group with the logical name *engineeringlbSG*.
+  * The ALB is associated with a security group with the logical name *EngineeringlbSG*.
     ** Allow incoming requests on port 80 from the Internet.
 
 image:../images/assignment7/cloudformation-diagram.png["800","800"]
@@ -105,7 +105,7 @@ image:../images/assignment7/cloudformation-diagram.png["800","800"]
 [NOTE]
 ====
 The names of the resources you configure in your stack template must *exactly* match the values above. The names 
-are case-sensitive, so a resource with the name of "Web1" is not the same as "web1". You will lose points on this 
+are case-sensitive, so a resource with the name of "web1" is not the same as "Web1". You will lose points on this 
 assignment if your resource names do not match the expected names. You should always double-check your work.
 ====
 
@@ -135,19 +135,19 @@ properly.
 Here is what the contents of your git repository should look like before final submission:
 
 ====
-&#x2523; corpweb.json +
+&#x2523; corpweb.yaml +
 ====
 
 === Save your work
 
 Create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/a/XBiLBt8A
 
-Commit your `corpweb.json` stack template file to this repository. You could create a new Git repository on your local machine, commit the template file to it, and then push the local repository up to GitHub. Or, you could use the GitHub web console to create a new repository and upload your template file to it. The
+Commit your `corpweb.yaml` stack template file to this repository. You could create a new Git repository on your local machine, commit the template file to it, and then push the local repository up to GitHub. Or, you could use the GitHub web console to create a new repository and upload your template file to it. The
 latter method is probably a little quicker for this assignment.
 
 [WARNING]
 ====
-You are responsible for ensuring that the corpweb.json template file you commit to your repository actually works on AWS 
+You are responsible for ensuring that the corpweb.yaml template file you commit to your repository actually works on AWS 
 CloudFormation. In the past, some students have used text editors which made small changes to the template when it was 
 saved to disk and committed to the git repository. The result is that the template no longer worked properly on 
 CloudFormation and the students' assignment scores were significantly impacted. *You should strongly consider testing 
