@@ -32,7 +32,7 @@ In this assignment you will revisit the Wordpress application again. This time w
 You can use a CloudFormation template to rapidly create many of the infrastructure
 resources needed for this assignment. Most of the resources in the template have already been created for you, but unfortunately the template is incomplete and you will need to add a couple missing components. The starter template is available in this S3 bucket location:
 
-  https://s3.amazonaws.com/seis615/AnsiblePress.json
+  https://s3.amazonaws.com/seis615/AnsiblePress.yaml
 
 Take a quick look at the template in a text editor. Notice how the UserData property for
 the `mgmt1` instance is configured. When CloudFormation launches this stack, it will
@@ -43,15 +43,15 @@ servers in the environment.
 
 The CloudFormation template is missing a couple resources that you will need to add:
 
-    * An application load balancer with a logical name of `webserverlb` which distributes HTTP (port 80) requests to the `web1` and `web2` instances. The health check endpoint for the load balancer should be the Wordpress readme path (`/wordpress/readme.html`).
-    * A `db.t2.micro` RDS database instance (not a cluster) running a MariaDB 10.2.21 database called `wordpress` located in a private VPC subnet. Use the logical name `wordpressdb` for the CloudFormation RDS resource. RDS and EC2 instances actually pre-date the arrival of VPCs in AWS so confusingly there are two different ways to configure these resources. You need to make sure this database instance is designed to run inside a VPC with the proper database subnet group and security group resources defined.
+    * An application load balancer with a logical name of `Webserverlb` which distributes HTTP (port 80) requests to the `web1` and `web2` instances. The health check endpoint for the load balancer should be the Wordpress readme path (`/wordpress/readme.html`).
+    * A `db.t2.micro` RDS database instance (not a cluster) running a MariaDB 10.2.21 database called `wordpress` located in a private VPC subnet. Use the logical name `Wordpressdb` for the CloudFormation RDS resource. RDS and EC2 instances actually pre-date the arrival of VPCs in AWS so confusingly there are two different ways to configure these resources. You need to make sure this database instance is designed to run inside a VPC with the proper database subnet group and security group resources defined.
     * A security group called `WebserverLbSecurityGroup` which allows incoming http access from the Internet.
     * A security group called `WordpressDbSecurityGroup` which allows incoming access on the standard MySQL port from the `WebServerSecurityGroup`
     * An input parameter called `DBName` which will define the database name to create (default to `wordpress`)
     * An input parameter called `DBUser` which will be used for the database server username.
     * An input parameter called `DBPassword` which will be used for the database server password.
-    * A stack output called `wordpressDbEndpoint` which shows the MariaDB instance endpoint address.
-    * A stack output called `wordpressLbEndpoint` which shows the application load balancer URL.
+    * A stack output called `WordpressDbEndpoint` which shows the MariaDB instance endpoint address.
+    * A stack output called `WordpressLbEndpoint` which shows the application load balancer URL.
 
 [WARNING]
 ====
@@ -62,9 +62,9 @@ The environment we need to create with CloudFormation will look something like t
 
 image:../images/assignment8/Configuration-mgmt.png["800","800"]
 
-Launch a new stack using the modified `AnsiblePress.json` template into the us-east-1 region. You can give the stack any name you like. When you create the stack, you will need to click a checkbox acknowledging the creation of IAM resources.
+Launch a new stack using the modified `AnsiblePress.yaml` template into the us-east-1 region. You can give the stack any name you like. When you create the stack, you will need to click a checkbox acknowledging the creation of IAM resources.
 
-You will use the Ansible software installed on `mgmt1` to configure the `web1` and `web2` systems. Ansible communicates with remote hosts using the SSH protocol which means that the proper access credentials need to be in place on `mgmt1` in order to establish shell connections with the other servers. Fortunately, the CloudFormation stack automates the setup of ssh credentials on the web instances.
+You will use the Ansible software installed on `mgmt1` to configure the `web1` and `web2` systems. Ansible communicates with remote hosts using the SSH protocol which means that the proper access credentials need to be in place on `Mgmt1` in order to establish shell connections with the other servers. Fortunately, the CloudFormation stack automates the setup of ssh credentials on the web instances.
 
 
 == Test Ansible
@@ -158,7 +158,7 @@ Here is what the contents of your git repository should look like before final s
 
 ====
 &#x2517; playbook.yml +
-&#x2517; AnsiblePress.json +
+&#x2517; AnsiblePress.yaml +
 
 ====
 
