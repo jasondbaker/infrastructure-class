@@ -5,7 +5,7 @@
 
 = SEIS 615 Week 5 Project: Autoscaling
 Jason Baker <bake2352@stthomas.edu>
-2.0, 8/10/2020
+3.0, 8/10/2021
 
 == Overview
 Create an infrastructure architecture which utilizes the EC2 autoscaling service.
@@ -13,8 +13,6 @@ Create an infrastructure architecture which utilizes the EC2 autoscaling service
 == Requirements
 
   * AWS account.
-  * SSH terminal application.
-
 
 == The project
 
@@ -60,14 +58,14 @@ creating the security group for the autoscaled instances first. Create a securit
 following incoming traffic rules:
 
 * Incoming traffic on port 80 (http) from the `ecolb-sg`.
-* Incoming traffic on port 22 (ssh) from your workstation (remember to use http://checkip.amazonaws.com).
  
 The autoscaling group should use a launch configuration with the following properties:
 
 * t2.micro instance size
-* Latest version of Amazon Linux 2 AMI (ami-0947d2ba12ee1ff75)
+* Latest version of Amazon Linux 2 AMI
 * IP Address Type: `Assign a public IP address to every instance.`
 * 10GB root volume storage size
+* SSMAccess role
 * Instances are named `ecoweb`
 * The instances will run in the ecotech-vpc
 * Configure User Data to run the following script:

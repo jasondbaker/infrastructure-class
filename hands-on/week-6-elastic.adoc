@@ -5,7 +5,7 @@
 
 = SEIS 615 Week 6 Project: Telemetry
 Jason Baker <bake2352@stthomas.edu>
-2.0, 8/10/2020
+3.0, 9/10/2021
 
 == Overview
 Telemetry plays a key role in every DevOps organization. Teams rely on telemetry collection and analysis as a feedback mechanism to understand how a service is performing. As teams deploy code changes to a service, metrics allow teams to understand how these changes are impacting the service. 
@@ -15,8 +15,6 @@ Nearly every modern application generates a set of application log data which de
 == Requirements
 
   * AWS account.
-  * SSH terminal application.
-
 
 == The project
 
@@ -69,7 +67,7 @@ The input stage retrieves events from the system. These events are usually creat
 
 We'll start playing with Logstash by creating the simplest possible pipeline. In this example, Logstash will use your keyboard input during the input stage, do nothing during the filter stage, and display the resulting message event on your console screen in the output stage.
 
-Log into one of the `webapp` EC2 instances created by the stack using ssh. Note, these instances are using Ubuntu Linux so you need to log in using the `ubuntu` user account, *not* the `ec2-user` account.
+Log into one of the `webapp` EC2 instances created by the stack using AWS Session Manager.
 
 Create a text file called `logstash_basic.conf` in the current working directory containing the following text:
 

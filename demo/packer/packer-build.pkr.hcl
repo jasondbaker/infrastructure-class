@@ -16,8 +16,7 @@ source "amazon-ebs" "packer" {
   ami_groups = ["all"]  # make the image publicly available
   ami_regions = ["us-east-2"]
   ami_virtualization_type = "hvm"
-  ebs_optimized = true
-  instance_type = "t3.micro"
+  instance_type = "t2.micro"
   region = "us-east-1"
   shutdown_behavior = "terminate"
   ssh_username = "ec2-user"
@@ -29,13 +28,6 @@ source "amazon-ebs" "packer" {
   aws_polling {
     delay_seconds = 60
     max_attempts = 60
-  }
-
-  launch_block_device_mappings {
-    device_name = "/dev/xvda"
-    volume_size = "8"
-    volume_type = "gp3"
-    delete_on_termination = true
   }
 
   source_ami_filter {

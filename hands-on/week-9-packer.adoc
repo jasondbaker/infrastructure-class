@@ -14,7 +14,6 @@ Packer template which uses Ansible to build a basic webserver AMI.
 == Requirements
 
   * AWS account.
-  * SSH terminal application.
   * Packer software or Packer CloudFormation Template
   * Code editor 
 
@@ -115,7 +114,7 @@ You may end up running the Packer build multiple times as you correct different 
 
 Once Packer successfully creates a new AMI, go ahead and manually launch a new EC2 instance using the new AMI into the VPC created by the Packer stack. Launching a newly built AMI is a common practice and oftentimes we will automate the testing of a new AMI after it's built. 
 
-You will need to setup ssh and http access to the new EC2 instance. Verify that the Nginx webserver is installed and running on the instance. 
+You will need to setup http access to the new EC2 instance. Verify that the Nginx webserver is installed and running on the instance. 
 
 You can create a new AMI if the instance you tested isn't working quite right. You will need to deregister the new AMI first before running a new Packer build or change the name of the AMI that Packer is trying to build. 
 

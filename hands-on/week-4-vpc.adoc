@@ -5,7 +5,7 @@
 
 = SEIS 615 Week 4 Project: VPC
 Jason Baker <bake2352@stthomas.edu>
-2.0, 8/10/2020
+3.0, 8/10/2021
 
 == Overview
 Setup an AWS VPC and ELB.
@@ -13,8 +13,6 @@ Setup an AWS VPC and ELB.
 == Requirements
 
   * AWS account.
-  * SSH terminal application.
-
 
 == The project
 
@@ -49,7 +47,7 @@ You might be wondering why there is only a single NAT gateway. In a production e
 Create three EC2 instances with the following properties:
 
 * t2.micro instance size
-* AMI: **ami-598b6124** (note that this is a public community image)
+* AMI: **ami-034b1e5cba4ade574** (note that this is a public community image)
 * 10GB root volume storage size
 * Instances are named `ecoweb1`, `ecoweb2`, and `ecoapi1`
 * The web instances should launch into ecotech public subnets in separate AZs, and the API instance should launch into the ecotech-private2 subnet.
@@ -57,11 +55,8 @@ Create three EC2 instances with the following properties:
 * The web instances are associated with a security group called `ecoweb-sg`. This security group should allow:
   - Incoming traffic on port 80 (http) from the Internet.
   - Incoming traffic on port 80 (http) from the ecolb-sg security group.
-  - Incoming traffic on port 22 (ssh) from your workstation (use http://checkip.amazonaws.com to determine your
-  IP address).
 * The API instance is associated with a security group called `ecoapi-sg`. This security group should allow:
   - Incoming traffic on port 80 (http) from the ecoweb-sg security group.
-  - Incoming traffic on port 22 (ssh) from the ecoweb-sg security group.
 
 === Create ELB
 

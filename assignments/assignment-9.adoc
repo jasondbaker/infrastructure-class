@@ -31,13 +31,13 @@ When your classroom repository is setup, GitHub will automatically copy projects
 
 You will use a CloudFormation template to launch a stack containing the software delivery pipeline and the infrastructure resources which will host a Python web application. You don't have to create this template from scratch. We launched a pipeline template during the hands-on portion of this week's lecture which built and deployed a Python application. You can use this template as a starting point:
 
-  https://seis615.s3.amazonaws.com/app-codepipeline-template.json
+  https://seis615.s3.amazonaws.com/app-codepipeline-template.yaml
 
 As a quick reminder, the template will create the following resources:
 
 * An AWS Virtual Private Cloud (VPC), two subnets in separate AZs including all the necessary routing tables and routes, and an Internet gateway.
 
-* An Application Load Balancer which will listen for requests on port 80 and forward these requests to an auto-scaling group containing two EC2 instances (t3.micro).
+* An Application Load Balancer which will listen for requests on port 80 and forward these requests to an auto-scaling group containing two EC2 instances (t2.micro).
 
 * CodeBuild and CodePipeline resources required to build out a software delivery pipeline for the python-project repository you cloned above.
 

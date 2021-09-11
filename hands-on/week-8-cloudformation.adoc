@@ -5,7 +5,7 @@
 
 = SEIS 615 Week 8 Project: CloudFormation
 Jason Baker <bake2352@stthomas.edu>
-2.0, 8/29/2021
+3.0, 8/29/2021
 
 == Overview
 Create a basic webserver failover architecture in AWS using a CloudFormation template.
@@ -13,9 +13,7 @@ Create a basic webserver failover architecture in AWS using a CloudFormation tem
 == Requirements
 
   * AWS account.
-  * SSH terminal application.
   * Code editor
-
 
 == The project
 
@@ -56,8 +54,7 @@ image:../images/week-8-cf-project.png["800","800"]
 
 Start by adding an input parameter called *InstanceType* which allows a user to specify the webserver instance type. The parameter should allow the user to select from a t3.micro or t3.medium instance type, defaulting to a t3.micro instance.
 
-You will need to add two webservers with logical names of *Web1* and *Web2* to this template. The webservers should use the
-*ami-3ea13f29* AMI and be associated with the *WebserverSG* security group. 
+You will need to add two webservers with logical names of *Web1* and *Web2* to this template. The webservers should use the *ami-034b1e5cba4ade574* AMI and be associated with the *WebserverSG* security group. 
 
 You will also need to add an application load balancer using the following resouces: a load balancer resource with the logical name *WebAlb*, an ELB listerner resource with the logical name *WebAlbListener*, and a target group with the logical name *WebAlbTG*. The load balancer will verify the health of target instances using the index path (/index.php) endpoint.
 

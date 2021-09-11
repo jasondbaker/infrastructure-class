@@ -5,7 +5,7 @@
 
 = SEIS 615 Week 2 Project: Linux & Git
 Jason Baker <bake2352@stthomas.edu>
-2.0, 8/10/2020
+3.0, 8/10/2021
 
 == Overview
 This week we will focus on becoming familiar with launching a Linux server and
@@ -59,9 +59,10 @@ server should have the following characteristics:
   * Amazon Linux 2 AMI 64-bit (usually the first option listed)
   * Located in a U.S. region (us-east-1)
   * t2.micro instance type
+  * SSMAccess role
   * All default instance settings (storage, vpm, security group, etc.)
 
-We will use the Amazon Linux operating system extensively in this class. AWS provides two versions of this OS -- Amazon Linux 2 and Amazon Linux. In some of the class videos you may see me click on the Amazon Linux AMI instead of the Amazon Linux 2 AMI. That's because the Amazon Linux 2 AMI was introduced after the videos were recorded. From a technical standpoint either Amazon Linux version will likely work fine, although I will expect you to consistently use Amazon Linux 2.
+We will use the Amazon Linux operating system extensively in this class. AWS provides two versions of this OS -- Amazon Linux 2 and Amazon Linux. I will expect you to consistently use Amazon Linux 2.
 
 I've created a video showing you how to launch a linux EC2 instance. The video is
 available at:
@@ -72,17 +73,7 @@ Once you launch the new server, it may take a few minutes to provision.
 
 === Log into server
 
-The next step is to log into the Linux server using a terminal program with secure shell (SSH) support. I like using http://www.iterm2.com[iTerm2] on a Mac. If you are a Windows user I recommend downloading and installing https://gitforwindows.org/[Git for Windows] which includes a BASH terminal application and an SSH program. The classroom computers should already have this software installed. 
-
-You will need to have the private server key and the
-public IP address before attempting to log into the server. The server key
-is basically your password. If you lose it, you will need to terminate the existing
-instance and launch a new server. I recommend reusing the same key when launching new servers throughout the class. Note, I make this recommendation for learning purposes and not because it is a preferred security practice.
-
-I've created a couple videos showing you how to use a terminal application to log into the instance using a Windows desktop and a MacOS desktop. Your personal computer or lab computer may be running a different OS version, but the process is still very similar.
-
-* Accessing EC2 instance from a Windows PC: https://youtu.be/o-ogpzXdXqU
-* Accessing EC2 instance from a Mac: https://youtu.be/ZFh-qA5DT6w
+The next step is to log into the Linux server using AWS Session Manager. Again, review the server launch video if you don't remember how to use this service to create a terminal session on the server.
 
 === Working with Linux
 
@@ -90,23 +81,12 @@ If you've made it this far, congratulations! You've made it over the toughest
 hurdle. By the end of this course, I promise you will be able to launch and
 log into servers in your sleep.
 
-You should be looking at a login screen that looks something like this:
+You should be looking at a black terminal that looks something like this:
 
-  Last login: Mon Mar 21 21:17:54 2016 from 174-20-199-194.mpls.qwest.net
-
-       __|  __|_  )
-       _|  (     /   Amazon Linux 2 AMI
-      ___|\___|___|
-
-  https://aws.amazon.com/amazon-linux-ami/2015.09-release-notes/
-  8 package(s) needed for security, out of 17 available
-  Run "sudo yum update" to apply all updates.
-
-  ec2-user@ip-172-31-15-26 ~]$
-
+  sh-4.2$ 
 
 Your terminal cursor is sitting at the shell prompt, waiting for you to type in
-your first command. Remember the shell? It is a really cool program that lets you
+your first command. Remember the shell? It's a really cool program that lets you
 start other programs and manage services on the Linux system. The rest of this
 exercise will be spent working with the shell.
 
@@ -134,13 +114,17 @@ Most of the core Linux commands have man pages available. But honestly, some of
 these man pages are a bit hard to understand. Sometimes your best bet is to
 search on Google if you are trying to figure out how to use a specific command.
 
-When you initially log into Linux, the system places you in your home directory.
+Type in the command:
+
+  cd ~
+
+This command places you in your home directory.
 Each user on the system has a separate home directory. Let's see where your
 home directory is located:
 
   pwd
 
-The response should be `/home/ec2-user`. The `pwd` command is handy to remember
+The response should be `/home/ssm-user`. The `pwd` command is handy to remember
 if you ever forget what file directory you are currently located in. If you recall
 from the _Linux Hands-on Guide_, this directory is also your current working
 directory.
@@ -234,9 +218,6 @@ Next, change to the new directory:
 
   cd documents
 
-Did you notice that your command prompt displays the name of the current directory?
-Something like: `[ec2-user@ip-172-31-15-26 documents]$`. Pretty handy, huh?
-
 Okay, let's create our first file in the `documents` directory. This is just an
 empty file for training purposes. Type in:
 
@@ -314,10 +295,9 @@ Let's continue. Change to the directory `/var` and make a directory called
 `test`.
 
 Ugh. Permission denied. We created this darn Linux server and we paid for it. Shouldn't
-we be able to do anything we want on it? You logged into the system as a user
-called `ec2-user`. While this user can create and manage files in its home
+we be able to do anything we want on it? You accessed the system using AWS Session Manager which logged you in as a special user called `ssm-user`. While this user can create and manage files in its home
 directory, it cannot change files all across the system. At least it can't
-as a normal user. The `ec2-user` is a member of the _root_ group, so it can
+as a normal user. The `ssm-user` is a member of the _root_ group, so it can
 escalate its privileges to _super-user_ status when necessary. Let's try it:
 
   sudo mkdir test
@@ -616,7 +596,7 @@ Here is what the contents of your git repository should look like before final s
 ====
 
 === Saving our work in the git repository
-Next, make sure you are still in your home directory (`/home/ec2-user`). We will
+Next, make sure you are still in your home directory (`/home/ssm-user`). We will
 install the git repository you created at the beginning of this exercise. You
 will need to modify this command by typing in the GitHub repository URL you
 copied earlier.

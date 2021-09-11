@@ -5,7 +5,7 @@
 
 = SEIS 615 Week 11 Project: Docker
 Jason Baker <bake2352@stthomas.edu>
-2.0, 8/10/2020
+3.0, 8/10/2021
 
 == Overview
 Create a Docker image using a Dockerfile.
@@ -13,8 +13,6 @@ Create a Docker image using a Dockerfile.
 == Requirements
 
   * AWS account.
-  * SSH terminal application.
-
 
 == The project
 

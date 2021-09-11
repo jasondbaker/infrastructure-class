@@ -43,8 +43,8 @@ servers in the environment.
 
 The CloudFormation template is missing a couple resources that you will need to add:
 
-    * An application load balancer with a logical name of `Webserverlb` which distributes HTTP (port 80) requests to the `web1` and `web2` instances. The health check endpoint for the load balancer should be the Wordpress readme path (`/wordpress/readme.html`).
-    * A `db.t2.micro` RDS database instance (not a cluster) running a MariaDB 10.2.21 database called `wordpress` located in a private VPC subnet. Use the logical name `Wordpressdb` for the CloudFormation RDS resource. RDS and EC2 instances actually pre-date the arrival of VPCs in AWS so confusingly there are two different ways to configure these resources. You need to make sure this database instance is designed to run inside a VPC with the proper database subnet group and security group resources defined.
+    * An application load balancer with a logical name of `WebserverLb` which distributes HTTP (port 80) requests to the `web1` and `web2` instances. The health check endpoint for the load balancer should be the Wordpress readme path (`/wordpress/readme.html`).
+    * A `db.t2.micro` RDS database instance (not a cluster) running a MariaDB 10.2.21 database called `wordpress` located in a private VPC subnet. Use the logical name `WordpressDb` for the CloudFormation RDS resource. RDS and EC2 instances actually pre-date the arrival of VPCs in AWS so confusingly there are two different ways to configure these resources. You need to make sure this database instance is designed to run inside a VPC with the proper database subnet group and security group resources defined.
     * A security group called `WebserverLbSecurityGroup` which allows incoming http access from the Internet.
     * A security group called `WordpressDbSecurityGroup` which allows incoming access on the standard MySQL port from the `WebServerSecurityGroup`
     * An input parameter called `DBName` which will define the database name to create (default to `wordpress`)
@@ -106,7 +106,7 @@ You will create an Ansible playbook to configure the `web1` and `web2` instances
 
 You can create a playbook file on the `mgmt1` server using a local text editor like nano or vi. Alternatively, you can use your favorite source code editor on your local workstation and copy (scp) the file from your local workstation to the `assignment8` directory on `mgmt1`. Use whichever method is easiest for you.
 
-Create a playbook called `playbook.yml` in the `/home/ec2-user/assignment8` directory. The playbook should contain two plays. The first play (named `install apache`) will install the Apache webserver and additional PHP software packages. The second play (named `install wordpress`) will install and configure the Wordpress application.
+Create a playbook called `playbook.yaml` in the `/home/ec2-user/assignment8` directory. The playbook should contain two plays. The first play (named `install apache`) will install the Apache webserver and additional PHP software packages. The second play (named `install wordpress`) will install and configure the Wordpress application.
 
 Here are the tasks you should configure in the first play:
 
@@ -157,7 +157,7 @@ Commit the contents of the `assignment8` directory to this repository, including
 Here is what the contents of your git repository should look like before final submission:
 
 ====
-&#x2517; playbook.yml +
+&#x2517; playbook.yaml +
 &#x2517; AnsiblePress.yaml +
 
 ====

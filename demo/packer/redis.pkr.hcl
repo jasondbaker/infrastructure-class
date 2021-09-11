@@ -11,7 +11,7 @@ source "amazon-ebs" "redis" {
     ami_name = "redis-testing {{timestamp}}"
     ami_virtualization_type = "hvm"
     ebs_optimized = true
-    instance_type = "t3.micro"
+    instance_type = "t2.micro"
     region = "us-east-1"
     shutdown_behavior = "terminate"
     ssh_username = "ec2-user"

@@ -12,8 +12,7 @@ Use the AWS ECS and Fargate to create a container cluster and launch the Wordpre
 
 == Requirements
 
-  * AWS account.
-  * SSH terminal application.
+  * AWS account
 
 == The project
 

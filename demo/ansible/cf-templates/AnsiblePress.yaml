@@ -1,0 +1,325 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+
+  AMI:
+    Description: "The EC2 instance AMI"
+    Type: "String"
+    Default: "ami-087c17d1fe0178315"
+
+Resources:
+  SSMAccessRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - "ec2.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore'
+
+  SSMRolePolicies:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: "ssmProperties"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - "ssm:DescribeParameters"
+              - "ssm:PutParameter"
+              - "ssm:GetParameters"
+              - "ssm:DeleteParameter"
+            Resource:
+              "Fn::Join":
+                - ""
+                - - "arn:aws:ssm:"
+                  - !Ref AWS::Region
+                  - ":"
+                  - !Ref AWS::AccountId
+                  - ":parameter/"
+                  - !Ref AWS::StackName
+                  - ".*"
+      Roles:
+        - !Ref SSMAccessRole
+
+  SSMInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: "/"
+      Roles:
+        - !Ref SSMAccessRole
+
+  Web1pem:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Join ["", [!Ref "AWS::StackName", ".web1pem"]]
+      Type: "String"
+      Value: "0"
+      Description: "web1 instance private key."
+
+  Web2pem:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Join ["", [!Ref "AWS::StackName", ".web2pem"]]
+      Type: "String"
+      Value: "0"
+      Description: "web2 instance private key."
+
+  WordpressVpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      EnableDnsSupport: "true"
+      EnableDnsHostnames: "true"
+      CidrBlock: "10.0.0.0/16"
+      Tags: 
+        - Key: "Environment"
+          Value: "Test"
+
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref WordpressVpc
+      CidrBlock: "10.0.0.0/24"
+      MapPublicIpOnLaunch: true
+      AvailabilityZone: 
+        Fn::Select: 
+          - 0
+          - Fn::GetAZs: ""
+
+  PublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref WordpressVpc
+      CidrBlock: "10.0.1.0/24"
+      MapPublicIpOnLaunch: true
+      AvailabilityZone: 
+        Fn::Select: 
+          - 1
+          - Fn::GetAZs: ""
+
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref WordpressVpc
+      CidrBlock: "10.0.2.0/24"
+      MapPublicIpOnLaunch: true
+      AvailabilityZone: 
+        Fn::Select: 
+          - 0
+          - Fn::GetAZs: ""
+
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref WordpressVpc
+      CidrBlock: "10.0.3.0/24"
+      MapPublicIpOnLaunch: true
+      AvailabilityZone: 
+        Fn::Select: 
+          - 1
+          - Fn::GetAZs: ""
+
+  Web1:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: "t3.micro"
+      ImageId: !Ref AMI
+      IamInstanceProfile: !Ref SSMInstanceProfile
+      NetworkInterfaces:
+        - GroupSet:
+            - !Ref WebServerSecurityGroup
+          AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          DeleteOnTermination: "true"
+          SubnetId: !Ref PublicSubnet1
+      Tags:
+        - Key: Name
+          Value: "web1"
+      UserData:
+        Fn::Base64: !Sub
+          - |
+            #!/bin/bash -xe
+            yum update -y
+            adduser ssm-user
+            echo 'ssm-user ALL=(ALL)NOPASSWD:ALL' >> /etc/sudoers.d/cloud-init
+            install -d -o ssm-user -g ssm-user -m 700 /home/ssm-user/.ssh
+            ssh-keygen -f /home/ssm-user/.ssh/web1-key.pem -q -N ""
+            chown ssm-user:ssm-user /home/ssm-user/.ssh/web1-key.pem
+            chown ssm-user:ssm-user /home/ssm-user/.ssh/web1-key.pem.pub
+            PEMFILE=`cat /home/ssm-user/.ssh/web1-key.pem`
+            aws ssm put-parameter --name ${Web1pem} --type String --value "${!PEMFILE}" --overwrite --region ${AWS::Region}
+            cat /home/ssm-user/.ssh/web1-key.pem.pub >> /home/ssm-user/.ssh/authorized_keys
+            # Signal the status from cfn-init
+            /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource Web1 --region ${AWS::Region}
+          - Web1pem: !Ref Web1pem
+
+    CreationPolicy:
+      ResourceSignal:
+        Timeout: "PT5M"
+
+  Web2:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: "t3.micro"
+      ImageId: !Ref AMI
+      IamInstanceProfile: !Ref SSMInstanceProfile
+      NetworkInterfaces:
+        - GroupSet:
+            - !Ref WebServerSecurityGroup
+          AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          DeleteOnTermination: "true"
+          SubnetId: !Ref PublicSubnet2
+      Tags:
+        - Key: Name
+          Value: "web2"
+      UserData:
+        Fn::Base64: !Sub
+          - |
+            #!/bin/bash -xe
+            yum update -y
+            adduser ssm-user
+            echo 'ssm-user ALL=(ALL)NOPASSWD:ALL' >> /etc/sudoers.d/cloud-init
+            install -d -o ssm-user -g ssm-user -m 700 /home/ssm-user/.ssh
+            ssh-keygen -f /home/ssm-user/.ssh/web2-key.pem -q -N ""
+            chown ssm-user:ssm-user /home/ssm-user/.ssh/web2-key.pem
+            chown ssm-user:ssm-user /home/ssm-user/.ssh/web2-key.pem.pub
+            PEMFILE=`cat /home/ssm-user/.ssh/web2-key.pem`
+            aws ssm put-parameter --name ${Web2pem} --type String --value "${!PEMFILE}" --overwrite --region ${AWS::Region}
+            cat /home/ssm-user/.ssh/web2-key.pem.pub >> /home/ssm-user/.ssh/authorized_keys
+            # Signal the status from cfn-init
+            /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource Web2 --region ${AWS::Region}
+          - Web2pem: !Ref Web2pem
+
+    CreationPolicy:
+      ResourceSignal:
+        Timeout: "PT5M"
+
+  Mgmt1:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - Web1
+      - Web2
+    Properties:
+      InstanceType: "t3.micro"
+      ImageId: !Ref AMI
+      IamInstanceProfile: !Ref SSMInstanceProfile
+      NetworkInterfaces:
+        - GroupSet:
+            - !Ref WebServerSecurityGroup
+          AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          DeleteOnTermination: "true"
+          SubnetId: !Ref PublicSubnet1
+      Tags:
+        - Key: Name
+          Value: "mgmt1"
+      UserData:
+        Fn::Base64: !Sub
+          - |
+            #!/bin/bash -xe
+            echo 'PATH=$PATH:/bin:/sbin:/usr/bin:/usr/local/bin' > /etc/environment
+            export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/local/bin
+            echo 'DATABASE_NAME=${DBName}' >> /etc/environment
+            echo 'DATABASE_USERNAME=${DBUser}' >> /etc/environment
+            echo 'DATABASE_PASSWORD=${DBPassword}' >> /etc/environment
+            echo 'DATABASE_ENDPOINT=${database_endpoint}' >> /etc/environment
+            sed -i '/\bsecure_path\b/s/$/:\/usr\/local\/bin/' /etc/sudoers
+            yum-config-manager --enable epel -y
+            yum install jq -y
+            amazon-linux-extras install ansible2 -y
+            adduser ssm-user
+            echo 'ssm-user ALL=(ALL)NOPASSWD:ALL' >> /etc/sudoers.d/cloud-init
+            install -d -o ssm-user -g ssm-user -m 700 /home/ssm-user/.ssh
+            mkdir -p /home/ssm-user/ansible_templates
+            wget -O /home/ssm-user/ansible_templates/wp-config.j2 https://s3.amazonaws.com/seis615/wp-config.j2
+            echo "web1 ansible_host=${web1_ip} ansible_user=ssm-user ansible_ssh_private_key_file=/home/ssm-user/.ssh/web1-key.pem" > /etc/ansible/hosts
+            echo "web2 ansible_host=${web2_ip} ansible_user=ssm-user ansible_ssh_private_key_file=/home/ssm-user/.ssh/web2-key.pem" >> /etc/ansible/hosts
+            sed -i '/host_key_checking/s/^#//g' /etc/ansible/ansible.cfg
+            aws ssm get-parameters --name "${Web1pem}" --region ${AWS::Region} | jq '.Parameters[0].Value' --raw-output > /home/ssm-user/.ssh/web1-key.pem
+            aws ssm get-parameters --name "${Web2pem}" --region ${AWS::Region} | jq '.Parameters[0].Value' --raw-output > /home/ssm-user/.ssh/web2-key.pem
+            chown ssm-user:ssm-user /home/ssm-user/.ssh/*.pem
+            chmod 600 /home/ssm-user/.ssh/*.pem
+          - database_endpoint: !GetAtt WordpressDb.Endpoint.Address
+            web1_ip: !GetAtt Web1.PrivateIp
+            web2_ip: !GetAtt Web2.PrivateIp
+
+  WebServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !Ref WordpressVpc
+      GroupDescription: "Allow access from HTTP traffic"
+      SecurityGroupIngress:
+        - IpProtocol: "tcp"
+          FromPort: "80"
+          ToPort: "80"
+          CidrIp: "0.0.0.0/0"
+
+  WebServerSGIngressTCP22:
+    Type: AWS::EC2::SecurityGroupIngress
+    Metadata:
+      Comment: "SSH ingress security rule"
+    Properties:
+      IpProtocol: "tcp"
+      FromPort: "22"
+      ToPort: "22"
+      SourceSecurityGroupId: !Ref WebServerSecurityGroup
+      GroupId: !GetAtt WebServerSecurityGroup.GroupId
+
+  InternetGateway:
+      Type: AWS::EC2::InternetGateway
+      Properties: {}
+
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+        InternetGatewayId: !Ref InternetGateway
+        VpcId: !Ref WordpressVpc
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref WordpressVpc
+
+  PublicRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: "0.0.0.0/0"
+      RouteTableId: !Ref PublicRouteTable
+      GatewayId: !Ref InternetGateway
+    DependsOn:
+      - InternetGateway
+
+  Public1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet1
+
+  Public2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet2
+
+Outputs:
+  Web1PublicIp:
+    Value: !GetAtt Web1.PublicIp
+    Description: "web1 public IP"
+
+  We2PublicIp:
+    Value: !GetAtt Web2.PublicIp
+    Description: "web2 public IP"
+
+  Mgmt1PublicIp:
+    Value: !GetAtt Mgmt1.PublicIp
+    Description: "mgmt1 public IP"

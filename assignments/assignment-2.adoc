@@ -48,15 +48,15 @@ I will never ask you to submit an empty file -- in other words, a file with no c
 
 == Setup a budget
 
-We make every effort to stay within the AWS free tier when working on assignments in this class. Some of the projects will inevitably generate AWS fees though. Your AWS educational credit should be more than enough to cover these additional expenses. However, it's possible that you might generate excessive fees by making a mistake. For example, you might inadvertently launch a really large EC2 instance or you might launch a set of resources in a  region, forget about them, and leave them running for several weeks.
+We make every effort to stay within the AWS free tier when working on assignments in this class. Some of the projects will inevitably generate AWS fees though. Your AWS educational credit should be more than enough to cover these additional expenses. However, it's possible that you might generate excessive fees by making a mistake. For example, you might inadvertently launch a really large EC2 instance or you might launch a set of resources in a region, forget about them, and leave them running for several weeks.
 
 These sorts of mistakes happen all the time in the real-world. Thankfully AWS offers a solution to this problem in the form of budgets. You can use the AWS Budget service to setup a monthly budget in your account to compare your current monthly spending to a desired amount. AWS will automatically notify you if the AWS monthly fees exceed your specified budget. Let's setup a monthly budget now.
 
 Log into the AWS web console using your account, click on the Services link and select the AWS Budgets service.
 
-Click on the `Create budget` button and select the `Cost budget` type. Click the `Set your budget` button. Give your budget a name like `Monthly Budget` with a monthly period. This should be a recurring budget starting this month. I recommend setting a fixed monthly budget of $25.
+Click on the `Create budget` button, select the `Cost budget` type, and click the `Next` button. Click the `Set your budget` button. Set up a Monthly budget starting this month with a fixed amount of $25. Give the budget a name of `Monthly Budget`. You do not need to change most of the default settings. Click the `Next` button.
 
-Click the `Configure alerts` button and create an alert based on the `Actual Costs` with an alert threshold of somewhere between 80-100% of the budgeted amount. Finally type in the e-mail address which will receive budget alerts, click on the `Confirm budget` button, review the budget settings and click the `Create` button.
+Click the `Add alert threshold` button to create an alert based on the `Actual Costs` with an alert threshold of somewhere between 80-100% of the budgeted amount. Finally type in the e-mail address which will receive budget alerts, click on the `Next` button a couple times, review the budget settings and click the `Create budget` button to create the new budget.
 
 Now you should have a budget alert setup to let you know if your monthly fees are exceeding a budget.
 
@@ -68,14 +68,15 @@ Ready? Let's go!
 === Launch Linux server
 
 The first step in the assignment is to launch a Linux server using AWS EC2.
-You should follow the same process as the previous assignment. Refer back
-to the assignment notes if you need to review the launch process.
+You should follow the same process as the class video and hands-on project in class. Refer back
+to the class video if you need to review the launch process.
 
 The server should have the following characteristics:
 
   * Amazon Linux 2 AMI 64-bit (usually the first option listed)
-  * Located in a U.S. region (us-east-1 or us-west-1)
+  * Located in a U.S. region (us-east-1)
   * t2.micro instance type
+  * SSMAccess role
   * All default instance settings (storage, vpm, security group, etc.)
 
 Note that when you are launching the server, you can elect to use the same
@@ -102,9 +103,7 @@ costs of the instance, but that amounts to pennies per month.
 ====
 
 === Log into server
-The next step is to log into the Linux server using a terminal program with
-secure shell (SSH) support. You will need to have the server key and the
-public IP address before attempting to log into the server.
+The next step is to log into the Linux server using AWS Session Manager. Again, watch the class video describing how to launch an EC2 instance if you don't remember how to do this.
 
 === More Shell Script Fun
 

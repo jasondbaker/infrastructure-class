@@ -1,0 +1,56 @@
+---
+- hosts: localhost
+  become: yes
+
+  tasks:
+
+    - name: install base packages
+      yum:
+        name: [
+          'git',
+          'tar',
+          'zip',
+          'unzip',
+          'wget',
+          'jq',
+        ]
+
+    - name: install apache
+      yum:
+        name: [
+          'httpd'
+        ]
+
+    - name: enable php repository
+      shell: |
+        amazon-linux-extras enable php7.4
+        yum clean metadata
+    
+    - name: install php packages
+      yum:
+        name: [
+          'php',
+          'php-devel',
+          'php-pear',
+          'php-mbstring',
+          'php-xml'
+        ]
+
+    - name: set up ssm-user
+      user:
+        name: ssm-user
+        shell: /bin/bash
+        
+    - name: install web content
+      copy:
+        src: /opt/ansible/files/index.php
+        dest: /var/www/html/index.php
+        remote_src: yes
+        owner: ec2-user
+        mode: 0644
+
+    - name: enable apache
+      service:
+        name: httpd
+        enabled: yes
+        state: started

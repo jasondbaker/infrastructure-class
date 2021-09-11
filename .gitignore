@@ -5,3 +5,5 @@
 .vagrant
 aws-manifest.json
 manifest.json
+.vscode
+.pytest_cache

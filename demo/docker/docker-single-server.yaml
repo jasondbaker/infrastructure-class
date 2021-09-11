@@ -1,0 +1,127 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+
+Resources:
+  DockerVpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      EnableDnsSupport: "true"
+      EnableDnsHostnames: "true"
+      CidrBlock: "10.0.0.0/16"
+      Tags:
+        - Key: Environment
+          Value: Docker
+
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref DockerVpc
+      CidrBlock: "10.0.0.0/24"
+
+  DockerInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties: 
+      Roles: 
+        - !Ref DockerServerRole
+
+  DockerServerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "ec2.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore'
+
+  DockerServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId: "ami-087c17d1fe0178315"
+      IamInstanceProfile: !Ref DockerInstanceProfile
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet: 
+            - !Ref DockerSG
+          SubnetId: !Ref PublicSubnet
+      UserData:
+        !Base64 |
+          #!/bin/bash
+          yum -y update
+          yum install -y git
+          amazon-linux-extras install docker
+          service docker start
+          chkconfig docker on
+          usermod -a -G docker ec2-user
+          adduser -G docker ssm-user
+      Tags:
+        - Key: "Name"
+          Value: "docker"
+    DependsOn:
+      - PublicRoute
+
+  DockerSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !Ref DockerVpc
+      GroupDescription: "Allow access from HTTP:8080"
+      SecurityGroupIngress:
+        - IpProtocol: "tcp"
+          FromPort: "8080"
+          ToPort: "8080"
+          CidrIp: "0.0.0.0/0"
+
+  DockerSGIngress:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+        IpProtocol: "-1"
+        FromPort: "-1"
+        ToPort: "-1"
+        SourceSecurityGroupId: !Ref DockerSG
+        GroupId: !GetAtt DockerSG.GroupId
+
+  InternetGW:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+      - Key: stack
+        Value: docker
+
+  GatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGW
+      VpcId: !Ref DockerVpc
+
+  PublicRT:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref DockerVpc
+
+  PublicRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: "0.0.0.0/0"
+      RouteTableId: !Ref PublicRT
+      GatewayId: !Ref InternetGW
+    DependsOn:
+      - InternetGW
+
+  RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRT
+      SubnetId: !Ref PublicSubnet
+
+Outputs:
+  DockerPublicIp:
+    Value: !GetAtt DockerServer.PublicIp
+    Description: "Docker server public IP"

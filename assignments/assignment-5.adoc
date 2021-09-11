@@ -5,7 +5,7 @@
 
 = SEIS 615 Assignment 5: Autoscaling
 Jason Baker <bake2352@stthomas.edu>
-2.0, 8/10/2020
+3.0, 8/10/2021
 
 == Overview
 This week we will enable auto scaling for a WordPress web application. The web
@@ -75,7 +75,7 @@ requirements for the security group include:
 
 Create two security groups called `production-web` and `production-db`. The
 first security group will allow all external devices to communicate with
-the web server instances via SSH and HTTP. Here are the requirements for the
+the web server instances via HTTP. Here are the requirements for the
 first security group:
 
   * production-web
@@ -84,7 +84,6 @@ first security group:
     ** Description: production web servers
     ** VPC: productionVPC
     ** Inbound:
-      *** SSH allowed from your workstation
       *** HTTP allowed from the Internet
 
 The second security group will allow only the web servers to communicate with
@@ -147,7 +146,7 @@ to ensure that the service is highly available.
 
 Go to the EC2 dashboard and select the `Load Balancers` menu item. Create a
 new application load balancer called `wordpress-lb` that will distribute HTTP (port 80) requests across
-web servers located in both us-west subnets. The load
+web servers located in both us-west-2 subnets. The load
 balancer should use `/wordpress/readme.html` as the health check ping path. You won't
 be able to associate any EC2 instances with the load balancer yet. That's not
 a problem since you can associate an instance with the load balancer later.
@@ -186,7 +185,7 @@ Launch an EC2 instance with the following properties:
   * Tag: Name = wordpress1
   * Security group: production-web
 
-Note, if this is the first time you are launching instances in the us-west region, AWS
+Note, if this is the first time you are launching instances in the us-west-2 region, AWS
 will likely prompt you to create a new set of SSH access keys. You should give this
 keypair a different name than your other keypair. 
 
@@ -196,7 +195,7 @@ appear in your browser. The user data script automatically updated the server
 and installed a number of basic components needed by Wordpress, including
 the Apache web server, PHP, and a database library.
 
-Connect to the new instance using an ssh terminal program. Create a new directory
+Connect to the new instance using AWS Session Manager. Create a new directory
 in your home directory called `wpinstall` and create a git repository inside this
 new directory.
 

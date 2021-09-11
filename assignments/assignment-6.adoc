@@ -5,7 +5,7 @@
 
 = SEIS 615 Assignment 6: Elastic Beanstalk
 Jason Baker <bake2352@stthomas.edu>
-2.0, 8/10/2020
+3.0, 8/10/2021
 
 == Overview
 During the last assignment, you built a highly available web application
@@ -61,8 +61,7 @@ If you accidentally deleted the default VPC in the us-east-1 region you can crea
 
 === Setup EB CLI configuration
 
-Connect to the instance via ssh once it is available and install the Elastic Beanstalk CLI. The 
-EB CLI is a command-line tool you can use to control the AWS EB service. It's kind of like a 
+Connect to the instance via AWS Session Manager once it is available and install the Elastic Beanstalk CLI. The EB CLI is a command-line tool you can use to control the AWS EB service. It's kind of like a 
 service-specific version of the AWS CLI. 
 
 First we need to install an EB CLI installer repository:

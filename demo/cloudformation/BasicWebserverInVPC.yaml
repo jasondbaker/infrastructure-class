@@ -2,24 +2,14 @@
 AWSTemplateFormatVersion: "2010-09-09"
 
 Parameters:
-  YourIp:
-    Description: "The current CIDR IP address of your workstation (x.x.x.x/32)."
-    Type: "String"
-    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-9]|3[0-2]))$"
-    ConstraintDescription: "Must be a valid IP CIDR range of the form x.x.x.x/x."
-
-  KeyName:
-    Description: "Name of your EC2 KeyPair to enable SSH access to the instances."
-    Type: "AWS::EC2::KeyPair::KeyName"
-    ConstraintDescription: "must be the name of an existing EC2 KeyPair."
 
   InstanceType:
     Description: "Webserver instance type."
     Type: "String"
-    Default: "t3.micro"
+    Default: "t2.micro"
     AllowedValues:
-      - "t3.micro"
-      - "t3.medium"
+      - "t2.micro"
+      - "t2.medium"
 
 Resources:
   ClassVpc:
@@ -47,12 +37,8 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       VpcId: !Ref ClassVpc
-      GroupDescription: "Allow access from SSH traffic"
+      GroupDescription: "Allow access from HTTP traffic"
       SecurityGroupIngress:
-        - IpProtocol: "tcp"
-          FromPort: "22"
-          ToPort: "22"
-          CidrIp: !Ref YourIp
         - IpProtocol: "tcp"
           FromPort: "80"
           ToPort: "80"
@@ -91,13 +77,36 @@ Resources:
       RouteTableId: !Ref PublicRT
       SubnetId: !Ref PublicSubnet1
 
+  ClassServerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - "ec2.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore'
+
+  ClassInstanceProfile: 
+    Type: AWS::IAM::InstanceProfile
+    Properties: 
+      Path: "/"
+      Roles: 
+        - !Ref ClassServerRole
+
   ClassWebserver:
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: !Ref InstanceType
-      ImageId: "ami-3ea13f29"
+      ImageId: "ami-034b1e5cba4ade574"
       SubnetId: !Ref PublicSubnet1
-      KeyName: !Ref KeyName
+      IamInstanceProfile: !Ref ClassInstanceProfile
       SecurityGroupIds:
         - !Ref WebserverSG
       Tags:

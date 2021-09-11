@@ -5,7 +5,7 @@
 
 = SEIS 615 Week 10 Project: Software Delivery Pipeline
 Jason Baker <bake2352@stthomas.edu>
-2.1, 8/10/2020
+3.0, 8/10/2021
 
 == Overview
 Create an automated software delivery pipeline using CodeCommit, CodeBuild, CodeDeploy and CodePipeline.
@@ -13,8 +13,6 @@ Create an automated software delivery pipeline using CodeCommit, CodeBuild, Code
 == Requirements
 
   * AWS account.
-  * SSH terminal application.
-
 
 == The project
 

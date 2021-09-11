@@ -5,7 +5,7 @@
 
 = SEIS 615 Week 12 Project: Serverless Data Pipeline
 Jason Baker <bake2352@stthomas.edu>
-2.0, 8/10/2020
+3.0, 8/10/2021
 
 == Overview
 Create a lambda function.
@@ -13,8 +13,6 @@ Create a lambda function.
 == Requirements
 
   * AWS account.
-  * SSH terminal application.
-
 
 == The project
 
@@ -30,7 +28,7 @@ AWS uses S3 as a storage location for Lambda functions. Lambda functions are pac
 
 Let's launch an EC2 instance called `datagen1` containing some of the resources we will use to work on this project. Create a simple CloudFormation template which creates a VPC and launches a public Amazon Linux 2 EC2 instance using ami-09ef51eee3a444c89 into a public subnet in us-east-1. Feel free to use one of the previous CloudFormation templates from earlier this semester as a starting template.
 
-The instance should be associated with a security group allowing ssh access from your workstation's IP address. Shell into the new EC2 instance and change to a directory called `serverless-start`.
+Shell into the new EC2 instance and change to a directory called `serverless-start`.
 
 === Build a serverless template
 

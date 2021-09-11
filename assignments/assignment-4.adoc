@@ -5,7 +5,7 @@
 
 = SEIS 615 Assignment 4: VPC
 Jason Baker <bake2352@stthomas.edu>
-2.0, 8/10/2020
+3.0, 8/10/2021
 
 == Overview
 This week we will build a VPC from scratch and work with an elastic load
@@ -129,14 +129,6 @@ software we needed. However, in the previous assignment we built out a Linux
 server and created an AMI. Now we can use that AMI to launch a new instance,
 saving us the time and effort required to get a new webserver up and running.
 
-In past assignments, AWS security groups were configured to allow SSH access from anywhere. 
-This is a poor security practice (even for development) and in real world deployments you should 
-configure security groups to minimize ssh access to your cloud resources. You can access the 
-website http://checkip.amazonaws.com in a browser to quickly determine the current IP address of your 
-workstation. Then, you can use this IP address to limit SSH access on the server to your workstation. 
-Remember that if you move your workstation from one network to another (like from home 
-to work) you will need to update this workstation IP address in the security group configuration.
-
 Go to the EC2 dashboard in the AWS web console and launch a new instance. The
 instance should have the following properties:
 
@@ -146,11 +138,11 @@ instance should have the following properties:
   * t2.micro instance type
   * Network is `nextgen-vpc`
   * Subnet is `nextgen-public-1`
+  * SSMAccess role
   * Auto-assign Public IP is enabled
   * Root volume size set to 10 GiB
   * Create a tag with a key of `Name` and a value of `webserver1`
   * Create a new security group for the instance called `webservers-sg` with the following policies:
-    ** SSH from your workstation (example, 53.128.44.16/32)
     ** HTTP from anywhere 0.0.0.0/0
     ** HTTPS from anywhere 0.0.0.0/0
   * Review your configuration settings and launch the new instance.
@@ -164,16 +156,16 @@ private subnet. The second instance should have the following properties:
 * t2.micro instance type
 * Network is `nextgen-vpc`
 * Subnet is `nextgen-private`
+* SSMAccess role
 * Auto-assign Public IP is disabled
 * Root volume size set to 10 GiB
 * Create a tag with a key of `Name` and a value of `backend1`
 * Create a new security group for the instance called `backends-sg` with the following policies:
-  ** SSH from sg-<webservers ID>  (where webservers ID is your webservers security group identifier, example: sg-f0321d88)
   ** HTTP from sg-<webservers ID>
   ** HTTPS from sg-<webservers ID>
 * Review your configuration settings and launch the new instance.
 
-The rules you created for the `backends-sg` security group restrict incoming ssh, http,
+The rules you created for the `backends-sg` security group restrict incoming http
 and https requests to only those instances located in the `webservers-sg` security group.
 You can see how it's possible to use security groups to identify source networks
 when creating rules in other security groups. This is a helpful abstraction because
@@ -195,8 +187,7 @@ methodically. You should be able to find the configuration error.
 
 === Connect to the private web server
 
-You were able to connect to the `webserver1` instance from your workstation but what about the `backend1`
-instance you launched in the private network? Well, it isn't accessible for
+You were able to connect to the `webserver1` instance from your workstation but what about the `backend1` instance you launched in the private network? Well, it isn't accessible for
 two reasons. First, the `backend1` instance doesn't have a public IP address. Verify
 that by looking at the instance properties on the EC2 dashboard. Second, the
 instance is hosted within a subnet that doesn't have a route connected to
@@ -206,67 +197,10 @@ You should be able to communicate with the `backend1` instance from one of the t
 webservers. Log into a public webserver and use the `curl` command to make a
 request to the webserver running on the `backend1` instance.
 
-The `backend1` instance may not be accessible from the Internet, but you
-should be able to log into it from `webserver1` using this server as a bastion host.
-Basically you need to establish an ssh connection to `webserver1` and tunnel through
-this host to `backend1`. In order to do this you need to configure the ssh agent service
-on your local workstation.
-
-===== Windows Proxy Configuration
-If you have a Windows computer, the first step is to make sure the ssh-agent is running on your workstation. This is a small helper application which caches your ssh credentials for the ssh client provided by Git for Windows. Open up a Git bash shell and type in the command:
-
-  eval $(ssh-agent -s)
-
-Next add your EC2 private key to the agent, replacing `server-key.pem` with your key name:
-
-  ssh-add server-key.pem
-
-Next you can ssh to `webserver1` using the ssh command:
-
-  ssh -A ec2-user@<webserver1 public IP>
-
-Note the use of the `-A` argument flag in this command. This argument tells ssh to
-look for your private server key in the keychain.
-
-Finally, once you have connected to `webserver1` you should be able to ssh into
-the `backend1` server by running this command on `webserver1`:
-
-  ssh ec2-user@<backend1 private IP>
-
-===== Mac Proxy configuration
-If you have a Mac computer, the first step is to add your EC2 private key to the Mac keychain:
-
-  eval "$(ssh-agent -s)"
-  
-Next add your EC2 private key to the agent, replacing `server-key.pem` with your key name:
-
-  ssh-add -K server-key.pem
-
-Next you can ssh to `webserver1` using the ssh command:
-
-  ssh -A ec2-user@<webserver1 public IP>
-
-Note the use of the `-A` argument flag in this command. This argument tells ssh to
-look for your private server key in the keychain.
-
-Finally, once you have connected to `webserver1` you should be able to ssh into
-the `backend1` server by running this command on `webserver1`:
-
-  ssh ec2-user@<backend1 private IP>
-
-===== Troubleshooting the SSH connection
-
-If you can't connect to the `backend1` server from `webserver1` there are several
-things you can check:
-
-* Check your Git for Windows or Mac ssh configuration.
-* Verify that the proper security group is setup for `backend1`. It should allow incoming ssh from the webserver security group.
-
 
 === Update the backend server
 
-Now that you have connected to the `backend1` server, we should make sure that our backend server has all the latest software updates.
-Go ahead and issue the `yum` command to update the server.
+Terminal into the `backend1` server and make sure that our server has all the latest software updates. Go ahead and issue the `yum` command to update the server.
 
 Whoa, what's up with the connection timeout errors? Think about the VPC subnet
 configuration and where the `backend1` server lives. The private subnet does
@@ -443,6 +377,7 @@ Go to the VPC dashboard and create a third subnet in your VPC:
   ** Name: nextgen-public-2
   ** VPC: nextgen-vpc
   ** AZ: us-east-1c
+  ** Role: SSMAccess
   ** CIDR: 10.0.3.0/24
 
 Modify the appropriate routing table so that instances within this new subnet

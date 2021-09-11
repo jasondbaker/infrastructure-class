@@ -1,0 +1,179 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Metadata": {
+        "Template": "{'Regions': 'Launch only in us-east-1 or us-east-2'}"
+    },
+    "Resources": {
+
+        "ManageAWSAccessKeys": {
+            "Properties": {
+                "ManagedPolicyName": "ManageAWSAccessKeys",
+                "PolicyDocument": {
+                    "Statement": [
+                        {
+                            "Action": [
+                                "iam:ListAccountAliases",
+                                "iam:ListUsers",
+                                "iam:ListVirtualMFADevices",
+                                "iam:GetAccountPasswordPolicy",
+                                "iam:GetAccountSummary"
+                            ],
+                            "Effect": "Allow",
+                            "Resource": [
+                                "*"
+                            ],
+                            "Sid": "AllowAllUsersToListAccounts"
+                        },
+                        {
+                            "Action": [
+                                "iam:ChangePassword",
+                                "iam:CreateAccessKey",
+                                "iam:CreateLoginProfile",
+                                "iam:DeleteAccessKey",
+                                "iam:DeleteLoginProfile",
+                                "iam:GetLoginProfile",
+                                "iam:ListAccessKeys",
+                                "iam:UpdateAccessKey",
+                                "iam:UpdateLoginProfile",
+                                "iam:ListSigningCertificates",
+                                "iam:DeleteSigningCertificate",
+                                "iam:UpdateSigningCertificate",
+                                "iam:UploadSigningCertificate",
+                                "iam:ListSSHPublicKeys",
+                                "iam:GetSSHPublicKey",
+                                "iam:DeleteSSHPublicKey",
+                                "iam:UpdateSSHPublicKey",
+                                "iam:UploadSSHPublicKey"
+                            ],
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:iam::*:user/${aws:username}"
+                            ],
+                            "Sid": "AllowIndividualUserToSeeAndManageOnlyTheirOwnAccountInformation"
+                        },
+                        {
+                            "Action": [
+                                "iam:CreateVirtualMFADevice",
+                                "iam:DeleteVirtualMFADevice",
+                                "iam:EnableMFADevice",
+                                "iam:ListMFADevices",
+                                "iam:ResyncMFADevice"
+                            ],
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:iam::*:mfa/${aws:username}",
+                                "arn:aws:iam::*:user/${aws:username}"
+                            ],
+                            "Sid": "AllowIndividualUserToViewAndManageTheirOwnMFA"
+                        },
+                        {
+                            "Action": [
+                                "iam:DeactivateMFADevice"
+                            ],
+                            "Condition": {
+                                "BoolIfExists": {
+                                    "aws:MultiFactorAuthPresent": "true"
+                                }
+                            },
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:iam::*:mfa/${aws:username}",
+                                "arn:aws:iam::*:user/${aws:username}"
+                            ],
+                            "Sid": "AllowIndividualUserToDeactivateOnlyTheirOwnMFAOnlyWhenUsingMFA"
+                        },
+                        {
+                            "Condition": {
+                                "BoolIfExists": {
+                                    "aws:MultiFactorAuthPresent": "false"
+                                }
+                            },
+                            "Effect": "Deny",
+                            "NotAction": [
+                                "iam:ChangePassword",
+                                "iam:CreateVirtualMFADevice",
+                                "iam:DeleteVirtualMFADevice",
+                                "iam:ListMFADevices",
+                                "iam:ListVirtualMFADevices",
+                                "iam:EnableMFADevice",
+                                "iam:ResyncMFADevice",
+                                "iam:ListAccountAliases",
+                                "iam:ListUsers",
+                                "iam:ListSSHPublicKeys",
+                                "iam:ListAccessKeys",
+                                "iam:ListServiceSpecificCredentials",
+                                "iam:GetAccountSummary",
+                                "sts:GetSessionToken"
+                            ],
+                            "Resource": [
+                                "*"
+                            ],
+                            "Sid": "BlockMostAccessUnlessSignedInWithMFA"
+                        }
+                    ],
+                    "Version": "2012-10-17"
+                }
+            },
+            "Type": "AWS::IAM::ManagedPolicy"
+        },
+
+        "Admins": {
+            "Properties": {
+                "ManagedPolicyArns": [
+                    "arn:aws:iam::aws:policy/AdministratorAccess",
+                    { "Ref": "ManageAWSAccessKeys" }
+                ]
+            },
+            "Type": "AWS::IAM::Group"
+        },
+
+        "s3workflow": {
+            "Type": "AWS::IAM::User",
+            "Properties": {
+                "Path": "/",
+                "Policies": [{
+                    "PolicyName": "s3bucketaccess",
+                    "PolicyDocument": {
+                        "Version": "2012-10-17",
+                        "Statement": [
+                            {
+                                "Effect": "Allow",
+                                "Action": [
+                                    "s3:GetBucketVersioning",
+                                    "s3:DeleteObject",
+                                    "s3:PutObject*",
+                                    "s3:GetObject*",
+                                    "s3:ListBucket*"
+                                ],
+                                "Resource": [
+                                    "arn:aws:s3:::seis615",
+                                    "arn:aws:s3:::seis615/*"
+                                ]
+                            }
+                        ]
+                    }
+                }]
+            }
+        },
+
+        "s3workflowkey": {
+            "Type" : "AWS::IAM::AccessKey",
+            "Properties" : {
+                "UserName" : {"Ref": "s3workflow"}
+              }
+          }
+
+    },
+
+    "Outputs" : {
+
+        "AccessKeyfors3workflow" : {
+            "Value" : { "Ref" : "s3workflowkey" }
+        },
+        "SecretKeyfors3workflowkey" : {
+            "Value" : {
+            "Fn::GetAtt" : [ "s3workflowkey", "SecretAccessKey" ]
+            }
+        }
+    }
+}

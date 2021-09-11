@@ -5,7 +5,7 @@
 
 = SEIS 615 Assignment 7: CloudFormation
 Jason Baker <bake2352@stthomas.edu>
-2.1, 8/10/2020
+3.0, 9/5/2021
 
 == Overview
 In our class we discussed how IT professionals now design and provision infrastructure using
@@ -82,22 +82,22 @@ The stack template should create the following logical resources:
   * A VPC with the logical name: *EngineeringVpc*
     ** The VPC CIDR block should be: 10.0.0.0/18
     ** The VPC should have two public subnets with logical names: *PublicSubnet1* and *PublicSubnet2*.
-        *** publicSubnet1 has a CIDR block of 10.0.0.0/24
-        *** publicSubnet2 has a CIDR block of 10.0.1.0/24
+        *** PublicSubnet1 has a CIDR block of 10.0.0.0/24
+        *** PublicSubnet2 has a CIDR block of 10.0.1.0/24
     ** The subnets should be deployed in an architecture which maximizes service availability.
   * Two EC2 instances with logical resource names of *Web1* and *Web2* with associated *Name* metadata tags.
-    ** web1 is located in the publicSubnet1 subnet.
-    ** web2 is located in the publicSubnet2 subnet.
+    ** web1 is located in the PublicSubnet1 subnet.
+    ** web2 is located in the PublicSubnet2 subnet.
     ** Each instance type is based on the InstanceType input parameter.
     ** The instance AMIs should use this public image: *ami-3ea13f29*
     ** The instance key-pairs are based on the KeyPair parameter.
   * A security group with a logical name of *WebserversSG* in the VPC.
     ** Allow incoming requests on port 22 from your workstation (based on the YourIp parameter).
-    ** Allow incoming requests on port 80 from the engineeringlbSG.
+    ** Allow incoming requests on port 80 from the EngineeringLbSG.
   * An application load balancer with the logical name *EngineeringLB* and target group with the logical name *EngineeringWebserversTG*
     ** Load balance incoming requests on port 80 and send to instance port 80 using the http protocol.
     ** Load balancer health check via http on port 80 to the "/" url location.
-  * The ALB is associated with a security group with the logical name *EngineeringlbSG*.
+  * The ALB is associated with a security group with the logical name *EngineeringLbSG*.
     ** Allow incoming requests on port 80 from the Internet.
 
 image:../images/assignment7/cloudformation-diagram.png["800","800"]

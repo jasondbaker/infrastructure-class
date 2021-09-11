@@ -1,0 +1,31 @@
+name: Transfer
+on:
+  push:
+    branches:
+    - main
+jobs:
+  transfer:
+    name: Transfer
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - name: Set AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Copy files to S3
+        run: |
+          aws s3 cp demo/ansible/cf-templates/AnsiblePress.yaml s3://seis615 --acl public-read
+          aws s3 cp demo/ansible/cf-templates/AnsibleSystems.yaml s3://seis615 --acl public-read
+          aws s3 cp demo/cloudformation/BasicVPC.yaml s3://seis615 --acl public-read
+          aws s3 cp demo/cloudformation/BasicWebserverInVPC.yaml s3://seis615 --acl public-read
+          aws s3 cp demo/cloudformation/s3bucket.yaml s3://seis615 --acl public-
+          aws s3 cp demo/docker/docker-single-server.yaml s3://seis615 --acl public-read
+          aws s3 cp demo/packer/packer-cf.yaml s3://seis615 --acl public-read
+          aws s3 cp demo/packer/packer-template.pkr.hcl s3://seis615 --acl public-read
+          aws s3 cp demo/packer/redis.pkr.hcl s3://seis615 --acl public-read
