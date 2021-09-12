@@ -1,3 +1,5 @@
+![transfer workflow](https://github.com/jasondbaker/infrastructure-class/actions/workflows/transfer.yml/badge.svg)
+
 DevOps & Cloud Infrastructure (SEIS 615) Curriculum
 ===================================================
 
