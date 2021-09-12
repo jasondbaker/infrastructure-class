@@ -5,7 +5,7 @@
 
 = SEIS 615 Assignment 8: Configuration Management
 Jason Baker <bake2352@stthomas.edu>
-2.0, 8/10/2020
+3.0, 9/10/2021
 
 == Overview
 
