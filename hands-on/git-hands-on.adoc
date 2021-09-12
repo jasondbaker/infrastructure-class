@@ -6,7 +6,7 @@ image:../images/git-hands-on/git-hands-on-logo.png["200","200",float="right"]
 
 == Git Hands-on Guide
 Jason Baker <bake2352@stthomas.edu>
-1.1, 8/26/2016
+2.0, 8/26/2021
 
 === Overview
 The purpose of this guide is to provide a basic overview of the Git version
@@ -14,7 +14,7 @@ control system. The goal is to get students familiar with core Git functions
 and version control processes. For more detailed information, see the Git
 reference manual at https://git-scm.com/documentation.
 
-You can also refer to the https://github.com/jasondbaker/infrastructure-class/blob/master/articles/git-cheat-sheet-education.pdf[Git command cheat sheet] for a concise summary of commands.
+You can also refer to the https://github.com/jasondbaker/infrastructure-class/blob/main/articles/git-cheat-sheet-education.pdf[Git command cheat sheet] for a concise summary of commands.
 
 === The git command
 Git commands are executed by typing `git` followed by a function
@@ -141,14 +141,14 @@ Let's say that you made a commit to the git repository but you accidentally comm
    (F)
 A-B-C
     ↑
-  master
+  main
 
 You can reverse the changes made by the commit by using the `git revert <commit hash>` command. This command creates a new commit that reverses the changes made in the specified commit. Your commit history will now look like the following diagram, where `D` represents a new commit that reverses the changes made in the `C` commit (or whatever commit you specify):
 
      (F)
 A-B-C-D
       ↑
-    master
+    main
 
 
 Sometimes you might want to reverse a commit and remove the commit and its file changes from the repository. It's like the commit never happened. You can revert back to the previous commit and state of your file system by using the command: `git reset --hard HEAD~1`
@@ -158,7 +158,7 @@ Note that this command is a little dangerous and you will lose the changes made 
  (F)
 A-B
   ↑
-master
+main
 
 It's possible to revert to the previous commit without changing the current status of the files. In other words, you can revert the repository back to the time right before you issued the last commit. All the files will still contain the changes you recently made. You can perform this type of soft revert by using the command: `git reset --soft HEAD~1`
 
@@ -191,7 +191,7 @@ Branching is super easy in Git and one of the reasons it is so popular. A branch
 is like a separate path in a timeline. Branches are used to test out new features
 or bug fixes without cluttering up the main development code base.
 
-  * Every new repository starts out with a default branch called *master*.
+  * Every new repository starts out with a default branch called *main*.
 
   * Every commit has to be made against a branch.
 
@@ -213,7 +213,7 @@ git branch test
 git branch features/update-branding
 ----
 
-  * Making all your commits against the master branch is a lazy and discouraged practice.
+  * Making all your commits against the main branch is a lazy and discouraged practice.
 
 image:../images/git-hands-on/git-hands-on-branching.png[]
 
@@ -226,7 +226,7 @@ the asterisk character (`*`).
 ----
 git branch
 
-* master
+* main
 testing
 ----
 
@@ -248,12 +248,12 @@ members can use it. To merge a branch into the existing checked out branch type:
 
 .Example:
 ----
-git checkout master
+git checkout main
 git merge develop
 ----
 
-In this example, the master branch is checked out and the develop branch is merged
-into the master.
+In this example, the main branch is checked out and the develop branch is merged
+into the main.
 
   * Sometimes merging doesn't go smoothly because of conflicts. The branches you want
   to merge contain a file with the same name, but _overlapping_ content. In this case
@@ -306,7 +306,7 @@ This command compares the file changes made between the f83d738 commit and the c
 
 Finally, you can also easily compare the file changes between two different branches using the command: `git diff <branch name>..<branch name>`. For example:
 
-  git diff master..develop
+  git diff main..develop
 
 Note that the diff command output can be a little bit cryptic depending on the number of changes present in the commits being analyzed. Oftentimes it is more helpful to use a graphical diff tool to review file changes.
 
