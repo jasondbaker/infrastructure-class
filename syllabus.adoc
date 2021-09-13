@@ -193,7 +193,8 @@ Shell scripting
 Assignment 1 +
 Read _Git Hands On Guide_ +
 Read _Linux Hands On Guide_ +
-Watch Lecture 2 video recordings
+Watch Lecture 2 video recordings +
+Watch Launching an EC2 instance video
 
 |3 | 9/27 | Virtualization & Cloud Computing +
 AWS +

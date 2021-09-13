@@ -67,7 +67,7 @@ We will use the Amazon Linux operating system extensively in this class. AWS pro
 I've created a video showing you how to launch a linux EC2 instance. The video is
 available at:
 
-* https://youtu.be/aN6XXz192kQ
+* https://youtu.be/OEQq-c0fM-c
 
 Once you launch the new server, it may take a few minutes to provision.
 

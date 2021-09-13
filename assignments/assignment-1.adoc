@@ -81,3 +81,9 @@ You can also learn how to use the GitHub website using free online training at t
   https://www.atlassian.com/git
 
 Please plan to invest additional learning time at the beginning of the course if you do not have experiencing working with Git or source control systems.
+
+== Launching an EC2 instance
+
+One of the first things you will need to learn how to do in AWS is launch new EC2 isntances. These are virtual machines which can run an operating system and set of applications. Watch the following video to learn how to launch new instances:
+
+https://youtu.be/OEQq-c0fM-c
