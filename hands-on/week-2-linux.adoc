@@ -15,6 +15,8 @@ will gain much more hands-on experience with AWS throughout the course. The goal
 is to get you comfortable working with the technology and not overwhelm you with
 all the details.
 
+Note: the hands-on projects we work on in class are not graded. This is an opportunity for you to practice and make mistakes without fear of impacting your grade.
+
 == Requirements
 
 You need to have a personal AWS account and GitHub account for this project. You should also
@@ -60,7 +62,8 @@ server should have the following characteristics:
   * Located in a U.S. region (us-east-1)
   * t2.micro instance type
   * SSMAccess role
-  * All default instance settings (storage, vpm, security group, etc.)
+  * All default instance settings (storage, vpc, security group, etc.)
+  * Remove the default SSH security group rule.
 
 We will use the Amazon Linux operating system extensively in this class. AWS provides two versions of this OS -- Amazon Linux 2 and Amazon Linux. I will expect you to consistently use Amazon Linux 2.
 
@@ -158,7 +161,7 @@ and access control list settings for each file or directory. Do you see any
 files listed? Remember, the first character in the access control list column
 denotes whether a listed item is a file or a directory.
 
-You probably see a couple files with names like `.autofsck`. How come you didn't
+You may see a couple files with names like `.autorelabel`. How come you didn't
 see this file when you typed in the `ls` command without any options? (Try to run
 this command again to convince yourself.) Files names that start with a period
 are called hidden files. These files won't appear on normal directory listings.
@@ -552,9 +555,11 @@ We installed the webserver, but is it actually running? Let's check. Type in:
 
   sudo service httpd status
 
-Nope. Let's start it. Type:
+Nope, you should see a response like `Active: inactive (dead)`. Let's start it. Type:
 
   sudo service httpd start
+
+Now try running the `sudo service httpd status` command again to see if the service is running.
 
 We can use the `service` command to control the services running on the system.
 Let's setup the service so that it automatically starts when the system boots up.
@@ -608,7 +613,7 @@ copied earlier.
 git clone https://github.com/seis615/project-2-linux-git-jasondbaker.git
 ----
 
-The git application will ask you for your GitHub username and password. Note, if you have multi-factor authentication enabled on your GitHub account you will need to provide a personal token instead of your password.
+The git application will ask you for your GitHub username and password. Note, if you have multi-factor authentication enabled on your GitHub account you will need to provide a personal access token instead of your password.
 
 Git will clone (copy) the repository from GitHub to your Linux server. Since
 the repository is empty the clone happens almost instantly. Check to make
