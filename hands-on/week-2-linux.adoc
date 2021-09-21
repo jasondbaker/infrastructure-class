@@ -613,7 +613,7 @@ copied earlier.
 git clone https://github.com/seis615/project-2-linux-git-jasondbaker.git
 ----
 
-The git application will ask you for your GitHub username and password. Note, if you have multi-factor authentication enabled on your GitHub account you will need to provide a personal access token instead of your password.
+The git application will ask you for your GitHub username and password. Note, the password you provide must be a GitHub personal access token and not the password you use to log into your GitHub account. Please review the video from earlier in the course explaining how to create a GitHub personal access token.
 
 Git will clone (copy) the repository from GitHub to your Linux server. Since
 the repository is empty the clone happens almost instantly. Check to make
@@ -666,8 +666,7 @@ Finally, let's save the repository to our GitHub account. Type in:
 
   git push origin master
 
-The git client will ask you for your GitHub username and password before pushing
-the repository.
+The git client will ask you for your GitHub username and password (personal access token) before pushing the repository.
 
 Go back to the GitHub.com website and login if you have been logged out. Click
 on the repository link for the project. Do you see your files listed
