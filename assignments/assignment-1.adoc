@@ -12,7 +12,7 @@ You have three required tasks and one optional task to complete this week,
 as well as the assigned readings. Don't wait until the end of the week to
 begin working on these tasks!
 
-* Sign up for a free GitHub.com account.
+* Sign up for a free GitHub.com account and create a personal access token.
 * Sign up for a free Slack account and optionally install software on your desktop and/or
 mobile device.
 * Sign up for an Amazon Web Services account.
@@ -23,6 +23,11 @@ mobile device.
 
 Sign up for a free GitHub account by going to https://github.com and clicking
 the `Sign Up` button. You are welcome to use an existing personal GitHub account if have one. *Please e-mail me your GitHub username once you have an account setup.* Do not send me your GiHub password. Every assignment in this class is submitted using GitHub repositories.
+
+We can access the GitHub website using a standard username and password (and optionally multi-factor authentication if you set this up). When we access GitHub using an application like `git` from a command-line, we need to provide a username and a personal access token. This token is like a long randomly generated password. Please watch the following video to create a personal access token for your GitHub account this semester:
+
+  https://youtu.be/-94CH9b7U0M
+
 
 == Slack account
 Sign up for a free Slack account at https://ustseis615.slack.com/signup using
@@ -61,7 +66,7 @@ Go to http://aws.amazon.com/ and click on the `Sign In` link to sign up for a
 new AWS account. You should use your @stthomas.edu email address when signing
 up for the account. Also, you need to provide Amazon with a valid credit card during the account setup process. Choose the basic support option. The other support options are designed for businesses. We will provide AWS support to one another via the class Slack channel.
 
-*Note, do not select the AWS Educate Starter Account option when signing up for an account.* If you select this option, you *will not* be able to complete all of the assignments in this course. 
+*Note, do not select the AWS Educate Starter Account option when signing up for an account.* If you select this option, you *will not* be able to complete many of the assignments in this course. 
 
 Once your AWS account is setup, your instructor will e-mail you an educational credit code after the semester begins which you can apply to your account. In previous semesters AWS generously gave each student $100 worth of credit to work on assignments.
 
@@ -86,4 +91,9 @@ Please plan to invest additional learning time at the beginning of the course if
 
 One of the first things you will need to learn how to do in AWS is launch new EC2 isntances. These are virtual machines which can run an operating system and set of applications. Watch the following video to learn how to launch new instances:
 
-https://youtu.be/OEQq-c0fM-c
+  https://youtu.be/OEQq-c0fM-c
+
+
+== Submitting your assignment
+
+The only thing you need to do to submit this assignment, after creating the required accounts, is to e-mail me your GitHub account name.  
