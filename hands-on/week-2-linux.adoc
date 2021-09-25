@@ -20,7 +20,7 @@ Note: the hands-on projects we work on in class are not graded. This is an oppor
 == Requirements
 
 You need to have a personal AWS account and GitHub account for this project. You should also
-read the https://github.com/jasondbaker/infrastructure-class/blob/master/hands-on/git-hands-on.adoc[_Git Hands-on Guide_] and https://github.com/jasondbaker/infrastructure-class/blob/master/hands-on/linux-hands-on.adoc[_Linux Hands-on Guide_] before beginning this
+read the https://github.com/jasondbaker/infrastructure-class/blob/main/hands-on/git-hands-on.adoc[_Git Hands-on Guide_] and https://github.com/jasondbaker/infrastructure-class/blob/main/hands-on/linux-hands-on.adoc[_Linux Hands-on Guide_] before beginning this
 exercise.
 
 

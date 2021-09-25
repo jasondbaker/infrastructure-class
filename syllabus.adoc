@@ -117,8 +117,7 @@ of chat channels while working on projects.
 {blank}
 *[.underline]#Computers#* +
 A computer is an essential tool for this class since most of the lectures will include
-opportunities for hands-on learning. A personal computer is strongly encouraged.
-￼￼￼￼￼￼￼￼￼￼
+opportunities for hands-on learning. A personal computer is strongly encouraged.￼￼￼￼￼￼￼￼￼￼
 
 {blank}
 *[.underline]#Linux#* +

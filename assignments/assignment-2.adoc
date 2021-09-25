@@ -5,7 +5,7 @@
 
 = SEIS 615 Assignment 2: Shell scripting
 Jason Baker <bake2352@stthomas.edu>
-2.0, 8/10/2020
+3.0, 9/17/2021
 
 == Overview
 This week we launched a Linux server on AWS and worked with several basic
@@ -33,17 +33,15 @@ notes first. If you make a mistake, no worries. We all learn by making mistakes.
 
 == Requirements
 
-You need to have a personal AWS account and GitHub account for this assignment. You should have
-also read the _Git Hands-on Guide_ and _Linux Hands-on Guide_ by this point in the
-course.
+You need to have a personal AWS account and GitHub account for this assignment. Optionally, you also may have read the _Git Hands-on Guide_ and _Linux Hands-on Guide_.
 
 == A word about grading
 
-One of the key DevOps practices we learn about in this class is the use of automation to increase the speed and repeatability of processes. Automation is utilized during the assignment grading process to review and assess your work.
+One of the key DevOps practices we learn about in this class is the use of automation to increase the speed and repeatability of processes. Automation is utilized during the assignment grading process to assess your work.
 
 It's important that you follow the instructions in each assignment and type in required files and resources with the proper names. All names are case sensitive, so a name like "Web1" is not the same as "web1". If you misspell a name, use the wrong case, or put a file in the wrong directory location you will lose points on your assignment. This is the easiest way to lose points, and also the most preventable. You should *always double-check your work* to make sure it accurately reflects the requirements specified in the assignment.
 
-I will never ask you to submit an empty file -- in other words, a file with no contents. If I ask you to run a command and store the output of a command in a file, I expect the file to contain meaningful information. You should always carefully review the content of your files before submitting your assignment.
+I will never ask you to submit an empty file -- in other words, a file with no content. If I ask you to run a command and store the output of a command in a file, I expect the file to contain meaningful information. You should always carefully review the content of your files before submitting your assignment.
 
 
 == Setup a budget
@@ -79,12 +77,6 @@ The server should have the following characteristics:
   * SSMAccess role
   * All default instance settings (storage, vpm, security group, etc.)
 
-Note that when you are launching the server, you can elect to use the same
-key pair you used in the class project or you can create a new key pair for this
-server. Either option is fine. From a practical standpoint, it might make
-sense to reuse the same key pair each time so that you don't have to
-keep track of which key pair you used to launch a particular server.
-
 [TIP]
 .Taking a break
 ====
@@ -94,12 +86,9 @@ You can always `stop` your EC2 instance when you need to take a break, and
 then `start` the instance back up when you are ready to work again.
 
 The EC2 instances we are creating save our changes even when the instances are
-shut down. Just don't `terminate` the instance, because then you will lose
-all of your work and have to start all over again.
+shut down. Just don't `terminate` the instance until you fullly complete the assignment, because you will lose all of your work and have to start all over again.
 
-AWS does not bill you
-for instances that are stopped. Well, technically they bill you for the storage
-costs of the instance, but that amounts to pennies per month.
+AWS does not bill you for instances that are stopped. Well, technically they bill you for the storage costs of the instance while it's stopped, but that amounts to pennies per month.
 ====
 
 === Log into server
@@ -116,20 +105,22 @@ Remember, it's a good practice to always update the Linux software packages
 immediately after building the server. Amazon Linux is a _rolling_ release,
 which means that the Linux image is being rebuilt with newer packages
 several times a week. This means that when you launch an Amazon Linux
-instance the software is very current.
+instance the software is usually up-to-date.
 
 We will also use Git in this assignment, so install the required software
-packages:
+package:
 
   sudo yum install git -y
 
-Do you remember which directory you are automatically placed into when you
-initially log into a Linux server? Your home directory. Remember, each user
-on a Linux system has their own unique home directory. Verify the location:
+Let's access your home directory:
+
+  cd ~
+
+Verify your current directory location by using the command:
 
   pwd
 
-You should see that you are currently in the `/home/ec2-user` directory.
+You should see that you are currently in the `/home/ssm-user` directory.
 
 Next, we're going to create a sub-directory in our home directory to store this
 week's assignment files. Let's call it `project1`. Go ahead and create this
@@ -325,14 +316,16 @@ by simply adding more argument options and related functions. That's exactly
 what we're going to do next. Before we do that, add the `script3` file to the
 Git repository and make another commit.
 
-During the past two assignments, we've been adding and modifying script files
-in our Git repository on the same branch -- the *master* branch. Typically,
+Wwe've been adding and modifying script files
+in our Git repository on the default branch -- the *master* branch. Typically,
 you don't want to edit and make changes to the files on the master branch. You
 should do all of your coding and testing in a separate branch, usually a
 feature branch. Once you have successfully modified your code then you can
 merge it back into the master branch. A typical development workflow contains
 many of these branching and merging activities. Let's start following that
 practice now.
+
+Note: in some cases the default branch on a Git repository may be called the `master` branch and in other cases it may be called the `main` branch. Git software typically uses `master`, while services like GitHub now call it `main`. So the name of the default branch in your repository will depend on where you first created the repo.
 
 Start by creating a new branch:
 
@@ -433,12 +426,12 @@ create new files but it would be nice if the script could also delete files.
 Your mission is to modify `script3` to add this deletion feature. You should also allow the user to pass an argument that returns the version of the script. Here are the
 requirements:
 
-  * Create a variable called `version` with a value of `1.0.1`
+  * Create a variable called `version` with a value of `1.1.3`
   * The `-d` or `--delete` flags should execute the `delete_file` function.
   * The `delete_file` function should remove a specified file when provided a name: `<name>-54321`
   * If a filename isn't provided as an argument to the script, then use `server`
-  as the default filename
-  * The `-v` or `--version` flags should output the version of the script (value of the `version` variable) using the `show_version` function..
+  as the default filename.
+  * The `-v` or `--version` flags should output the version of the script (value of the `version` variable) using the `show_version` function.
   * The usage statement should display the new deletion flag and version flag options.
   * The help text should display useful information about the new deletion and version options.
 
@@ -452,7 +445,7 @@ You can test your script by issuing the following sequence of commands:
 If your script is working properly, you should not see a `server-54321` or
 `foo-54321` file listed in the current directory. If your script isn't working
 properly, then keep working at it! It's okay (and expected) to make mistakes.
-Feel free to use Google or Slack to investigate any error messages that you
+Feel free to use sites like Google or Stackoverflow to investigate any error messages that you
 encounter.
 
 Once the script is working properly, commit the updated script to your
