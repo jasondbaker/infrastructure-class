@@ -20,7 +20,7 @@ Let's get started!
 
 === Create an S3 bucket
 
-Create an S3 bucket in the us-east-1 region using whatever name you like. Create a prefix (folder) in the bucket called `images` and upload an image file into it. You can select any sort of image you would like and you may have to download one from the Internet if nescessary. Configure S3 to store the image in the infrequently access storage class and in an encrypted (AES-256) format.
+Create an S3 bucket in the us-east-1 region using whatever name you like. Create a prefix (folder) in the bucket called `images` and upload an image file into it. You can select any sort of image you would like and you may have to download one from the Internet if necessary. Configure S3 to store the image in the infrequently access storage class and in an encrypted (AES-256) format.
 
 
 === Create an EC2 instance
