@@ -146,7 +146,7 @@ The next step is to launch a Linux instance using EC2.
 In previous assignments, you accepted all of the server launch defaults when launching a
 Linux instance. This time you will customize some of the launch settings by
 *configuring the instance details*. In particular,
-you will associate the S3-full-access role you created previously with the new instance.
+you will associate the S3-server-access-role role you created previously with the new instance.
 
 The server should have the following characteristics:
 
@@ -167,12 +167,6 @@ Your configuration may be slightly different based on the availability of a
 newer Amazon Linux 2 AMI.
 
 image:../images/assignment3/server-launch-1.png["600","600"]
-
-Note that when you are launching the server, you can elect to use the same
-key pair you used last week or you can create a new key pair for this
-server. Either option is fine. From a practical standpoint, it might make
-sense to reuse the same key pair each time so that you don't have to
-keep track of which key pair you used to launch a particular server.
 
 === Log into server
 The next step is to log into the Linux server using AWS Session Manager. Remember, it will
@@ -250,7 +244,7 @@ instance? You will take care of that next.
 
 Let's copy the `index.html` file from your S3 bucket into the web server
 document root directory. Your instance already has access to the S3 bucket
-because you created a role called `S3-full-access` and associated it with the
+because you created a role called `S3-server-access-role` and associated it with the
 instance when you launched it earlier. The role assigned full S3 access
 privileges to the instance.
 
@@ -395,7 +389,7 @@ The contents of the `metadata.txt` file should look similar to this after
   {
     "Code" : "Success",
     "LastUpdated" : "2016-04-05T16:45:21Z",
-    "InstanceProfileArn" : "arn:aws:iam::234149541132:instance-profile/S3-full-access",
+    "InstanceProfileArn" : "arn:aws:iam::234149541132:instance-profile/S3-server-access-role",
     "InstanceProfileId" : "AIPAIKSVFD6G6V26PMAGO"
   }
   webservers

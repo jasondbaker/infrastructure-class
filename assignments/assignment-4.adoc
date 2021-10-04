@@ -321,7 +321,7 @@ in a special way based on the way the `curl` command works (using the `tee` comm
 
 ** Copy the file `/var/log/nginx/access.log` into the present working directory.
 
-* If the user starts the script with a `-v` or `--version` argument, the script will return the value `0.5.0`
+* If the user starts the script with a `-v` or `--version` argument, the script will return the value `0.8.1`
 
 * If the user starts the script with a `-h` or `--help` argument, the script will provide useful help information.
 
