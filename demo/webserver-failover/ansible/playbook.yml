@@ -35,11 +35,6 @@
           'php-mbstring',
           'php-xml'
         ]
-
-    - name: set up ssm-user
-      user:
-        name: ssm-user
-        shell: /bin/bash
         
     - name: install web content
       copy:

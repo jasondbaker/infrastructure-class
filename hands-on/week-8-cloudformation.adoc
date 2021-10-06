@@ -54,7 +54,7 @@ image:../images/week-8-cf-project.png["800","800"]
 
 Start by adding an input parameter called *InstanceType* which allows a user to specify the webserver instance type. The parameter should allow the user to select from a t2.micro or t2.medium instance type, defaulting to a t2.micro instance.
 
-You will need to add two webservers with logical names of *Web1* and *Web2* to this template. The webservers should use the *ami-034b1e5cba4ade574* AMI and be associated with the *WebserverSG* security group. These websevers should also reference the *ClassInstanceProfile* instance profile to enable AWS Session Manager access.
+You will need to add two webservers with logical names of *Web1* and *Web2* to this template. The webservers should use the *ami-031a2e82d50ed8905* AMI and be associated with the *WebserverSG* security group. These websevers should also reference the *ClassInstanceProfile* instance profile to enable AWS Session Manager access.
 
 You will also need to add an application load balancer using the following resouces: a load balancer resource with the logical name *WebAlb*, an ELB listerner resource with the logical name *WebAlbListener*, and a target group with the logical name *WebAlbTG*. The load balancer will verify the health of target instances using the index path (/index.php) endpoint.
 

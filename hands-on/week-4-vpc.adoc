@@ -47,7 +47,7 @@ You might be wondering why there is only a single NAT gateway. In a production e
 Create three EC2 instances with the following properties:
 
 * t2.micro instance size
-* AMI: **ami-034b1e5cba4ade574** (note that this is a public community image)
+* AMI: **ami-031a2e82d50ed8905** (note that this is a public community image)
 * 10GB root volume storage size
 * Instances are named `ecoweb1`, `ecoweb2`, and `ecoapi1`
 * The web instances should launch into ecotech public subnets in separate AZs, and the API instance should launch into the ecotech-private2 subnet.

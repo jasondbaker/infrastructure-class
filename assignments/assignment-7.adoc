@@ -85,7 +85,7 @@ The stack template should create the following logical resources:
     ** Web1 is located in the PublicSubnet1 subnet.
     ** Web2 is located in the PublicSubnet2 subnet.
     ** Each instance type is based on the InstanceType input parameter.
-    ** The instance AMIs should use this public image: *ami-034b1e5cba4ade574*
+    ** The instance AMIs should use this public image: *ami-031a2e82d50ed8905*
   * A security group with a logical name of *WebserversSG* in the VPC.
     ** Allow incoming requests on port 80 from the EngineeringLbSG.
   * An application load balancer with the logical name *EngineeringLB* and target group with the logical name *EngineeringWebserversTG*
