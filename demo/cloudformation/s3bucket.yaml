@@ -11,8 +11,3 @@ Resources:
     Metadata:
       Comment: "Real bucket name will inclue ClassBucket plus random characters"
 
-Outputs:
-  BucketUrl:
-    Value: !GetAtt ClassBucket.WebsiteURL
-    Description: "S3 bucket website address"
-
