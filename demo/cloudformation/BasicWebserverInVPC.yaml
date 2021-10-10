@@ -104,7 +104,7 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: !Ref InstanceType
-      ImageId: "ami-034b1e5cba4ade574"
+      ImageId: "ami-031a2e82d50ed8905"
       SubnetId: !Ref PublicSubnet1
       IamInstanceProfile: !Ref ClassInstanceProfile
       SecurityGroupIds:
