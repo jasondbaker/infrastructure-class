@@ -292,13 +292,13 @@ your local Git identity by running these commands:
   $ git config --global user.email "your@email.com"
   $ git config --global user.name "your GitHub username"
 
-When you create a Git repository and start working with files, the master branch of the repository is checked out by default. Go ahead and create a file in the directory called `README.md` and add the following contents:
+When you create a Git repository and start working with files, the main branch of the repository is checked out by default. Go ahead and create a file in the directory called `README.md` and add the following contents:
 
   *Assignment 4 Files*
 
 Commit the file to the repository.
 
-You just committed the file to the master branch of the repository. We generally try to avoid working directly on the master branch in our professional life. Go ahead and create a new branch in the Git repository called `develop` and check it out. This branch will have the README.md file in it because you just branched from the most recent commit in master.
+You just committed the file to the main branch of the repository. We generally try to avoid working directly on the main branch in our professional life. Go ahead and create a new branch in the Git repository called `develop` and check it out. This branch will have the README.md file in it because you just branched from the most recent commit in main.
 
 === Create a shell script
 
@@ -333,8 +333,8 @@ Once you have completed the shell script, make sure you run the script properly 
 repository up to GitHub:
 
 * Create a new repository on GiHub Classroom by clicking this link: https://classroom.github.com/a/wCOFqtu3
-* Merge your `develop` branch back into the `master` branch on your local Git repository.
-* Push your local master branch up to the GitHub repository.
+* Merge your `develop` branch back into the `main` branch on your local Git repository.
+* Push your local main branch up to the GitHub repository.
 
 Confirm that the four files are now in your new GitHub repository:
 
@@ -530,7 +530,7 @@ Enter these commands, substituting the values as necessary:
   git config --global user.email "your@email.com"
   git config --global user.name "your GitHub username"
 
-Create a new `develop` Git branch and check it out. Now add the `access2.log` file to the repository and commit your changes to the develop branch. Merge the `develop` branch into the `master` branch. Push the master branch back up to GitHub. Verify that the new `access2.log` file exists on
+Create a new `develop` Git branch and check it out. Now add the `access2.log` file to the repository and commit your changes to the develop branch. Merge the `develop` branch into the `main` branch. Push the main branch back up to GitHub. Verify that the new `access2.log` file exists on
 your GitHub repository.
 
 === Check your work

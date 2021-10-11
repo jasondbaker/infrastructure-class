@@ -429,7 +429,7 @@ need to recall the specific commands.
   * Modify the origin remote on your local Git repository to point to the
   address of this new GitHub repository, something like: https://github.com/ustseis615/assignment-3-aws-<username>.git
 
-  * Push your local master branch up to the GitHub repository
+  * Push your local main branch up to the GitHub repository
 
 Congratulations! Your work is now saved.
 
