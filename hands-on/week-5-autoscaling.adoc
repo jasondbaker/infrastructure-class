@@ -59,7 +59,7 @@ following incoming traffic rules:
 
 * Incoming traffic on port 80 (http) from the `ecolb-sg`.
  
-The autoscaling group should use a launch configuration with the following properties:
+The autoscaling group should use a launch template with the following properties:
 
 * t2.micro instance size
 * Latest version of Amazon Linux 2 AMI

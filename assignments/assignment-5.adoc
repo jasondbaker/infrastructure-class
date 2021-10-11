@@ -422,14 +422,14 @@ load balancer.
 
 === Create an Auto Scaling group
 
-The next step in the assignment is to create a launch configuration and auto
-scaling group. Select the `Launch Configuration` menu item and click on the
+The next step in the assignment is to create a launch template and auto
+scaling group. Select the `Launch Templates` menu item and click on the
 button to create a new auto scaling group. Here are the properties for the
-new launch configuration:
+new launch template:
 
   * AMI: wordpressweb (located in your personal AMI listing)
   * Type: t2.micro
-  * Launch configuration name: wordpress-launch-config
+  * Launch template name: wordpress-launch-config
   * IP Address Type: Assign a public IP address to every instance.  (located in advanced section)
   * Security group: production-web
 
