@@ -369,6 +369,9 @@
                         }
                     ]
                 },
+                "ManagedPolicyArns": [
+                    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+                ],
                 "Policies": [
                     {
                         "PolicyDocument": {
@@ -389,11 +392,48 @@
             }
         },
 
+        "LoadServerRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "RoleName": "loadserver-role",
+                "AssumeRolePolicyDocument": {
+                    "Statement": [
+                        {
+                            "Action": [
+                                "sts:AssumeRole"
+                            ],
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "ec2.amazonaws.com"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "ManagedPolicyArns": [
+                    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+                ]
+            }
+        },
+
+        "LoadInstanceProfile": {
+            "Type": "AWS::IAM::InstanceProfile",
+            "Properties": {
+                "Roles": [
+                    {
+                        "Ref": "LoadServerRole"
+                    }
+                ]
+            }
+        },
+
         "LoadServer": {
             "Type": "AWS::EC2::Instance",
             "Properties" : {
               "InstanceType": "t3.small",
               "ImageId": {"Ref": "webami"},
+              "IamInstanceProfile": {"Ref": "LoadInstanceProfile"},
               "SubnetId": {"Ref": "PublicSubnet1"},
               "SecurityGroupIds": [
                 { "Ref": "PerftestSG"}

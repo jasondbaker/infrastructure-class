@@ -67,9 +67,11 @@ The input stage retrieves events from the system. These events are usually creat
 
 We'll start playing with Logstash by creating the simplest possible pipeline. In this example, Logstash will use your keyboard input during the input stage, do nothing during the filter stage, and display the resulting message event on your console screen in the output stage.
 
-Log into one of the `webapp` EC2 instances created by the stack using AWS Session Manager.
+Log into one of the `webapp` EC2 instances created by the stack using AWS Session Manager. Note, these EC2 instances are using the Ubuntu Linux distribution instead of the Amazon Linux 2 distribution. Don't worry, most of the Linux commands you are familiar with work the same way in Ubuntu. Our project application environment was configured to be run by the `ubuntu` user account, so we need to switch our account to this user by running the command:
 
-Create a text file called `logstash_basic.conf` in the current working directory containing the following text:
+  sudo su ubuntu
+
+Create a text file called `logstash_basic.conf` in the /home/ssm-user directory containing the following text:
 
   input {
     stdin {}
@@ -91,10 +93,10 @@ Be patient. It will take about 30 seconds for the application to start up (JVM b
 Logstash should respond back with a message like:
 
   {
-       "message" => "My first message!",
-      "@version" => "1",
-    "@timestamp" => 2019-08-30T18:39:28.114Z,
-          "host" => "ip-10-0-0-44"
+      "@timestamp" => 2021-10-18T04:42:59.021Z,
+        "@version" => "1",
+            "host" => "ip-10-0-1-166",
+        "message" => "My first message!"
   }
 
 Logstash took your raw input message and converted it into an event message which could be sent to another service. It can do the same thing for lots of other kinds of messages, like messages written to a logfile or messages emitted by applications. It converts these messages into something that other services can easily consume. That's all there's to it! Press `ctl-c` to exit out of the Logstash application.
@@ -118,24 +120,24 @@ Create a new Logstash configuration file called `logstash_nginx.conf` containing
 Then start up Logstash using this configuration file. You will likely see a stream of messages generated as a result of ELB health checks:
 
   {
-        "@version" => "1",
-      "@timestamp" => 2019-08-30T20:50:53.874Z,
-        "message" => "10.0.1.160 - - [30/Aug/2019:20:50:50 +0000] \"GET /health HTTP/1.1\" 404 153 \"-\" \"ELB-HealthChecker/2.0\" \"-\"",
             "path" => "/var/log/nginx/access.log",
-            "host" => "ip-10-0-0-44"
+            "host" => "ip-10-0-1-166",
+        "message" => "10.0.1.170 - - [18/Oct/2021:04:46:28 +0000] \"GET /health HTTP/1.1\" 200 125 \"-\" \"ELB-HealthChecker/2.0\" \"-\"",
+      "@timestamp" => 2021-10-18T04:46:30.381Z,
+        "@version" => "1"
   }
 
 The CloudFormation stack you launched created an application load balancer. Go back to the CloudFormation dashboard and select your stack. Look at the `Outputs` tab to find the _ELBEndpoint_ value. This is the web URL endpoint for the ALB. You can also find this value by looking in the Elastic Load Balancer dashboard. 
 
 Open up a web browser and type in this load balancer endpoint address. Watch your shell console window at the same time. Notice that as you make a web request to the server, your access request is logged and emitted as a message by Logstash.
 
-Stop the Logstash application before proceeding.
+Stop the Logstash application using ctrl-c before proceeding.
 
 === Filtering log messages
 
 The Logstash event message contains a field called `message` which contains the full Nginx log message. There's a lot of useful information packed in this field. For example:
 
-  "message" => "10.0.0.217 - - [30/Aug/2019:21:01:15 +0000] \"GET /health HTTP/1.1\" 404 153 \"-\" \"ELB-HealthChecker/2.0\" \"-\""
+  "message" => "10.0.1.170 - - [18/Oct/2021:04:47:48 +0000] \"GET /health HTTP/1.1\" 200 125 \"-\" \"ELB-HealthChecker/2.0\" \"-\""
 
 Nginx access log events follow a standardized format. If Logstash could understand this format it could unpack the data before forwarding it to another service for analysis. Fortunately Logstash can unpack the message using a plugin called `grok` in the filter pipeline stage.
 
@@ -161,22 +163,22 @@ Modify the `logstash_nginx.conf` file to add a filter:
 Now run Logstash again using this modified configuration file. Notice how Logstash has added a bunch of additional fields to the output event message and these fields contain data parsed from the `message` field:
 
   {
-        "response" => "404",
-            "host" => "ip-10-0-0-44",
-        "timestamp" => "30/Aug/2019:21:26:16 +0000",
+      "@timestamp" => 2021-10-18T04:50:38.973Z,
+        "timestamp" => "18/Oct/2021:04:50:38 +0000",
+        "referrer" => "\"-\"",
+            "host" => "ip-10-0-1-166",
+          "message" => "10.0.1.170 - - [18/Oct/2021:04:50:38 +0000] \"GET /health HTTP/1.1\" 200 125 \"-\" \"ELB-HealthChecker/2.0\" \"-\"",
+          "request" => "/health",
         "@version" => "1",
-          "message" => "10.0.0.217 - - [30/Aug/2019:21:26:16 +0000] \"GET /health HTTP/1.1\" 404 153 \"-\" \"ELB-HealthChecker/2.0\" \"-\"",
-      "httpversion" => "1.1",
+        "clientip" => "10.0.1.170",
+        "response" => "200",
+            "bytes" => "125",
+            "verb" => "GET",
             "ident" => "-",
             "auth" => "-",
-          "request" => "/health",
-      "@timestamp" => 2019-08-30T21:26:17.287Z,
             "path" => "/var/log/nginx/access.log",
             "agent" => "\"ELB-HealthChecker/2.0\"",
-            "verb" => "GET",
-            "bytes" => "153",
-        "clientip" => "10.0.0.217",
-        "referrer" => "\"-\""
+      "httpversion" => "1.1"
   }
 
 Make another request to the ELB endpoint address in your web browser and watch Logstash emit the event message. Stop the Logstash application before proceeding.
@@ -187,7 +189,7 @@ OpenSearch uses the Elastic database to provide an extremely fast data indexing 
 
 Logstash requires AWS credentials in order to push data into OpenSearch. We could store these credentials in the Logstash configuration file, but that wouldn't be a very good security practice. Instead we'll take advantage of an EC2 instance profile. When the `webapp` EC2 instance was created by CloudFormation, a role was attached to the instance which grants access to the OpenSearch service. We'll take advantage of this role when setting up the output plugin.
 
-Let's modify the `logstash_nginx.conf` file again to update the output stage. Before modifying the file, you will need to look up the OpenSearch service endpoint address. Go to the OpenSearch dashboard and select the `webtest` domain. Copy the endpoint address (you shouldn't use the https:// part of the address in the pipeline configuration file). Your configuration file should look similar to the one below:
+Let's modify the `logstash_nginx.conf` file again to update the output stage. Before modifying the file, you will need to look up the OpenSearch service endpoint address. Go to the OpenSearch dashboard and select the `webtest` domain. Copy the domain endpoint address (you shouldn't use the https:// part of the address in the pipeline configuration file). Your configuration file should look similar to the one below:
 
   input {
     file {
@@ -213,7 +215,7 @@ Let's modify the `logstash_nginx.conf` file again to update the output stage. Be
 
 The output stage will use the `amazon_es` plugin to forward messages to the specified OpenSearch endpoint. The `index` parameter tells OpenSearch to add the message to a database index called `access-logs` with the current date appended.
 
-Start up Logstash using the new configuration and leave it running. You should see a stream of filtered events in your console output like before. How do we see if these events were properly pushed into OpenSearch? We can do that using Kibana.
+Start up Logstash using the new configuration and leave it running. You should see a stream of filtered events in your console output like before. How do we see if these events were properly pushed into OpenSearch? We can check that using Kibana.
 
 === Viewing data with Kibana
 
@@ -221,11 +223,11 @@ Kibana is a web-based service which allows you to view and analyze data stored i
 
 In this exercise, Kibana access is restricted to your IP address (remember providing this as a parameter to CloudFormation?). However, restricting access via IP address usually isn't good enough in the real world. In a business environment you will likely need to implement strong role-based access.
 
-You can find the Kibana web address for your OpenSearch cluster by going to the OpenSearch dashboard and selecting the `webtest` domain. Type this web address into a browser to open up the Kibana website. Click on the _Explore on my own_ link.
+You can find the Kibana URL address for your OpenSearch cluster by going to the OpenSearch dashboard and selecting the `webtest` domain. Type this web address into a browser to open up the Kibana website. Click on the _Explore on my own_ link.
 
-The first thing you should do in Kibana is create an index pattern by selecting the _Index Patterns_ link. Define a new index pattern called `access-logs-*`. Kibana should show you that your index pattern matches 1 index. This is good news because it means that data was successfully pushed from Logstash to OpenSearch! You can also define a time filter field for your index. Using the `@timestamp` field makes sense. Finish creating the index pattern.
+The first thing you should do in Kibana is create an index pattern by selecting the _Index Patterns_ link on the lower right section of the page. Define a new index pattern called `access-logs-*`. Kibana should show you that your index pattern matches 1 index. This is good news because it means that data was successfully pushed from Logstash to OpenSearch! Click on the `Next step` button. You can also define a time filter field for your index. Using the `@timestamp` field makes sense here. Finish by clicking on the `Create index pattern` button.
 
-Next, click on the `Discover` menu in Kibana. The discover dashboard allows you to quickly create adhoc queries. You can use this to discover new things about your data. There are several types of queries you can run in Kibana. Let's try a free-text query. Type the number `200` into the search field and click the `Update` button. You should see a set of messages appear which all contain the highlighted search value you entered.
+Next, click on the `Discover` link in the left-hand navigation menu. The discover dashboard allows you to quickly create adhoc queries. You can use this to discover new things about your data. There are several types of queries you can run in Kibana. Let's try a free-text query. Type the number `200` into the search field at the top and click the `Update` button. You should see a set of messages appear which all contain the highlighted search value you entered.
 
 Now type `200 health` into the search field and click the `Update` button. This search will find all of the messages which contain `200` or `health`. Note that we could have explicitly defined this boolean search by typing `200 OR health`. We didn't have to include the `OR` keyword because it was implied by the space between our search terms.
 
@@ -255,13 +257,16 @@ The webservers are receiving requests from your web browser, the ELB health chec
 
 We can use various tools and third-party services to perform load testing on a web service. We'll use a load generation application called Gatling for this purpose. Gatling can use a scripted plan (called a _scenario_) to simulate hundreds or thousands of web clients accessing the service. Typically you run a tool like Gatling on a separate server rather than on the webservers you are testing. That's because you don't want the execution of the load testing tool to impact the service being tested.
 
-Our CloudFormation stack created a separate EC2 instance named `loadserver` that we can use for load testing purposes. Open up a new terminal console and log into this instance. We will use the Gatling software to run a simulation.
+Our CloudFormation stack created a separate EC2 instance named `loadserver` that we can use for load testing purposes. Open up a new terminal console and log into this instance. We will use the Gatling software to run a simulation. Again, change to the `ubuntu` user and this user's home directory by running these commands:
 
-Run the following command, substituting your ALB endpoint address for the one in this example:
+  sudo su ubuntu
+  cd ~
+
+Run the following command, substituting your ELB endpoint address for the one in this example (make sure to prefix it with http://):
 
   JAVA_OPTS="-Dendpoint=http://elasticproject-alb-844427988.us-east-1.elb.amazonaws.com" gatling.sh
 
-Gatling will take a little while to start as the JVM loads up. Once it is running it will present you with a set of simulations it can run. Select the `webapp.RecordedSimulation`. You don't need to add a run description.
+Gatling will take a little while to start as the JVM loads up. Once it is running it will present you with a set of simulations it can run. Select the `webapp.RecordedSimulation`. You don't need to add a run description (just press enter again).
 
 Once Gatling starts running you will start to see statistics scroll down the screen and messages streaming in the other terminal consoles. What's going on here?
 
