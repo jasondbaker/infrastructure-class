@@ -10,7 +10,9 @@ Jason Baker <bake2352@stthomas.edu>
 == Overview
 Telemetry plays a key role in every DevOps organization. Teams rely on telemetry collection and analysis as a feedback mechanism to understand how a service is performing. As teams deploy code changes to a service, metrics allow teams to understand how these changes are impacting the service. 
 
-Nearly every modern application generates a set of application log data which describes application events and failures. Engineers review application logs when trying to diagnose service problems. In this week's project we will utilize a common ELK stack architecture to ingest and analyze log information from a server. 
+Nearly every modern application generates a set of application log data which describes application events and failures. Engineers review application logs when trying to diagnose service problems. In this week's project we will utilize a common ELK stack architecture to ingest and analyze log information from a server.
+
+Amazon provides a managed Elastic database service called OpenSearch (previously known as Elasticsearch). Basically, Amazon forked the popular Elastic opensource project and created a new managed service which is API-compatible with Elastic. 
 
 == Requirements
 
@@ -23,8 +25,7 @@ Let's get started!
 === Launch a CloudFormation template.
 
 We're going to get a little preview of CloudFormation, a tool we will learn much more about in a few weeks.
-CloudFormation allows us to quickly create sets of resources called stacks. Log into your AWS account and click on
-the link below:
+CloudFormation allows us to quickly create sets of resources called stacks. Log into your AWS account and click on the link below:
 
   https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?templateURL=https://s3.amazonaws.com/seis615/elastic-template.json&stackName=ElasticStack&param_asgsize=2&param_webami=ami-0414e79e87fbc38af
 
@@ -32,7 +33,6 @@ the link below:
 You will see a quick create stack page showing the name of the stack and a list of
 input parameter values. Set the following parameter values:
 
-  * KeyName should be set to the name of your EC2 keypair.
   * YourIp should be set to your workstation's IP address in x.x.x.x/32 CIDR notation (use checkip.amazonaws.com to verify)
 
 Select the checkbox next to *I acknowledge that AWS CloudFormation might create IAM resources with custom names.* Click the *Create Stack* button.
@@ -43,25 +43,25 @@ The template will create a stack containing several resources:
 * An AWS Virtual Private Cloud (VPC) including two subnets, routing tables, routes, and
 an Internet Gateway.
 
-* A single-node Elasticsearch instance.
+* A single-node OpenSearch (Elastic) instance.
 
 * An application load balancer targeting a set of EC2 instances running the Nginx webserver.
 
 
-It will take around 10 minutes for CloudFormation to create the AWS resources for you (most of the time is spent launching Elasticsearch). You can watch the progress messages on the *Events* tab in 
+It will take around 10 minutes for CloudFormation to create the AWS resources for you (most of the time is spent launching OpenSearch). You can watch the progress messages on the *Events* tab in 
 the console. When the stack has been created, you will see a CREATE_COMPLETE message in the *Status* column of the console and on the *Overview* tab. 
 
-You can begin working on the project once the EC2 instances are ready. You don't necessarily have to wait for Elasticsearch since we won't use it immediately.
+You can begin working on the project once the EC2 instances are ready. You don't necessarily have to wait for OpenSearch since we won't use it immediately.
 
 image:../images/assignment6/Elastic-project.png["800","800"]
 
 === Working with Logstash
 
-Logstash is a software application which collects, filters, and forwards data to other services. We can use it to retrieve data from a server and send that data to an analytics service like Elasticsearch. Logstash is written in Java and is preinstalled on the EC2 instances (named `webapp`) launched by the CloudFormation stack.
+Logstash is a software application which collects, filters, and forwards data to other services. We can use it to retrieve data from a server and send that data to an analytics service like OpenSearch. Logstash is written in Java and is preinstalled on the EC2 instances (named `webapp`) launched by the CloudFormation stack.
 
 Logstash uses the concept of an event pipeline and plugin modules to process data. A pipeline consists of three stages: input, filter, and output. You can define plugins for each of these stages to process data in a desired manner.
 
-The input stage retrieves events from the system. These events are usually created by a Logstash plugin. For example, a plugin exists to retrieve messages from local logfiles, syslog, and a wide variety of applications. The filter stage uses plugins to filter data events. You may want to discard certain types of events or transform events in some special way. Finally, the output stage uses plugins to route events to a destination. In this exercise, we will use a plugin to route events to Elasticsearch.
+The input stage retrieves events from the system. These events are usually created by a Logstash plugin. For example, a plugin exists to retrieve messages from local logfiles, syslog, and a wide variety of applications. The filter stage uses plugins to filter data events. You may want to discard certain types of events or transform events in some special way. Finally, the output stage uses plugins to route events to a destination. In this exercise, we will use a plugin to route events to OpenSearch.
 
 === Create a basic pipeline
 
@@ -181,13 +181,13 @@ Now run Logstash again using this modified configuration file. Notice how Logsta
 
 Make another request to the ELB endpoint address in your web browser and watch Logstash emit the event message. Stop the Logstash application before proceeding.
 
-=== Outputting log messages to Elasticsearch
+=== Outputting log messages to OpenSearch
 
-Elasticsearch uses the Elastic database to provide an extremely fast data indexing and search service. Elastic is based on the open source Apache Lucene search engine. Logstash can use its event pipeline to output messages into Elasticsearch. In order to send messages to Elasticsearch, Logstash needs to use a special output plugin called `amazon_es` which has been pre-installed for you.
+OpenSearch uses the Elastic database to provide an extremely fast data indexing and search service. Elastic is based on the open source Apache Lucene search engine. Logstash can use its event pipeline to output messages into OpenSearch. In order to send messages to OpenSearch, Logstash needs to use a special output plugin called `amazon_es` which has been pre-installed for you.
 
-Logstash requires AWS credentials in order to push data into Elasticsearch. We could store these credentials in the Logstash configuration file, but that wouldn't be a very good security practice. Instead we'll take advantage of an EC2 instance profile. When the `webapp` EC2 instance was created by CloudFormation, a role was attached to the instance which grants access to the Elasticsearch service. We'll take advantage of this role when setting up the output plugin.
+Logstash requires AWS credentials in order to push data into OpenSearch. We could store these credentials in the Logstash configuration file, but that wouldn't be a very good security practice. Instead we'll take advantage of an EC2 instance profile. When the `webapp` EC2 instance was created by CloudFormation, a role was attached to the instance which grants access to the OpenSearch service. We'll take advantage of this role when setting up the output plugin.
 
-Let's modify the `logstash_nginx.conf` file again to update the output stage. Before modifying the file, you will need to look up the Elasticsearch service endpoint address. Go to the Elasticsearch dashboard and select the `webtest` domain. Copy the endpoint address (you shouldn't use the https:// part of the address in the pipeline configuration file). Your configuration file should look similar to the one below:
+Let's modify the `logstash_nginx.conf` file again to update the output stage. Before modifying the file, you will need to look up the OpenSearch service endpoint address. Go to the OpenSearch dashboard and select the `webtest` domain. Copy the endpoint address (you shouldn't use the https:// part of the address in the pipeline configuration file). Your configuration file should look similar to the one below:
 
   input {
     file {
@@ -211,19 +211,19 @@ Let's modify the `logstash_nginx.conf` file again to update the output stage. Be
     }
   }
 
-The output stage will use the `amazon_es` plugin to forward messages to the specified Elasticsearch endpoint. The `index` parameter tells Elasticsearch to add the message to a database index called `access-logs` with the current date appended.
+The output stage will use the `amazon_es` plugin to forward messages to the specified OpenSearch endpoint. The `index` parameter tells OpenSearch to add the message to a database index called `access-logs` with the current date appended.
 
-Start up Logstash using the new configuration and leave it running. You should see a stream of filtered events in your console output like before. How do we see if these events were properly pushed into Elasticsearch? We can do that using Kibana.
+Start up Logstash using the new configuration and leave it running. You should see a stream of filtered events in your console output like before. How do we see if these events were properly pushed into OpenSearch? We can do that using Kibana.
 
 === Viewing data with Kibana
 
-Kibana is a web-based service which allows you to view and analyze data stored in an Elastic database. AWS automatically configures the Kibana service for you when you build an Elasticsearch cluster. It's very important to secure the access to Kibana since it can access all of the data in the database. In fact, there have been several major security breaches over the past couple years related to companies that improperly secured access to Kibana.
+Kibana is a web-based service which allows you to view and analyze data stored in an Elastic database. AWS automatically configures the Kibana service for you when you build an OpenSearch cluster. It's very important to secure the access to Kibana since it can access all of the data in the database. In fact, there have been several major security breaches over the past couple years related to companies that improperly secured access to Kibana.
 
 In this exercise, Kibana access is restricted to your IP address (remember providing this as a parameter to CloudFormation?). However, restricting access via IP address usually isn't good enough in the real world. In a business environment you will likely need to implement strong role-based access.
 
-You can find the Kibana web address for your Elasticsearch cluster by going to the Elasticsearch dashboard and selecting the `webtest` domain. Type this web address into a browser to open up the Kibana website. Click on the _Explore on my own_ link.
+You can find the Kibana web address for your OpenSearch cluster by going to the OpenSearch dashboard and selecting the `webtest` domain. Type this web address into a browser to open up the Kibana website. Click on the _Explore on my own_ link.
 
-The first thing you should do in Kibana is create an index pattern by selecting the _Index Patterns_ link. Define a new index pattern called `access-logs-*`. Kibana should show you that your index pattern matches 1 index. This is good news because it means that data was successfully pushed from Logstash to Elasticsearch! You can also define a time filter field for your index. Using the `@timestamp` field makes sense. Finish creating the index pattern.
+The first thing you should do in Kibana is create an index pattern by selecting the _Index Patterns_ link. Define a new index pattern called `access-logs-*`. Kibana should show you that your index pattern matches 1 index. This is good news because it means that data was successfully pushed from Logstash to OpenSearch! You can also define a time filter field for your index. Using the `@timestamp` field makes sense. Finish creating the index pattern.
 
 Next, click on the `Discover` menu in Kibana. The discover dashboard allows you to quickly create adhoc queries. You can use this to discover new things about your data. There are several types of queries you can run in Kibana. Let's try a free-text query. Type the number `200` into the search field and click the `Update` button. You should see a set of messages appear which all contain the highlighted search value you entered.
 
@@ -237,7 +237,7 @@ Okay, that's all you need to know about performing searches for now. Feel free t
 
 === Configure second web server
 
-Use a new terminal console to log into the second `webapp` webserver. Create a `logstash-nginx.conf` on this server and configure it like the first webserver. Launch Logstash on the server using this configuration file. Now you should have Logstash running on two webservers collecting logs and forwarding messages to the Elasticsearch service. Keep both of these sessions open in separate terminals.
+Use a new terminal console to log into the second `webapp` webserver. Create a `logstash-nginx.conf` on this server and configure it like the first webserver. Launch Logstash on the server using this configuration file. Now you should have Logstash running on two webservers collecting logs and forwarding messages to the OpenSearch service. Keep both of these sessions open in separate terminals.
 
 You might be wondering what our website is doing. Let's try it out. You should be able to find the ELB endpoint address listed as one of the outputs in the CloudFormation stack. You can also find the address by going to the ELB dashboard. Enter this address in a web browser and access the site.
 
