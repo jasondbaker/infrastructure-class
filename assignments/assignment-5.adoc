@@ -357,8 +357,7 @@ fully qualified domain name associated with the private IP address of the server
 
 After creating and successfully executing the script, the WordPress site should now be accessible via a web browser. The site is configured to use your elastic load
 balancer, therefore you need to associate the EC2 instance with the load
-balancer. Go to the `instances` property of your load balancer and
-*edit* the instances to add the `wordpress1` server.
+balancer. 
 
 Open up a web browser on your desktop and type in the DNS name of the load
 balancer as the URL with the `/wordpress` path. For example:
