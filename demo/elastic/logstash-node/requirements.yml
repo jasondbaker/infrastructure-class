@@ -1,5 +1,3 @@
-- src: tommarshall.awscli
-  name: awscli
 - src: geerlingguy.java
   name: java
 - src: nginxinc.nginx
