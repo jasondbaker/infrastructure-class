@@ -147,7 +147,9 @@
                                 ],
                                 "Resource": [
                                     "arn:aws:s3:::seis615",
-                                    "arn:aws:s3:::seis615/*"
+                                    "arn:aws:s3:::seis615/*",
+                                    "arn:aws:s3:::ustseis615-midterm",
+                                    "arn:aws:s3:::ustseis615-midterm/*"
                                 ]
                             }
                         ]

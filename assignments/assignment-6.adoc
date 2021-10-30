@@ -54,7 +54,10 @@ preach.
 
 Go ahead and create a new Amazon Linux 2 t2.micro linux instance called `mgmt1` in a default VPC in the 
 us-east-1 (N. Virginia) region. Yes, you can use the AWS console for this task (but this is the 
-last time!).
+last time!). You will also need to define an instance role for `mgmt1` with the following policies attached:
+
+	* PowerUserAccess
+	* AmazonSSMManagedInstanceCore
 
 [NOTE]
 If you accidentally deleted the default VPC in the us-east-1 region you can create a new Default VPC in the VPC web console.
@@ -79,8 +82,8 @@ Next, we need to install some software build tools required by the EB CLI:
 Next, install a Python environment for the EB CLI and modify the shell execution path to use the new Python environment:
 
   ./aws-elastic-beanstalk-cli-setup/scripts/bundled_installer
-  echo 'export PATH="/home/ec2-user/.ebcli-virtual-env/executables:$PATH"' >> ~/.bash_profile && source ~/.bash_profile
-  p=(/home/ec2-user/.pyenv/versions/3*/bin); echo "export PATH=$p:$PATH" >> /home/ec2-user/.bash_profile  && source /home/ec2-user/.bash_profile
+  echo 'export PATH="/home/ssm-user/.ebcli-virtual-env/executables:$PATH"' >> ~/.bash_profile && source ~/.bash_profile
+  p=(/home/ssm-user/.pyenv/versions/3*/bin); echo "export PATH=$p:$PATH" >> /home/ssm-user/.bash_profile  && source /home/ssm-user/.bash_profile
   
 Finally, run the EB CLI installer application:
 
@@ -107,12 +110,6 @@ First, the EB CLI prompts you to select a region. Type the number that correspon
 that you would like to use and press Enter.
 
 	us-east-1 (N. Virginia)
-
-Next, provide your API access key and secret key so that the EB CLI can manage resources for you. 
-Access keys are created in the AWS Identity and Access Management management console.
-
-	(aws-access-id): (type in your aws-access-id)
-	(aws-secret-key): (type in your aws-secret-key)
 
 An application in Elastic Beanstalk is a resource that contains a set of application versions 
 (source), environments, and saved configurations that are associated with a single web application. 
@@ -147,7 +144,7 @@ group, security groups, etc. Launch the environment by running the command:
 
 This command will ask a series of questions before launching the environment:
 
-	RDS DB name: wordpressdb
+	RDS DB username: wpadmin
 	RDS DB master password: (choose one)
 
 The EB CLI will automatically upload the Wordpress application to EB as a deployment package. Now 
