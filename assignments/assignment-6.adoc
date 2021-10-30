@@ -151,12 +151,6 @@ The EB CLI will automatically upload the Wordpress application to EB as a deploy
 watch as the EB service builds the infrastructure environment for your application. This process 
 may take about 20 minutes.
 
-[NOTE]
-Elastic Beanstalk uses the access permissions associated with your IAM account to create resources 
-such as EC2 instances and security groups. If the creation process fails, your IAM account may not 
-have the proper permissions in place to create all the necessary resources. You should go into the 
-IAM console and add the AWSElastikBeanstalkFullAccess or AdministratorAccess policy to your account.
-
 After the launch process completes, check out the status of your EB environment by using the 
 following command:
 
@@ -165,21 +159,21 @@ following command:
 You should see something like:
 
 	Environment details for: wordpress-dev
-	  Application name: wordpress
-	  Region: us-east-1
-	  Deployed Version: app-201024_194802
-	  Environment ID: e-8ypya6xcfq
-	  Platform: arn:aws:elasticbeanstalk:us-east-1::platform/PHP 7.4 running on 64bit Amazon Linux 2/3.1.2
-	  Tier: WebServer-Standard-1.0
-	  CNAME: wordpress-dev.eba-tc3epku7.us-east-1.elasticbeanstalk.com
-	  Updated: 2020-10-24 19:58:07.002000+00:00
-	  Status: Ready
-	  Health: Green
+		Application name: wordpress
+		Region: us-east-1
+		Deployed Version: app-de0c-211030_175127
+		Environment ID: e-dii3pnvzek
+		Platform: arn:aws:elasticbeanstalk:us-east-1::platform/PHP 7.4 running on 64bit Amazon Linux 2/3.3.7
+		Tier: WebServer-Standard-1.0
+		CNAME: wordpress-dev.eba-mv2gjry3.us-east-1.elasticbeanstalk.com
+		Updated: 2021-10-30 18:01:42.033000+00:00
+		Status: Ready
+		Health: Green
 
 If the Status attribute is `Ready` and the Health is `Green` then you should be able to open up the 
 Wordpress application in a browser using the CNAME address in the output above. For example:
 
-	http://wordpress-dev.eba-tc3epku7.us-east-1.elasticbeanstalk.com
+	http://wordpress-dev.eba-mv2gjry3.us-east-1.elasticbeanstalk.com
 
 Go ahead and configure the Wordpress application like the previous assignment. Feel free to log 
 into the Wordpress application and play around with the interface a little bit. For example, try to 
