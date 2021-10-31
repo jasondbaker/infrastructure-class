@@ -106,7 +106,7 @@ You will create an Ansible playbook to configure the `web1` and `web2` instances
 
 You can create a playbook file on the `mgmt1` server using a local text editor like nano or vi. Alternatively, you can use your favorite source code editor on your local workstation and copy (scp) the file from your local workstation to the `assignment8` directory on `mgmt1`. Use whichever method is easiest for you.
 
-Create a playbook called `playbook.yaml` in the `/home/ec2-user/assignment8` directory. The playbook should contain two plays. The first play (named `install apache`) will install the Apache webserver and additional PHP software packages. The second play (named `install wordpress`) will install and configure the Wordpress application.
+Create a playbook called `playbook.yaml` in the `/home/ssm-user/assignment8` directory. The playbook should contain two plays. The first play (named `install apache`) will install the Apache webserver and additional PHP software packages. The second play (named `install wordpress`) will install and configure the Wordpress application.
 
 Here are the tasks you should configure in the first play:
 
@@ -121,7 +121,7 @@ Here are the tasks you should configure in the first play:
 While Ansible can run shell commands on servers using the `shell` or `command` modules, in general we try to avoid using shell commands in playbooks as much as possible because shell commands tend to be less maintainable. Playbooks are not shell scripts. You should not have more than one shell command in this playbook.
 ====
 
-Note that the `ec2-user` user doesn't have the necessary permissions to install new services on the instance. Ansible will need to become a super-user on these systems in order to install new packages.
+Note that the `ssm-user` user doesn't have the necessary permissions to install new services on the instance. Ansible will need to become a super-user on these systems in order to install new packages.
 
 Here are the tasks you should configure in the second play:
 
@@ -129,7 +129,7 @@ Here are the tasks you should configure in the second play:
         ** There are a couple different Ansible modules you can use to download files from the Internet. You can choose any one you want.
     * Unarchive the Wordpress software package to the directory `/var/www/html`
         ** Hint: Look at using the `unarchive` module.
-    * Create the Wordpress configuration file (`/var/www/html/wordpress/wp-config.php`) on the webservers using the Jinja template called `wp-config.j2` located in the `/home/ec2-user/ansible_templates` directory on the `mgmt1` server.
+    * Create the Wordpress configuration file (`/var/www/html/wordpress/wp-config.php`) on the webservers using the Jinja template called `wp-config.j2` located in the `/home/ssm-user/ansible_templates` directory on the `mgmt1` server.
 
 The Jinja template engine allows us to take template files and automatically interpolate the value of variables in the template. The values of the interpolated variables are provided by Ansible. If the variable name in an Ansible play and the variable name in the template match, Ansible will swap out the template variable name with the value of the Ansible variable. This is really handy because it means we can convert application configuration files into templates which can be parameterized and reused.
 
