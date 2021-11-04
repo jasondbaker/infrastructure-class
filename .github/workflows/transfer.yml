@@ -25,6 +25,7 @@ jobs:
           aws s3 cp demo/cloudformation/BasicVPC.yaml s3://seis615 --acl public-read
           aws s3 cp demo/cloudformation/BasicWebserverInVPC.yaml s3://seis615 --acl public-read
           aws s3 cp demo/cloudformation/s3bucket.yaml s3://seis615 --acl public-read
+          aws s3 cp demo/cloudformation/glue-template.yaml s3://seis615 --acl public-read
           aws s3 cp demo/docker/docker-single-server.yaml s3://seis615 --acl public-read
           aws s3 cp demo/elastic/elastic-template.json s3://seis615 --acl public-read
           aws s3 cp demo/packer/packer-cf.yaml s3://seis615 --acl public-read

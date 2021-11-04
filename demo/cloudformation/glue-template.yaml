@@ -1,0 +1,26 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+# Sample CloudFormation template in YAML to demonstrate creating a database named mysampledatabase
+# The metadata created in the Data Catalog points to the flights public S3 bucket
+#
+# Parameters section contains names that are substituted in the Resources section
+# These parameters are the names the resources created in the Data Catalog
+Parameters:
+  CFNDatabaseName:
+    Type: String
+    Default: cfn-mysampledatabse
+
+# Resources section defines metadata for the Data Catalog
+Resources:
+# Create an AWS Glue database
+  CFNDatabaseFlights:
+    Type: AWS::Glue::Database
+    Properties:
+      # The database is created in the Data Catalog for your account
+      CatalogId: !Ref AWS::AccountId   
+      DatabaseInput:
+        # The name of the database is defined in the Parameters section above
+        Name: !Ref CFNDatabaseName	
+        Description: Database to hold tables for flights data
+        LocationUri: s3://crawler-public-us-east-1/flight/2016/csv/
+        #Parameters: Leave AWS database parameters blank
