@@ -9,7 +9,7 @@ Parameters:
   webtype:
     Description: "Web server instance type"
     Type: "String"
-    Default: "t3.micro"
+    Default: "t2.micro"
   asgsize:
     Description: "ASG size."
     Type: "String"

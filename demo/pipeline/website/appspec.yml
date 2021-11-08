@@ -3,6 +3,7 @@ os: linux
 files:
   - source: /index.html
     destination: /usr/share/nginx/html/
+file_exists_behavior: OVERWRITE
 hooks:
   ApplicationStart:
     - location: scripts/start_server.sh
