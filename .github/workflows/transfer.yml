@@ -31,3 +31,13 @@ jobs:
           aws s3 cp demo/packer/packer-cf.yaml s3://seis615 --acl public-read
           aws s3 cp demo/packer/packer-template.pkr.hcl s3://seis615 --acl public-read
           aws s3 cp demo/packer/redis.pkr.hcl s3://seis615 --acl public-read
+          aws s3 cp demo/pipeline/app-codebuild-template.yaml s3://seis615 --acl public-read
+          aws s3 cp demo/pipeline/app-codedeploy-template.yaml s3://seis615 --acl public-read
+          aws s3 cp demo/pipeline/app-codepipeline-template.yaml s3://seis615 --acl public-read
+      
+      - name: Package pipeline artifact
+        run: |
+          cd demo/pipeline/website
+          zip -r ../website.zip *
+          cd ..
+          aws s3 cp website.zip s3://seis615 --acl public-read

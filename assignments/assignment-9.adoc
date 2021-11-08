@@ -5,7 +5,7 @@
 
 = SEIS 615 Assignment 9: Code pipeline
 Jason Baker <bake2352@stthomas.edu>
-2.1, 8/10/2020
+3.0, 11/7/2021
 
 == Overview
 A DevOps code pipeline helps to automate continuous delivery processes for software development organizations. Developers, testers, and operations staff depend on functioning pipelines to transform code changes into deployable software releases. While software developers are the primary users of a pipeline, IT operations professionals oftentimes have to maintain it.

@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /index.html
-    destination: /var/www/html/
+    destination: /usr/share/nginx/html/
 hooks:
   ApplicationStart:
     - location: scripts/start_server.sh
