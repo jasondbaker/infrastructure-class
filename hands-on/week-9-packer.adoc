@@ -42,7 +42,6 @@ The template will create a stack containing a basic VPC environment:
     * Routing table with an Internet route
     * Packer security group
     * EC2 instance with Amazon Linux 2 and Packer software installed
-    * Two input parameters (KeyName and YourIp)
 
 Packer automates the building of EC2 AMIs. It does this by launching a new EC2 instance based on 
 a predefined base AMI (Amazon Linux 2), installing software on the instance, shutting down the instance, and creating a new AMI based on this instance. Packer automatically terminates the temporary EC2 instance after the AMI is created.
