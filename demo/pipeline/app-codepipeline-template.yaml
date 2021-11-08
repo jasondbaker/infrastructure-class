@@ -3,10 +3,6 @@ AWSTemplateFormatVersion: "2010-09-09"
 
 Parameters:
 
-  projectUrl:
-    Description: "Git project URL. (https://github.com/<your-name>/java-project.git)"
-    Type: "String"
-
   webami:
     Description: "Web server AMI."
     Type: "String"
@@ -30,7 +26,7 @@ Parameters:
   GitHubRepositoryName:
     Description: "GitHub repository name"
     Type: "String"
-    Default: "python-project"
+    Default: "name/python-project"
 
 Resources:
 
@@ -240,9 +236,6 @@ Resources:
           yum install -y git
           yum install -y ruby
           yum install -y wget
-          amazon-linux-extras install nginx1.12 -y
-          systemctl enable nginx.service
-          systemctl start nginx.service
           cd /home/ec2-user
           wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install
           chmod +x ./install
@@ -467,6 +460,7 @@ Resources:
                   - !Join ["", [!GetAtt ArtifactBucket.Arn, "/*"]]
                 Action:
                   - "s3:PutObject"
+                  - "s3:PutObjectAcl"
                   - "s3:GetObject"
                   - "s3:GetBucketAcl"
                   - "s3:GetBucketLocation"
