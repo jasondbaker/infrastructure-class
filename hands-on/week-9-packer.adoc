@@ -47,7 +47,7 @@ Packer automates the building of EC2 AMIs. It does this by launching a new EC2 i
 a predefined base AMI (Amazon Linux 2), installing software on the instance, shutting down the instance, and creating a new AMI based on this instance. Packer automatically terminates the temporary EC2 instance after the AMI is created.
 
 Launch the stack and shell into the Packer server. Once you have logged into the server, type in the command 
-`packer version` to verify that the Packer tool is installed and working. It should be installed since Packer was used to build the Packer server AMI!
+`packer.io version` to verify that the Packer tool is installed and working. It should be installed since Packer was used to build the Packer server AMI!
 
 The next step is to create a Packer template which is written as a HashiCorp Configuration Language (HCL2) file. HCL is a special configuration language developed by HashiCorp and used in a number of their tools. It's sort of like a more human-readable version of JSON. Packer actually supports configuration files written in JSON, and that was the preferred configuration format for many years. However at the time of this writing, Packer recommends creating new templates in the HCL2 format because that's what they will support in the future.
 
@@ -65,7 +65,7 @@ Provisioners describe how to actually configure the image in the build section. 
 
 === Create a Packer template
 
-Next, create a Packer template called `webserver-packer-template.pkr.hcl`. You will use this template along with the packer software to create a new AMI with webserver software installed. You can use the following starter template to build your template:
+Next, create a Packer template called `webserver-packer-template.pkr.hcl`. You will use this template along with the Packer software to create a new AMI with webserver software installed. You can use the following starter template to build your template:
 
     https://s3.amazonaws.com/seis615/packer-template.pkr.hcl
 
@@ -97,11 +97,11 @@ playbook.
 
 Let's try to build the new AMI now that your Packer template and Ansible playbook are complete. The first step you need to do is to install any plugins required by Packer to build the AMI. We defined these plugins in the `packer{}` section of the Packer template file. You can install the plugins by running the command:
 
-    packer init webserver-packer-template.pkr.hcl
+    packer.io init webserver-packer-template.pkr.hcl
 
 Next, initiate the AMI build by running the command:
 
-    packer build webserver-packer-template.pkr.hcl
+    packer.io build webserver-packer-template.pkr.hcl
 
 Watch as Packer performs a series of steps to automatically build the AMI for you. Check out the EC2 web console and notice that Packer is launching a new EC2 instanced called `Packer Builder`. Packer will shell into this instance and use Ansible to configure the server. Once Ansible completes, Packer will shut down the instance and create a new AMI.
 
