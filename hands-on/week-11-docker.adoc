@@ -22,7 +22,7 @@ Let's get started!
 
 The first step in the project is to build a Docker server running on EC2 using the following CloudFormation template:
 
-  https://s3.amazonaws.com/seis615/docker-single-server.json
+  https://s3.amazonaws.com/seis615/docker-single-server.yaml
 
 Launch the template to create a new stack. Shell into the new EC2 instance, logging in as the `ubuntu` user, and run the following command:
 

@@ -32,7 +32,7 @@ Shell into the new EC2 instance and change to a directory called `serverless-sta
 
 === Build a serverless template
 
-We need to build a CloudFormation SAM (serverless) template which contains a Lambda function and a Kinesis stream resource. The convention when building serverless templates is to use a YAML template format, so let's do that for this project. You can find a starter CloudFormation template and Lambda function inside the `serverless-start` directory on your EC2 instance.
+We need to build a CloudFormation SAM (serverless) template which contains a Lambda function and a Kinesis stream resource. You can find a starter CloudFormation template and Lambda function inside the `serverless-start` directory on your EC2 instance.
 
 The directory contains a template called `datapipe.yml` which is incomplete, and a subdirectory called `lambda` which contains two Python scripts called `datalog.py` and `data_generator.py`. The `datalog.py` script is a Lambda function and the `data_generator.py` script is used later in the project.
 

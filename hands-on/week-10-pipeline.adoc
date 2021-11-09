@@ -29,7 +29,7 @@ Okay, let's start begin building the pipeline!
 
 We always create infrastructure resources using code whenever possible and code repositories are no different. You should build a CloudFormation template to create all of the resources for this project including an S3 artifact bucket,  CodeCommit repository, CodeBuild project, and CodePipeline pipeline. Instead of starting from scratch, you can use the following template as a starting point:
 
-  * https://seis615.s3.amazonaws.com/app-codebuild-template.json
+  * https://seis615.s3.amazonaws.com/app-codebuild-template.yaml
 
 === Create a CodeCommit repository
 
@@ -57,16 +57,14 @@ There are a number of changes you need to make to the template to get the CodeBu
   * The CodePipeline project resource uses a custom IAM role (AppBuildRole) to access other AWS services and resources. For example, the role allows the project to retrieve and store objects in an S3 artifact bucket. The role does not currently allow CodePipeline to pull source code from a CodeCommit repository. You can update the project role to allow this by adding the following policy statement to the list of existing statements in the role:
 
 ----
-  {
-    "Sid": "CodeCommitPolicy",
-    "Effect": "Allow",
-    "Action": [
-      "codecommit:GitPull"
-    ],
-    "Resource": [
-      "*"
-    ]
-  }
+  
+  Sid: "CodeCommitPolicy"
+  Effect: "Allow"
+  Action:
+    - "codecommit:GitPull"
+  Resource:
+    - "*"
+  
 ----
 
 === Test your template changes
@@ -83,7 +81,7 @@ Our current stack built out a CodeBuild project which is able to retrieve source
 
 Let's add a CodePipeline pipeline resource to the template. You could either start creating this resource from scratch or you could copy code from one of the hands-on templates that we used during the lecture:
 
-  * https://seis615.s3.amazonaws.com/app-codepipeline-template.json
+  * https://seis615.s3.amazonaws.com/app-codepipeline-template.yaml
 
 Here's the documentation for the `AWS::CodePipeline::Pipeline` resource:
 
@@ -100,89 +98,47 @@ Here are some hints:
   * The pipeline configuration references a special IAM service role (CodePipelineServiceRole) to access other AWS services. Here's the configuration code I recommend using for the service role:
 
 
-    "CodePipelineServiceRole": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-          "AssumeRolePolicyDocument": {
-              "Statement": [
-                  {
-                      "Action": [
-                          "sts:AssumeRole"
-                      ],
-                      "Effect": "Allow",
-                      "Principal": {
-                          "Service": [
-                              "codepipeline.amazonaws.com"
-                          ]
-                      }
-                  }
-              ]
-          },
-          "Path": "/service-role/",
-          "Policies": [
-              {
-                  "PolicyDocument": {
-                      "Statement": [
-                          {
-                              "Effect": "Allow",
-                              "Resource": [
-                                  {
-                                      "Fn::GetAtt": [
-                                          "ArtifactBucket",
-                                          "Arn"
-                                      ]
-                                  },
-                                  {"Fn::Join": [
-                                      "",
-                                      [
-                                          {
-                                              "Fn::GetAtt": [
-                                                  "ArtifactBucket",
-                                                  "Arn"
-                                              ]
-                                          },
-                                          "/*"
-                                      ]
-                                  ]}
-                              ],
-                              "Action": [
-                                  "s3:PutObject",
-                                  "s3:GetObject",
-                                  "s3:GetBucketAcl",
-                                  "s3:GetBucketLocation"
-                              ]
-                          },
-                          {
-                              "Action": [
-                                  "codecommit:CancelUploadArchive",
-                                  "codecommit:GetBranch",
-                                  "codecommit:GetCommit",
-                                  "codecommit:GetUploadArchiveStatus",
-                                  "codecommit:UploadArchive"
-                              ],
-                              "Resource": [
-                                  { "Fn::GetAtt": [ "JavaRepository", "Arn" ] }
-                              ],
-                              "Effect": "Allow"
-                          },
-                          {
-                              "Action": [
-                                  "codebuild:BatchGetBuilds",
-                                  "codebuild:StartBuild"
-                              ],
-                              "Resource": [
-                                  { "Fn::GetAtt": [ "AppBuildProject", "Arn" ] }
-                              ],
-                              "Effect": "Allow"
-                          }
-                      ],
-                      "Version": "2012-10-17"
-                  },
-                  "PolicyName": "ec2codedeploy"
-              }
-          ]
-      }
-  }
+    CodePipelineServiceRole:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Statement:
+            - Action:
+                - "sts:AssumeRole"
+              Effect: "Allow"
+              Principal:
+                Service:
+                  - "codepipeline.amazonaws.com"
+        Path: "/service-role/"
+        Policies:
+          - PolicyDocument:
+              Statement:
+                - Effect: "Allow"
+                  Resource:
+                    - !GetAtt ArtifactBucket.Arn
+                    - !Join ["", [!GetAtt "ArtifactBucket.Arn", "/*"]]
+                  Action:
+                    - "s3:PutObject"
+                    - "s3:PutObjectAcl"
+                    - "s3:GetObject"
+                    - "s3:GetBucketAcl"
+                    - "s3:GetBucketLocation"
+                - Effect: "Allow"
+                  Resource: !GetAtt JavaRepository.Arn
+                  Action:
+                    - "codecommit:CancelUploadArchive"
+                    - "codecommit:GetBranch"
+                    - "codecommit:GetCommit"
+                    - "codecommit:GetUploadArchiveStatus"
+                    - "codecommit:UploadArchive"
+                - Effect: "Allow"
+                  Resource: !GetAtt AppBuildProject.Arn
+                  Action:
+                    - "codebuild:BatchGetBuilds"
+                    - "codebuild:StartBuild"
+            Version: "2012-10-17"
+            PolicyName: "ec2codedeploy"
+
 
 Update your CloudFormation stack with the new template code and try to trigger the pipeline (release change). You should see the source and build stages successfully complete if everything is configured correctly. If you encounter any failure, look at the log messages to try to determine the cause of the error. Oftentimes an error in the pipeline is caused by a permissions problem. 
 
