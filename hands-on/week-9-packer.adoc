@@ -129,4 +129,4 @@ Please show me your template code.
 
 === Terminate AWS resources
 
-Remember to terminate all the resources created in this project, including the stack created by the Packer template.
+Remember to terminate all the resources created in this project, including the CloudFormation stack created by the Packer template. If you manually launched an EC2 instance to test your new AMI, you will need to terminate this test instance before deleting the stack.

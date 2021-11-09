@@ -4,9 +4,9 @@ AWSTemplateFormatVersion: "2010-09-09"
 Mappings:
   RegionMap:
     us-east-1:
-      image: "ami-0ab0c067c03ddf412"
+      image: "ami-03b9b55d010d7edcf"
     us-east-2:
-      image: "ami-07504569efdfa8145"
+      image: "ami-0a4ac2494288a06e8"
 
 Resources:
   PackerVpc:
