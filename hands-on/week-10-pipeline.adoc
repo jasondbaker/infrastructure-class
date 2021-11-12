@@ -95,49 +95,17 @@ Here are some hints:
 
     ** https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#action-requirements
 
-  * The pipeline configuration references a special IAM service role (CodePipelineServiceRole) to access other AWS services. Here's the configuration code I recommend using for the service role:
+  * The pipeline configuration references a special IAM service role (CodePipelineServiceRole) to access other AWS services. We need to add an additional policy to this role:
 
 
-    CodePipelineServiceRole:
-      Type: AWS::IAM::Role
-      Properties:
-        AssumeRolePolicyDocument:
-          Statement:
-            - Action:
-                - "sts:AssumeRole"
-              Effect: "Allow"
-              Principal:
-                Service:
-                  - "codepipeline.amazonaws.com"
-        Path: "/service-role/"
-        Policies:
-          - PolicyDocument:
-              Statement:
-                - Effect: "Allow"
-                  Resource:
-                    - !GetAtt ArtifactBucket.Arn
-                    - !Join ["", [!GetAtt "ArtifactBucket.Arn", "/*"]]
-                  Action:
-                    - "s3:PutObject"
-                    - "s3:PutObjectAcl"
-                    - "s3:GetObject"
-                    - "s3:GetBucketAcl"
-                    - "s3:GetBucketLocation"
-                - Effect: "Allow"
-                  Resource: !GetAtt JavaRepository.Arn
-                  Action:
-                    - "codecommit:CancelUploadArchive"
-                    - "codecommit:GetBranch"
-                    - "codecommit:GetCommit"
-                    - "codecommit:GetUploadArchiveStatus"
-                    - "codecommit:UploadArchive"
-                - Effect: "Allow"
-                  Resource: !GetAtt AppBuildProject.Arn
-                  Action:
-                    - "codebuild:BatchGetBuilds"
-                    - "codebuild:StartBuild"
-            Version: "2012-10-17"
-            PolicyName: "ec2codedeploy"
+    - Effect: "Allow"
+      Resource: !GetAtt JavaRepository.Arn
+      Action:
+        - "codecommit:CancelUploadArchive"
+        - "codecommit:GetBranch"
+        - "codecommit:GetCommit"
+        - "codecommit:GetUploadArchiveStatus"
+        - "codecommit:UploadArchive"
 
 
 Update your CloudFormation stack with the new template code and try to trigger the pipeline (release change). You should see the source and build stages successfully complete if everything is configured correctly. If you encounter any failure, look at the log messages to try to determine the cause of the error. Oftentimes an error in the pipeline is caused by a permissions problem. 
