@@ -119,12 +119,7 @@ Congratulations! You have created a very basic software delivery pipeline.
 
 Sometimes we need to add a manual approval stage to a pipeline. For example, the pipeline may perform a series of automated tests and then need to pause while engineers perform some manual testing on the build artifacts. The pipeline execution will continue once it receives a manual approval.
 
-Create a new pipeline stage called `ManualTest` after the build which triggers a manual approval process.
-
-
-=== Double-Extra Super-sized task (optional)
-
-Configure the `ManualTest` pipeline stage to send you an email notification when an approval is required.
+Create a new pipeline stage called `ManualTest` after the build which triggers a manual approval process. Configure the `ManualTest` pipeline stage to send you an email notification when an approval is required. Hint, you may need to modify the pipeline service role as part of this configuration.
 
 
 === Show me your work
