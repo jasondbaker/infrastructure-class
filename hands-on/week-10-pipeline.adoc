@@ -57,7 +57,7 @@ There are a number of changes you need to make to the template to get the CodeBu
   * The CodePipeline project resource uses a custom IAM role (AppBuildRole) to access other AWS services and resources. For example, the role allows the project to retrieve and store objects in an S3 artifact bucket. The role does not currently allow CodePipeline to pull source code from a CodeCommit repository. You can update the project role to allow this by adding the following policy statement to the list of existing statements in the role:
 
 ----
-  
+
   Sid: "CodeCommitPolicy"
   Effect: "Allow"
   Action:
@@ -97,9 +97,9 @@ Here are some hints:
 
   * The pipeline configuration references a special IAM service role (CodePipelineServiceRole) to access other AWS services. We need to add an additional policy to this role:
 
- ----
- 
- - Effect: "Allow"
+----
+   
+   Effect: "Allow"
    Resource: !GetAtt JavaRepository.Arn
    Action:
      - "codecommit:CancelUploadArchive"
