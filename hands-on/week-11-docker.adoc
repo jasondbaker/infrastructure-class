@@ -30,7 +30,7 @@ Launch the template to create a new stack. Shell into the new EC2 instance, logg
 
 The system should respond with the docker client version. Something like:
 
-  Docker version 18.09.0, build 4d60db4
+  Docker version 20.10.7, build f0df350
 
 === Working with containers
 
