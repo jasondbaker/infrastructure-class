@@ -97,16 +97,18 @@ Here are some hints:
 
   * The pipeline configuration references a special IAM service role (CodePipelineServiceRole) to access other AWS services. We need to add an additional policy to this role:
 
+ ----
+ 
+ - Effect: "Allow"
+   Resource: !GetAtt JavaRepository.Arn
+   Action:
+     - "codecommit:CancelUploadArchive"
+     - "codecommit:GetBranch"
+     - "codecommit:GetCommit"
+     - "codecommit:GetUploadArchiveStatus"
+     - "codecommit:UploadArchive"
 
-    - Effect: "Allow"
-      Resource: !GetAtt JavaRepository.Arn
-      Action:
-        - "codecommit:CancelUploadArchive"
-        - "codecommit:GetBranch"
-        - "codecommit:GetCommit"
-        - "codecommit:GetUploadArchiveStatus"
-        - "codecommit:UploadArchive"
-
+----
 
 Update your CloudFormation stack with the new template code and try to trigger the pipeline (release change). You should see the source and build stages successfully complete if everything is configured correctly. If you encounter any failure, look at the log messages to try to determine the cause of the error. Oftentimes an error in the pipeline is caused by a permissions problem. 
 
