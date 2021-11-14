@@ -71,6 +71,11 @@ You will use the Ansible software installed on `mgmt1` to configure the `web1` a
 
 Log into the `mgmt1` instance and create a new directory in your home directory called `assignment8`. Initialize a new Git repository in this directory.
 
+Note, you should be using the BASH shell for this assignment. The `ssm-user` account uses the Bourne shell (`sh`) by default, so you may need to switch to the BASH shell by typing the command: `/bin/bash`. You can also configure AWS Session Manager to use the BASH shell by default by going to the AWS Systems Manager web console, selecting Session Manager, and selecting the Preferences menu tab. Here you can specify a Linux shell profile with commands that will automatically enable BASH and change to the user's home directory:
+
+    /bin/bash
+    cd ~
+
 Ansible uses an inventory file to track managed hosts. The inventory file specifies how Ansible should connect to a remote host. It usually contains the IP address or fully-qualified domain name of a host, as well as the username and key required to access a host. The `hosts` file was dynamically created by an EC2 userdata script, so it already contains the IP address of the `web1` and `web2` instances. Take a look at the hosts file located at `/etc/ansible/hosts`.
 
 You can verify that Ansible can successfully access the managed hosts by typing the
