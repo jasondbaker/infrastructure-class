@@ -61,6 +61,10 @@ We can reuse the existing CodeBuild resource in the pipeline but we need to empl
 
   https://docs.aws.amazon.com/codepipeline/latest/userguide/action-reference-CodeBuild.html
 
+The format of the environment variable property value is a little tricky to specify in YAML code because the value must be in JSON format. Yes, it's a little strange. Here is an example of how this property value might be formatted:
+
+  '[{"name": "BUILD_TYPE", "type": "PLAINTEXT", "value": "UNITTEST"}]'
+ 
 Now that the UnitTest and Build stages are passing an environment variable to CodeBuild, we need to modify the `buildspec.yml` file to make use of this environment variable. We want the UnitTest stage to run the unit test commands and the Build stage to run the build commands. Check out this example code snippet:
 
    pre_build:
