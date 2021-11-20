@@ -395,7 +395,7 @@ Resources:
                 Category: "Source"
                 Owner: "ThirdParty"
                 Provider: "GitHub"
-                Version": "1"
+                Version: "1"
               Configuration:
                 Owner: !Ref GitHubUsername
                 Repo: !Ref GitHubRepositoryName
@@ -431,6 +431,20 @@ Resources:
               Configuration:
                 ApplicationName: !Ref WebPlatformApplication
                 DeploymentGroupName: !Ref WebPlatformDeploymentGroup
+
+  Webhook:
+    Type: AWS::CodePipeline::Webhook
+    Properties:
+      Authentication: "GITHUB_HMAC"
+      AuthenticationConfiguration:
+        SecretToken: '{{resolve:secretsmanager:github-token:SecretString:token}}'
+      Filters:
+        - JsonPath: "$.ref"
+          MatchEquals: "refs/heads/master" 
+      TargetPipeline: !Ref AppCodePipeline
+      TargetPipelineVersion: !GetAtt AppCodePipeline.Version
+      TargetAction: "GetSource"
+      RegisterWithThirdParty: "true"
 
   CodePipelineServiceRole:
     Type: AWS::IAM::Role
