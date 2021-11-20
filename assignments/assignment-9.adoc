@@ -118,7 +118,7 @@ Copy the CloudFormation template you modified for this assignment into this new 
 Your repository will contain all of the application files created by the repository template. Additionally, your git repository should contain the following files before final submission:
 
 ====
-&#x2523; app-codepipeline-template.json +
+&#x2523; app-codepipeline-template.yaml +
 &#x2517; app.py +
 &#x2517; appspec.yml +
 &#x2517; buildspec.yml
