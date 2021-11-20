@@ -18,6 +18,11 @@ Parameters:
     Type: "String"
     Default: "2"
 
+  GitHubUsername:
+    Description: "Your GitHub username or organization name"
+    Type: "String"
+    Default: "ustseis615"
+
   GitHubBranchName:
     Description: "GitHub branch name"
     Type: "String"
@@ -26,7 +31,7 @@ Parameters:
   GitHubRepositoryName:
     Description: "GitHub repository name"
     Type: "String"
-    Default: "name/python-project"
+    Default: "python-project"
 
 Resources:
 
@@ -53,12 +58,6 @@ Resources:
             Condition:
               StringNotEquals:
                 s3:x-amz-server-side-encryption: "aws:kms"
-
-  CodestarConnection:
-    Type: AWS::CodeStarConnections::Connection
-    Properties:
-      ConnectionName: GitHubConnection
-      ProviderType: GitHub
 
   Vpc:
     Type: AWS::EC2::VPC
@@ -324,9 +323,6 @@ Resources:
                   - "s3:PutObject"
                   - "s3:GetBucketAcl"
                   - "s3:GetBucketLocation"
-              - Effect: "Allow"
-                Action: "codestar-connections:UseConnection"
-                Resource: !Ref CodestarConnection
 
   BuildLogPolicy:
     Type: AWS::IAM::Policy
@@ -397,14 +393,15 @@ Resources:
             - Name: "GetSource"
               ActionTypeId:
                 Category: "Source"
-                Owner: "AWS"
-                Provider: "CodeStarSourceConnection"
-                Version: "1"
+                Owner: "ThirdParty"
+                Provider: "GitHub"
+                Version": "1"
               Configuration:
-                ConnectionArn: !Ref CodestarConnection
-                FullRepositoryId: !Ref GitHubRepositoryName
-                BranchName: !Ref GitHubBranchName
-                DetectChanges: true
+                Owner: !Ref GitHubUsername
+                Repo: !Ref GitHubRepositoryName
+                Branch: !Ref GitHubBranchName
+                OAuthToken: '{{resolve:secretsmanager:github-token:SecretString:token}}'
+                PollForSourceChanges: "false"
               OutputArtifacts:
                 - Name: "SourceCode"
         - Name: "Build"
