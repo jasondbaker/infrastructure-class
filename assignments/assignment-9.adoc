@@ -25,7 +25,7 @@ Let's get that code pipeline flowing!
 
 The first step in the assignment is to create a new GitHub Classroom repository by clicking on this link: https://classroom.github.com/a/rdHjH7DJ
 
-When your classroom repository is setup, GitHub will automatically copy projects files into it from a template repository. 
+When your classroom repository is setup, GitHub will automatically copy projects files into it from a template repository. You do not need to fork an existing repository for this project.
 
 === Create a CloudFormation stack
 
@@ -43,13 +43,12 @@ As a quick reminder, the template will create the following resources:
 
 * CodePipeline will use the CodeDeploy service to deploy the python software artifacts to the EC2 instances.
 
-When launching the template you will need to specify the location of the GitHub repository the pipeline will pull source code from. Note that this repository isn't technically owned by you. It belongs to an organization called `ustseis615` and therefore you must use `ustseis615` for the GithubUsername parameter, not your personal username. The GithubRepositoryName parameter also must reference your classroom repository name, for example: `assignment-9-code-pipeline-jasondbaker`. Finally, you must create a secret called `github-token` in AWS Secrets Manager containing a GitHub Personal Access Token. The secret has a key called `token` which references the token value. Watch the AWS CodeBuild hands-on video again if you have not created this secret yet.
+When launching the template you will need to specify the location of the GitHub repository the pipeline will pull source code from. Note that this repository isn't technically owned by you. It belongs to an organization called `ustseis615` and therefore you must use `ustseis615` for the GithubUsername parameter, not your personal GitHub username. The GithubRepositoryName parameter also must reference your classroom repository name, for example: `assignment-9-code-pipeline-jasondbaker`. Finally, you must create a secret called `github-token` in AWS Secrets Manager containing a GitHub Personal Access Token. The secret has a key called `token` which references the token value. Watch the AWS CodeBuild hands-on video again if you have not created this secret yet.
 
 Your goal in this assignment is to enhance the existing pipeline defined in the CloudFormation template. Specifically, you will need to make three changes:
 
 1. Separate the current build stage into separate unit test and build stages.
 2. Add linting to the unit test stage.
-3. Modify the pipeline so that it is automatically triggered when the code repository is updated using a webhook.
 
 === Create a new unit test stage
 
