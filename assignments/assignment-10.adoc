@@ -49,27 +49,26 @@ The pipeline will create a Docker image and push it into an ECR repository. Your
 
 ----
 
-  {
-      Effect: "Allow"
-      Resource:
-        - !GetAtt DockerRepository.Arn
-      Action:
-        - "ecr:GetRepositoryPolicy"
-        - "ecr:ListImages"
-        - "ecr:PutImage"
-        - "ecr:UploadLayerPart"
-        - "ecr:TagResource"
-        - "ecr:InitiateLayerUpload"
-        - "ecr:CompleteLayerUpload"
-        - "ecr:GetAuthorizationToken"
-        - "ecr:DescribeImages"
-        - "ecr:DescribeRepositories"
-        - "ecr:BatchCheckLayerAvailability"
-      Effect: "Allow"
-      Resource:
-        - "*"
-      Action:
-        - "ecr:GetAuthorizationToken"
+    Effect: "Allow"
+    Resource:
+      - !GetAtt DockerRepository.Arn
+    Action:
+      - "ecr:GetRepositoryPolicy"
+      - "ecr:ListImages"
+      - "ecr:PutImage"
+      - "ecr:UploadLayerPart"
+      - "ecr:TagResource"
+      - "ecr:InitiateLayerUpload"
+      - "ecr:CompleteLayerUpload"
+      - "ecr:GetAuthorizationToken"
+      - "ecr:DescribeImages"
+      - "ecr:DescribeRepositories"
+      - "ecr:BatchCheckLayerAvailability"
+    Effect: "Allow"
+    Resource:
+      - "*"
+    Action:
+      - "ecr:GetAuthorizationToken"
 
 ----
 
