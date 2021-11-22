@@ -1,0 +1,48 @@
+---
+- hosts: localhost
+  become: yes
+  
+  tasks:
+  
+  - name: install linux security updates
+    yum:
+      security: yes
+      state: latest
+
+  - name: install boto3
+    shell: |
+      pip3 install boto3==1.20.10
+
+  - name: install base packages
+    yum:
+      name: [
+        'git', 
+        'tar',
+        'jq',
+        'python3-pip',
+        'python3',
+        'unzip',
+        'wget',
+        'yum-utils',
+        'zip'
+      ]
+
+  - name: ensure ssm-user exists
+    user:
+      name: ssm-user
+      shell: /bin/bash
+      append: yes
+
+  - name: set up sudoers configuration
+    copy:
+      src: /opt/ansible/files/ssm-agent-users
+      dest: /etc/sudoers.d/ssm-agent-users
+      owner: root
+      group: root
+      mode: 0440
+
+  - name: add project files
+    copy:
+      src: /opt/ansible/serverless-start
+      dest: /home/ssm-user
+      owner: ssm-user

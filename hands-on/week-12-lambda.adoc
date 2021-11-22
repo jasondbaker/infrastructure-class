@@ -22,13 +22,13 @@ Let's get started!
 
 Cloud computing infrastructure and serverless applications are widely used in scenarios where organizations need to ingest and process large amounts of data. During our project this week we will package and deploy a serverless application which creates a data pipeline. We will use two resources to set up a basic data pipeline: a Kinesis stream and a Lambda function.
 
-AWS uses S3 as a storage location for Lambda functions. Lambda functions are packaged inside zip files which contain the Lambda function code and any code dependencies such as third-party libraries. You should manually setup an S3 bucket in your account to store packaged Lambda functions. Give the S3 bucket a name like `serverless-datapipe-jbaker`, of course substituting your personal account name.
+=== Launch a stack
 
-=== Launch an EC2 instance
+Let's launch a stack in us-east-1 containing some of the resources we will use to work on this project:
 
-Let's launch an EC2 instance called `datagen1` containing some of the resources we will use to work on this project. Create a simple CloudFormation template which creates a VPC and launches a public Amazon Linux 2 EC2 instance using ami-09ef51eee3a444c89 into a public subnet in us-east-1. Feel free to use one of the previous CloudFormation templates from earlier this semester as a starting template.
+  * https://seis615.s3.amazonaws.com/serverless-node.yaml
 
-Shell into the new EC2 instance and change to a directory called `serverless-start`.
+The stack creates an EC2 instance with the proper instance role in place to create additional AWS resources and an S3 bucket to store Lambda functions. The instance also has the popular boto3 Python library installed. Shell into the new EC2 instance and change to a directory in the ssm-user home directory called `serverless-start`.
 
 === Build a serverless template
 

@@ -34,6 +34,7 @@ jobs:
           aws s3 cp demo/pipeline/app-codebuild-template.yaml s3://seis615 --acl public-read
           aws s3 cp demo/pipeline/app-codedeploy-template.yaml s3://seis615 --acl public-read
           aws s3 cp demo/pipeline/app-codepipeline-template.yaml s3://seis615 --acl public-read
+          aws s3 cp demo/serverless/serverless-node.yaml s3://seis615 --acl public-read
       
       - name: Package pipeline artifact
         run: |

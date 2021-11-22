@@ -5,7 +5,7 @@
 
 = SEIS 615 Assignment 11: Serverless Pipeline Extended Edition 
 Jason Baker <bake2352@stthomas.edu>
-2.0, 10/8/2020
+3.0, 11/19/2021
 
 == Overview
 Serverless applications represent the continued evolution of cloud-native application architecture. We can use serverless applications to build platforms that support millions of customers and process enormous amounts of data. In our class project this week, we deployed a basic data pipeline using a CloudFormation SAM template, Lambda function, and Kinesis stream. In this week's assignment, you will expand the functionality of the CloudFormation template by creating a Lambda function to store Kinesis messages in a DynamoDB table.
@@ -25,7 +25,7 @@ Let's start consuming those Kinesis messages!
 
 === Setup project environment
 
-The assignment will use the same EC2 instance (ami-09ef51eee3a444c89) as our recent class project. Review the project again for details. You can continue to use the EC2 instance you created during the project or you can create a new one. *If you skipped the class project, you will need to complete it before continuing work on this assignment.* Note, while the work from the class project is required to complete this assignment successfully, only the additional resources added in this assignment will be graded.
+The assignment will use the same CloudFormation stack as our recent class project. Review the project again for details. You can continue to use the EC2 instance you created during the project or you can create a new one (remembering to save your work first). *If you skipped the class project, you will need to complete it before continuing work on this assignment.* Note, while the work from the class project is required to complete this assignment successfully, only the additional resources added in this assignment will be graded.
 
 You should be able to shell into the EC2 instance and access the serverless application files. The `datapipe.yml` CloudFormation template should contain the two resources setup in the class project: a Lambda function and a Kinesis stream. 
 

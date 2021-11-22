@@ -1,0 +1,118 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+
+Resources:
+
+  ServerlessBucket:
+    Type: AWS::S3::Bucket
+
+  ServerlessVpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      EnableDnsSupport: "true"
+      EnableDnsHostnames: "true"
+      CidrBlock: "10.0.0.0/16"
+      Tags:
+        - Key: Environment
+          Value: Serverless
+
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref ServerlessVpc
+      CidrBlock: "10.0.0.0/24"
+
+  ServerlessInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties: 
+      Roles: 
+        - !Ref ServerlessServerRole
+
+  ServerlessServerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "ec2.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore'
+        - 'arn:aws:iam::aws:policy/IAMFullAccess'
+        - 'arn:aws:iam::aws:policy/PowerUserAccess'
+
+  ServerlessServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId: "ami-04108f1c3b37356dd"
+      IamInstanceProfile: !Ref ServerlessInstanceProfile
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet: 
+            - !Ref ServerlessSG
+          SubnetId: !Ref PublicSubnet
+      Tags:
+        - Key: "Name"
+          Value: "serverless"
+    DependsOn:
+      - PublicRoute
+
+  ServerlessSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !Ref ServerlessVpc
+      GroupDescription: "Allow all outgoing"
+      SecurityGroupEgress:
+        - IpProtocol: "-1"
+          FromPort: "-1"
+          ToPort: "-1"
+          CidrIp: "0.0.0.0/0"
+
+  InternetGW:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+      - Key: stack
+        Value: serverless
+
+  GatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGW
+      VpcId: !Ref ServerlessVpc
+
+  PublicRT:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref ServerlessVpc
+
+  PublicRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: "0.0.0.0/0"
+      RouteTableId: !Ref PublicRT
+      GatewayId: !Ref InternetGW
+    DependsOn:
+      - InternetGW
+
+  RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRT
+      SubnetId: !Ref PublicSubnet
+
+Outputs:
+  ServerlessPublicIp:
+    Value: !GetAtt ServerlessServer.PublicIp
+    Description: "Serverless server public IP"
+
+  ServerlessBucketName:
+    Value: !Ref ServerlessBucket
+    Description: "Serverless S3 bucket name"
