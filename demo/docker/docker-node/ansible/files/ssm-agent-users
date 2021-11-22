@@ -1,0 +1,2 @@
+# User rules for ssm-user
+ssm-user ALL=(ALL) NOPASSWD:ALL

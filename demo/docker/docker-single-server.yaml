@@ -44,7 +44,7 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: t2.micro
-      ImageId: "ami-087c17d1fe0178315"
+      ImageId: "ami-0ca4b616df30dd953"
       IamInstanceProfile: !Ref DockerInstanceProfile
       NetworkInterfaces:
         - AssociatePublicIpAddress: "true"
@@ -52,16 +52,6 @@ Resources:
           GroupSet: 
             - !Ref DockerSG
           SubnetId: !Ref PublicSubnet
-      UserData:
-        !Base64 |
-          #!/bin/bash
-          yum -y update
-          yum install -y git
-          amazon-linux-extras install docker
-          service docker start
-          chkconfig docker on
-          usermod -a -G docker ec2-user
-          adduser -G docker ssm-user
       Tags:
         - Key: "Name"
           Value: "docker"
@@ -78,15 +68,6 @@ Resources:
           FromPort: "8080"
           ToPort: "8080"
           CidrIp: "0.0.0.0/0"
-
-  DockerSGIngress:
-    Type: AWS::EC2::SecurityGroupIngress
-    Properties:
-        IpProtocol: "-1"
-        FromPort: "-1"
-        ToPort: "-1"
-        SourceSecurityGroupId: !Ref DockerSG
-        GroupId: !GetAtt DockerSG.GroupId
 
   InternetGW:
     Type: AWS::EC2::InternetGateway
