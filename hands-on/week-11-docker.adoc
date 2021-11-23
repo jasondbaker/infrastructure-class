@@ -76,7 +76,7 @@ You should see the html of the nginx test page displayed (`Welcome to nginx!`). 
 
 === Create a web page
 
-Create a sub-directory in the ubuntu user's home directory called `docker`. Create another sub-directory within the `docker` directory called `html`. Create a small text file called `index.html` inside the `html` directory with the following content:
+Create a sub-directory in the ssm-user's home directory called `docker`. Create another sub-directory within the `docker` directory called `html`. Create a small text file called `index.html` inside the `html` directory with the following content:
 
     <html>
     <body>
