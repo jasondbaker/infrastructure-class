@@ -40,7 +40,7 @@ Modify the `datapipe.yml` file to add a Lambda function called `DatalogFunction`
 
   * Handler: datalog.lambda_handler
     ** The handler specifies the function method AWS will automatically call when invoking the function.
-  * Runtime: python3.6
+  * Runtime: python3.9
   * CodeUri: lambda/datalog.py
     ** The CodeUri references the local storage location of the Lambda function code file relative to the CloudFormation YAML template file you are editing.
   * MemorySize: 256
@@ -50,7 +50,7 @@ Modify the `datapipe.yml` file to add a Lambda function called `DatalogFunction`
   * An event source called `StreamData` using a Kinesis type event source. 
     ** The stream should reference the `DataStream` Kinesis stream resource Arn in the template. (Hint: look at GetAtt function)
     ** StartingPosition: TRIM_HORIZON
-    ** BatchSize: 50
+    ** BatchSize: 25
 
 The Lambda function event source needs a little more explanation because some students get confused about the difference between the Kinesis resource and the Lambda function event source. The Kinesis stream resource is an AWS service just like other service we have used this semester such as EC2 and RDS. The Kinesis event source is part of the Lambda function configuration. The event source describes how the Lambda function will be triggered -- in this case by messages coming from a Kinesis stream. 
 
