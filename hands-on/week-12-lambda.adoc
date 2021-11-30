@@ -65,7 +65,7 @@ Additionally, it might be helpful to look at the folowing documentation links:
 
 You need to package the CloudFormation SAM template after you have added the Lambda function resource to the template. The packaging process will automatically create a zipfile package for the Lambda function and upload the package to your S3 bucket. Additionally, the packaging process will modify your CloudFormation SAM template to reference the newly packaged Lambda function. 
 
-We will use the special `aws cloudformation package` command to create the Lambda package and CloudFormation SAM template. Run `aws configure` and setup AWS API credentials on your EC2 instance. The credentials should be associated with an account that has at least `PowerUser` and `IAMFullAccess` role access. 
+We will use the special `aws cloudformation package` command to create the Lambda package and CloudFormation SAM template.
 
 Run the following command in the same directory as the `datapipe.yml` file, substituting your S3 bucket name for the bucket in the example below:
 
