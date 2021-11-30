@@ -76,7 +76,7 @@ The command will package (zip) the Lambda function and upload it to an S3 bucket
 Now you can deploy a new CloudFormation stack using the updated template and the `aws cloudformation deploy` command.
 We need to add the `--capabilities CAPABILITY_IAM` flag to the command because the stack will use IAM resources. Run the following command to create a new stack called `datapipe`:
 
-  aws cloudformation deploy --template-file packaged-datapipe.yml --capabilities CAPABILITY_IAM --stack-name datapipe
+  aws cloudformation deploy --template-file packaged-datapipe.yml --capabilities CAPABILITY_IAM --region us-east-1 --stack-name datapipe
 
 You can log into the AWS CloudFormation web dashboard to watch the stack deployment. If the deployment fails, check out the stack events to determine the failure and fix your CloudFormation template. You will need to re-package and re-deploy your template again if you make any changes.
 
