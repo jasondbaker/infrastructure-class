@@ -1,0 +1,218 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Resources:
+  Vpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      EnableDnsSupport: "true"
+      EnableDnsHostnames: "true"
+      CidrBlock: "10.0.0.0/16"
+      Tags:
+        - Key: "Environment"
+          Value: "Test"
+
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref "Vpc"
+      CidrBlock: "10.0.0.0/24"
+      AvailabilityZone: "us-east-1a"
+    
+  PublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref "Vpc"
+      CidrBlock: "10.0.1.0/24"
+      AvailabilityZone: "us-east-1b"
+
+  ElbSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !Ref "Vpc"
+      GroupDescription: "Allow http access from everywhere"
+      SecurityGroupIngress:
+        - IpProtocol: "tcp"
+          FromPort: "80"
+          ToPort: "80"
+          CidrIp: "0.0.0.0/0"
+
+  WebserverSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !Ref "Vpc"
+      GroupDescription: "Allow port 5000 from ELB"
+      SecurityGroupIngress:
+        - IpProtocol: "tcp"
+          FromPort: "5000"
+          ToPort: "5000"
+          SourceSecurityGroupId: !Ref "ElbSG"
+
+  InternetGW:
+    Type: AWS::EC2::InternetGateway
+    Properties: {}
+
+  VpcGwAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref "InternetGW"
+      VpcId: !Ref "Vpc"
+
+  PublicRT:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref "Vpc"
+
+  PublicRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: "0.0.0.0/0"
+      RouteTableId: !Ref "PublicRT"
+      GatewayId: !Ref "InternetGW"
+    DependsOn:
+      - "InternetGW"
+
+  PublicSubnet1RTassoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref "PublicRT"
+      SubnetId: !Ref "PublicSubnet1"
+
+  PublicSubnet2RTassoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref "PublicRT"
+      SubnetId: !Ref "PublicSubnet2"
+
+  PetsCluster:
+    Type: AWS::ECS::Cluster
+
+  WebService:
+    Type: AWS::ECS::Service
+    DependsOn:
+      - "ELBListener"
+    Properties:
+      Cluster: !Ref "PetsCluster"
+      DesiredCount: "2"
+      LaunchType: "FARGATE"
+      TaskDefinition: !Ref "WebDefinition"
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: "ENABLED"
+          SecurityGroups:
+            - !Ref "WebserverSG"
+          Subnets:
+            - !Ref "PublicSubnet1"
+            - !Ref "PublicSubnet2"
+      LoadBalancers:
+        - ContainerName: "petsweb"
+          ContainerPort: "5000"
+          TargetGroupArn: !Ref ELBTargetGroup
+
+  WebDefinition:
+    Type: "AWS::ECS::TaskDefinition"
+    Properties:
+      Cpu: "256"
+      Memory: "512"
+      NetworkMode: "awsvpc"
+      RequiresCompatibilities: ["FARGATE"]
+      TaskRoleArn: !Ref "ECSTaskRole"
+      ExecutionRoleArn: !Ref "ECSExecRole"
+      ContainerDefinitions:
+        - Name: "petsweb"
+          Image: "ghcr.io/ustseis615/docker-pets:1.0"
+          Essential: "true"
+          PortMappings:
+            - ContainerPort: 5000
+          LogConfiguration:
+            LogDriver: "awslogs"
+            Options:
+              awslogs-group: "fargate-petsweb"
+              awslogs-create-group: "true"
+              awslogs-region: !Ref "AWS::Region"
+              awslogs-stream-prefix: "ecs"
+
+  ECSTaskRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action: [ "sts:AssumeRole" ]
+            Principal:
+              Service: "ecs-tasks.amazonaws.com"
+
+  ECSExecRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action: [ "sts:AssumeRole" ]
+            Principal:
+              Service: "ecs-tasks.amazonaws.com"
+      Policies:
+        - PolicyName: "AmazonECSExecutionRolePolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "logs:CreateLogStream"
+                  - "logs:CreateLogGroup"
+                  - "logs:DescribeLogGroups"
+                  - "logs:PutLogEvents"
+                Resource: "*"
+
+  ELB:
+    Type: "AWS::ElasticLoadBalancingV2::LoadBalancer"
+    Properties:
+      LoadBalancerAttributes:
+        - Key: "idle_timeout.timeout_seconds"
+          Value: "30"
+      Name: !Join ["", [!Ref "AWS::StackName", "-alb"]]
+      Scheme: "internet-facing"
+      SecurityGroups: [ !Ref "ElbSG" ]
+      Subnets:
+        - !Ref "PublicSubnet1"
+        - !Ref "PublicSubnet2"
+      Tags:
+        - Key: "Name"
+          Value: !Join ["", [!Ref "AWS::StackName", "-alb"]]
+
+  ELBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - TargetGroupArn: !Ref "ELBTargetGroup"
+          Type: "forward"
+      LoadBalancerArn: !Ref "ELB"
+      Port: "80"
+      Protocol: "HTTP"
+
+  ELBTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckPath: "/health"
+      HealthCheckProtocol: "HTTP"
+      HealthCheckIntervalSeconds: 10
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 2
+      Matcher:
+        HttpCode: "200,302"
+      TargetType: "ip"
+      Port: 5000
+      Protocol: "HTTP"
+      TargetGroupAttributes":
+        - Key: "deregistration_delay.timeout_seconds"
+          Value: "30"
+      VpcId: !Ref "Vpc"
+
+Outputs:
+  ELBEndpoint:
+    Description: "ELB DNS endpoint address"
+    Value: !GetAtt ELB.DNSName
