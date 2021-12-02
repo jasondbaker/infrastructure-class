@@ -5,7 +5,7 @@
 
 = SEIS 615 Week 13 Project: AWS Fargate
 Jason Baker <bake2352@stthomas.edu>
-2.0, 8/10/2020
+3.0, 12/1/2021
 
 == Overview
 Use the AWS ECS and Fargate to create a container cluster and launch the Wordpress application into it.
@@ -30,7 +30,7 @@ Another way to create the role is to access the AWS CLI and run the following co
 
 Download this CloudFormation template to your workstation:
 
-  https://s3.amazonaws.com/seis615/pets-discovery-wp-project.json
+  https://s3.amazonaws.com/seis615/pets-discovery-wp-project.yaml
 
 We used a similar version of this template to create an ECS/Fargate cluster in this last week's lecture. It creates the following resources:
 
@@ -42,7 +42,7 @@ We used a similar version of this template to create an ECS/Fargate cluster in t
 
 We need to modify this template to run the Wordpress application. Remember Wordpress? Of course you do. This is the fourth and final time we will use it in this course.
 
-Rename the downloaded file `wordpress-template.json`. Now modify the `wordpress-template.json` template code in your code editor to launch a Wordpress environment. There are a number of change you will need to make to the template.
+Rename the downloaded file `wordpress-template.yaml`. Now modify the `wordpress-template.yaml` template code in your code editor to launch a Wordpress environment. There are a number of change you will need to make to the template.
 
     * Change the name of the ECS cluster to `WordpressCluster`.
     * Create a web service task using the `ghcr.io/ustseis615/wordpress` Docker image (see: https://hub.docker.com/_/wordpress/)
@@ -75,39 +75,30 @@ We're almost done with the template changes. Now we need to add a bunch of envir
 
 Add the following environment variables to the web task (I've provided the code):
 
-        {
-            "Name": "WORDPRESS_AUTH_KEY",
-            "Value": {"Ref": "authKey"}
-        },
-        {
-            "Name": "WORDPRESS_SECURE_AUTH_KEY",
-            "Value": {"Ref": "secureAuthKey"}
-        },
-        {
-            "Name": "WORDPRESS_LOGGED_IN_KEY",
-            "Value": {"Ref": "loggedInKey"}
-        },
-        {
-            "Name": "WORDPRESS_NONCE_KEY",
-            "Value": {"Ref": "nonceKey"}
-        },
-        {
-            "Name": "WORDPRESS_AUTH_SALT",
-            "Value": {"Ref": "authSalt"}
-        },
-        {
-            "Name": "WORDPRESS_SECURE_AUTH_SALT",
-            "Value": {"Ref": "secureAuthSalt"}
-        },
-        {
-            "Name": "WORDPRESS_LOGGED_IN_SALT",
-            "Value": {"Ref": "loggedInSalt"}
-        },
-        {
-            "Name": "WORDPRESS_NONCE_SALT",
-            "Value": {"Ref": "nonceSalt"}
-        }
+        
+    Name: "WORDPRESS_AUTH_KEY"
+    Value: !Ref "authKey"
 
+    Name: "WORDPRESS_SECURE_AUTH_KEY"
+    Value: !Ref "secureAuthKey"
+
+    Name: "WORDPRESS_LOGGED_IN_KEY"
+    Value: !Ref "loggedInKey"
+
+    Name: "WORDPRESS_NONCE_KEY"
+    Value: !Ref "nonceKey"
+
+    Name: "WORDPRESS_AUTH_SALT"
+    Value: !Ref "authSalt"
+
+    Name: "WORDPRESS_SECURE_AUTH_SALT"
+    Value: !Ref "secureAuthSalt"
+
+    Name: "WORDPRESS_LOGGED_IN_SALT"
+    Value: !Ref "loggedInSalt"
+
+    Name: "WORDPRESS_NONCE_SALT"
+    Value: !Ref "nonceSalt"
 
 === Launch Wordpress cluster
 
