@@ -207,7 +207,7 @@ Resources:
       TargetType: "ip"
       Port: 5000
       Protocol: "HTTP"
-      TargetGroupAttributes":
+      TargetGroupAttributes:
         - Key: "deregistration_delay.timeout_seconds"
           Value: "30"
       VpcId: !Ref "Vpc"
