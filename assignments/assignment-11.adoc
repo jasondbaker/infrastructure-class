@@ -44,7 +44,7 @@ I recommend using the CloudFormation SAM specification at https://github.com/aws
 
 You will need to create a second Lambda function which uses the Kinesis stream as an event source. Yes, it's possible to connect multiple Lambda functions to the same Kinesis stream to process messages in parallel. 
 
-Create a Lambda function written in python3.6 with a logical name of `DatastoreFunction`. The function should be associated with a Python script file named `datastore.py`. The Lambda function will need to be able to write data to a DynamoDB table, so it should use `AWSLambdaFullAccess` as an execution policy. This role is a bit more powerful than what we would normally use in practice, but it's okay for this assignment.
+Create a Lambda function written in python3.6 with a logical name of `DatastoreFunction`. The function should be associated with a Python script file named `datastore.py`. The Lambda function will need to be able to write data to a DynamoDB table, so it should use `AWSLambda_FullAccess` and `AmazonDynamoDBFullAccess` as execution policies. This role is a far more powerful than what we would normally use in practice, but it's okay for this assignment. In general you should avoid using these types of AWS managed roles for your work projects.
 
 The code you create in the Lambda function will need to know the name of the DynamoDB table. How do we provide that name to the function? A common way to inject parameters into Lambda functions is to use environment variables. Configure the Lambda function to use an environment variable called `TABLE_NAME` which references the name of the DynamoDB table.
 
