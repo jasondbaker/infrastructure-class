@@ -35,7 +35,7 @@ image:../images/assignment11/serverless-pipeline-extended.png["800","800"]
 
 === Create DynamoDB table
 
-Modify the CloudFormation SAM template to create a DynamoDB table with a logical name of `DatapipeTable`. The name of the physical table should be generated dynamically by CloudFormation. The table should have a primary key with the name `id`, which stores string values. It should use the default read and write capacity units. Data stored in the table should use server-side encryption. 
+Modify the CloudFormation SAM template to create a DynamoDB table with a logical name of `DatapipeTable`. The name of the physical table should be generated dynamically by CloudFormation. The table should have a primary key with the name `id`, which stores string values. It should use the pay-per-request billing model. Data stored in the table should use server-side encryption. 
 
 I recommend using the CloudFormation SAM specification at https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md as a documentation resource when creating the DynamoDB table. 
 
