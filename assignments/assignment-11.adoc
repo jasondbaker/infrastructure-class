@@ -93,9 +93,9 @@ Take a look at the Lambda function metrics and logs for your new Lambda function
 
 You should be able to go to the DynamoDB web console and view a list of the items in the table after invoking the new Lambda function successfully. Do you see the records from the Kinesis stream stored in the table? If so, congratulations you're done! If not, keep working at it.
 
-Perform a scan of the DynamoDB table and store the results in a file called `tablescan.json`:
+Perform a scan of the DynamoDB table and store the results in a file called `tablescan.json` by running this command (substitute in the name of your DynamoDB table):
 
-    aws dynamodb scan --table-name datapipe > tablescan.json
+    aws dynamodb scan --table-name datapipe-DatapipeTable-YB7QWCY673CK --region us-east-1 > tablescan.json
 
 Take a look at the JSON file created by the scan. You should see all of the data items stored in the database table.
 
