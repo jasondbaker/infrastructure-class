@@ -87,7 +87,7 @@ Here are a couple hints:
 
 === Test serverless application
 
-Once you have written the `datastore.py` script, you should run the `data_generator.py` Python3 script to test the new environment. The generator script will push 1000 messages into the Kinesis stream, and the stream events will trigger both Lambda functions in the CloudFormation stack. 
+Once you have written and deployed the `datastore.py` script as a Lambda function, you should run the `data_generator.py` Python3 script to test the new environment. The generator script will push 1000 messages into the Kinesis stream, and the stream events will trigger both Lambda functions in the CloudFormation stack. 
 
 Take a look at the Lambda function metrics and logs for your new Lambda function. It's not uncommon to see an error message during your first test. Fix the error and deploy the changes back into your CloudFormation stack. Run the generation script again. You may have to iterate over this process several times to get the new Lambda function working properly. You can always delete the CloudFormation stack and redeploy if you need a fresh start.
 
