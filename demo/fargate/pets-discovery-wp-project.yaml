@@ -24,41 +24,49 @@ Parameters:
   authKey:
     Description: "Auth key."
     Type: "String"
+    Default: "@G9uQ-k;2CMlzx|Cb/3!A%~Uw5l#C7Oz0&GyOL?-O+Yh.v+oK3]O_uDXnDW>Yt!P"
     NoEcho: "true"
 
   secureAuthKey:
     Description: "Secure auth key."
     Type: "String"
+    Default: "%NgX+yn-17++p2vQQf8Nu+d<g)VAz;RIcDaWZY,}sm zrZOX+hRf`m{4O|RG|8h%"
     NoEcho: "true"
 
   loggedInKey:
     Description: "Logged in key."
     Type: "String"
+    Default: ">RaZqf)aSXU(UZxVw|Sf>-}=K|ud@|X~c|H^.EL:U^1I%.2%qRK%&n<c|^+#*-~O"
     NoEcho: "true"
 
   nonceKey:
     Description: "Nonce key."
     Type: "String"
+    Default: "{G!U:@y,75(l;^`U:.c_[xl8=mYTJ<!)!B<VENd2%ag`l^5v(V(VWTdQyG2h}f.>"
     NoEcho: "true"
 
   authSalt:
     Description: "Auth salt."
     Type: "String"
+    Default: "euF6Z(Cwj=^[wLVL]s]Gm(Tv7F4X ..9u*g64qjRQ%?LwP3}]uL||!8nra$d*}!y"
     NoEcho: "true"
 
   secureAuthSalt:
     Description: "Secure auth salt."
     Type: "String"
+    Default: "WG|:f0Z%_Ls#_gf3BE|K),^M-gu+S8&p.?`egj{-{2CnI2j[zVSY<@tLCbAjd+t$"
     NoEcho: "true"
 
   loggedInSalt:
     Description: "Logged in salt."
     Type: "String"
+    Default: "b:q`F= WK1pa{?w5%Bv@nZK~5-c5T67$D@7q(?|~s[ `yJnEI-yByB<Fu6EdQ^^B"
     NoEcho: "true"
 
   nonceSalt:
     Description: "Nonce salt."
     Type: "String"
+    Default: "`66jB-c}c|3pS+j`QUcNr<opJja &=.is1V^>5eWk;&s.36XoOL{ItsB7Id?R><Y"
     NoEcho: "true"
 
 Resources:
@@ -203,8 +211,20 @@ Resources:
               awslogs-region: !Ref "AWS::Region"
               awslogs-stream-prefix: "ecs"
           Environment:
-            - Name: "DB"
-              Value: "db.service.pets"
+            - Name: "WORDPRESS_AUTH_KEY"
+              Value: !Ref "secureAuthKey"
+            - Name: "WORDPRESS_LOGGED_IN_KEY"
+              Value: !Ref "loggedInKey"
+            - Name: "WORDPRESS_NONCE_KEY"
+              Value: !Ref "nonceKey"
+            - Name: "WORDPRESS_AUTH_SALT"
+              Value: !Ref "authSalt"
+            - Name: "WORDPRESS_SECURE_AUTH_SALT"
+              Value: !Ref "secureAuthSalt"
+            - Name: "WORDPRESS_LOGGED_IN_SALT"
+              Value: !Ref "loggedInSalt"
+            - Name: "WORDPRESS_NONCE_SALT"
+              Value: !Ref "nonceSalt"
 
   DBService:
     Type: AWS::ECS::Service
