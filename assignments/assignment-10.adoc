@@ -200,7 +200,6 @@ Here is what the contents of your git repository should look like before final s
 &#x2523; buildspec.yml +
 &#x2523; docker-build-template.yaml +
 &#x2517; /app +
-&nbsp;&nbsp;&nbsp;&#x2523; app.py +
 &nbsp;&nbsp;&nbsp;&#x2523; site.py +
 &nbsp;&nbsp;&nbsp;&#x2523; requirements.txt +
 
