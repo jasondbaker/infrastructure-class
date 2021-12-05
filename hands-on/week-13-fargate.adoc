@@ -5,7 +5,7 @@
 
 = SEIS 615 Week 13 Project: AWS Fargate
 Jason Baker <bake2352@stthomas.edu>
-3.0, 12/1/2021
+3.0, 12/4/2021
 
 == Overview
 Use the AWS ECS and Fargate to create a container cluster and launch the Wordpress application into it.
@@ -32,7 +32,7 @@ Download this CloudFormation template to your workstation:
 
   https://s3.amazonaws.com/seis615/pets-discovery-wp-project.yaml
 
-We used a similar version of this template to create an ECS/Fargate cluster in this last week's lecture. It creates the following resources:
+We used a similar version of this template to create an ECS/Fargate cluster in this last week's lecture. This version includes a couple additional configuration items. It creates the following resources:
 
     * A VPC containing subnets and Internet Gateway
     * An ECS cluster with a couple services and tasks
@@ -71,51 +71,12 @@ Rename the downloaded file `wordpress-template.yaml`. Now modify the `wordpress-
 
     * Modify the Cloud Map service discovery namespace to use the name `service.wordpress`.
 
-We're almost done with the template changes. Now we need to add a bunch of environment variables related to the Wordpress password salt. What is a salt? It's a set of randomly generated values which are used to securely hash passwords. Our template will launch 3 Wordpress webservers and we need to make sure that all three Wordpress configuration files are using the same password salt. If we don't do this, we won't be able to log into the load balanced Wordpress application properly.
-
-Add the following environment variables to the web task (I've provided the code):
-
-        
-    Name: "WORDPRESS_AUTH_KEY"
-    Value: !Ref "authKey"
-
-    Name: "WORDPRESS_SECURE_AUTH_KEY"
-    Value: !Ref "secureAuthKey"
-
-    Name: "WORDPRESS_LOGGED_IN_KEY"
-    Value: !Ref "loggedInKey"
-
-    Name: "WORDPRESS_NONCE_KEY"
-    Value: !Ref "nonceKey"
-
-    Name: "WORDPRESS_AUTH_SALT"
-    Value: !Ref "authSalt"
-
-    Name: "WORDPRESS_SECURE_AUTH_SALT"
-    Value: !Ref "secureAuthSalt"
-
-    Name: "WORDPRESS_LOGGED_IN_SALT"
-    Value: !Ref "loggedInSalt"
-
-    Name: "WORDPRESS_NONCE_SALT"
-    Value: !Ref "nonceSalt"
 
 === Launch Wordpress cluster
 
-Create a stack called `wordpress` using your new CloudFormation template. You can select a reasonable set of passwords for the database service (the passwords can be the same). We need to provide a bunch of values for the salt parameters. What should we use? Wordpress provides a random salt generator for us located at:
+Create a stack called `wordpress` using your new CloudFormation template. You can select a reasonable set of passwords for the database service (the passwords can be the same). We need to provide a bunch of values for the salt parameters. What is a salt? It's a set of randomly generated values which are used to securely hash passwords. Our template will launch 3 Wordpress webservers and we need to make sure that all three Wordpress configuration files are using the same password salt. If we don't do this, we won't be able to log into the load balanced Wordpress application properly.
 
-    https://api.wordpress.org/secret-key/1.1/salt/
-
-You can use the following values if that site isn't working. Note, you should never use these values in a production site because these are public and therefore compromised. If you ignore this warning your site will be hacked. You have been warned.
-
-    AUTH_KEY         @G9uQ-k;2CMlzx|Cb/3!A%~Uw5l#C7Oz0&GyOL?-O+Yh.v+oK3]O_uDXnDW>Yt!P
-    SECURE_AUTH_KEY  %NgX+yn-17++p2vQQf8Nu+d<g)VAz;RIcDaWZY,}sm zrZOX+hRf`m{4O|RG|8h%
-    LOGGED_IN_KEY    >RaZqf)aSXU(UZxVw|Sf>-}=K|ud@|X~c|H^.EL:U^1I%.2%qRK%&n<c|^+#*-~O
-    NONCE_KEY        {G!U:@y,75(l;^`U:.c_[xl8=mYTJ<!)!B<VENd2%ag`l^5v(V(VWTdQyG2h}f.>
-    AUTH_SALT        euF6Z(Cwj=^[wLVL]s]Gm(Tv7F4X ..9u*g64qjRQ%?LwP3}]uL||!8nra$d*}!y
-    SECURE_AUTH_SALT WG|:f0Z%_Ls#_gf3BE|K),^M-gu+S8&p.?`egj{-{2CnI2j[zVSY<@tLCbAjd+t$
-    LOGGED_IN_SALT   b:q`F= WK1pa{?w5%Bv@nZK~5-c5T67$D@7q(?|~s[ `yJnEI-yByB<Fu6EdQ^^B
-    NONCE_SALT       `66jB-c}c|3pS+j`QUcNr<opJja &=.is1V^>5eWk;&s.36XoOL{ItsB7Id?R><Y
+What sale values should we use? The salt parameter values are populated with a set of values that will work for this project. Warning: you should never use these values in a real production Wordpress site. If you ignore this warning your Wordpress site will be hacked. You have been warned.
 
 The stack will take about 10 minutes to launch.
 
@@ -125,11 +86,11 @@ Test out the Wordpress application by going to the ELB endpoint address in your 
     * Go to the ECS web console and look at the task logs. Sometimes the log files can provide helpful troubleshooting info. For example, maybe the Wordpress containers can't communicate properly with the MariaDB container.
     * You can stop the database task to clear the database. The cluster will automatically start a fresh database server for you.
 
-Is this Wordpress template production worthy? No. It has two big problems. First, we are persisting data inside of a container. The data will disappear when the container goes away. Using something like RDS would be a much better idea. Second, data uploads are stored on each individual web container. We would need to install something like an S3 plugin to handle data uploads.
+Is this Wordpress template production worthy? No. It has two big problems. First, we are persisting data in a database service running inside a container. The data will disappear when the container goes away. Using something like RDS would be a much better idea. Second, data uploads are stored on each individual web container. We would need to install something like a Wordpress S3 plugin to handle data uploads.
 
 === Cluster Hero task (optional)
 
-Generally we don't pass in secrets to stacks like database passwords using CloudFormation string parameters. It's possible to retrieve these stack parameter in cleartext. Modify the stack template parameters to use secure values stored in AWS Parameter Store keys. 
+Replace the MariaDB Fargate container with a Serverless Aurora Database running a MySql engine.
 
 === Show me your work
 
