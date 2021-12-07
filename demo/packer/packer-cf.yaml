@@ -117,7 +117,7 @@ Resources:
       RouteTableId: !Ref PublicRT
       GatewayId: !Ref InternetGW
     DependsOn:
-      - InternetGW
+      - GatewayAttachment
 
   RouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation

@@ -121,12 +121,12 @@ Resources:
 
   PublicRoute:
     Type: AWS::EC2::Route
+    DependsOn: 
+      - "VpcGwAttachment"
     Properties:
       DestinationCidrBlock: "0.0.0.0/0"
       RouteTableId: !Ref "PublicRT"
       GatewayId: !Ref "InternetGW"
-    DependsOn:
-      - "InternetGW"
 
   PublicSubnet1RTassoc:
     Type: AWS::EC2::SubnetRouteTableAssociation

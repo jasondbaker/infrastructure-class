@@ -149,7 +149,7 @@
                 }
             },
             "DependsOn": [
-                "InternetGW"
+                "VpcGwAttachment"
             ]
         },
         "PublicSubnet1RTassoc": {

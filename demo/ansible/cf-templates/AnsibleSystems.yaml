@@ -292,7 +292,7 @@ Resources:
       RouteTableId: !Ref PublicRouteTable
       GatewayId: !Ref InternetGateway
     DependsOn:
-      - InternetGateway
+      - AttachGateway
 
   Public1RouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
